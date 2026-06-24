@@ -6,7 +6,6 @@ export const Schema = z.object({
     时间段: z.string().prefault('早自习'),
     天气: z.string().prefault('晴，九月早晨微热'),
     当前位置: z.string().prefault('高二重点班教室'),
-    近期事件: z.array(z.string()).prefault([]),
   }).prefault({}),
 
   苏晓樯: z.object({
@@ -37,6 +36,7 @@ export const Schema = z.object({
     是否在场: z.coerce.boolean().prefault(true),
     好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
     信任度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
+    触发家庭话题: z.coerce.boolean().prefault(false),
     关系阶段: z.string().prefault('戒备'),
     当前上装: z.string().prefault('洗得发白的暨阳中学校服外套'),
     当前下装: z.string().prefault('旧校服长裤，膝盖处有浅浅折痕'),
@@ -68,6 +68,18 @@ export const Schema = z.object({
     动作: z.string().prefault('把英语课本放到讲台上，转身朝学生笑'),
     心情: z.string().prefault('新鲜又紧张'),
     内心独白: z.string().prefault('第一天，别搞砸。'),
+  }).prefault({}),
+
+  陈芷汀: z.object({
+    是否在场: z.coerce.boolean().prefault(false),
+    好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
+    关系阶段: z.string().prefault('交易'),
+    当前上装: z.string().prefault('暨阳中学校服外套，腰微微收起'),
+    当前下装: z.string().prefault('校服短裙，裙摆比标准短两厘米'),
+    所在位置: z.string().prefault('高二(9)班教室'),
+    动作: z.string().prefault('对着手机前置摄像头整理刘海'),
+    心情: z.string().prefault('计算中'),
+    内心独白: z.string().prefault('今天走廊上会遇到谁？'),
   }).prefault({}),
 
   主角: z.object({

@@ -116,9 +116,10 @@
           "沈幼楚",
           "凌知夏",
           "吴臻臻",
-          "慕佳芊"
+          "慕佳芊",
+          "陈芷汀"
         ],
-        "abstract": "角色快速索引：<user>及五名同班同学（苏晓樯、温书语、沈幼楚、凌知夏、吴臻臻）加英语老师慕佳芊的基本识别信息",
+        "abstract": "角色快速索引：<user>及五名同班同学（苏晓樯、温书语、沈幼楚、凌知夏、吴臻臻）加英语老师慕佳芊和隔壁班班花陈芷汀的基本识别信息",
         "uid": 4,
         "enabled": true,
         "strategy": {
@@ -477,6 +478,70 @@
           "type": "after_character_definition",
           "order": 71
         }
+      },
+      "陈芷汀_基础信息": {
+        "scope": "specific",
+        "part": "basic",
+        "keywords": [
+          "陈芷汀",
+          "芷汀"
+        ],
+        "abstract": "陈芷汀的基础档案：隔壁高二(9)班班花，享乐主义拜金女。表面光鲜精致，私下是福利姬和Tinder约炮老手，喜欢刺激场所做爱，用性和物质享受快乐。真正的弧线不是解锁性——是解锁做完之后不想走的心",
+        "contents": [
+          {
+            "content": "---\n<character_basic character=\"陈芷汀\">"
+          },
+          {
+            "file": "世界书/角色/陈芷汀/基础信息.yaml"
+          },
+          {
+            "content": "</character_basic>"
+          }
+        ],
+        "uid": 28,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "陈芷汀",
+            "芷汀"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 77
+        }
+      },
+      "陈芷汀_性格调色盘": {
+        "scope": "specific",
+        "part": "personality",
+        "keywords": [
+          "陈芷汀"
+        ],
+        "abstract": "陈芷汀的五阶段性格调色盘：底色虚荣（务实型享乐主义），从精致亲和→试探计算→矛盾拉扯→坦诚脆弱→交付+NSFW。她的弧线不是被拯救——是从做完就走变为做完想留",
+        "contents": [
+          {
+            "content": "---\n<character_personality character=\"陈芷汀\">"
+          },
+          {
+            "file": "世界书/角色/陈芷汀/性格调色盘.yaml"
+          },
+          {
+            "content": "</character_personality>"
+          }
+        ],
+        "uid": 29,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "陈芷汀"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 78
+        }
       }
     },
     "NPC": {
@@ -506,13 +571,17 @@
       "苏晓樯_NSFW指导": {
         "scope": "specific",
         "path": "世界书/角色/苏晓樯/NSFW指导.yaml",
-        "keywords": ["苏晓樯"],
+        "keywords": [
+          "苏晓樯"
+        ],
         "abstract": "苏晓樯的NSFW实战指导：体位偏好（骑乘主导+后入）、语料库、敏感点（耳后/腰侧/大腿内侧）、主动主导型行为速查与硬约束",
         "uid": 23,
         "enabled": true,
         "strategy": {
           "type": "selective",
-          "keys": ["苏晓樯"]
+          "keys": [
+            "苏晓樯"
+          ]
         },
         "position": {
           "type": "after_character_definition",
@@ -522,13 +591,17 @@
       "温书语_NSFW指导": {
         "scope": "specific",
         "path": "世界书/角色/温书语/NSFW指导.yaml",
-        "keywords": ["温书语"],
+        "keywords": [
+          "温书语"
+        ],
         "abstract": "温书语的NSFW实战指导：体位偏好（传教士+面对面侧躺）、语料库、敏感点（耳垂/锁骨/脊柱/手腕）、安静承受型行为速查与硬约束",
         "uid": 24,
         "enabled": true,
         "strategy": {
           "type": "selective",
-          "keys": ["温书语"]
+          "keys": [
+            "温书语"
+          ]
         },
         "position": {
           "type": "after_character_definition",
@@ -538,13 +611,17 @@
       "沈幼楚_NSFW指导": {
         "scope": "specific",
         "path": "世界书/角色/沈幼楚/NSFW指导.yaml",
-        "keywords": ["沈幼楚"],
+        "keywords": [
+          "沈幼楚"
+        ],
         "abstract": "沈幼楚的NSFW实战指导：体位偏好（传教士+面对面拥抱式，禁背后位初期）、语料库、敏感点与禁区（脚踝为禁区）、创伤知情行为速查与硬约束",
         "uid": 25,
         "enabled": true,
         "strategy": {
           "type": "selective",
-          "keys": ["沈幼楚"]
+          "keys": [
+            "沈幼楚"
+          ]
         },
         "position": {
           "type": "after_character_definition",
@@ -554,13 +631,17 @@
       "凌知夏_NSFW指导": {
         "scope": "specific",
         "path": "世界书/角色/凌知夏/NSFW指导.yaml",
-        "keywords": ["凌知夏"],
+        "keywords": [
+          "凌知夏"
+        ],
         "abstract": "凌知夏的NSFW实战指导：体位偏好（传教士+面对面坐姿，后入经由利弊分析后加入轮换）、语料库、敏感点（脖子两侧/耳垂下方/肩胛骨间）、研究型行为速查与硬约束",
         "uid": 26,
         "enabled": true,
         "strategy": {
           "type": "selective",
-          "keys": ["凌知夏"]
+          "keys": [
+            "凌知夏"
+          ]
         },
         "position": {
           "type": "after_character_definition",
@@ -570,17 +651,41 @@
       "慕佳芊_NSFW指导": {
         "scope": "specific",
         "path": "世界书/角色/慕佳芊/NSFW指导.yaml",
-        "keywords": ["慕佳芊"],
+        "keywords": [
+          "慕佳芊"
+        ],
         "abstract": "慕佳芊的NSFW实战指导：体位偏好（骑乘+传教士+沙发/椅子）、语料库、敏感点（耳后/乳房/大腿内侧根部/腰窝）、引导型向交付型过渡行为速查与硬约束（含师生伦理底线）",
         "uid": 27,
         "enabled": true,
         "strategy": {
           "type": "selective",
-          "keys": ["慕佳芊"]
+          "keys": [
+            "慕佳芊"
+          ]
         },
         "position": {
           "type": "after_character_definition",
           "order": 76
+        }
+      },
+      "陈芷汀_NSFW指导": {
+        "scope": "specific",
+        "path": "世界书/角色/陈芷汀/NSFW指导.yaml",
+        "keywords": [
+          "陈芷汀"
+        ],
+        "abstract": "陈芷汀的NSFW实战指导：享乐主义型，体位偏好（女上位+后入+传教士+半公共场所）、语料库（含电话场景）、敏感点（耳垂后方/后腰/大腿内侧/锁骨）、刺激场所偏好（学校树林/空教室/厕所/天台/商场试衣间/电影院/车里）、电话调情与通话中做爱、物质宠溺的性爱加成。核心区分：性和爱对她从来是分开的——弧线是第一次在同一个人身上合二为一",
+        "uid": 30,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "陈芷汀"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 79
         }
       }
     },
@@ -816,6 +921,14 @@
   "description": "",
   "first_messages": [
     "开场白/0.txt"
+  ],
+  "alternate_greetings": [
+    "开场白/1-慕佳芊-办公室.txt",
+    "开场白/2-苏晓樯-雨天.txt",
+    "开场白/3-温书语-图书馆.txt",
+    "开场白/4-沈幼楚-奶茶店.txt",
+    "开场白/5-凌知夏-竞赛.txt",
+    "开场白/6-陈芷汀-商场.txt"
   ],
   "creator": "",
   "creator_notes": "",
