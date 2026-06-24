@@ -707,28 +707,40 @@
   }
 
   function bindStatus(root) {
-    if (!root || root.dataset.avatarBound === "true") return;
+    if (!root) return;
+    if (root.dataset.avatarBoundVersion === "3") {
+      applyStoredAvatars(root);
+      return;
+    }
     root.dataset.avatarBound = "true";
+    root.dataset.avatarBoundVersion = "3";
 
     const modal = root.querySelector(".jy-avatar-modal");
     const big = root.querySelector(".jy-avatar-big");
     const title = root.querySelector(".jy-avatar-title");
     const input = root.querySelector(".jy-avatar-input");
-    const avatars = Array.from(root.querySelectorAll(".jy-avatar"));
     let activeAvatar = null;
 
-    avatars.forEach((avatar) => {
-      const name = avatar.getAttribute("alt") || "头像";
-      const key = avatar.dataset.avatarKey || name;
-      const saved = getStoredAvatar(key);
-      avatar.dataset.defaultSrc = avatar.currentSrc || avatar.src;
-      avatar.dataset.avatarName = name;
-      avatar.dataset.avatarKey = key;
-      avatar.setAttribute("role", "button");
-      avatar.setAttribute("tabindex", "0");
-      avatar.setAttribute("title", name + "头像");
-      if (saved) avatar.src = saved;
-    });
+    function getAvatars() {
+      return Array.from(root.querySelectorAll(".jy-avatar"));
+    }
+
+    function applyStoredAvatars(scope) {
+      getAvatars().forEach((avatar) => {
+        const name = avatar.dataset.avatarName || avatar.getAttribute("alt") || "头像";
+        const key = avatar.dataset.avatarKey || name;
+        const saved = getStoredAvatar(key);
+        if (!avatar.dataset.defaultSrc) avatar.dataset.defaultSrc = avatar.currentSrc || avatar.src;
+        avatar.dataset.avatarName = name;
+        avatar.dataset.avatarKey = key;
+        avatar.setAttribute("role", "button");
+        avatar.setAttribute("tabindex", "0");
+        avatar.setAttribute("title", name + "头像");
+        if (saved) avatar.src = saved;
+      });
+    }
+
+    applyStoredAvatars(root);
 
     function openAvatar(avatar) {
       activeAvatar = avatar;
@@ -800,6 +812,15 @@
     document.addEventListener("DOMContentLoaded", init);
   } else {
     init();
+  }
+
+  setTimeout(init, 100);
+  setTimeout(init, 500);
+  setTimeout(init, 1200);
+
+  if (typeof MutationObserver !== "undefined") {
+    const observer = new MutationObserver(init);
+    observer.observe(document.documentElement, { childList: true, subtree: true });
   }
 })();
 </script>

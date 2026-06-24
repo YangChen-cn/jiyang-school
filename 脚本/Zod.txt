@@ -71,7 +71,7 @@ export const Schema = z.object({
   }).prefault({}),
 
   陈芷汀: z.object({
-    是否在场: z.coerce.boolean().prefault(false),
+    是否在场: z.coerce.boolean().prefault(true),
     好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
     关系阶段: z.string().prefault('交易'),
     当前上装: z.string().prefault('暨阳中学校服外套，腰微微收起'),
