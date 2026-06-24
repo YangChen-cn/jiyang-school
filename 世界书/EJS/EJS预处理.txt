@@ -1,0 +1,10 @@
+@@generate_before
+<%_
+define('current_location', getvar('stat_data.世界.当前位置', { defaults: '' }));
+define('current_day', '开学第一天');
+define('affection_xiaotian', getvar('stat_data.苏晓樯.好感度', { defaults: 0 }));
+define('affection_shuyu', getvar('stat_data.温书语.好感度', { defaults: 0 }));
+define('affection_youchu', getvar('stat_data.沈幼楚.好感度', { defaults: 0 }));
+define('affection_zhixia', getvar('stat_data.凌知夏.好感度', { defaults: 0 }));
+define('affection_jiaqian', getvar('stat_data.慕佳芊.好感度', { defaults: 0 }));
+_%>

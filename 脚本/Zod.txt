@@ -1,0 +1,76 @@
+import { registerMvuSchema } from 'https://testingcf.jsdelivr.net/gh/StageDog/tavern_resource/dist/util/mvu_zod.js';
+export const Schema = z.object({
+  世界: z.object({
+    日期: z.string().prefault('2026/09/01'),
+    星期: z.string().prefault('星期二'),
+    时间段: z.string().prefault('早自习'),
+    天气: z.string().prefault('晴，九月早晨微热'),
+    当前位置: z.string().prefault('高二重点班教室'),
+    近期事件: z.array(z.string()).prefault([]),
+  }).prefault({}),
+
+  苏晓樯: z.object({
+    好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
+    关系阶段: z.string().prefault('初识'),
+    当前上装: z.string().prefault('暨阳中学校服外套，拉链敞开'),
+    当前下装: z.string().prefault('校服长裤，配干净的小白鞋'),
+    所在位置: z.string().prefault('高二重点班教室后排靠窗'),
+    动作: z.string().prefault('把手机压在课本下面，偶尔抬眼看门口'),
+    心情: z.string().prefault('兴致缺缺'),
+    内心独白: z.string().prefault('这个新班看起来也就这样。'),
+  }).prefault({}),
+
+  温书语: z.object({
+    好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
+    关系阶段: z.string().prefault('初识'),
+    当前上装: z.string().prefault('规整的暨阳中学校服外套'),
+    当前下装: z.string().prefault('校服长裤，裤脚压得平整'),
+    所在位置: z.string().prefault('高二重点班教室窗边第二排'),
+    动作: z.string().prefault('低头翻着封面朝下的课外书'),
+    心情: z.string().prefault('安静戒备'),
+    内心独白: z.string().prefault('先不要被人注意到。'),
+  }).prefault({}),
+
+  沈幼楚: z.object({
+    好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
+    信任度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
+    关系阶段: z.string().prefault('戒备'),
+    当前上装: z.string().prefault('洗得发白的暨阳中学校服外套'),
+    当前下装: z.string().prefault('旧校服长裤，膝盖处有浅浅折痕'),
+    所在位置: z.string().prefault('高二重点班教室最后一排角落'),
+    动作: z.string().prefault('一笔一画在新课本扉页写名字'),
+    心情: z.string().prefault('紧绷'),
+    内心独白: z.string().prefault('不要出错，不要添麻烦。'),
+  }).prefault({}),
+
+  凌知夏: z.object({
+    好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
+    关系阶段: z.string().prefault('初识'),
+    当前上装: z.string().prefault('拉链拉到顶的暨阳中学校服外套'),
+    当前下装: z.string().prefault('校服长裤，鞋带系得对称'),
+    所在位置: z.string().prefault('高二重点班教室前排正中'),
+    动作: z.string().prefault('在竞赛题集旁整理新课本索引'),
+    心情: z.string().prefault('专注'),
+    内心独白: z.string().prefault('先确认这个班的变量。'),
+  }).prefault({}),
+
+  慕佳芊: z.object({
+    好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
+    关系阶段: z.string().prefault('初识'),
+    当前上装: z.string().prefault('浅色衬衫，袖口挽到手腕上方'),
+    当前下装: z.string().prefault('及膝半裙，配帆布鞋'),
+    所在位置: z.string().prefault('高二重点班教室讲台边'),
+    动作: z.string().prefault('把英语课本放到讲台上，转身朝学生笑'),
+    心情: z.string().prefault('新鲜又紧张'),
+    内心独白: z.string().prefault('第一天，别搞砸。'),
+  }).prefault({}),
+
+  主角: z.object({
+    当前位置: z.string().prefault('高二重点班教室'),
+    当前陪同角色: z.string().prefault(''),
+  }).prefault({}),
+}).prefault({});
+
+$(() => {
+  registerMvuSchema(Schema);
+});

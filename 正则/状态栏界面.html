@@ -1,0 +1,499 @@
+<style>
+  .jy-status {
+    --c-ink: #26312f;
+    --c-muted: #6d7873;
+    --c-soft: #8b9a91;
+    --c-paper: #fbfaf5;
+    --c-panel: rgba(255, 255, 255, 0.78);
+    --c-line: rgba(64, 83, 76, 0.16);
+    --c-primary: #2f7d72;
+    --c-accent: #b36b4a;
+    --c-warm: #d8a657;
+    --c-cool: #496f9e;
+    --shadow-panel: 0 14px 34px rgba(39, 55, 51, 0.12);
+    box-sizing: border-box;
+    width: min(860px, calc(100% - 20px));
+    margin: 12px auto;
+    color: var(--c-ink);
+    font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .jy-status *,
+  .jy-status *::before,
+  .jy-status *::after {
+    box-sizing: border-box;
+  }
+
+  .jy-shell {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--c-line);
+    border-radius: 8px;
+    background:
+      linear-gradient(135deg, rgba(47, 125, 114, 0.08), transparent 34%),
+      linear-gradient(315deg, rgba(216, 166, 87, 0.12), transparent 30%),
+      var(--c-paper);
+    box-shadow: var(--shadow-panel);
+  }
+
+  .jy-shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, rgba(38, 49, 47, 0.045) 1px, transparent 1px) 0 0 / 18px 18px,
+      linear-gradient(rgba(38, 49, 47, 0.035) 1px, transparent 1px) 0 0 / 18px 18px;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.55), transparent 72%);
+  }
+
+  .jy-head {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 14px 10px;
+    border-bottom: 1px solid var(--c-line);
+  }
+
+  .jy-title {
+    min-width: 0;
+  }
+
+  .jy-kicker {
+    color: var(--c-muted);
+    font-size: 11px;
+    letter-spacing: 0;
+  }
+
+  .jy-location {
+    margin-top: 2px;
+    overflow: hidden;
+    color: var(--c-ink);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .jy-time {
+    display: grid;
+    gap: 3px;
+    min-width: 142px;
+    padding: 7px 9px;
+    border: 1px solid rgba(47, 125, 114, 0.18);
+    border-radius: 7px;
+    background: rgba(255, 255, 255, 0.62);
+    text-align: right;
+  }
+
+  .jy-date {
+    color: var(--c-primary);
+    font-weight: 700;
+  }
+
+  .jy-weekday {
+    color: var(--c-ink);
+    font-size: 12px;
+    font-weight: 650;
+  }
+
+  .jy-period {
+    color: var(--c-muted);
+    font-size: 12px;
+  }
+
+  .jy-meta {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    padding: 10px 14px 12px;
+  }
+
+  .jy-chip {
+    min-width: 0;
+    border: 1px solid var(--c-line);
+    border-radius: 7px;
+    background: var(--c-panel);
+    padding: 7px 9px;
+  }
+
+  .jy-label {
+    display: block;
+    color: var(--c-muted);
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .jy-value {
+    display: block;
+    margin-top: 2px;
+    overflow: hidden;
+    color: var(--c-ink);
+    font-weight: 650;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .jy-people {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    padding: 0 14px 14px;
+  }
+
+  .jy-person {
+    min-width: 0;
+    border: 1px solid var(--c-line);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.68);
+    padding: 9px;
+  }
+
+  .jy-person:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .jy-person[data-tone="warm"] { --tone: var(--c-accent); }
+  .jy-person[data-tone="quiet"] { --tone: var(--c-cool); }
+  .jy-person[data-tone="guard"] { --tone: #7f6b55; }
+  .jy-person[data-tone="clear"] { --tone: #536d89; }
+  .jy-person[data-tone="bright"] { --tone: var(--c-warm); }
+  .jy-person[data-tone="warm"] .jy-mark { background: #f2e0d7; }
+  .jy-person[data-tone="quiet"] .jy-mark { background: #dce6f2; }
+  .jy-person[data-tone="guard"] .jy-mark { background: #e8e0d4; }
+  .jy-person[data-tone="clear"] .jy-mark { background: #e0e6ee; }
+  .jy-person[data-tone="bright"] .jy-mark { background: #f4e7c9; }
+
+  .jy-person-head {
+    display: flex;
+    gap: 7px;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .jy-mark {
+    display: inline-grid;
+    flex: 0 0 auto;
+    width: 24px;
+    height: 24px;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(47, 125, 114, 0.12);
+    color: var(--tone);
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .jy-name-wrap {
+    min-width: 0;
+  }
+
+  .jy-name {
+    overflow: hidden;
+    font-weight: 750;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .jy-stage {
+    overflow: hidden;
+    color: var(--c-muted);
+    font-size: 11px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .jy-bar-row {
+    margin-top: 9px;
+  }
+
+  .jy-bar-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+    color: var(--c-muted);
+    font-size: 11px;
+  }
+
+  .jy-num {
+    color: var(--tone);
+    font-weight: 750;
+  }
+
+  .jy-bar {
+    position: relative;
+    height: 6px;
+    margin-top: 4px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(38, 49, 47, 0.1);
+  }
+
+  .jy-fill {
+    --v: 0;
+    display: block;
+    width: clamp(0%, calc(var(--v) * 1%), 100%);
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.15), var(--tone));
+  }
+
+  .jy-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    margin-top: 9px;
+  }
+
+  .jy-detail {
+    min-width: 0;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.45);
+    padding: 5px 6px;
+  }
+
+  .jy-detail-wide {
+    grid-column: 1 / -1;
+  }
+
+  .jy-detail b {
+    display: block;
+    color: var(--tone);
+    font-size: 10px;
+    font-weight: 750;
+  }
+
+  .jy-detail span {
+    display: block;
+    overflow: hidden;
+    margin-top: 1px;
+    color: var(--c-ink);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .jy-thought {
+    margin-top: 8px;
+    border-left: 2px solid var(--tone);
+    padding: 4px 0 4px 7px;
+    color: var(--c-muted);
+    font-size: 12px;
+  }
+
+  .jy-foot {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 9px 14px 11px;
+    border-top: 1px solid var(--c-line);
+    color: var(--c-muted);
+    font-size: 11px;
+  }
+
+  .jy-foot span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 680px) {
+    .jy-status {
+      width: min(100%, calc(100% - 12px));
+      margin: 8px auto;
+      font-size: 12px;
+    }
+
+    .jy-head {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .jy-time {
+      min-width: 0;
+      text-align: left;
+    }
+
+    .jy-meta {
+      grid-template-columns: 1fr;
+    }
+
+    .jy-people {
+      grid-template-columns: 1fr;
+    }
+
+    .jy-person:last-child {
+      grid-column: auto;
+    }
+
+    .jy-detail-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .jy-detail-wide {
+      grid-column: auto;
+    }
+  }
+</style>
+<body>
+
+<div class="jy-status">
+  <div class="jy-shell" aria-label="暨阳中学状态栏">
+    <div class="jy-head">
+      <div class="jy-title">
+        <div class="jy-kicker">暨阳中学 · 当前坐标</div>
+        <div class="jy-location">{{format_message_variable::stat_data.世界.当前位置}}</div>
+      </div>
+      <div class="jy-time">
+        <span class="jy-date">{{format_message_variable::stat_data.世界.日期}}</span>
+        <span class="jy-weekday">{{format_message_variable::stat_data.世界.星期}}</span>
+        <span class="jy-period">{{format_message_variable::stat_data.世界.时间段}}</span>
+      </div>
+    </div>
+
+    <div class="jy-meta">
+      <div class="jy-chip">
+        <span class="jy-label">天气</span>
+        <span class="jy-value">{{format_message_variable::stat_data.世界.天气}}</span>
+      </div>
+      <div class="jy-chip">
+        <span class="jy-label">主角位置</span>
+        <span class="jy-value">{{format_message_variable::stat_data.主角.当前位置}}</span>
+      </div>
+      <div class="jy-chip">
+        <span class="jy-label">近期事件 / 陪同</span>
+        <span class="jy-value">{{format_message_variable::stat_data.世界.近期事件}} · {{format_message_variable::stat_data.主角.当前陪同角色}}</span>
+      </div>
+    </div>
+
+    <div class="jy-people">
+      <div class="jy-person" data-tone="warm">
+        <div class="jy-person-head">
+          <span class="jy-mark">苏</span>
+          <div class="jy-name-wrap">
+            <div class="jy-name">苏晓樯</div>
+            <div class="jy-stage">{{format_message_variable::stat_data.苏晓樯.关系阶段}}</div>
+          </div>
+        </div>
+        <div class="jy-bar-row">
+          <div class="jy-bar-top"><span>好感</span><span class="jy-num">{{format_message_variable::stat_data.苏晓樯.好感度}}</span></div>
+          <div class="jy-bar"><span class="jy-fill" style="--v: {{format_message_variable::stat_data.苏晓樯.好感度}};"></span></div>
+        </div>
+        <div class="jy-detail-grid">
+          <div class="jy-detail"><b>上装</b><span>{{format_message_variable::stat_data.苏晓樯.当前上装}}</span></div>
+          <div class="jy-detail"><b>下装</b><span>{{format_message_variable::stat_data.苏晓樯.当前下装}}</span></div>
+          <div class="jy-detail jy-detail-wide"><b>位置</b><span>{{format_message_variable::stat_data.苏晓樯.所在位置}}</span></div>
+          <div class="jy-detail jy-detail-wide"><b>动作</b><span>{{format_message_variable::stat_data.苏晓樯.动作}}</span></div>
+          <div class="jy-detail"><b>心情</b><span>{{format_message_variable::stat_data.苏晓樯.心情}}</span></div>
+        </div>
+        <div class="jy-thought">{{format_message_variable::stat_data.苏晓樯.内心独白}}</div>
+      </div>
+
+      <div class="jy-person" data-tone="quiet">
+        <div class="jy-person-head">
+          <span class="jy-mark">温</span>
+          <div class="jy-name-wrap">
+            <div class="jy-name">温书语</div>
+            <div class="jy-stage">{{format_message_variable::stat_data.温书语.关系阶段}}</div>
+          </div>
+        </div>
+        <div class="jy-bar-row">
+          <div class="jy-bar-top"><span>好感</span><span class="jy-num">{{format_message_variable::stat_data.温书语.好感度}}</span></div>
+          <div class="jy-bar"><span class="jy-fill" style="--v: {{format_message_variable::stat_data.温书语.好感度}};"></span></div>
+        </div>
+        <div class="jy-detail-grid">
+          <div class="jy-detail"><b>上装</b><span>{{format_message_variable::stat_data.温书语.当前上装}}</span></div>
+          <div class="jy-detail"><b>下装</b><span>{{format_message_variable::stat_data.温书语.当前下装}}</span></div>
+          <div class="jy-detail jy-detail-wide"><b>位置</b><span>{{format_message_variable::stat_data.温书语.所在位置}}</span></div>
+          <div class="jy-detail jy-detail-wide"><b>动作</b><span>{{format_message_variable::stat_data.温书语.动作}}</span></div>
+          <div class="jy-detail"><b>心情</b><span>{{format_message_variable::stat_data.温书语.心情}}</span></div>
+        </div>
+        <div class="jy-thought">{{format_message_variable::stat_data.温书语.内心独白}}</div>
+      </div>
+
+      <div class="jy-person" data-tone="guard">
+        <div class="jy-person-head">
+          <span class="jy-mark">沈</span>
+          <div class="jy-name-wrap">
+            <div class="jy-name">沈幼楚</div>
+            <div class="jy-stage">{{format_message_variable::stat_data.沈幼楚.关系阶段}}</div>
+          </div>
+        </div>
+        <div class="jy-bar-row">
+          <div class="jy-bar-top"><span>好感</span><span class="jy-num">{{format_message_variable::stat_data.沈幼楚.好感度}}</span></div>
+          <div class="jy-bar"><span class="jy-fill" style="--v: {{format_message_variable::stat_data.沈幼楚.好感度}};"></span></div>
+        </div>
+        <div class="jy-bar-row">
+          <div class="jy-bar-top"><span>信任</span><span class="jy-num">{{format_message_variable::stat_data.沈幼楚.信任度}}</span></div>
+          <div class="jy-bar"><span class="jy-fill" style="--v: {{format_message_variable::stat_data.沈幼楚.信任度}};"></span></div>
+        </div>
+        <div class="jy-detail-grid">
+          <div class="jy-detail"><b>上装</b><span>{{format_message_variable::stat_data.沈幼楚.当前上装}}</span></div>
+          <div class="jy-detail"><b>下装</b><span>{{format_message_variable::stat_data.沈幼楚.当前下装}}</span></div>
+          <div class="jy-detail jy-detail-wide"><b>位置</b><span>{{format_message_variable::stat_data.沈幼楚.所在位置}}</span></div>
+          <div class="jy-detail jy-detail-wide"><b>动作</b><span>{{format_message_variable::stat_data.沈幼楚.动作}}</span></div>
+          <div class="jy-detail"><b>心情</b><span>{{format_message_variable::stat_data.沈幼楚.心情}}</span></div>
+        </div>
+        <div class="jy-thought">{{format_message_variable::stat_data.沈幼楚.内心独白}}</div>
+      </div>
+
+      <div class="jy-person" data-tone="clear">
+        <div class="jy-person-head">
+          <span class="jy-mark">凌</span>
+          <div class="jy-name-wrap">
+            <div class="jy-name">凌知夏</div>
+            <div class="jy-stage">{{format_message_variable::stat_data.凌知夏.关系阶段}}</div>
+          </div>
+        </div>
+        <div class="jy-bar-row">
+          <div class="jy-bar-top"><span>好感</span><span class="jy-num">{{format_message_variable::stat_data.凌知夏.好感度}}</span></div>
+          <div class="jy-bar"><span class="jy-fill" style="--v: {{format_message_variable::stat_data.凌知夏.好感度}};"></span></div>
+        </div>
+        <div class="jy-detail-grid">
+          <div class="jy-detail"><b>上装</b><span>{{format_message_variable::stat_data.凌知夏.当前上装}}</span></div>
+          <div class="jy-detail"><b>下装</b><span>{{format_message_variable::stat_data.凌知夏.当前下装}}</span></div>
+          <div class="jy-detail jy-detail-wide"><b>位置</b><span>{{format_message_variable::stat_data.凌知夏.所在位置}}</span></div>
+          <div class="jy-detail jy-detail-wide"><b>动作</b><span>{{format_message_variable::stat_data.凌知夏.动作}}</span></div>
+          <div class="jy-detail"><b>心情</b><span>{{format_message_variable::stat_data.凌知夏.心情}}</span></div>
+        </div>
+        <div class="jy-thought">{{format_message_variable::stat_data.凌知夏.内心独白}}</div>
+      </div>
+
+      <div class="jy-person" data-tone="bright">
+        <div class="jy-person-head">
+          <span class="jy-mark">慕</span>
+          <div class="jy-name-wrap">
+            <div class="jy-name">慕佳芊</div>
+            <div class="jy-stage">{{format_message_variable::stat_data.慕佳芊.关系阶段}}</div>
+          </div>
+        </div>
+        <div class="jy-bar-row">
+          <div class="jy-bar-top"><span>好感</span><span class="jy-num">{{format_message_variable::stat_data.慕佳芊.好感度}}</span></div>
+          <div class="jy-bar"><span class="jy-fill" style="--v: {{format_message_variable::stat_data.慕佳芊.好感度}};"></span></div>
+        </div>
+        <div class="jy-detail-grid">
+          <div class="jy-detail"><b>上装</b><span>{{format_message_variable::stat_data.慕佳芊.当前上装}}</span></div>
+          <div class="jy-detail"><b>下装</b><span>{{format_message_variable::stat_data.慕佳芊.当前下装}}</span></div>
+          <div class="jy-detail jy-detail-wide"><b>位置</b><span>{{format_message_variable::stat_data.慕佳芊.所在位置}}</span></div>
+          <div class="jy-detail jy-detail-wide"><b>动作</b><span>{{format_message_variable::stat_data.慕佳芊.动作}}</span></div>
+          <div class="jy-detail"><b>心情</b><span>{{format_message_variable::stat_data.慕佳芊.心情}}</span></div>
+        </div>
+        <div class="jy-thought">{{format_message_variable::stat_data.慕佳芊.内心独白}}</div>
+      </div>
+    </div>
+
+    <div class="jy-foot">
+      <span>浣江边的风还在走廊尽头</span>
+      <span>Jiyang High · MVU Status</span>
+    </div>
+  </div>
+</div>
+</body>

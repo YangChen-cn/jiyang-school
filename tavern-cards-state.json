@@ -1,0 +1,887 @@
+{
+  "projectName": "暨阳中学",
+  "worldbookName": "暨阳中学",
+  "form": "charactercard",
+  "mvu": true,
+  "entryManifest": {
+    "世界观": {
+      "世界设定": {
+        "path": "世界书/世界观/世界设定.yaml",
+        "keywords": [
+          "暨阳市",
+          "诸暨",
+          "暨阳中学"
+        ],
+        "abstract": "暨阳市与暨阳中学的世界观概览：对标2026年浙江诸暨的强县级市、百年老城名校、民营经济家庭背景和高二重点班群像日常",
+        "uid": 0,
+        "enabled": true,
+        "strategy": {
+          "type": "constant"
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 20
+        }
+      }
+    },
+    "扮演准则": {
+      "扮演准则": {
+        "path": "世界书/扮演准则/扮演准则.yaml",
+        "keywords": [],
+        "abstract": "叙事风格与互动规则：第三人称日常向，口语化短句，情绪留白，女角色独立行动逻辑，禁止心理学术语",
+        "uid": 1,
+        "enabled": true,
+        "strategy": {
+          "type": "constant"
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 30
+        }
+      }
+    },
+    "地理": {
+      "学校详情": {
+        "scope": "specific",
+        "part": "region",
+        "keywords": [
+          "暨阳中学",
+          "校园"
+        ],
+        "abstract": "暨阳中学校园场景详情：高二重点班教室、操场、图书馆、天台、食堂、小花园、实验楼，各场景的特征和人物关联",
+        "contents": [
+          {
+            "content": "---\n<region region=\"暨阳中学校内\">"
+          },
+          {
+            "file": "世界书/地理/学校详情.yaml"
+          },
+          {
+            "content": "</region>"
+          }
+        ],
+        "uid": 2,
+        "enabled": true,
+        "strategy": {
+          "type": "constant"
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 40
+        }
+      },
+      "周边街区": {
+        "scope": "specific",
+        "part": "region",
+        "keywords": [
+          "暨阳路",
+          "后街小吃带",
+          "遇见奶茶店",
+          "浣江",
+          "新城商圈",
+          "诸暨站"
+        ],
+        "abstract": "暨阳中学校园周边：暨阳路校门口、后街小吃带、遇见奶茶店、晨光文具复印店、浣江步道、老城生活圈、新城商圈和诸暨站",
+        "contents": [
+          {
+            "content": "---\n<region region=\"暨阳中学校园周边\">"
+          },
+          {
+            "file": "世界书/地理/周边街区.yaml"
+          },
+          {
+            "content": "</region>"
+          }
+        ],
+        "uid": 3,
+        "enabled": true,
+        "strategy": {
+          "type": "constant"
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 50
+        }
+      }
+    },
+    "角色": {
+      "角色速览": {
+        "path": "世界书/角色/角色速览.yaml",
+        "scope": "catalog",
+        "part": "basic",
+        "keywords": [
+          "苏晓樯",
+          "温书语",
+          "沈幼楚",
+          "凌知夏",
+          "吴臻臻",
+          "慕佳芊"
+        ],
+        "abstract": "角色快速索引：<user>及五名同班同学（苏晓樯、温书语、沈幼楚、凌知夏、吴臻臻）加英语老师慕佳芊的基本识别信息",
+        "uid": 4,
+        "enabled": true,
+        "strategy": {
+          "type": "constant"
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 60
+        }
+      },
+      "苏晓樯_基础信息": {
+        "scope": "specific",
+        "part": "basic",
+        "keywords": [
+          "苏晓樯",
+          "小天女"
+        ],
+        "abstract": "苏晓樯的基础档案：矿业大亨独生千金，外号小天女，暨阳中学风云人物。张扬明艳、真诚到刺人，高二那年父亲病重后扛起家族产业，从富家千金蜕变为女继承人",
+        "contents": [
+          {
+            "content": "---\n<character_basic character=\"苏晓樯\">"
+          },
+          {
+            "file": "世界书/角色/苏晓樯/基础信息.yaml"
+          },
+          {
+            "content": "</character_basic>"
+          }
+        ],
+        "uid": 5,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "苏晓樯",
+            "小天女"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 61
+        }
+      },
+      "苏晓樯_性格调色盘": {
+        "scope": "specific",
+        "part": "personality",
+        "keywords": [
+          "苏晓樯"
+        ],
+        "abstract": "苏晓樯的性格调色盘：底气为底色、张扬为主色调、长大为点缀。居高临下但不恶意的仗义大小姐，被现实打磨后更硬更强，但骨子里那股不服输的劲从未变过",
+        "contents": [
+          {
+            "content": "---\n<character_personality character=\"苏晓樯\">"
+          },
+          {
+            "file": "世界书/角色/苏晓樯/性格调色盘.yaml"
+          },
+          {
+            "content": "</character_personality>"
+          }
+        ],
+        "uid": 6,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "苏晓樯"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 62
+        }
+      },
+      "温书语_基础信息": {
+        "scope": "specific",
+        "part": "basic",
+        "keywords": [
+          "温书语",
+          "书语"
+        ],
+        "abstract": "温书语的基础档案：文学社社长，语文课代表，安静内敛的文学少女，从小在图书馆长大，用阅读隔绝世界也在阅读中找到了自己的声音",
+        "contents": [
+          {
+            "content": "---\n<character_basic character=\"温书语\">"
+          },
+          {
+            "file": "世界书/角色/温书语/基础信息.yaml"
+          },
+          {
+            "content": "</character_basic>"
+          }
+        ],
+        "uid": 7,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "温书语",
+            "书语"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 63
+        }
+      },
+      "温书语_性格调色盘": {
+        "scope": "specific",
+        "part": "personality",
+        "keywords": [
+          "温书语"
+        ],
+        "abstract": "温书语的多阶段性格调色盘：底色安静，随好感度从内敛疏离→温和细腻→柔软坚定，以纸条和细节表达感情",
+        "contents": [
+          {
+            "content": "---\n<character_personality character=\"温书语\">"
+          },
+          {
+            "file": "世界书/角色/温书语/性格调色盘.yaml"
+          },
+          {
+            "content": "</character_personality>"
+          }
+        ],
+        "uid": 8,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "温书语"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 64
+        }
+      },
+      "沈幼楚_基础信息": {
+        "scope": "specific",
+        "part": "basic",
+        "keywords": [
+          "沈幼楚"
+        ],
+        "abstract": "沈幼楚的基础档案：家境困难的女孩，与祖母同住，在奶茶店打工，曾受亲人侵害后独自承受，极度警惕但对善意无比珍惜",
+        "contents": [
+          {
+            "content": "---\n<character_basic character=\"沈幼楚\">"
+          },
+          {
+            "file": "世界书/角色/沈幼楚/基础信息.yaml"
+          },
+          {
+            "content": "</character_basic>"
+          }
+        ],
+        "uid": 9,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "沈幼楚"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 65
+        }
+      },
+      "沈幼楚_性格调色盘": {
+        "scope": "specific",
+        "part": "personality",
+        "keywords": [
+          "沈幼楚"
+        ],
+        "abstract": "沈幼楚的多阶段性格调色盘：底色脆弱，随信任建立从沉默回避的警觉→隐忍观察的感激→温顺坚韧的依赖，以安全感的渐进重建为主线",
+        "contents": [
+          {
+            "content": "---\n<character_personality character=\"沈幼楚\">"
+          },
+          {
+            "file": "世界书/角色/沈幼楚/性格调色盘.yaml"
+          },
+          {
+            "content": "</character_personality>"
+          }
+        ],
+        "uid": 10,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "沈幼楚"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 66
+        }
+      },
+      "沈幼楚_三面性": {
+        "scope": "specific",
+        "part": "tri_faceted",
+        "keywords": [
+          "沈幼楚"
+        ],
+        "abstract": "沈幼楚的三面性：学校透明人（隐身自保）→涉及家庭的逃生模式（恐惧切断）→<user>面前停下来的地方（卸下防御、重建日常），含过渡机制和面间渗透",
+        "contents": [
+          {
+            "content": "---\n<character_tri_faceted character=\"沈幼楚\">"
+          },
+          {
+            "file": "世界书/角色/沈幼楚/三面性.yaml"
+          },
+          {
+            "content": "</character_tri_faceted>"
+          }
+        ],
+        "uid": 11,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "沈幼楚"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 67
+        }
+      },
+      "凌知夏_基础信息": {
+        "scope": "specific",
+        "part": "basic",
+        "keywords": [
+          "凌知夏",
+          "知夏"
+        ],
+        "abstract": "凌知夏的基础档案：年级前三的学霸，竞赛组成员，理性克制到情感笨拙，通过细节而非语言关照他人",
+        "contents": [
+          {
+            "content": "---\n<character_basic character=\"凌知夏\">"
+          },
+          {
+            "file": "世界书/角色/凌知夏/基础信息.yaml"
+          },
+          {
+            "content": "</character_basic>"
+          }
+        ],
+        "uid": 12,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "凌知夏",
+            "知夏"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 68
+        }
+      },
+      "凌知夏_性格调色盘": {
+        "scope": "specific",
+        "part": "personality",
+        "keywords": [
+          "凌知夏"
+        ],
+        "abstract": "凌知夏的多阶段性格调色盘：底色理性，随好感度从克制高效的冷淡→逻辑细致的解题式关心→体贴笨拙的理性沦陷，以行动翻译情感",
+        "contents": [
+          {
+            "content": "---\n<character_personality character=\"凌知夏\">"
+          },
+          {
+            "file": "世界书/角色/凌知夏/性格调色盘.yaml"
+          },
+          {
+            "content": "</character_personality>"
+          }
+        ],
+        "uid": 13,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "凌知夏"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 69
+        }
+      },
+      "慕佳芊_基础信息": {
+        "scope": "specific",
+        "part": "basic",
+        "keywords": [
+          "慕佳芊",
+          "英语老师"
+        ],
+        "abstract": "慕佳芊的基础档案：23岁的暨阳中学毕业生，回母校教英语的年轻女教师，家境优渥开宝马，大学情史丰富，回暨阳后对相亲对象百般嫌弃，在讲台上重新发现什么值得认真",
+        "contents": [
+          {
+            "content": "---\n<character_basic character=\"慕佳芊\">"
+          },
+          {
+            "file": "世界书/角色/慕佳芊/基础信息.yaml"
+          },
+          {
+            "content": "</character_basic>"
+          }
+        ],
+        "uid": 14,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "慕佳芊",
+            "英语老师"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 70
+        }
+      },
+      "慕佳芊_性格调色盘": {
+        "scope": "specific",
+        "part": "personality",
+        "keywords": [
+          "慕佳芊"
+        ],
+        "abstract": "慕佳芊的多阶段性格调色盘：底色开朗，从活力亲和的年轻教师→特别关注<user>的引导者→在温暖认真和犹豫之间拉扯的女人，师生伦理是她的红线但心早已越界",
+        "contents": [
+          {
+            "content": "---\n<character_personality character=\"慕佳芊\">"
+          },
+          {
+            "file": "世界书/角色/慕佳芊/性格调色盘.yaml"
+          },
+          {
+            "content": "</character_personality>"
+          }
+        ],
+        "uid": 15,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "慕佳芊"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 71
+        }
+      }
+    },
+    "NPC": {
+      "吴臻臻_基础信息": {
+        "path": "世界书/NPC/吴臻臻/基础信息.yaml",
+        "keywords": [
+          "吴臻臻",
+          "班长"
+        ],
+        "abstract": "吴臻臻的NPC档案：班长兼学生会副主席，虚荣驱动型人格，一切行为都离不开被看见被认可被羡慕，表面兄弟实则暗自较劲，帮了你之后会在心里计分",
+        "uid": 16,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "吴臻臻",
+            "班长"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 80
+        }
+      }
+    },
+    "事件": {
+      "开学第一天": {
+        "keywords": [
+          "开学",
+          "第一天"
+        ],
+        "abstract": "开学第一天的初始场景：九月初早晨，五个角色在教室中各就各位，以各自的方式注意到<user>走进来",
+        "contents": [
+          {
+            "content": "场景: 九月初，暨阳中学高二重点班，开学第一天"
+          },
+          {
+            "file": "世界书/事件/开学第一天.yaml"
+          }
+        ],
+        "uid": 17,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "开学",
+            "第一天"
+          ]
+        },
+        "position": {
+          "type": "at_depth",
+          "role": "system",
+          "depth": 0,
+          "order": 90
+        }
+      }
+    },
+    "MVU": {
+      "[mvu_update]变量输出格式": {
+        "path": "世界书/变量/变量输出格式.txt",
+        "part": "output_format",
+        "keywords": [],
+        "abstract": "MVU变量输出格式",
+        "uid": 18,
+        "enabled": true,
+        "strategy": {
+          "type": "constant"
+        },
+        "position": {
+          "type": "at_depth",
+          "role": "system",
+          "depth": 0,
+          "order": 100
+        }
+      },
+      "变量列表": {
+        "path": "世界书/变量/变量列表.txt",
+        "part": "variable_list",
+        "keywords": [],
+        "abstract": "MVU变量列表",
+        "uid": 19,
+        "enabled": true,
+        "strategy": {
+          "type": "constant"
+        },
+        "position": {
+          "type": "at_depth",
+          "role": "system",
+          "depth": 0,
+          "order": 110
+        }
+      },
+      "[mvu_update]变量更新规则": {
+        "path": "世界书/变量/变量更新规则.yaml",
+        "part": "update_rules",
+        "keywords": [],
+        "abstract": "MVU变量更新规则",
+        "uid": 20,
+        "enabled": true,
+        "strategy": {
+          "type": "constant"
+        },
+        "position": {
+          "type": "at_depth",
+          "role": "system",
+          "depth": 0,
+          "order": 120
+        }
+      },
+      "[InitVar]请勿打开": {
+        "path": "世界书/变量/initvar.yaml",
+        "part": "initvar",
+        "keywords": [],
+        "abstract": "MVU初始变量",
+        "uid": 21,
+        "enabled": false,
+        "position": {
+          "type": "at_depth",
+          "role": "system",
+          "depth": 0,
+          "order": 130
+        }
+      }
+    },
+    "EJS预处理": {
+      "EJS预处理": {
+        "path": "世界书/EJS/EJS预处理.txt",
+        "keywords": [],
+        "abstract": "EJS变量注册：映射current_location、affection_xiaotian/shuyu/youchu/zhixia/jiaqian到对应MVU变量路径",
+        "uid": 22,
+        "enabled": true,
+        "strategy": {
+          "type": "constant"
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 10
+        }
+      }
+    }
+  },
+  "typeLists": {
+    "before_char": [
+      "EJS预处理",
+      "世界观",
+      "扮演准则",
+      "时间线",
+      "地理"
+    ],
+    "after_char": [
+      "角色",
+      "NPC"
+    ],
+    "depth": [
+      "事件",
+      "MVU"
+    ]
+  },
+  "strategyThresholds": {
+    "角色": {
+      "basic": {
+        "threshold": 5,
+        "required": true
+      },
+      "other": {
+        "threshold": 2,
+        "required": false
+      },
+      "personality": {
+        "threshold": 2,
+        "required": true
+      },
+      "tri_faceted": {
+        "threshold": 2,
+        "required": false
+      }
+    },
+    "事件": 0,
+    "地理": {
+      "faction": {
+        "threshold": 4,
+        "required": false
+      },
+      "region": {
+        "threshold": 4,
+        "required": false
+      },
+      "scene": {
+        "threshold": 4,
+        "required": false
+      }
+    },
+    "MVU": {
+      "initvar": {
+        "threshold": null,
+        "required": false
+      },
+      "output_format": {
+        "threshold": "Infinity",
+        "required": false
+      },
+      "update_rules": {
+        "threshold": "Infinity",
+        "required": false
+      },
+      "variable_list": {
+        "threshold": "Infinity",
+        "required": false
+      }
+    },
+    "NPC": 0,
+    "EJS预处理": "Infinity",
+    "扮演准则": "Infinity",
+    "时间线": {
+      "history": {
+        "threshold": "Infinity",
+        "required": false
+      },
+      "plot": {
+        "threshold": "Infinity",
+        "required": false
+      }
+    },
+    "世界观": "Infinity"
+  },
+  "partOrder": {
+    "角色": [
+      "basic",
+      "personality",
+      "tri_faceted",
+      "other"
+    ],
+    "地理": [
+      "region",
+      "scene",
+      "faction"
+    ],
+    "MVU": [
+      "variable_list",
+      "update_rules",
+      "output_format",
+      "initvar"
+    ],
+    "时间线": [
+      "history",
+      "plot"
+    ]
+  },
+  "depth_defaults": {
+    "role": "system",
+    "depth": 0
+  },
+  "description": "",
+  "first_messages": [
+    "开场白/0.txt"
+  ],
+  "creator": "",
+  "creator_notes": "",
+  "version": "1.0",
+  "create_date": "2026-06-24T15:20:28.960Z",
+  "extensions": {
+    "tavern_helper": {
+      "scripts": {
+        "MVU": {
+          "type": "script",
+          "script_file": "脚本/MVU.txt",
+          "enabled": true,
+          "id": "d0311ca6-5e9a-498e-a777-f74dc4dc6b12",
+          "info": "",
+          "button": {
+            "enabled": true,
+            "buttons": [
+              {
+                "name": "重新处理变量",
+                "visible": true
+              },
+              {
+                "name": "重新读取初始变量",
+                "visible": true
+              },
+              {
+                "name": "快照楼层",
+                "visible": false
+              },
+              {
+                "name": "重演楼层",
+                "visible": false
+              },
+              {
+                "name": "重试额外模型解析",
+                "visible": false
+              },
+              {
+                "name": "清除旧楼层变量",
+                "visible": false
+              }
+            ]
+          },
+          "data": {}
+        },
+        "Zod": {
+          "type": "script",
+          "script_file": "脚本/Zod.txt",
+          "enabled": true,
+          "id": "5b3b09af-35e3-4149-a0f7-2f08776ed6a1",
+          "info": "",
+          "button": {
+            "enabled": true,
+            "buttons": []
+          },
+          "data": {}
+        }
+      },
+      "variables": {}
+    },
+    "talkativeness": "0.5",
+    "fav": false,
+    "depth_prompt": {
+      "prompt": "",
+      "depth": 4,
+      "role": "system"
+    }
+  },
+  "regex_scripts": {
+    "对AI隐藏状态栏": {
+      "id": "b5f2606f-69cc-4a6a-8ebb-bd8a3b7f671f",
+      "findRegex": "<StatusPlaceHolderImpl/>",
+      "replaceString": "",
+      "trimStrings": [],
+      "placement": [
+        2
+      ],
+      "disabled": false,
+      "markdownOnly": false,
+      "promptOnly": true,
+      "runOnEdit": true,
+      "substituteRegex": 0,
+      "minDepth": null,
+      "maxDepth": null
+    },
+    "状态栏界面": {
+      "id": "ce6da13c-4e35-4057-8964-3192b7903acc",
+      "findRegex": "<StatusPlaceHolderImpl/>",
+      "replace_file": "正则/状态栏界面.html",
+      "trimStrings": [],
+      "placement": [
+        2
+      ],
+      "disabled": false,
+      "markdownOnly": true,
+      "promptOnly": false,
+      "runOnEdit": true,
+      "substituteRegex": 0,
+      "minDepth": null,
+      "maxDepth": null
+    },
+    "对AI隐藏变量更新": {
+      "id": "aa12731a-97c4-4450-ac2f-0bfe1d6a4f64",
+      "findRegex": "/<(update(?:variable)?)>(?:(?!.*<\\/\\1>)(?:(?!<\\1>).)*$|(?:(?!<\\1>).)*<\\/\\1?>)/gsi",
+      "replaceString": "",
+      "trimStrings": [],
+      "placement": [
+        1,
+        2
+      ],
+      "disabled": false,
+      "markdownOnly": false,
+      "promptOnly": true,
+      "runOnEdit": false,
+      "substituteRegex": 0,
+      "minDepth": null,
+      "maxDepth": null
+    },
+    "变量更新中美化": {
+      "id": "b9d5f25b-a9d0-41bf-8a69-602d64bbde22",
+      "findRegex": "/<(update(?:variable)?)>(?!.*<\\/\\1>)\\s*((?:(?!<\\1>).)*)\\s*$/gsi",
+      "replace_file": "正则/变量更新中美化.html",
+      "trimStrings": [],
+      "placement": [
+        1,
+        2
+      ],
+      "disabled": false,
+      "markdownOnly": true,
+      "promptOnly": false,
+      "runOnEdit": false,
+      "substituteRegex": 0,
+      "minDepth": null,
+      "maxDepth": null
+    },
+    "变量更新美化": {
+      "id": "92d49340-fe5e-4929-871f-43d110e5ec76",
+      "findRegex": "/<(update(?:variable)?)>\\s*((?:(?!<\\1>).)*)\\s*<\\/\\1>/gsi",
+      "replace_file": "正则/变量更新美化.html",
+      "trimStrings": [],
+      "placement": [
+        1,
+        2
+      ],
+      "disabled": false,
+      "markdownOnly": true,
+      "promptOnly": false,
+      "runOnEdit": false,
+      "substituteRegex": 0,
+      "minDepth": null,
+      "maxDepth": null
+    }
+  }
+}
