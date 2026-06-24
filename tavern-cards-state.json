@@ -3,6 +3,7 @@
   "worldbookName": "暨阳中学",
   "form": "charactercard",
   "mvu": true,
+  "avatar": "暨阳中学.png",
   "entryManifest": {
     "世界观": {
       "世界设定": {
@@ -167,7 +168,7 @@
         "keywords": [
           "苏晓樯"
         ],
-        "abstract": "苏晓樯的性格调色盘：底气为底色、张扬为主色调、长大为点缀。居高临下但不恶意的仗义大小姐，被现实打磨后更硬更强，但骨子里那股不服输的劲从未变过",
+        "abstract": "苏晓樯的五阶段性格调色盘：底色底气，从张扬直率→直率别扭→试探拉扯→坦率柔软→亲密恋人+NSFW，以真诚的尖锐感贯穿，90+解锁完整亲密",
         "contents": [
           {
             "content": "---\n<character_personality character=\"苏晓樯\">"
@@ -231,7 +232,7 @@
         "keywords": [
           "温书语"
         ],
-        "abstract": "温书语的多阶段性格调色盘：底色安静，随好感度从内敛疏离→温和细腻→柔软坚定，以纸条和细节表达感情",
+        "abstract": "温书语的五阶段性格调色盘：底色安静，从内敛疏离→温和细腻→试探细腻→柔软坚定→亲密恋人+NSFW，以纸条和细节表达感情，90+解锁身体即语言的亲密",
         "contents": [
           {
             "content": "---\n<character_personality character=\"温书语\">"
@@ -293,7 +294,7 @@
         "keywords": [
           "沈幼楚"
         ],
-        "abstract": "沈幼楚的多阶段性格调色盘：底色脆弱，随信任建立从沉默回避的警觉→隐忍观察的感激→温顺坚韧的依赖，以安全感的渐进重建为主线",
+        "abstract": "沈幼楚的五阶段性格调色盘：底色脆弱，从沉默回避的警觉→隐忍观察的感激→温顺坚韧的依赖萌芽→主动依赖→归属+NSFW，以安全感渐进重建为主线，90+解锁亲密中的信任重构",
         "contents": [
           {
             "content": "---\n<character_personality character=\"沈幼楚\">"
@@ -324,7 +325,7 @@
         "keywords": [
           "沈幼楚"
         ],
-        "abstract": "沈幼楚的三面性：学校透明人（隐身自保）→涉及家庭的逃生模式（恐惧切断）→<user>面前停下来的地方（卸下防御、重建日常），含过渡机制和面间渗透",
+        "abstract": "沈幼楚的三面性：学校透明人（隐身自保）→涉及家庭的逃生模式（恐惧切断）→<user>面前停下来的地方（好感度≥50解锁，卸下防御、重建日常），含过渡机制和面间渗透",
         "contents": [
           {
             "content": "---\n<character_tri_faceted character=\"沈幼楚\">"
@@ -388,7 +389,7 @@
         "keywords": [
           "凌知夏"
         ],
-        "abstract": "凌知夏的多阶段性格调色盘：底色理性，随好感度从克制高效的冷淡→逻辑细致的解题式关心→体贴笨拙的理性沦陷，以行动翻译情感",
+        "abstract": "凌知夏的五阶段性格调色盘：底色理性，从克制高效→逻辑细致→逻辑崩坏的挫败→体贴笨拙→亲密恋人+NSFW，以解题精神贯穿包括亲密，90+解锁解题式亲密",
         "contents": [
           {
             "content": "---\n<character_personality character=\"凌知夏\">"
@@ -452,7 +453,7 @@
         "keywords": [
           "慕佳芊"
         ],
-        "abstract": "慕佳芊的多阶段性格调色盘：底色开朗，从活力亲和的年轻教师→特别关注<user>的引导者→在温暖认真和犹豫之间拉扯的女人，师生伦理是她的红线但心早已越界",
+        "abstract": "慕佳芊的五阶段性格调色盘：底色开朗，从活力亲和→关注引导→温暖挣扎的越界期→认真决定期→交付+NSFW，师生伦理是她的红线，90+跨越红线后的完整交付",
         "contents": [
           {
             "content": "---\n<character_personality character=\"慕佳芊\">"
@@ -498,6 +499,88 @@
         "position": {
           "type": "after_character_definition",
           "order": 80
+        }
+      }
+    },
+    "NSFW指导": {
+      "苏晓樯_NSFW指导": {
+        "scope": "specific",
+        "path": "世界书/角色/苏晓樯/NSFW指导.yaml",
+        "keywords": ["苏晓樯"],
+        "abstract": "苏晓樯的NSFW实战指导：体位偏好（骑乘主导+后入）、语料库、敏感点（耳后/腰侧/大腿内侧）、主动主导型行为速查与硬约束",
+        "uid": 23,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": ["苏晓樯"]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 72
+        }
+      },
+      "温书语_NSFW指导": {
+        "scope": "specific",
+        "path": "世界书/角色/温书语/NSFW指导.yaml",
+        "keywords": ["温书语"],
+        "abstract": "温书语的NSFW实战指导：体位偏好（传教士+面对面侧躺）、语料库、敏感点（耳垂/锁骨/脊柱/手腕）、安静承受型行为速查与硬约束",
+        "uid": 24,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": ["温书语"]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 73
+        }
+      },
+      "沈幼楚_NSFW指导": {
+        "scope": "specific",
+        "path": "世界书/角色/沈幼楚/NSFW指导.yaml",
+        "keywords": ["沈幼楚"],
+        "abstract": "沈幼楚的NSFW实战指导：体位偏好（传教士+面对面拥抱式，禁背后位初期）、语料库、敏感点与禁区（脚踝为禁区）、创伤知情行为速查与硬约束",
+        "uid": 25,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": ["沈幼楚"]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 74
+        }
+      },
+      "凌知夏_NSFW指导": {
+        "scope": "specific",
+        "path": "世界书/角色/凌知夏/NSFW指导.yaml",
+        "keywords": ["凌知夏"],
+        "abstract": "凌知夏的NSFW实战指导：体位偏好（传教士+面对面坐姿，后入经由利弊分析后加入轮换）、语料库、敏感点（脖子两侧/耳垂下方/肩胛骨间）、研究型行为速查与硬约束",
+        "uid": 26,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": ["凌知夏"]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 75
+        }
+      },
+      "慕佳芊_NSFW指导": {
+        "scope": "specific",
+        "path": "世界书/角色/慕佳芊/NSFW指导.yaml",
+        "keywords": ["慕佳芊"],
+        "abstract": "慕佳芊的NSFW实战指导：体位偏好（骑乘+传教士+沙发/椅子）、语料库、敏感点（耳后/乳房/大腿内侧根部/腰窝）、引导型向交付型过渡行为速查与硬约束（含师生伦理底线）",
+        "uid": 27,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": ["慕佳芊"]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 76
         }
       }
     },
@@ -627,7 +710,8 @@
     ],
     "after_char": [
       "角色",
-      "NPC"
+      "NPC",
+      "NSFW指导"
     ],
     "depth": [
       "事件",
@@ -687,6 +771,7 @@
       }
     },
     "NPC": 0,
+    "NSFW指导": "Infinity",
     "EJS预处理": "Infinity",
     "扮演准则": "Infinity",
     "时间线": {

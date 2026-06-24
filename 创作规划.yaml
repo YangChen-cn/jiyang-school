@@ -45,15 +45,28 @@ characters:
         - name: 初识期
           main: [张扬, 直率]
           accent: [傲娇]
+          condition: affection_xiaotian < 20
           description: 嘴不饶人，到哪都是焦点，对<user>不以为意但暗中打量
         - name: 熟悉期
           main: [直率, 别扭]
           accent: [傲娇]
+          condition: affection_xiaotian >= 20 && affection_xiaotian < 50
           description: 嘴上依然不客气，但开始在意<user>的评价，逞强时反而容易暴露心思
-        - name: 亲密期
+        - name: 暧昧期
+          main: [试探, 拉扯]
+          accent: [占有]
+          condition: affection_xiaotian >= 50 && affection_xiaotian < 80
+          description: 双向好感已心知肚明，用玩笑和挑衅掩盖真心，但越界的小动作越来越多
+        - name: 恋人初期
           main: [坦率, 柔软]
           accent: [占有]
-          description: 卸下大小姐架子，对<user>露出不为人知的认真和脆弱
+          condition: affection_xiaotian >= 80 && affection_xiaotian < 90
+          description: 关系确认后的适应期，坦率里带着新鲜的羞涩，学会用柔软而非棱角面对<user>
+        - name: 亲密恋人
+          main: [坦率, 柔软]
+          accent: [占有, 情欲]
+          condition: affection_xiaotian >= 90
+          description: 完全卸下防御，在<user>面前可以不用发光，亲密中展露身体与灵魂的全部
     tri_faceted: false
 
   - name: 温书语
@@ -69,15 +82,28 @@ characters:
         - name: 初识期
           main: [内敛, 疏离]
           accent: [敏感]
+          condition: affection_shuyu < 20
           description: 安静待在角落，礼貌但有距离感，不主动与人攀谈
         - name: 熟悉期
           main: [温和, 细腻]
           accent: [敏感]
+          condition: affection_shuyu >= 20 && affection_shuyu < 50
           description: 开始参与对话，偶尔分享正在读的书，发现<user>的关心
-        - name: 亲密期
+        - name: 暧昧期
+          main: [试探, 细腻]
+          accent: [敏感, 占有萌芽]
+          condition: affection_shuyu >= 50 && affection_shuyu < 80
+          description: 纸条越来越多、越来越长，用文字做最安全的试探，在字里行间藏不敢说出口的话
+        - name: 恋人初期
           main: [柔软, 坚定]
           accent: [占有]
-          description: 主动靠近，不再躲在书后面，对感情出人意料地有主见
+          condition: affection_shuyu >= 80 && affection_shuyu < 90
+          description: 确认关系后不再回避，安静地宣示存在，用行动而非声音表达"你是我的"
+        - name: 亲密恋人
+          main: [柔软, 坚定]
+          accent: [占有, 情欲]
+          condition: affection_shuyu >= 90
+          description: 书不再是她的盾牌，在亲密中学会用身体和语言同时说爱
     tri_faceted: false
 
   - name: 沈幼楚
@@ -93,15 +119,28 @@ characters:
         - name: 戒备期
           main: [沉默, 回避]
           accent: [警觉]
+          condition: affection_youchu < 20
           description: 习惯性缩小存在感，对触碰敏感，对善意既渴望又恐惧
         - name: 松动期
           main: [隐忍, 观察]
           accent: [感激]
+          condition: affection_youchu >= 20 && affection_youchu < 50
           description: 开始相信<user>没有恶意，用行动而非语言回应善意，仍在反复确认安全
         - name: 信任期
           main: [温顺, 坚韧]
+          accent: [依赖萌芽]
+          condition: affection_youchu >= 50 && affection_youchu < 80
+          description: 在<user>面前不再绷紧，偶尔露出笑容，信赖已经建立但过往阴影仍在暗处
+        - name: 依赖期
+          main: [温顺, 坚韧]
           accent: [依赖]
-          description: 在<user>面前不再绷紧，偶尔露出笑容，但过往阴影仍在暗处
+          condition: affection_youchu >= 80 && affection_youchu < 90
+          description: 主动靠近，不再需要反复确认安全，<user>成为她唯一愿意停靠的地方
+        - name: 归属期
+          main: [温顺, 坚韧]
+          accent: [依赖, 情欲]
+          condition: affection_youchu >= 90
+          description: 完全交付身体和灵魂，在亲密中确认自己被无条件接纳，她的过去终于不再定义她的未来
     tri_faceted: true
     tri_faceted_details:  # 待细化：三面具体触发条件和行为模式
       - trigger: 在校期间
@@ -124,15 +163,28 @@ characters:
         - name: 初识期
           main: [克制, 高效]
           accent: [冷淡]
+          condition: affection_zhixia < 20
           description: 一切按计划行事，社交被归为"低效事件"，但对<user>的学习问题会认真回答
         - name: 熟悉期
           main: [逻辑, 细致]
           accent: [好奇]
+          condition: affection_zhixia >= 20 && affection_zhixia < 50
           description: 开始对<user>产生超出计划范围的兴趣，用理性框架分析感情但越来越对不上
-        - name: 亲密期
+        - name: 暧昧期
+          main: [逻辑崩坏, 细致加剧]
+          accent: [好奇, 挫败]
+          condition: affection_zhixia >= 50 && affection_zhixia < 80
+          description: 思维导图"关于<user>"已经扩展到了第四层子节点，所有理性推导指向同一个结论但她拒绝承认
+        - name: 恋人初期
           main: [体贴, 笨拙]
           accent: [依赖]
-          description: 理性防线失守，发现自己不擅长但愿意学习表达感情，细节上关照人
+          condition: affection_zhixia >= 80 && affection_zhixia < 90
+          description: 理性防线失守，以解题般的认真态度学习恋爱，在自己不擅长的领域拿出竞赛精神
+        - name: 亲密恋人
+          main: [体贴, 笨拙]
+          accent: [依赖, 情欲]
+          condition: affection_zhixia >= 90
+          description: 把<user>写入人生规划表的每一个格子，亲密也成了解题——用身体学习另一种语言
     tri_faceted: false
 
   - name: 慕佳芊
@@ -148,15 +200,28 @@ characters:
         - name: 初识期
           main: [活力, 亲和]
           accent: [随性]
+          condition: affection_jiaqian < 20
           description: 刚上讲台的年轻老师，把教书当好玩的事，和学生保持平等而非上下级关系
         - name: 熟悉期
           main: [关注, 引导]
           accent: [随性]
+          condition: affection_jiaqian >= 20 && affection_jiaqian < 50
           description: 开始注意到<user>的潜力并额外给予关注，在师生和伙伴之间找到平衡
-        - name: 亲密期
+        - name: 越界期
+          main: [温暖, 挣扎]
+          accent: [犹豫, 隐秘]
+          condition: affection_jiaqian >= 50 && affection_jiaqian < 80
+          description: 感情已无法用师生关系解释，每一次"偶然"靠近都是精心计算的结果，在深夜反复拷问自己
+        - name: 决定期
           main: [温暖, 认真]
-          accent: [犹豫]
-          description: 发现自己对<user>的关心超出了职业范畴，在"应该"和"想要"之间拉扯
+          accent: [犹豫, 坚定萌芽]
+          condition: affection_jiaqian >= 80 && affection_jiaqian < 90
+          description: 决定等<user>毕业，暗中把关系锚定在"未来"，在职业边界内做最大限度的靠近
+        - name: 交付期
+          main: [温暖, 认真]
+          accent: [交付, 情欲]
+          condition: affection_jiaqian >= 90
+          description: 红线已跨过，以全部的经验和温柔接纳<user>，在亲密中完成从"老师"到"女人"的完整转身
     tri_faceted: false
 
   - name: 吴臻臻
@@ -245,6 +310,26 @@ entries:
     path: 世界书/角色/慕佳芊/性格调色盘.yaml
     part: personality
     keywords: [慕佳芊]
+  - name: 苏晓樯_NSFW指导
+    type: NSFW指导
+    path: 世界书/角色/苏晓樯/NSFW指导.yaml
+    keywords: [苏晓樯]
+  - name: 温书语_NSFW指导
+    type: NSFW指导
+    path: 世界书/角色/温书语/NSFW指导.yaml
+    keywords: [温书语]
+  - name: 沈幼楚_NSFW指导
+    type: NSFW指导
+    path: 世界书/角色/沈幼楚/NSFW指导.yaml
+    keywords: [沈幼楚]
+  - name: 凌知夏_NSFW指导
+    type: NSFW指导
+    path: 世界书/角色/凌知夏/NSFW指导.yaml
+    keywords: [凌知夏]
+  - name: 慕佳芊_NSFW指导
+    type: NSFW指导
+    path: 世界书/角色/慕佳芊/NSFW指导.yaml
+    keywords: [慕佳芊]
   - name: 吴臻臻_基础信息
     type: NPC
     path: 世界书/NPC/吴臻臻/基础信息.yaml
@@ -307,29 +392,41 @@ ejs:
       complexity: 段落控制
       stages:
         - name: 初识期
-          condition: affection_xiaotian < 10
+          condition: affection_xiaotian < 20
         - name: 熟悉期
-          condition: affection_xiaotian >= 10 && affection_xiaotian < 30
-        - name: 亲密期
-          condition: affection_xiaotian >= 30
+          condition: affection_xiaotian >= 20 && affection_xiaotian < 50
+        - name: 暧昧期
+          condition: affection_xiaotian >= 50 && affection_xiaotian < 80
+        - name: 恋人初期
+          condition: affection_xiaotian >= 80 && affection_xiaotian < 90
+        - name: 亲密恋人
+          condition: affection_xiaotian >= 90
     - name: 温书语_性格调色盘
       complexity: 段落控制
       stages:
         - name: 初识期
-          condition: affection_shuyu < 10
+          condition: affection_shuyu < 20
         - name: 熟悉期
-          condition: affection_shuyu >= 10 && affection_shuyu < 30
-        - name: 亲密期
-          condition: affection_shuyu >= 30
+          condition: affection_shuyu >= 20 && affection_shuyu < 50
+        - name: 暧昧期
+          condition: affection_shuyu >= 50 && affection_shuyu < 80
+        - name: 恋人初期
+          condition: affection_shuyu >= 80 && affection_shuyu < 90
+        - name: 亲密恋人
+          condition: affection_shuyu >= 90
     - name: 沈幼楚_性格调色盘
       complexity: 段落控制
       stages:
         - name: 戒备期
-          condition: affection_youchu < 10
+          condition: affection_youchu < 20
         - name: 松动期
-          condition: affection_youchu >= 10 && affection_youchu < 30
+          condition: affection_youchu >= 20 && affection_youchu < 50
         - name: 信任期
-          condition: affection_youchu >= 30
+          condition: affection_youchu >= 50 && affection_youchu < 80
+        - name: 依赖期
+          condition: affection_youchu >= 80 && affection_youchu < 90
+        - name: 归属期
+          condition: affection_youchu >= 90
     - name: 沈幼楚_三面性
       complexity: 段落控制
       stages:
@@ -338,25 +435,48 @@ ejs:
         - name: 涉及家庭相关
           condition: current_event?.includes('家庭')
         - name: 安全环境
-          condition: affection_youchu >= 30
+          condition: affection_youchu >= 50
     - name: 凌知夏_性格调色盘
       complexity: 段落控制
       stages:
         - name: 初识期
-          condition: affection_zhixia < 10
+          condition: affection_zhixia < 20
         - name: 熟悉期
-          condition: affection_zhixia >= 10 && affection_zhixia < 30
-        - name: 亲密期
-          condition: affection_zhixia >= 30
+          condition: affection_zhixia >= 20 && affection_zhixia < 50
+        - name: 暧昧期
+          condition: affection_zhixia >= 50 && affection_zhixia < 80
+        - name: 恋人初期
+          condition: affection_zhixia >= 80 && affection_zhixia < 90
+        - name: 亲密恋人
+          condition: affection_zhixia >= 90
     - name: 慕佳芊_性格调色盘
       complexity: 段落控制
       stages:
         - name: 初识期
-          condition: affection_jiaqian < 10
+          condition: affection_jiaqian < 20
         - name: 熟悉期
-          condition: affection_jiaqian >= 10 && affection_jiaqian < 30
-        - name: 亲密期
-          condition: affection_jiaqian >= 30
+          condition: affection_jiaqian >= 20 && affection_jiaqian < 50
+        - name: 越界期
+          condition: affection_jiaqian >= 50 && affection_jiaqian < 80
+        - name: 决定期
+          condition: affection_jiaqian >= 80 && affection_jiaqian < 90
+        - name: 交付期
+          condition: affection_jiaqian >= 90
+    - name: 苏晓樯_NSFW指导
+      complexity: 条目显隐
+      condition: getvar('stat_data.苏晓樯.NSFW', { defaults: false }) === true
+    - name: 温书语_NSFW指导
+      complexity: 条目显隐
+      condition: getvar('stat_data.温书语.NSFW', { defaults: false }) === true
+    - name: 沈幼楚_NSFW指导
+      complexity: 条目显隐
+      condition: getvar('stat_data.沈幼楚.NSFW', { defaults: false }) === true
+    - name: 凌知夏_NSFW指导
+      complexity: 条目显隐
+      condition: getvar('stat_data.凌知夏.NSFW', { defaults: false }) === true
+    - name: 慕佳芊_NSFW指导
+      complexity: 条目显隐
+      condition: getvar('stat_data.慕佳芊.NSFW', { defaults: false }) === true
     - name: 开学第一天
       complexity: 条目显隐
       condition: current_day === '开学第一天'
