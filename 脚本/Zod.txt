@@ -84,6 +84,7 @@ export const Schema = z.object({
 
   主角: z.object({
     当前位置: z.string().prefault('高二重点班教室'),
+    外貌: z.string().prefault('普通暨阳中学男生，穿干净校服，神情还有些没睡醒'),
   }).prefault({}),
 }).prefault({});
 
