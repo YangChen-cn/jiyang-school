@@ -83,7 +83,6 @@ export const Schema = z.object({
 
   主角: z.object({
     当前位置: z.string().prefault('高二重点班教室'),
-    当前陪同角色: z.string().prefault(''),
   }).prefault({}),
 }).prefault({});
 
