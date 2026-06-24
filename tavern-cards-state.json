@@ -1030,23 +1030,6 @@
       "minDepth": null,
       "maxDepth": null
     },
-    "对AI隐藏变量更新": {
-      "id": "aa12731a-97c4-4450-ac2f-0bfe1d6a4f64",
-      "findRegex": "/<(update(?:variable)?)>(?:(?!.*<\\/\\1>)(?:(?!<\\1>).)*$|(?:(?!<\\1>).)*<\\/\\1?>)/gsi",
-      "replaceString": "",
-      "trimStrings": [],
-      "placement": [
-        1,
-        2
-      ],
-      "disabled": false,
-      "markdownOnly": false,
-      "promptOnly": true,
-      "runOnEdit": false,
-      "substituteRegex": 0,
-      "minDepth": null,
-      "maxDepth": null
-    },
     "变量更新中美化": {
       "id": "b9d5f25b-a9d0-41bf-8a69-602d64bbde22",
       "findRegex": "/<(update(?:variable)?)>(?!.*<\\/\\1>)\\s*((?:(?!<\\1>).)*)\\s*$/gsi",
@@ -1059,7 +1042,7 @@
       "disabled": false,
       "markdownOnly": true,
       "promptOnly": false,
-      "runOnEdit": false,
+      "runOnEdit": true,
       "substituteRegex": 0,
       "minDepth": null,
       "maxDepth": null
@@ -1076,6 +1059,23 @@
       "disabled": false,
       "markdownOnly": true,
       "promptOnly": false,
+      "runOnEdit": true,
+      "substituteRegex": 0,
+      "minDepth": null,
+      "maxDepth": null
+    },
+    "对AI隐藏变量更新": {
+      "id": "aa12731a-97c4-4450-ac2f-0bfe1d6a4f64",
+      "findRegex": "/<(update(?:variable)?)>(?:(?!.*<\\/\\1>)(?:(?!<\\1>).)*$|(?:(?!<\\1>).)*<\\/\\1?>)/gsi",
+      "replaceString": "",
+      "trimStrings": [],
+      "placement": [
+        1,
+        2
+      ],
+      "disabled": false,
+      "markdownOnly": false,
+      "promptOnly": true,
       "runOnEdit": false,
       "substituteRegex": 0,
       "minDepth": null,
