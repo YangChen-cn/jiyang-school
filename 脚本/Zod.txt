@@ -1,7 +1,7 @@
 import { registerMvuSchema } from 'https://testingcf.jsdelivr.net/gh/StageDog/tavern_resource/dist/util/mvu_zod.js';
 export const Schema = z.object({
   世界: z.object({
-    日期: z.string().prefault('2026/09/01'),
+    日期: z.string().prefault('2020/09/01'),
     星期: z.string().prefault('星期二'),
     时间段: z.string().prefault('早自习'),
     天气: z.string().prefault('晴，九月早晨微热'),
@@ -10,6 +10,7 @@ export const Schema = z.object({
   }).prefault({}),
 
   苏晓樯: z.object({
+    是否在场: z.coerce.boolean().prefault(true),
     好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
     关系阶段: z.string().prefault('初识'),
     当前上装: z.string().prefault('暨阳中学校服外套，拉链敞开'),
@@ -21,6 +22,7 @@ export const Schema = z.object({
   }).prefault({}),
 
   温书语: z.object({
+    是否在场: z.coerce.boolean().prefault(true),
     好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
     关系阶段: z.string().prefault('初识'),
     当前上装: z.string().prefault('规整的暨阳中学校服外套'),
@@ -32,6 +34,7 @@ export const Schema = z.object({
   }).prefault({}),
 
   沈幼楚: z.object({
+    是否在场: z.coerce.boolean().prefault(true),
     好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
     信任度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
     关系阶段: z.string().prefault('戒备'),
@@ -44,6 +47,7 @@ export const Schema = z.object({
   }).prefault({}),
 
   凌知夏: z.object({
+    是否在场: z.coerce.boolean().prefault(true),
     好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
     关系阶段: z.string().prefault('初识'),
     当前上装: z.string().prefault('拉链拉到顶的暨阳中学校服外套'),
@@ -55,6 +59,7 @@ export const Schema = z.object({
   }).prefault({}),
 
   慕佳芊: z.object({
+    是否在场: z.coerce.boolean().prefault(true),
     好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
     关系阶段: z.string().prefault('初识'),
     当前上装: z.string().prefault('浅色衬衫，袖口挽到手腕上方'),
