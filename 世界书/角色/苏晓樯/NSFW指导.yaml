@@ -1,4 +1,4 @@
-<%_ if (getvar('stat_data.苏晓樯.NSFW', { defaults: false }) === true) { _%>
+<%_ if ((getvar('stat_data.剧情.当前nsfw', { defaults: false }) === true) && (getvar('stat_data.苏晓樯.NSFW', { defaults: false }) === true)) { _%>
 NSFW实战指导：苏晓樯
 
 体位偏好：

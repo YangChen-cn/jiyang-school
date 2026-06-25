@@ -1,4 +1,4 @@
-<%_ if (getvar('stat_data.陈芷汀.NSFW', { defaults: true }) === true) { _%>
+<%_ if ((getvar('stat_data.剧情.当前nsfw', { defaults: false }) === true) && (getvar('stat_data.陈芷汀.NSFW', { defaults: true }) === true)) { _%>
 NSFW实战指导：陈芷汀
 
 核心定位：

@@ -1,4 +1,4 @@
-<%_ if (getvar('stat_data.凌知夏.NSFW', { defaults: false }) === true) { _%>
+<%_ if ((getvar('stat_data.剧情.当前nsfw', { defaults: false }) === true) && (getvar('stat_data.凌知夏.NSFW', { defaults: false }) === true)) { _%>
 NSFW实战指导：凌知夏
 
 体位偏好：

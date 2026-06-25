@@ -1,4 +1,4 @@
-<%_ if (getvar('stat_data.温书语.NSFW', { defaults: false }) === true) { _%>
+<%_ if ((getvar('stat_data.剧情.当前nsfw', { defaults: false }) === true) && (getvar('stat_data.温书语.NSFW', { defaults: false }) === true)) { _%>
 NSFW实战指导：温书语
 
 体位偏好：

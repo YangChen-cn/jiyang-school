@@ -1,4 +1,4 @@
-<%_ if (getvar('stat_data.慕佳芊.NSFW', { defaults: false }) === true) { _%>
+<%_ if ((getvar('stat_data.剧情.当前nsfw', { defaults: false }) === true) && (getvar('stat_data.慕佳芊.NSFW', { defaults: false }) === true)) { _%>
 NSFW实战指导：慕佳芊
 
 体位偏好：
