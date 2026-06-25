@@ -3,7 +3,6 @@
   "worldbookName": "暨阳中学",
   "form": "charactercard",
   "mvu": true,
-  "avatar": "暨阳中学.png",
   "entryManifest": {
     "世界观": {
       "世界设定": {
@@ -13,7 +12,7 @@
           "诸暨",
           "暨阳中学"
         ],
-        "abstract": "暨阳市与暨阳中学的世界观概览：对标2026年浙江诸暨的强县级市、百年老城名校、民营经济家庭背景和高二重点班群像日常",
+        "abstract": "暨阳市与暨阳中学的世界观概览：对标2026年浙江诸暨的强县级市、百年老城名校、城东万风新天地商业核心、御江湾别墅区、老鹰山传说和高二重点班群像日常",
         "uid": 0,
         "enabled": true,
         "strategy": {
@@ -38,6 +37,20 @@
         "position": {
           "type": "before_character_definition",
           "order": 30
+        }
+      },
+      "修罗场冲突": {
+        "path": "世界书/扮演准则/修罗场冲突.yaml",
+        "keywords": [],
+        "abstract": "修罗场与占有欲规则：六角色三阶段吃醋递进、选择有后果、感知敏锐度与冲突风格，指导多角色同时在场时的情绪暗流处理",
+        "uid": 31,
+        "enabled": true,
+        "strategy": {
+          "type": "constant"
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 31
         }
       }
     },
@@ -76,13 +89,18 @@
         "part": "region",
         "keywords": [
           "暨阳路",
-          "后街小吃带",
+          "雄风",
+          "KFC",
+          "正新鸡排",
+          "青悦城",
           "遇见奶茶店",
           "浣江",
-          "新城商圈",
-          "诸暨站"
+          "城东万风新天地",
+          "万达宝龙商圈",
+          "老鹰山",
+          "暨阳站"
         ],
-        "abstract": "暨阳中学校园周边：暨阳路校门口、后街小吃带、遇见奶茶店、晨光文具复印店、浣江步道、老城生活圈、新城商圈和诸暨站",
+        "abstract": "暨阳中学校园周边：校门口雄风老商场、KFC与正新鸡排、青悦城、遇见奶茶店、浣江步道、老城次坞打面、城东万风新天地、万达宝龙商圈、老鹰山和暨阳站",
         "contents": [
           {
             "content": "---\n<region region=\"暨阳中学校园周边\">"
@@ -509,7 +527,7 @@
         },
         "position": {
           "type": "after_character_definition",
-          "order": 77
+          "order": 72
         }
       },
       "陈芷汀_性格调色盘": {
@@ -540,7 +558,7 @@
         },
         "position": {
           "type": "after_character_definition",
-          "order": 78
+          "order": 73
         }
       }
     },
@@ -569,8 +587,8 @@
     },
     "NSFW指导": {
       "苏晓樯_NSFW指导": {
-        "scope": "specific",
         "path": "世界书/角色/苏晓樯/NSFW指导.yaml",
+        "scope": "specific",
         "keywords": [
           "苏晓樯"
         ],
@@ -585,12 +603,12 @@
         },
         "position": {
           "type": "after_character_definition",
-          "order": 72
+          "order": 90
         }
       },
       "温书语_NSFW指导": {
-        "scope": "specific",
         "path": "世界书/角色/温书语/NSFW指导.yaml",
+        "scope": "specific",
         "keywords": [
           "温书语"
         ],
@@ -605,12 +623,12 @@
         },
         "position": {
           "type": "after_character_definition",
-          "order": 73
+          "order": 91
         }
       },
       "沈幼楚_NSFW指导": {
-        "scope": "specific",
         "path": "世界书/角色/沈幼楚/NSFW指导.yaml",
+        "scope": "specific",
         "keywords": [
           "沈幼楚"
         ],
@@ -625,12 +643,12 @@
         },
         "position": {
           "type": "after_character_definition",
-          "order": 74
+          "order": 92
         }
       },
       "凌知夏_NSFW指导": {
-        "scope": "specific",
         "path": "世界书/角色/凌知夏/NSFW指导.yaml",
+        "scope": "specific",
         "keywords": [
           "凌知夏"
         ],
@@ -645,12 +663,12 @@
         },
         "position": {
           "type": "after_character_definition",
-          "order": 75
+          "order": 93
         }
       },
       "慕佳芊_NSFW指导": {
-        "scope": "specific",
         "path": "世界书/角色/慕佳芊/NSFW指导.yaml",
+        "scope": "specific",
         "keywords": [
           "慕佳芊"
         ],
@@ -665,12 +683,12 @@
         },
         "position": {
           "type": "after_character_definition",
-          "order": 76
+          "order": 94
         }
       },
       "陈芷汀_NSFW指导": {
-        "scope": "specific",
         "path": "世界书/角色/陈芷汀/NSFW指导.yaml",
+        "scope": "specific",
         "keywords": [
           "陈芷汀"
         ],
@@ -685,7 +703,7 @@
         },
         "position": {
           "type": "after_character_definition",
-          "order": 79
+          "order": 95
         }
       }
     },
@@ -717,7 +735,7 @@
           "type": "at_depth",
           "role": "system",
           "depth": 0,
-          "order": 90
+          "order": 100
         }
       }
     },
@@ -736,7 +754,7 @@
           "type": "at_depth",
           "role": "system",
           "depth": 0,
-          "order": 100
+          "order": 110
         }
       },
       "变量列表": {
@@ -753,7 +771,7 @@
           "type": "at_depth",
           "role": "system",
           "depth": 0,
-          "order": 110
+          "order": 120
         }
       },
       "[mvu_update]变量更新规则": {
@@ -770,7 +788,7 @@
           "type": "at_depth",
           "role": "system",
           "depth": 0,
-          "order": 120
+          "order": 130
         }
       },
       "[InitVar]请勿打开": {
@@ -784,7 +802,7 @@
           "type": "at_depth",
           "role": "system",
           "depth": 0,
-          "order": 130
+          "order": 140
         }
       }
     },
@@ -918,17 +936,10 @@
     "role": "system",
     "depth": 0
   },
+  "avatar": "暨阳中学.png",
   "description": "",
   "first_messages": [
     "开场白/0.txt"
-  ],
-  "alternate_greetings": [
-    "开场白/1-慕佳芊-办公室.txt",
-    "开场白/2-苏晓樯-雨天.txt",
-    "开场白/3-温书语-图书馆.txt",
-    "开场白/4-沈幼楚-奶茶店.txt",
-    "开场白/5-凌知夏-竞赛.txt",
-    "开场白/6-陈芷汀-商场.txt"
   ],
   "creator": "",
   "creator_notes": "",
@@ -1030,6 +1041,23 @@
       "minDepth": null,
       "maxDepth": null
     },
+    "对AI隐藏变量更新": {
+      "id": "aa12731a-97c4-4450-ac2f-0bfe1d6a4f64",
+      "findRegex": "/<(update(?:variable)?)>(?:(?!.*<\\/\\1>)(?:(?!<\\1>).)*$|(?:(?!<\\1>).)*<\\/\\1?>)/gsi",
+      "replaceString": "",
+      "trimStrings": [],
+      "placement": [
+        1,
+        2
+      ],
+      "disabled": false,
+      "markdownOnly": false,
+      "promptOnly": true,
+      "runOnEdit": false,
+      "substituteRegex": 0,
+      "minDepth": null,
+      "maxDepth": null
+    },
     "变量更新中美化": {
       "id": "b9d5f25b-a9d0-41bf-8a69-602d64bbde22",
       "findRegex": "/<(update(?:variable)?)>(?!.*<\\/\\1>)\\s*((?:(?!<\\1>).)*)\\s*$/gsi",
@@ -1042,7 +1070,7 @@
       "disabled": false,
       "markdownOnly": true,
       "promptOnly": false,
-      "runOnEdit": true,
+      "runOnEdit": false,
       "substituteRegex": 0,
       "minDepth": null,
       "maxDepth": null
@@ -1059,23 +1087,6 @@
       "disabled": false,
       "markdownOnly": true,
       "promptOnly": false,
-      "runOnEdit": true,
-      "substituteRegex": 0,
-      "minDepth": null,
-      "maxDepth": null
-    },
-    "对AI隐藏变量更新": {
-      "id": "aa12731a-97c4-4450-ac2f-0bfe1d6a4f64",
-      "findRegex": "/<(update(?:variable)?)>(?:(?!.*<\\/\\1>)(?:(?!<\\1>).)*$|(?:(?!<\\1>).)*<\\/\\1?>)/gsi",
-      "replaceString": "",
-      "trimStrings": [],
-      "placement": [
-        1,
-        2
-      ],
-      "disabled": false,
-      "markdownOnly": false,
-      "promptOnly": true,
       "runOnEdit": false,
       "substituteRegex": 0,
       "minDepth": null,
