@@ -325,6 +325,15 @@
     text-align: center;
   }
 
+  .jy-shell[data-nsfw="true"] .jy-plot-card[data-kind="nsfw"] {
+    border-color: rgba(200, 85, 115, 0.35);
+    background: linear-gradient(180deg, rgba(255, 220, 235, 0.40), rgba(255, 240, 245, 0.25));
+  }
+
+  .jy-shell[data-nsfw="true"] .jy-plot-card[data-kind="nsfw"] .jy-plot-label {
+    color: #c24f6a;
+  }
+
   .jy-people {
     position: relative;
     display: grid;
@@ -718,11 +727,96 @@
       grid-column: 1 / -1;
     }
   }
+  /* ── NSFW mode ── */
+  .jy-shell[data-nsfw="true"] {
+    border-color: rgba(200, 85, 115, 0.48);
+    background:
+      linear-gradient(135deg, rgba(220, 105, 135, 0.14), transparent 36%),
+      linear-gradient(315deg, rgba(210, 130, 155, 0.16), transparent 32%),
+      #fdf6f8;
+    box-shadow:
+      0 18px 42px rgba(170, 70, 95, 0.16),
+      0 0 64px rgba(215, 120, 148, 0.09);
+  }
+
+  .jy-shell[data-nsfw="true"]::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 4;
+    border-radius: inherit;
+    background:
+      radial-gradient(ellipse at 18% 28%, rgba(255, 155, 180, 0.1), transparent 42%),
+      radial-gradient(ellipse at 75% 55%, rgba(255, 130, 165, 0.08), transparent 38%);
+  }
+
+  .jy-nsfw-badge {
+    display: none;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 11px;
+    border: 1px solid rgba(200, 85, 115, 0.42);
+    border-radius: 999px;
+    background: linear-gradient(135deg, rgba(250, 180, 200, 0.30), rgba(250, 210, 225, 0.18));
+    color: #c24f6a;
+    font-size: 11px;
+    font-weight: 750;
+    white-space: nowrap;
+    animation: jy-nsfw-pulse 2.2s ease-in-out infinite;
+  }
+
+  .jy-shell[data-nsfw="true"] .jy-nsfw-badge {
+    display: inline-flex;
+  }
+
+  @keyframes jy-nsfw-pulse {
+    0%, 100% { opacity: 0.72; }
+    50%      { opacity: 1; }
+  }
+
+  .jy-shell[data-nsfw="true"] .jy-head {
+    border-bottom-color: rgba(200, 85, 115, 0.28);
+  }
+
+  .jy-nsfw-hearts {
+    display: none;
+    position: absolute;
+    top: 8px;
+    right: 14px;
+    color: rgba(200, 85, 115, 0.34);
+    font-size: 15px;
+    letter-spacing: 4px;
+    pointer-events: none;
+    z-index: 8;
+    animation: jy-hearts-drift 3.5s ease-in-out infinite;
+  }
+
+  .jy-shell[data-nsfw="true"] .jy-nsfw-hearts {
+    display: block;
+  }
+
+  .jy-sfw-text {
+    display: inline;
+    color: var(--c-muted);
+    font-size: 11px;
+    font-weight: 650;
+  }
+
+  .jy-shell[data-nsfw="true"] .jy-sfw-text {
+    display: none;
+  }
+
+  @keyframes jy-hearts-drift {
+    0%, 100% { transform: translateY(0); opacity: 0.38; }
+    50%      { transform: translateY(-8px); opacity: 0.68; }
+  }
 </style>
 <body>
 
 <div class="jy-status">
-  <div class="jy-shell" aria-label="暨阳中学状态栏">
+  <div class="jy-shell" aria-label="暨阳中学状态栏" data-nsfw="{{format_message_variable::stat_data.剧情.当前nsfw}}">
+    <div class="jy-nsfw-hearts" aria-hidden="true">♥ ♡ ♥</div>
     <div class="jy-head">
       <div class="jy-user-panel">
         <img class="jy-avatar jy-user-avatar" alt="{{user}}" data-avatar-key="user" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%232f7d72'/%3E%3Cstop offset='1' stop-color='%23d8a657'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='128' height='128' rx='64' fill='%23fbfaf5'/%3E%3Ccircle cx='64' cy='48' r='22' fill='url(%23g)' opacity='.9'/%3E%3Cpath d='M28 112c6-25 20-38 36-38s30 13 36 38' fill='url(%23g)' opacity='.82'/%3E%3C/svg%3E">
@@ -762,6 +856,10 @@
       <div class="jy-plot-card" data-kind="event">
         <span class="jy-plot-label">当前事件</span>
         <span class="jy-plot-value">{{format_message_variable::stat_data.剧情.当前事件}}</span>
+      </div>
+      <div class="jy-plot-card" data-kind="nsfw">
+        <span class="jy-plot-label">状态</span>
+        <span class="jy-plot-value"><span class="jy-nsfw-badge">♥ NSFW</span><span class="jy-sfw-text">日常</span></span>
       </div>
       <div class="jy-plot-card" data-kind="activity">
         <span class="jy-plot-label">校园活动</span>
