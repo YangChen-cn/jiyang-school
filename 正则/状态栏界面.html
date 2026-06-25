@@ -325,12 +325,12 @@
     text-align: center;
   }
 
-  .jy-shell[data-nsfw="true"] .jy-plot-card[data-kind="nsfw"] {
+  .jy-shell[data-nsfw="true"] .jy-status-chip {
     border-color: rgba(200, 85, 115, 0.35);
-    background: linear-gradient(180deg, rgba(255, 220, 235, 0.40), rgba(255, 240, 245, 0.25));
+    background: linear-gradient(180deg, rgba(255, 220, 235, 0.38), rgba(255, 240, 245, 0.22));
   }
 
-  .jy-shell[data-nsfw="true"] .jy-plot-card[data-kind="nsfw"] .jy-plot-label {
+  .jy-shell[data-nsfw="true"] .jy-status-chip .jy-label {
     color: #c24f6a;
   }
 
@@ -846,6 +846,10 @@
         <span class="jy-label">主角位置</span>
         <span class="jy-value">{{format_message_variable::stat_data.主角.当前位置}}</span>
       </div>
+      <div class="jy-chip jy-status-chip">
+        <span class="jy-label">状态</span>
+        <span class="jy-value"><span class="jy-nsfw-badge">♥ NSFW</span><span class="jy-sfw-text">日常</span></span>
+      </div>
     </div>
 
     <div class="jy-plot" aria-label="剧情推进">
@@ -856,10 +860,6 @@
       <div class="jy-plot-card" data-kind="event">
         <span class="jy-plot-label">当前事件</span>
         <span class="jy-plot-value">{{format_message_variable::stat_data.剧情.当前事件}}</span>
-      </div>
-      <div class="jy-plot-card" data-kind="nsfw">
-        <span class="jy-plot-label">状态</span>
-        <span class="jy-plot-value"><span class="jy-nsfw-badge">♥ NSFW</span><span class="jy-sfw-text">日常</span></span>
       </div>
       <div class="jy-plot-card" data-kind="activity">
         <span class="jy-plot-label">校园活动</span>
