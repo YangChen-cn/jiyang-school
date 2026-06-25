@@ -560,6 +560,27 @@
           "type": "after_character_definition",
           "order": 73
         }
+      },
+      "<user>": {
+        "path": "世界书/角色/<user>.yaml",
+        "scope": "specific",
+        "part": "basic",
+        "keywords": [
+          "<user>"
+        ],
+        "abstract": "<user>的自定义档案：姓名、年龄、家庭背景、性格、外貌等基础信息，由用户在 YAML 文件中自行填写",
+        "uid": 32,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "<user>"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 74
+        }
       }
     },
     "NPC": {
