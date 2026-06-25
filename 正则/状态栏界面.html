@@ -273,6 +273,58 @@
     white-space: nowrap;
   }
 
+  .jy-plot {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr) minmax(0, 1fr) minmax(64px, 0.5fr) minmax(0, 0.9fr);
+    gap: 8px;
+    padding: 0 14px 12px;
+  }
+
+  .jy-plot-card {
+    min-width: 0;
+    border: 1px solid rgba(47, 125, 114, 0.15);
+    border-radius: 7px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.55));
+    padding: 7px 9px;
+  }
+
+  .jy-plot-card[data-muted="true"] {
+    opacity: 0.68;
+  }
+
+  .jy-plot-label {
+    display: block;
+    color: var(--c-muted);
+    font-size: 10px;
+    font-weight: 650;
+    white-space: nowrap;
+  }
+
+  .jy-plot-value {
+    display: block;
+    margin-top: 2px;
+    overflow: hidden;
+    color: var(--c-ink);
+    font-size: 12px;
+    font-weight: 760;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .jy-plot-card[data-kind="pace"] .jy-plot-value {
+    color: var(--c-primary);
+  }
+
+  .jy-plot-card[data-kind="activity"] .jy-plot-value {
+    color: var(--c-accent);
+  }
+
+  .jy-plot-card[data-kind="cooldown"] {
+    text-align: center;
+  }
+
   .jy-people {
     position: relative;
     display: grid;
@@ -642,6 +694,10 @@
       grid-template-columns: 1fr;
     }
 
+    .jy-plot {
+      grid-template-columns: 1fr;
+    }
+
     .jy-people {
       grid-template-columns: 1fr;
     }
@@ -676,7 +732,7 @@
         </div>
       </div>
       <div class="jy-title">
-        <div class="jy-kicker">暨阳中学 · 当前坐标</div>
+        <div class="jy-kicker">暨阳中学 v1.2 · 当前坐标</div>
         <div class="jy-location">{{format_message_variable::stat_data.世界.当前位置}}</div>
       </div>
       <button class="jy-map-button" type="button" data-action="open-map">地图</button>
@@ -695,6 +751,29 @@
       <div class="jy-chip">
         <span class="jy-label">主角位置</span>
         <span class="jy-value">{{format_message_variable::stat_data.主角.当前位置}}</span>
+      </div>
+    </div>
+
+    <div class="jy-plot" aria-label="剧情推进">
+      <div class="jy-plot-card" data-kind="pace">
+        <span class="jy-plot-label">推进节奏</span>
+        <span class="jy-plot-value">{{format_message_variable::stat_data.剧情.推进节奏}}</span>
+      </div>
+      <div class="jy-plot-card" data-kind="event">
+        <span class="jy-plot-label">当前事件</span>
+        <span class="jy-plot-value">{{format_message_variable::stat_data.剧情.当前事件}}</span>
+      </div>
+      <div class="jy-plot-card" data-kind="activity">
+        <span class="jy-plot-label">校园活动</span>
+        <span class="jy-plot-value">{{format_message_variable::stat_data.剧情.校园活动}}</span>
+      </div>
+      <div class="jy-plot-card" data-kind="cooldown">
+        <span class="jy-plot-label">冷却</span>
+        <span class="jy-plot-value">{{format_message_variable::stat_data.剧情.事件冷却}}</span>
+      </div>
+      <div class="jy-plot-card" data-kind="focus">
+        <span class="jy-plot-label">焦点</span>
+        <span class="jy-plot-value">{{format_message_variable::stat_data.剧情.上次焦点角色}}</span>
       </div>
     </div>
 

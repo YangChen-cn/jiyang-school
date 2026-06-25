@@ -7,6 +7,14 @@ export const Schema = z.object({
     当前位置: z.string().prefault('高二重点班教室'),
   }).prefault({}),
 
+  剧情: z.object({
+    推进节奏: z.string().prefault('日常铺垫'),
+    当前事件: z.string().prefault('无'),
+    事件冷却: z.coerce.number().transform(v => _.clamp(v, 0, 5)).prefault(0),
+    上次焦点角色: z.string().prefault('无'),
+    校园活动: z.string().prefault('无'),
+  }).prefault({}),
+
   苏晓樯: z.object({
     是否在场: z.coerce.boolean().prefault(true),
     好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),

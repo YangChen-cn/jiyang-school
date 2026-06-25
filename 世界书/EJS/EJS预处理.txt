@@ -2,6 +2,13 @@
 <%_
 define('current_location', getvar('stat_data.世界.当前位置', { defaults: '' }));
 define('current_day', '开学第一天');
+define('current_date', getvar('stat_data.世界.日期', { defaults: '2020/09/01' }));
+define('current_period', getvar('stat_data.世界.时间段', { defaults: '' }));
+define('plot_pace', getvar('stat_data.剧情.推进节奏', { defaults: '日常铺垫' }));
+define('plot_event', getvar('stat_data.剧情.当前事件', { defaults: '无' }));
+define('plot_cooldown', getvar('stat_data.剧情.事件冷却', { defaults: 0 }));
+define('plot_focus', getvar('stat_data.剧情.上次焦点角色', { defaults: '无' }));
+define('campus_activity', getvar('stat_data.剧情.校园活动', { defaults: '无' }));
 define('affection_xiaotian', getvar('stat_data.苏晓樯.好感度', { defaults: 0 }));
 define('affection_shuyu', getvar('stat_data.温书语.好感度', { defaults: 0 }));
 define('affection_youchu', getvar('stat_data.沈幼楚.好感度', { defaults: 0 }));

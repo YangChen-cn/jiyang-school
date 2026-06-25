@@ -1,6 +1,6 @@
 {
   "projectName": "暨阳中学",
-  "worldbookName": "暨阳中学",
+  "worldbookName": "暨阳中学v1.2",
   "form": "charactercard",
   "mvu": true,
   "entryManifest": {
@@ -753,6 +753,51 @@
           "depth": 0,
           "order": 100
         }
+      },
+      "[mvu_plot]剧情推动器": {
+        "path": "世界书/事件/剧情推动器.yaml",
+        "keywords": [
+          "剧情推动",
+          "事件池",
+          "日常铺垫",
+          "余波处理"
+        ],
+        "abstract": "用户优先的轻量剧情推动器：<user>明确行动高于事件池，事件池仅在场面停住时兜底；根据剧情节奏、事件冷却、在场角色和好感阶段生成一个可拒绝的小压力或余波",
+        "uid": 33,
+        "enabled": true,
+        "strategy": {
+          "type": "constant"
+        },
+        "position": {
+          "type": "at_depth",
+          "role": "system",
+          "depth": 0,
+          "order": 101
+        }
+      },
+      "[mvu_plot]校园活动节点": {
+        "path": "世界书/事件/校园活动节点.yaml",
+        "keywords": [
+          "体育周",
+          "篮球对抗赛",
+          "艺术周",
+          "十佳歌手",
+          "文艺汇演",
+          "远足",
+          "老鹰山"
+        ],
+        "abstract": "校园活动节点：体育周篮球对抗赛、11月老鹰山远足、12月艺术周十佳歌手与文艺汇演，提供铺垫、事件池和余波边界",
+        "uid": 34,
+        "enabled": true,
+        "strategy": {
+          "type": "constant"
+        },
+        "position": {
+          "type": "at_depth",
+          "role": "system",
+          "depth": 0,
+          "order": 102
+        }
       }
     },
     "MVU": {
@@ -826,7 +871,7 @@
       "EJS预处理": {
         "path": "世界书/EJS/EJS预处理.txt",
         "keywords": [],
-        "abstract": "EJS变量注册：映射current_location、affection_xiaotian/shuyu/youchu/zhixia/jiaqian到对应MVU变量路径",
+        "abstract": "EJS变量注册：映射当前位置、日期时间、剧情节奏/事件/冷却/焦点/校园活动，以及各角色好感度到对应MVU变量路径",
         "uid": 22,
         "enabled": true,
         "strategy": {
@@ -952,7 +997,7 @@
     "role": "system",
     "depth": 0
   },
-  "avatar": "暨阳中学.png",
+  "avatar": "暨阳中学v1.2.png",
   "description": "",
   "first_messages": [
     "开场白/0.txt"
