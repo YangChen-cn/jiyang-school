@@ -325,6 +325,141 @@
     text-align: center;
   }
 
+  .jy-calendar {
+    position: relative;
+    margin: 0 14px 12px;
+    border: 1px solid rgba(73, 111, 158, 0.16);
+    border-radius: 8px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.56)),
+      repeating-linear-gradient(0deg, transparent 0 19px, rgba(73, 111, 158, 0.055) 20px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    padding: 10px 11px 11px;
+  }
+
+  .jy-calendar-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 9px;
+  }
+
+  .jy-calendar-title {
+    color: var(--c-ink);
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .jy-calendar-hint {
+    overflow: hidden;
+    color: var(--c-muted);
+    font-size: 10px;
+    font-weight: 650;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .jy-timeline {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .jy-timeline::before {
+    content: "";
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    top: 18px;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(47, 125, 114, 0.25), rgba(216, 166, 87, 0.4), rgba(179, 107, 74, 0.35));
+  }
+
+  .jy-jump {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    min-width: 0;
+    min-height: 78px;
+    align-content: start;
+    gap: 4px;
+    border: 1px solid rgba(73, 111, 158, 0.18);
+    border-radius: 8px;
+    background: rgba(251, 250, 245, 0.9);
+    color: var(--c-ink);
+    cursor: pointer;
+    font: inherit;
+    padding: 9px 9px 8px;
+    text-align: left;
+    box-shadow: 0 8px 18px rgba(38, 49, 47, 0.07);
+  }
+
+  .jy-jump::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--jump-tone, var(--c-primary));
+    border-radius: 50%;
+    background: var(--c-paper);
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.76);
+  }
+
+  .jy-jump[data-tone="green"] { --jump-tone: var(--c-primary); }
+  .jy-jump[data-tone="gold"] { --jump-tone: var(--c-warm); }
+  .jy-jump[data-tone="blue"] { --jump-tone: var(--c-cool); }
+  .jy-jump[data-tone="red"] { --jump-tone: var(--c-accent); }
+
+  .jy-jump:hover,
+  .jy-jump:focus-visible {
+    border-color: var(--jump-tone, var(--c-primary));
+    background: rgba(255, 255, 255, 0.96);
+    outline: none;
+    transform: translateY(-1px);
+  }
+
+  .jy-jump-date {
+    color: var(--jump-tone, var(--c-primary));
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .jy-jump-name {
+    overflow: hidden;
+    color: var(--c-ink);
+    font-size: 13px;
+    font-weight: 820;
+    line-height: 1.18;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .jy-jump-note {
+    color: var(--c-muted);
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .jy-jump-toast {
+    display: none;
+    margin-top: 8px;
+    border-left: 3px solid var(--c-primary);
+    background: rgba(47, 125, 114, 0.08);
+    color: var(--c-muted);
+    font-size: 11px;
+    font-weight: 650;
+    padding: 6px 8px;
+  }
+
+  .jy-jump-toast[data-show="true"] {
+    display: block;
+  }
+
   .jy-shell[data-nsfw="true"] .jy-status-chip {
     border-color: rgba(200, 85, 115, 0.35);
     background: linear-gradient(180deg, rgba(255, 220, 235, 0.38), rgba(255, 240, 245, 0.22));
@@ -707,6 +842,36 @@
       grid-template-columns: 1fr;
     }
 
+    .jy-calendar-head {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .jy-timeline {
+      grid-template-columns: 1fr;
+    }
+
+    .jy-timeline::before {
+      left: 15px;
+      right: auto;
+      top: 13px;
+      bottom: 13px;
+      width: 2px;
+      height: auto;
+    }
+
+    .jy-jump {
+      min-height: 0;
+      padding-left: 28px;
+    }
+
+    .jy-jump::before {
+      position: absolute;
+      left: 9px;
+      top: 12px;
+    }
+
     .jy-people {
       grid-template-columns: 1fr;
     }
@@ -873,6 +1038,36 @@
         <span class="jy-plot-label">焦点</span>
         <span class="jy-plot-value">{{format_message_variable::stat_data.剧情.上次焦点角色}}</span>
       </div>
+    </div>
+
+    <div class="jy-calendar" aria-label="学期大事件时间轴">
+      <div class="jy-calendar-head">
+        <span class="jy-calendar-title">学期时间轴</span>
+        <span class="jy-calendar-hint">点击事件，填入快进指令</span>
+      </div>
+      <div class="jy-timeline">
+        <button class="jy-jump" type="button" data-tone="green" data-jump-text="快进到开学第一天前夕">
+          <span class="jy-jump-date">09/01</span>
+          <span class="jy-jump-name">开学第一天</span>
+          <span class="jy-jump-note">座位、课本、第一轮注意</span>
+        </button>
+        <button class="jy-jump" type="button" data-tone="gold" data-jump-text="快进到体育周前夕">
+          <span class="jy-jump-date">10月中下旬</span>
+          <span class="jy-jump-name">体育周</span>
+          <span class="jy-jump-note">篮球报名、后勤分组、赛前选择</span>
+        </button>
+        <button class="jy-jump" type="button" data-tone="blue" data-jump-text="快进到远足前夕">
+          <span class="jy-jump-date">11月</span>
+          <span class="jy-jump-name">老鹰山远足</span>
+          <span class="jy-jump-note">路线分组、补给、同行压力</span>
+        </button>
+        <button class="jy-jump" type="button" data-tone="red" data-jump-text="快进到艺术周前夕">
+          <span class="jy-jump-date">12月</span>
+          <span class="jy-jump-name">艺术周</span>
+          <span class="jy-jump-note">十佳歌手、排练、后台偶遇</span>
+        </button>
+      </div>
+      <div class="jy-jump-toast" role="status" aria-live="polite"></div>
     </div>
 
     <div class="jy-people">
@@ -1086,14 +1281,97 @@
     image.src = dataUrl;
   }
 
+  function getReachableDocuments() {
+    const docs = [document];
+    try {
+      if (window.parent && window.parent.document && window.parent.document !== document) docs.push(window.parent.document);
+    } catch (error) {}
+    try {
+      if (window.top && window.top.document && !docs.includes(window.top.document)) docs.push(window.top.document);
+    } catch (error) {}
+    return docs;
+  }
+
+  function isUsableControl(element) {
+    if (!element || element.disabled || element.readOnly) return false;
+    if (element.closest && element.closest(".jy-status")) return false;
+    return true;
+  }
+
+  function findPromptInput() {
+    const selectors = [
+      "#send_textarea",
+      "textarea#send_textarea",
+      "textarea[name='send_textarea']",
+      "textarea[aria-label*='message' i]",
+      "textarea[placeholder*='输入']",
+      "textarea[placeholder*='消息']",
+      "textarea[placeholder*='message' i]",
+      "textarea[placeholder]",
+      "[contenteditable='true'][role='textbox']",
+      "[contenteditable='true']"
+    ];
+
+    for (const doc of getReachableDocuments()) {
+      for (const selector of selectors) {
+        const input = doc.querySelector(selector);
+        if (isUsableControl(input)) return input;
+      }
+      if (isUsableControl(doc.activeElement) && (doc.activeElement.matches("textarea, input, [contenteditable='true']"))) {
+        return doc.activeElement;
+      }
+    }
+    return null;
+  }
+
+  function setPromptText(input, text) {
+    input.focus();
+    if ("value" in input) {
+      const setter = Object.getOwnPropertyDescriptor(input.__proto__, "value")?.set;
+      if (setter) setter.call(input, text);
+      else input.value = text;
+    } else {
+      input.textContent = text;
+    }
+    const doc = input.ownerDocument || document;
+    input.dispatchEvent(new doc.defaultView.Event("input", { bubbles: true }));
+    input.dispatchEvent(new doc.defaultView.Event("change", { bubbles: true }));
+  }
+
+  function showJumpToast(root, text) {
+    const toast = root.querySelector(".jy-jump-toast");
+    if (!toast) return;
+    toast.textContent = "已填入输入框：" + text;
+    toast.dataset.show = "true";
+    window.clearTimeout(root._jyJumpToastTimer);
+    root._jyJumpToastTimer = window.setTimeout(() => {
+      toast.dataset.show = "false";
+    }, 2600);
+  }
+
+  function sendFastForward(root, text) {
+    const input = findPromptInput();
+    if (!input) {
+      const toast = root.querySelector(".jy-jump-toast");
+      if (toast) {
+        toast.textContent = "未找到输入框，请手动输入：" + text;
+        toast.dataset.show = "true";
+      }
+      return;
+    }
+
+    setPromptText(input, text);
+    showJumpToast(root, text);
+  }
+
   function bindStatus(root) {
     if (!root) return;
-    if (root.dataset.avatarBoundVersion === "4") {
+    if (root.dataset.avatarBoundVersion === "5") {
       applyStoredAvatars(root);
       return;
     }
     root.dataset.avatarBound = "true";
-    root.dataset.avatarBoundVersion = "4";
+    root.dataset.avatarBoundVersion = "5";
 
     const modal = root.querySelector(".jy-avatar-modal");
     const big = root.querySelector(".jy-avatar-big");
@@ -1152,6 +1430,12 @@
     }
 
     root.addEventListener("click", (event) => {
+      const jump = event.target.closest(".jy-jump");
+      if (jump && root.contains(jump)) {
+        sendFastForward(root, jump.dataset.jumpText || jump.textContent.trim());
+        return;
+      }
+
       if (event.target.closest('[data-action="open-map"]')) {
         openMap();
         return;
