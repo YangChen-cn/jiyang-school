@@ -363,7 +363,7 @@
   .jy-timeline {
     position: relative;
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(7, minmax(0, 1fr));
     gap: 8px;
   }
 
@@ -1040,31 +1040,46 @@
       </div>
     </div>
 
-    <div class="jy-calendar" aria-label="学期大事件时间轴">
+    <div class="jy-calendar" aria-label="学年大事件时间轴">
       <div class="jy-calendar-head">
-        <span class="jy-calendar-title">学期时间轴</span>
+        <span class="jy-calendar-title">学年时间轴</span>
         <span class="jy-calendar-hint">点击事件，填入快进指令</span>
       </div>
       <div class="jy-timeline">
-        <button class="jy-jump" type="button" data-tone="green" data-jump-text="快进到开学第一天前夕">
-          <span class="jy-jump-date">09/01</span>
-          <span class="jy-jump-name">开学第一天</span>
-          <span class="jy-jump-note">座位、课本、第一轮注意</span>
+        <button class="jy-jump" type="button" data-tone="green" data-jump-text="快进到国庆假期前夕">
+          <span class="jy-jump-date">10/01-07</span>
+          <span class="jy-jump-name">国庆假期</span>
+          <span class="jy-jump-note">第一次校外长时间相处</span>
         </button>
         <button class="jy-jump" type="button" data-tone="gold" data-jump-text="快进到体育周前夕">
           <span class="jy-jump-date">10月中下旬</span>
           <span class="jy-jump-name">体育周</span>
-          <span class="jy-jump-note">篮球报名、后勤分组、赛前选择</span>
+          <span class="jy-jump-note">篮球对抗赛、后勤选择</span>
+        </button>
+        <button class="jy-jump" type="button" data-tone="blue" data-jump-text="快进到期中考试前夕">
+          <span class="jy-jump-date">11月上旬</span>
+          <span class="jy-jump-name">期中考试</span>
+          <span class="jy-jump-note">首次正式排名与压力</span>
         </button>
         <button class="jy-jump" type="button" data-tone="blue" data-jump-text="快进到远足前夕">
-          <span class="jy-jump-date">11月</span>
+          <span class="jy-jump-date">11月中下旬</span>
           <span class="jy-jump-name">老鹰山远足</span>
-          <span class="jy-jump-note">路线分组、补给、同行压力</span>
+          <span class="jy-jump-note">路线分组、补给照应</span>
         </button>
         <button class="jy-jump" type="button" data-tone="red" data-jump-text="快进到艺术周前夕">
           <span class="jy-jump-date">12月</span>
           <span class="jy-jump-name">艺术周</span>
-          <span class="jy-jump-note">十佳歌手、排练、后台偶遇</span>
+          <span class="jy-jump-note">十佳歌手、排练后台</span>
+        </button>
+        <button class="jy-jump" type="button" data-tone="green" data-jump-text="快进到寒假前夕">
+          <span class="jy-jump-date">2021/01月底</span>
+          <span class="jy-jump-name">寒假</span>
+          <span class="jy-jump-note">家庭与生活圈展开</span>
+        </button>
+        <button class="jy-jump" type="button" data-tone="red" data-jump-text="快进到春节前夕">
+          <span class="jy-jump-date">2021/02/12</span>
+          <span class="jy-jump-name">春节</span>
+          <span class="jy-jump-note">寒假内的人际密集点</span>
         </button>
       </div>
       <div class="jy-jump-toast" role="status" aria-live="polite"></div>
