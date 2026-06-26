@@ -574,7 +574,7 @@
         },
         "position": {
           "type": "before_character_definition",
-          "order": 15
+          "order": 80
         }
       }
     },
@@ -597,7 +597,7 @@
         },
         "position": {
           "type": "after_character_definition",
-          "order": 80
+          "order": 90
         }
       }
     },
@@ -619,7 +619,7 @@
         },
         "position": {
           "type": "after_character_definition",
-          "order": 90
+          "order": 100
         }
       },
       "温书语_NSFW指导": {
@@ -639,7 +639,7 @@
         },
         "position": {
           "type": "after_character_definition",
-          "order": 91
+          "order": 101
         }
       },
       "沈幼楚_NSFW指导": {
@@ -659,7 +659,7 @@
         },
         "position": {
           "type": "after_character_definition",
-          "order": 92
+          "order": 102
         }
       },
       "凌知夏_NSFW指导": {
@@ -679,7 +679,7 @@
         },
         "position": {
           "type": "after_character_definition",
-          "order": 93
+          "order": 103
         }
       },
       "慕佳芊_NSFW指导": {
@@ -699,7 +699,7 @@
         },
         "position": {
           "type": "after_character_definition",
-          "order": 94
+          "order": 104
         }
       },
       "陈芷汀_NSFW指导": {
@@ -719,7 +719,7 @@
         },
         "position": {
           "type": "after_character_definition",
-          "order": 95
+          "order": 105
         }
       }
     },
@@ -751,7 +751,7 @@
           "type": "at_depth",
           "role": "system",
           "depth": 0,
-          "order": 100
+          "order": 110
         }
       },
       "[mvu_plot]剧情推动器": {
@@ -772,7 +772,7 @@
           "type": "at_depth",
           "role": "system",
           "depth": 0,
-          "order": 101
+          "order": 111
         }
       },
       "[mvu_plot]校园活动节点": {
@@ -807,7 +807,7 @@
           "type": "at_depth",
           "role": "system",
           "depth": 0,
-          "order": 102
+          "order": 112
         }
       }
     },
@@ -826,7 +826,7 @@
           "type": "at_depth",
           "role": "system",
           "depth": 0,
-          "order": 110
+          "order": 120
         }
       },
       "变量列表": {
@@ -843,7 +843,7 @@
           "type": "at_depth",
           "role": "system",
           "depth": 0,
-          "order": 120
+          "order": 130
         }
       },
       "[mvu_update]变量更新规则": {
@@ -860,7 +860,7 @@
           "type": "at_depth",
           "role": "system",
           "depth": 0,
-          "order": 130
+          "order": 140
         }
       },
       "[InitVar]请勿打开": {
@@ -874,7 +874,7 @@
           "type": "at_depth",
           "role": "system",
           "depth": 0,
-          "order": 140
+          "order": 150
         }
       }
     },
