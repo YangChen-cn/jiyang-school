@@ -1,3 +1,4 @@
+```
 <style>
   .jy-status {
     --c-ink: #26312f;
@@ -1381,18 +1382,19 @@
 
   function bindStatus(root) {
     if (!root) return;
-    if (root.dataset.avatarBoundVersion === "5") {
+    if (root.dataset.avatarBoundVersion === "6") {
       applyStoredAvatars(root);
       return;
     }
     root.dataset.avatarBound = "true";
-    root.dataset.avatarBoundVersion = "5";
+    root.dataset.avatarBoundVersion = "6";
 
     const modal = root.querySelector(".jy-avatar-modal");
     const big = root.querySelector(".jy-avatar-big");
     const title = root.querySelector(".jy-avatar-title");
     const input = root.querySelector(".jy-avatar-input");
     const mapModal = root.querySelector(".jy-map-modal");
+    const hasAvatarModal = Boolean(modal && big && title && input);
     let activeAvatar = null;
 
     function getAvatars() {
@@ -1417,6 +1419,7 @@
     applyStoredAvatars(root);
 
     function openAvatar(avatar) {
+      if (!hasAvatarModal) return;
       activeAvatar = avatar;
       const name = avatar.dataset.avatarName || avatar.getAttribute("alt") || "头像";
       big.src = avatar.src;
@@ -1427,6 +1430,7 @@
     }
 
     function closeAvatar() {
+      if (!hasAvatarModal) return;
       modal.dataset.open = "false";
       modal.setAttribute("aria-hidden", "true");
       input.value = "";
@@ -1456,27 +1460,28 @@
         return;
       }
 
+      if (hasAvatarModal && (event.target === modal || event.target.closest('[data-action="close-avatar"]'))) {
+        closeAvatar();
+        return;
+      }
+
+      if (hasAvatarModal && event.target.closest('[data-action="reset-avatar"]') && activeAvatar) {
+        const key = activeAvatar.dataset.avatarKey || activeAvatar.dataset.avatarName || activeAvatar.getAttribute("alt") || "头像";
+        removeStoredAvatar(key);
+        activeAvatar.src = activeAvatar.dataset.defaultSrc;
+        big.src = activeAvatar.src;
+        return;
+      }
+
       const avatar = event.target.closest(".jy-avatar");
       if (avatar && root.contains(avatar)) {
         openAvatar(avatar);
         return;
       }
 
-      if (event.target === modal || event.target.closest('[data-action="close-avatar"]')) {
-        closeAvatar();
-        return;
-      }
-
       if (event.target === mapModal || event.target.closest('[data-action="close-map"]')) {
         closeMap();
         return;
-      }
-
-      if (event.target.closest('[data-action="reset-avatar"]') && activeAvatar) {
-        const key = activeAvatar.dataset.avatarKey || activeAvatar.dataset.avatarName || activeAvatar.getAttribute("alt") || "头像";
-        removeStoredAvatar(key);
-        activeAvatar.src = activeAvatar.dataset.defaultSrc;
-        big.src = activeAvatar.src;
       }
     });
 
@@ -1485,26 +1490,28 @@
         event.preventDefault();
         openAvatar(event.target);
       }
-      if (event.key === "Escape" && modal.dataset.open === "true") closeAvatar();
+      if (event.key === "Escape" && hasAvatarModal && modal.dataset.open === "true") closeAvatar();
       if (event.key === "Escape" && mapModal && mapModal.dataset.open === "true") closeMap();
     });
 
-    input.addEventListener("change", () => {
-      const file = input.files && input.files[0];
-      if (!file || !activeAvatar || !file.type.startsWith("image/")) return;
+    if (hasAvatarModal) {
+      input.addEventListener("change", () => {
+        const file = input.files && input.files[0];
+        if (!file || !activeAvatar || !file.type.startsWith("image/")) return;
 
-      const reader = new FileReader();
-      reader.onload = () => {
-        const dataUrl = String(reader.result || "");
-        const key = activeAvatar.dataset.avatarKey || activeAvatar.dataset.avatarName || activeAvatar.getAttribute("alt") || "头像";
-        compactImage(dataUrl, (compactUrl) => {
-          activeAvatar.src = compactUrl;
-          big.src = compactUrl;
-          setStoredAvatar(key, compactUrl);
-        });
-      };
-      reader.readAsDataURL(file);
-    });
+        const reader = new FileReader();
+        reader.onload = () => {
+          const dataUrl = String(reader.result || "");
+          const key = activeAvatar.dataset.avatarKey || activeAvatar.dataset.avatarName || activeAvatar.getAttribute("alt") || "头像";
+          compactImage(dataUrl, (compactUrl) => {
+            activeAvatar.src = compactUrl;
+            big.src = compactUrl;
+            setStoredAvatar(key, compactUrl);
+          });
+        };
+        reader.readAsDataURL(file);
+      });
+    }
   }
 
   function init() {
@@ -1528,3 +1535,4 @@
 })();
 </script>
 </body>
+```
