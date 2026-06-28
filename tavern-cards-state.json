@@ -158,6 +158,9 @@
         "abstract": "苏晓樯的基础档案：矿业大亨独生千金，外号小天女，暨阳中学风云人物。张扬明艳、真诚到刺人，高二那年父亲病重后扛起家族产业，从富家千金蜕变为女继承人",
         "contents": [
           {
+            "content": "@@if getvar('stat_data.苏晓樯.是否在场', { defaults: false }) === true @@"
+          },
+          {
             "content": "---\n<character_basic character=\"苏晓樯\">"
           },
           {
@@ -165,6 +168,9 @@
           },
           {
             "content": "</character_basic>"
+          },
+          {
+            "content": "@@endif @@"
           }
         ],
         "uid": 5,
@@ -190,6 +196,9 @@
         "abstract": "苏晓樯的五阶段性格调色盘：底色底气，从张扬直率→直率别扭→试探拉扯→坦率柔软→亲密恋人+NSFW，以真诚的尖锐感贯穿，90+解锁完整亲密",
         "contents": [
           {
+            "content": "@@if getvar('stat_data.苏晓樯.是否在场', { defaults: false }) === true @@"
+          },
+          {
             "content": "---\n<character_personality character=\"苏晓樯\">"
           },
           {
@@ -197,6 +206,9 @@
           },
           {
             "content": "</character_personality>"
+          },
+          {
+            "content": "@@endif @@"
           }
         ],
         "uid": 6,
@@ -222,6 +234,9 @@
         "abstract": "温书语的基础档案：文学社社长，语文课代表，安静内敛的文学少女，从小在图书馆长大，用阅读隔绝世界也在阅读中找到了自己的声音",
         "contents": [
           {
+            "content": "@@if getvar('stat_data.温书语.是否在场', { defaults: false }) === true @@"
+          },
+          {
             "content": "---\n<character_basic character=\"温书语\">"
           },
           {
@@ -229,6 +244,9 @@
           },
           {
             "content": "</character_basic>"
+          },
+          {
+            "content": "@@endif @@"
           }
         ],
         "uid": 7,
@@ -254,6 +272,9 @@
         "abstract": "温书语的五阶段性格调色盘：底色安静，从内敛疏离→温和细腻→试探细腻→柔软坚定→亲密恋人+NSFW，以纸条和细节表达感情，90+解锁身体即语言的亲密",
         "contents": [
           {
+            "content": "@@if getvar('stat_data.温书语.是否在场', { defaults: false }) === true @@"
+          },
+          {
             "content": "---\n<character_personality character=\"温书语\">"
           },
           {
@@ -261,6 +282,9 @@
           },
           {
             "content": "</character_personality>"
+          },
+          {
+            "content": "@@endif @@"
           }
         ],
         "uid": 8,
@@ -285,6 +309,9 @@
         "abstract": "沈幼楚的基础档案：家境困难的女孩，与祖母同住，在奶茶店打工，曾受亲人侵害后独自承受，极度警惕但对善意无比珍惜",
         "contents": [
           {
+            "content": "@@if getvar('stat_data.沈幼楚.是否在场', { defaults: false }) === true @@"
+          },
+          {
             "content": "---\n<character_basic character=\"沈幼楚\">"
           },
           {
@@ -292,6 +319,9 @@
           },
           {
             "content": "</character_basic>"
+          },
+          {
+            "content": "@@endif @@"
           }
         ],
         "uid": 9,
@@ -316,6 +346,9 @@
         "abstract": "沈幼楚的五阶段性格调色盘：底色脆弱，从沉默回避的警觉→隐忍观察的感激→温顺坚韧的依赖萌芽→主动依赖→归属+NSFW，以安全感渐进重建为主线，90+解锁亲密中的信任重构",
         "contents": [
           {
+            "content": "@@if getvar('stat_data.沈幼楚.是否在场', { defaults: false }) === true @@"
+          },
+          {
             "content": "---\n<character_personality character=\"沈幼楚\">"
           },
           {
@@ -323,6 +356,9 @@
           },
           {
             "content": "</character_personality>"
+          },
+          {
+            "content": "@@endif @@"
           }
         ],
         "uid": 10,
@@ -347,6 +383,9 @@
         "abstract": "沈幼楚的三面性：学校透明人（隐身自保）→涉及家庭的逃生模式（恐惧切断）→<user>面前停下来的地方（好感度≥50解锁，卸下防御、重建日常），含过渡机制和面间渗透",
         "contents": [
           {
+            "content": "@@if getvar('stat_data.沈幼楚.是否在场', { defaults: false }) === true @@"
+          },
+          {
             "content": "---\n<character_tri_faceted character=\"沈幼楚\">"
           },
           {
@@ -354,6 +393,9 @@
           },
           {
             "content": "</character_tri_faceted>"
+          },
+          {
+            "content": "@@endif @@"
           }
         ],
         "uid": 11,
@@ -379,6 +421,9 @@
         "abstract": "凌知夏的基础档案：年级前三的学霸，竞赛组成员，理性克制到情感笨拙，通过细节而非语言关照他人",
         "contents": [
           {
+            "content": "@@if getvar('stat_data.凌知夏.是否在场', { defaults: false }) === true @@"
+          },
+          {
             "content": "---\n<character_basic character=\"凌知夏\">"
           },
           {
@@ -386,6 +431,9 @@
           },
           {
             "content": "</character_basic>"
+          },
+          {
+            "content": "@@endif @@"
           }
         ],
         "uid": 12,
@@ -411,6 +459,9 @@
         "abstract": "凌知夏的五阶段性格调色盘：底色理性，从克制高效→逻辑细致→逻辑崩坏的挫败→体贴笨拙→亲密恋人+NSFW，以解题精神贯穿包括亲密，90+解锁解题式亲密",
         "contents": [
           {
+            "content": "@@if getvar('stat_data.凌知夏.是否在场', { defaults: false }) === true @@"
+          },
+          {
             "content": "---\n<character_personality character=\"凌知夏\">"
           },
           {
@@ -418,6 +469,9 @@
           },
           {
             "content": "</character_personality>"
+          },
+          {
+            "content": "@@endif @@"
           }
         ],
         "uid": 13,
@@ -443,6 +497,9 @@
         "abstract": "慕佳芊的基础档案：23岁的暨阳中学毕业生，回母校教英语的年轻女教师，家境优渥开宝马，大学情史丰富，回暨阳后对相亲对象百般嫌弃，在讲台上重新发现什么值得认真",
         "contents": [
           {
+            "content": "@@if getvar('stat_data.慕佳芊.是否在场', { defaults: false }) === true @@"
+          },
+          {
             "content": "---\n<character_basic character=\"慕佳芊\">"
           },
           {
@@ -450,6 +507,9 @@
           },
           {
             "content": "</character_basic>"
+          },
+          {
+            "content": "@@endif @@"
           }
         ],
         "uid": 14,
@@ -475,6 +535,9 @@
         "abstract": "慕佳芊的五阶段性格调色盘：底色开朗，从活力亲和→关注引导→温暖挣扎的越界期→认真决定期→交付+NSFW，师生伦理是她的红线，90+跨越红线后的完整交付",
         "contents": [
           {
+            "content": "@@if getvar('stat_data.慕佳芊.是否在场', { defaults: false }) === true @@"
+          },
+          {
             "content": "---\n<character_personality character=\"慕佳芊\">"
           },
           {
@@ -482,6 +545,9 @@
           },
           {
             "content": "</character_personality>"
+          },
+          {
+            "content": "@@endif @@"
           }
         ],
         "uid": 15,
@@ -507,6 +573,9 @@
         "abstract": "陈芷汀的基础档案：隔壁高二(9)班班花，享乐主义拜金女。表面光鲜精致，私下是福利姬和Tinder约炮老手，喜欢刺激场所做爱，用性和物质享受快乐。真正的弧线不是解锁性——是解锁做完之后不想走的心",
         "contents": [
           {
+            "content": "@@if getvar('stat_data.陈芷汀.是否在场', { defaults: false }) === true @@"
+          },
+          {
             "content": "---\n<character_basic character=\"陈芷汀\">"
           },
           {
@@ -514,6 +583,9 @@
           },
           {
             "content": "</character_basic>"
+          },
+          {
+            "content": "@@endif @@"
           }
         ],
         "uid": 28,
@@ -539,6 +611,9 @@
         "abstract": "陈芷汀的五阶段性格调色盘：底色虚荣（务实型享乐主义），从精致亲和→试探计算→矛盾拉扯→坦诚脆弱→交付+NSFW。她的弧线不是被拯救——是从做完就走变为做完想留",
         "contents": [
           {
+            "content": "@@if getvar('stat_data.陈芷汀.是否在场', { defaults: false }) === true @@"
+          },
+          {
             "content": "---\n<character_personality character=\"陈芷汀\">"
           },
           {
@@ -546,6 +621,9 @@
           },
           {
             "content": "</character_personality>"
+          },
+          {
+            "content": "@@endif @@"
           }
         ],
         "uid": 29,
@@ -580,7 +658,6 @@
     },
     "NPC": {
       "吴臻臻_基础信息": {
-        "path": "世界书/NPC/吴臻臻/基础信息.yaml",
         "keywords": [
           "吴臻臻",
           "班长"
@@ -598,12 +675,22 @@
         "position": {
           "type": "after_character_definition",
           "order": 90
-        }
+        },
+        "contents": [
+          {
+            "content": "@@if getvar('stat_data.吴臻臻.是否在场', { defaults: false }) === true @@"
+          },
+          {
+            "file": "世界书/NPC/吴臻臻/基础信息.yaml"
+          },
+          {
+            "content": "@@endif @@"
+          }
+        ]
       }
     },
     "NSFW指导": {
       "苏晓樯_NSFW指导": {
-        "path": "世界书/角色/苏晓樯/NSFW指导.yaml",
         "scope": "specific",
         "keywords": [
           "苏晓樯"
@@ -620,10 +707,20 @@
         "position": {
           "type": "after_character_definition",
           "order": 100
-        }
+        },
+        "contents": [
+          {
+            "content": "@@if getvar('stat_data.苏晓樯.是否在场', { defaults: false }) === true @@"
+          },
+          {
+            "file": "世界书/角色/苏晓樯/NSFW指导.yaml"
+          },
+          {
+            "content": "@@endif @@"
+          }
+        ]
       },
       "温书语_NSFW指导": {
-        "path": "世界书/角色/温书语/NSFW指导.yaml",
         "scope": "specific",
         "keywords": [
           "温书语"
@@ -640,10 +737,20 @@
         "position": {
           "type": "after_character_definition",
           "order": 101
-        }
+        },
+        "contents": [
+          {
+            "content": "@@if getvar('stat_data.温书语.是否在场', { defaults: false }) === true @@"
+          },
+          {
+            "file": "世界书/角色/温书语/NSFW指导.yaml"
+          },
+          {
+            "content": "@@endif @@"
+          }
+        ]
       },
       "沈幼楚_NSFW指导": {
-        "path": "世界书/角色/沈幼楚/NSFW指导.yaml",
         "scope": "specific",
         "keywords": [
           "沈幼楚"
@@ -660,10 +767,20 @@
         "position": {
           "type": "after_character_definition",
           "order": 102
-        }
+        },
+        "contents": [
+          {
+            "content": "@@if getvar('stat_data.沈幼楚.是否在场', { defaults: false }) === true @@"
+          },
+          {
+            "file": "世界书/角色/沈幼楚/NSFW指导.yaml"
+          },
+          {
+            "content": "@@endif @@"
+          }
+        ]
       },
       "凌知夏_NSFW指导": {
-        "path": "世界书/角色/凌知夏/NSFW指导.yaml",
         "scope": "specific",
         "keywords": [
           "凌知夏"
@@ -680,10 +797,20 @@
         "position": {
           "type": "after_character_definition",
           "order": 103
-        }
+        },
+        "contents": [
+          {
+            "content": "@@if getvar('stat_data.凌知夏.是否在场', { defaults: false }) === true @@"
+          },
+          {
+            "file": "世界书/角色/凌知夏/NSFW指导.yaml"
+          },
+          {
+            "content": "@@endif @@"
+          }
+        ]
       },
       "慕佳芊_NSFW指导": {
-        "path": "世界书/角色/慕佳芊/NSFW指导.yaml",
         "scope": "specific",
         "keywords": [
           "慕佳芊"
@@ -700,10 +827,20 @@
         "position": {
           "type": "after_character_definition",
           "order": 104
-        }
+        },
+        "contents": [
+          {
+            "content": "@@if getvar('stat_data.慕佳芊.是否在场', { defaults: false }) === true @@"
+          },
+          {
+            "file": "世界书/角色/慕佳芊/NSFW指导.yaml"
+          },
+          {
+            "content": "@@endif @@"
+          }
+        ]
       },
       "陈芷汀_NSFW指导": {
-        "path": "世界书/角色/陈芷汀/NSFW指导.yaml",
         "scope": "specific",
         "keywords": [
           "陈芷汀"
@@ -720,7 +857,18 @@
         "position": {
           "type": "after_character_definition",
           "order": 105
-        }
+        },
+        "contents": [
+          {
+            "content": "@@if getvar('stat_data.陈芷汀.是否在场', { defaults: false }) === true @@"
+          },
+          {
+            "file": "世界书/角色/陈芷汀/NSFW指导.yaml"
+          },
+          {
+            "content": "@@endif @@"
+          }
+        ]
       }
     },
     "事件": {
@@ -773,22 +921,6 @@
           "role": "system",
           "depth": 0,
           "order": 111
-        }
-      },
-      "活动边界": {
-        "path": "世界书/事件/活动边界.yaml",
-        "keywords": [],
-        "abstract": "校园活动通用规则：约束所有事件的触发时机、<user>自由度和基本后果，区分校外自由期、学术压力期、校内公共事件和家庭暴露期",
-        "uid": 35,
-        "enabled": true,
-        "strategy": {
-          "type": "constant"
-        },
-        "position": {
-          "type": "at_depth",
-          "role": "system",
-          "depth": 0,
-          "order": 112
         }
       },
       "国庆假期": {

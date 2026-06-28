@@ -377,10 +377,7 @@ entries:
     type: 事件
     path: 世界书/事件/剧情推动器.yaml
     keywords: [剧情推动, 事件池, 日常铺垫, 余波处理]
-  - name: 活动边界
-    type: 事件
-    path: 世界书/事件/活动边界.yaml
-  - name: 国庆假期
+- name: 国庆假期
     type: 事件
     path: 世界书/事件/国庆假期.yaml
     keywords: [国庆, 假期, 放假, 出游, 杭州, 上海, 绍兴, 朋友圈, 国庆出游, 短途]
@@ -583,6 +580,67 @@ ejs:
     - name: 陈芷汀_NSFW指导
       complexity: 条目显隐
       condition: getvar('stat_data.陈芷汀.NSFW', { defaults: true }) === true
+    # —— 角色在场条件（所有角色条目外层包裹） ——
+    - name: 苏晓樯_基础信息
+      complexity: 条目显隐
+      condition: getvar('stat_data.苏晓樯.是否在场', { defaults: false }) === true
+    - name: 苏晓樯_性格调色盘
+      complexity: 条目显隐
+      condition: getvar('stat_data.苏晓樯.是否在场', { defaults: false }) === true
+    - name: 苏晓樯_NSFW指导
+      complexity: 条目显隐
+      condition: getvar('stat_data.苏晓樯.是否在场', { defaults: false }) === true
+    - name: 温书语_基础信息
+      complexity: 条目显隐
+      condition: getvar('stat_data.温书语.是否在场', { defaults: false }) === true
+    - name: 温书语_性格调色盘
+      complexity: 条目显隐
+      condition: getvar('stat_data.温书语.是否在场', { defaults: false }) === true
+    - name: 温书语_NSFW指导
+      complexity: 条目显隐
+      condition: getvar('stat_data.温书语.是否在场', { defaults: false }) === true
+    - name: 沈幼楚_基础信息
+      complexity: 条目显隐
+      condition: getvar('stat_data.沈幼楚.是否在场', { defaults: false }) === true
+    - name: 沈幼楚_性格调色盘
+      complexity: 条目显隐
+      condition: getvar('stat_data.沈幼楚.是否在场', { defaults: false }) === true
+    - name: 沈幼楚_三面性
+      complexity: 条目显隐
+      condition: getvar('stat_data.沈幼楚.是否在场', { defaults: false }) === true
+    - name: 沈幼楚_NSFW指导
+      complexity: 条目显隐
+      condition: getvar('stat_data.沈幼楚.是否在场', { defaults: false }) === true
+    - name: 凌知夏_基础信息
+      complexity: 条目显隐
+      condition: getvar('stat_data.凌知夏.是否在场', { defaults: false }) === true
+    - name: 凌知夏_性格调色盘
+      complexity: 条目显隐
+      condition: getvar('stat_data.凌知夏.是否在场', { defaults: false }) === true
+    - name: 凌知夏_NSFW指导
+      complexity: 条目显隐
+      condition: getvar('stat_data.凌知夏.是否在场', { defaults: false }) === true
+    - name: 慕佳芊_基础信息
+      complexity: 条目显隐
+      condition: getvar('stat_data.慕佳芊.是否在场', { defaults: false }) === true
+    - name: 慕佳芊_性格调色盘
+      complexity: 条目显隐
+      condition: getvar('stat_data.慕佳芊.是否在场', { defaults: false }) === true
+    - name: 慕佳芊_NSFW指导
+      complexity: 条目显隐
+      condition: getvar('stat_data.慕佳芊.是否在场', { defaults: false }) === true
+    - name: 陈芷汀_基础信息
+      complexity: 条目显隐
+      condition: getvar('stat_data.陈芷汀.是否在场', { defaults: false }) === true
+    - name: 陈芷汀_性格调色盘
+      complexity: 条目显隐
+      condition: getvar('stat_data.陈芷汀.是否在场', { defaults: false }) === true
+    - name: 陈芷汀_NSFW指导
+      complexity: 条目显隐
+      condition: getvar('stat_data.陈芷汀.是否在场', { defaults: false }) === true
+    - name: 吴臻臻_基础信息
+      complexity: 条目显隐
+      condition: getvar('stat_data.吴臻臻.是否在场', { defaults: false }) === true
     - name: 开学第一天
       complexity: 条目显隐
       condition: current_day === '开学第一天'
