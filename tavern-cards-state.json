@@ -797,9 +797,8 @@
           "type": "constant"
         },
         "position": {
-          "type": "at_depth",
-          "role": "system",
-          "depth": 0,
+          "type": "before_character_definition",
+          "depth": 9999,
           "order": 111
         }
       },
