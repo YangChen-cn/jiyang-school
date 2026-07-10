@@ -44,6 +44,16 @@ if [ ! -x "$RECOMPILE" ]; then
   exit 1
 fi
 
+PREVIOUS_AVATAR="$(STATE_FILE="$STATE_FILE" python3 - <<'PY'
+import json
+import os
+from pathlib import Path
+
+state = json.loads(Path(os.environ["STATE_FILE"]).read_text())
+print(state.get("avatar", ""))
+PY
+)"
+
 STATE_FILE="$STATE_FILE" CARDRC_FILE="$CARDRC_FILE" PROJECT="$PROJECT" \
 DISPLAY_NAME="$DISPLAY_NAME" VERSION_TAG="$VERSION_TAG" OUTPUT_FILE="$OUTPUT_FILE" \
 ARTIFACT_PATH="$ARTIFACT_PATH" python3 - <<'PY'
@@ -70,9 +80,24 @@ cardrc = json.loads(cardrc_path.read_text())
 cardrc.setdefault("projects", {}).setdefault(project, {})["state_file"] = "tavern-cards-state.json"
 cardrc["projects"][project]["artifact"] = artifact_path
 cardrc_path.write_text(json.dumps(cardrc, ensure_ascii=False, indent=4) + "\n")
+
+status_path = state_path.parent / "正则" / "状态栏界面.html"
+if status_path.exists():
+    import re
+    status = status_path.read_text()
+    updated, count = re.subn(r"暨阳中学 v[0-9.]+ · 当前坐标", f"暨阳中学 {version_tag} · 当前坐标", status)
+    if count:
+        status_path.write_text(updated)
 PY
 
 echo "=== 发布 ${DISPLAY_NAME} ==="
 echo "  -> state: projectName/worldbookName/version/avatar 已同步"
 echo "  -> artifact: ${ARTIFACT_PATH}"
+echo "  -> 状态栏标题: ${VERSION_TAG}"
+
+if [ ! -f "$OUTPUT_FILE" ] && [ -n "$PREVIOUS_AVATAR" ] && [ -f "$PREVIOUS_AVATAR" ]; then
+  cp "$PREVIOUS_AVATAR" "$OUTPUT_FILE"
+  echo "  -> 复用上一版 PNG 作为头像源: ${PREVIOUS_AVATAR}"
+fi
+
 "$RECOMPILE"

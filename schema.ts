@@ -89,6 +89,19 @@ export const Schema = z.object({
     内心独白: z.string().prefault('今天走廊上会遇到谁？'),
   }).prefault({}),
 
+  虞淑婉: z.object({
+    是否在场: z.coerce.boolean().prefault(false),
+    好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
+    关系阶段: z.string().prefault('师生'),
+    NSFW: z.coerce.boolean().prefault(false),
+    当前上装: z.string().prefault('米白衬衫，外搭深灰西装'),
+    当前下装: z.string().prefault('深色西装长裤，配低跟鞋'),
+    所在位置: z.string().prefault('行政楼校长办公室'),
+    动作: z.string().prefault('在文件末页签下名字，抬手示意秘书稍等'),
+    心情: z.string().prefault('平静'),
+    内心独白: z.string().prefault('先听完，再决定该怎么处理。'),
+  }).prefault({}),
+
   主角: z.object({
     当前位置: z.string().prefault('高二重点班教室'),
     外貌: z.string().prefault('普通暨阳中学男生，穿干净校服，神情还有些没睡醒'),

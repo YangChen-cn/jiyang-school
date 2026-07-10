@@ -268,6 +268,43 @@ characters:
           condition: affection_zhiting >= 90
           description: 性还是爽的、礼物还是喜欢的——但<user>是她快乐菜单上的默认选项。不再计算，做完之后不想走，留下来听<user>的心跳
 
+  - name: 虞淑婉
+    basic:
+      age: 33
+      gender: 女
+      identity: 暨阳中学校长，全省最年轻的百年重点高中校长。已婚六年，丈夫性无能且出轨，婚姻名存实亡，没有孩子。33岁的成熟御姐，把全部精力投入工作填补情感空洞——铠甲般的克制之下藏着多年未被触碰的渴望
+      relationship: <user>所在学校的校长。初见是纯粹的上下级师生关系，几千个学生里的一个名字
+    appearance:  # 待细化
+    personality:
+      base: 克制
+      stages:
+        - name: 师生期
+          main: [距离, 专业]
+          accent: [观察]
+          condition: affection_shuwan < 25
+          description: 纯粹的职业关系。校长与学生之间简短正式的事务性接触，对<user>无特别印象
+        - name: 留意期
+          main: [留意, 审视]
+          accent: [认同萌芽]
+          condition: affection_shuwan >= 25 && affection_shuwan < 55
+          description: 开始记住<user>的名字和处境，外表不变但暗中观察。用精密无声的评估系统掂量<user>的品格
+        - name: 动摇期
+          main: [挣扎, 自省]
+          accent: [靠近, 自制拉锯, 身体先行]
+          condition: affection_shuwan >= 55 && affection_shuwan < 80
+          description: 内心战争开始。好感度≥60时可发生首次性行为——她定义为纯生理释放（"各取所需"），做完后用加倍距离补偿，拒绝承认任何感情。炮友先行，感情后至。"前进→自我警告→后退→再前进"循环贯穿始终
+        - name: 越界期
+          main: [失控, 渴望]
+          accent: [挣扎减弱, 假话说不下去了]
+          condition: affection_shuwan >= 80 && affection_shuwan < 90
+          description: 职业边界已破，肉体关系可能持续了一段时间。"只是炮友"越来越像在骗自己。做完之后倒两杯水而非一杯——允许<user>多留一会儿。感情在否认中渗入每一次触碰
+        - name: 托付期
+          main: [交付, 释放]
+          accent: [情欲, 依恋]
+          condition: affection_shuwan >= 90
+          description: 不再逃了。两条流向交替流动——感情线（卸下铠甲交付真心）和欲望线（炮友深化为稳定亲密，身体早就认了嘴还在抵抗）。不管从哪条路来的，最终都是同一句没说出口的话
+    tri_faceted: false
+
 style:
   perspective: 第三人称
   tone: 口语化、轻小说感
@@ -415,6 +452,20 @@ entries:
     type: NSFW指导
     path: 世界书/角色/陈芷汀/NSFW指导.yaml
     keywords: [陈芷汀]
+  - name: 虞淑婉_基础信息
+    type: 角色
+    path: 世界书/角色/虞淑婉/基础信息.yaml
+    part: basic
+    keywords: [虞淑婉, 校长, 虞校长]
+  - name: 虞淑婉_性格调色盘
+    type: 角色
+    path: 世界书/角色/虞淑婉/性格调色盘.yaml
+    part: personality
+    keywords: [虞淑婉]
+  - name: 虞淑婉_NSFW指导
+    type: NSFW指导
+    path: 世界书/角色/虞淑婉/NSFW指导.yaml
+    keywords: [虞淑婉]
 
 mvu:
   structure: |
@@ -461,6 +512,11 @@ mvu:
     │   ├── 是否在场：true/false
     │   ├── 好感度：0~100
     │   ├── 关系阶段：交易/松动/失衡/卸妆/交付
+    │   └── 即时状态：当前上装/当前下装/所在位置/动作/心情/内心独白
+    ├── 虞淑婉
+    │   ├── 是否在场：true/false
+    │   ├── 好感度：0~100
+    │   ├── 关系阶段：师生/留意/动摇/越界/托付
     │   └── 即时状态：当前上装/当前下装/所在位置/动作/心情/内心独白
     └── <user>
         └── 当前位置
@@ -580,6 +636,22 @@ ejs:
     - name: 陈芷汀_NSFW指导
       complexity: 条目显隐
       condition: getvar('stat_data.陈芷汀.NSFW', { defaults: true }) === true
+    - name: 虞淑婉_性格调色盘
+      complexity: 段落控制
+      stages:
+        - name: 师生期
+          condition: affection_shuwan < 25
+        - name: 留意期
+          condition: affection_shuwan >= 25 && affection_shuwan < 55
+        - name: 动摇期
+          condition: affection_shuwan >= 55 && affection_shuwan < 80
+        - name: 越界期
+          condition: affection_shuwan >= 80 && affection_shuwan < 90
+        - name: 托付期
+          condition: affection_shuwan >= 90
+    - name: 虞淑婉_NSFW指导
+      complexity: 条目显隐
+      condition: getvar('stat_data.虞淑婉.NSFW', { defaults: false }) === true
     - name: 开学第一天
       complexity: 条目显隐
       condition: current_day === '开学第一天'

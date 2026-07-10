@@ -1,6 +1,6 @@
 {
-  "projectName": "暨阳中学v1.5",
-  "worldbookName": "暨阳中学v1.5",
+  "projectName": "暨阳中学v1.6",
+  "worldbookName": "暨阳中学v1.6",
   "form": "charactercard",
   "mvu": true,
   "entryManifest": {
@@ -135,9 +135,10 @@
           "凌知夏",
           "吴臻臻",
           "慕佳芊",
-          "陈芷汀"
+          "陈芷汀",
+          "虞淑婉"
         ],
-        "abstract": "角色快速索引：<user>及五名同班同学（苏晓樯、温书语、沈幼楚、凌知夏、吴臻臻）加英语老师慕佳芊和隔壁班班花陈芷汀的基本识别信息",
+        "abstract": "角色快速索引：<user>及五名同班同学（苏晓樯、温书语、沈幼楚、凌知夏、吴臻臻）加英语老师慕佳芊、隔壁班班花陈芷汀和校长虞淑婉的基本识别信息",
         "uid": 4,
         "enabled": true,
         "strategy": {
@@ -560,6 +561,96 @@
           "type": "after_character_definition",
           "order": 73
         }
+      },
+      "虞淑婉_基础信息": {
+        "scope": "specific",
+        "part": "basic",
+        "keywords": [
+          "虞淑婉",
+          "校长",
+          "虞校长"
+        ],
+        "abstract": "虞淑婉的基础档案：33岁的暨阳中学校长，克制利落的成熟御姐。已婚六年但丈夫性无能且出轨，婚姻名存实亡，没有孩子是隐秘遗憾。铠甲般的克制之下藏着多年未被触碰的渴望——直到<user>的出现让她开始质疑自己维系了太久的克制",
+        "uid": 43,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "虞淑婉",
+            "校长",
+            "虞校长"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 74
+        },
+        "contents": [
+          {
+            "content": "---\n<character_basic character=\"虞淑婉\">"
+          },
+          {
+            "file": "世界书/角色/虞淑婉/基础信息.yaml"
+          },
+          {
+            "content": "</character_basic>"
+          }
+        ]
+      },
+      "虞淑婉_性格调色盘": {
+        "scope": "specific",
+        "part": "personality",
+        "keywords": [
+          "虞淑婉"
+        ],
+        "abstract": "虞淑婉的五阶段性格调色盘：底色克制，师生期(距离专业)→留意期(留意审视)→动摇期(挣扎自省，前进后退拉锯)→越界期(失控渴望，双线萌芽)→托付期(交付释放+NSFW，感情/炮友双线)。90+解锁多年压抑后的完整交付",
+        "uid": 44,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "虞淑婉"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 75
+        },
+        "contents": [
+          {
+            "content": "---\n<character_personality character=\"虞淑婉\">"
+          },
+          {
+            "file": "世界书/角色/虞淑婉/性格调色盘.yaml"
+          },
+          {
+            "content": "</character_personality>"
+          }
+        ]
+      },
+      "虞淑婉_NSFW指导": {
+        "scope": "specific",
+        "keywords": [
+          "虞淑婉"
+        ],
+        "abstract": "虞淑婉的NSFW实战指导：体位偏好、成熟女人被剥夺六年后的释放型行为速查、感情/炮友双模式语料库与硬约束（含婚姻伦理与权力关系底线）",
+        "uid": 45,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "虞淑婉"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 106
+        },
+        "contents": [
+          {
+            "file": "世界书/角色/虞淑婉/NSFW指导.yaml"
+          }
+        ]
       },
       "<user>": {
         "path": "世界书/角色/<user>.yaml",
@@ -1237,14 +1328,14 @@
     "role": "system",
     "depth": 0
   },
-  "avatar": "暨阳中学v1.5.png",
+  "avatar": "暨阳中学v1.6.png",
   "description": "",
   "first_messages": [
     "开场白/0.txt"
   ],
   "creator": "",
   "creator_notes": "",
-  "version": "v1.5",
+  "version": "v1.6",
   "create_date": "2026-06-24T15:20:28.960Z",
   "extensions": {
     "tavern_helper": {
