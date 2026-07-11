@@ -1,7 +1,7 @@
 (() => {
   const ROOT_SELECTOR = '[data-jy-opening]';
   const ENTRY_NAME = '玩家开局设定';
-  const GLOBAL_KEY = '__jiyangOpeningSetupControllerV5';
+  const GLOBAL_KEY = '__jiyangOpeningSetupControllerV6';
   const cleanups = [];
 
   try { window[GLOBAL_KEY]?.stop?.(); } catch (_) {}
@@ -67,10 +67,33 @@
 
   const GREETING_NAMES = ['开局设定界面', '开学第一天', '慕佳芊', '苏晓樯', '温书语', '沈幼楚', '凌知夏', '陈芷汀', '虞淑婉'];
 
-  function openingContent(data) {
+  function worldbookProfile(data) {
     return [
-      '<player_opening_profile>',
-      '以下内容是本次对话中 <user> 的唯一玩家档案。以它为准，不要用角色卡默认设定覆盖它。',
+      '<player_profile>',
+      '以下内容是本次对话中 <user> 的唯一玩家档案。以它为准，不要用角色卡默认设定覆盖它。此条目只保留稳定人物设定。',
+      '',
+      `姓名: ${data.姓名}`,
+      `年龄: ${data.年龄}`,
+      `性别或称谓: ${data.性别或称谓}`,
+      `班级或身份: ${data.班级或身份}`,
+      `外貌: ${data.外貌}`,
+      `性格: ${data.性格}`,
+      `擅长与学业: ${data.擅长与学业}`,
+      `家庭背景: ${data.家庭背景}`,
+      `重要物品: ${data.重要物品}`,
+      '',
+      '互动规则:',
+      '- 角色应通过具体互动逐渐认识 <user>，不要把未设定内容强加给 <user>。',
+      '- 家庭背景与重要物品可以成为剧情线索，但不能替 <user> 自动做决定。',
+      '- 用档案中的姓名称呼 <user>；保留 <user> 对自身行动、表达和选择的完全控制。',
+      '</player_profile>'
+    ].join('\n');
+  }
+
+  function openingMessage(data, action, customOpening, selectedGreeting) {
+    const lines = [
+      '<initial_setup>',
+      '以下是本次新角色的完整初始设定。请在本次开局中接住它，不要遗漏或替 <user> 自动补全未设定内容。',
       '',
       `姓名: ${data.姓名}`,
       `年龄: ${data.年龄}`,
@@ -83,12 +106,18 @@
       `重要物品: ${data.重要物品}`,
       `开局心事: ${data.开局心事}`,
       '',
-      '互动规则:',
-      '- 角色应通过具体互动逐渐认识 <user>，不要把未设定内容强加给 <user>。',
-      '- 家庭背景、物品与开局心事可以成为剧情线索，但不能替 <user> 自动做决定。',
-      '- 用档案中的姓名称呼 <user>；保留 <user> 对自身行动、表达和选择的完全控制。',
-      '</player_opening_profile>'
-    ].join('\n');
+      `当前开场: ${selectedGreeting}`
+    ];
+    if (customOpening) lines.push(`自定义开局: ${customOpening}`);
+    lines.push(
+      `开局行动: ${action}`,
+      '',
+      '连续性优先级:',
+      '- 如果初始变量中的日期、时间、地点、在场人物、衣着、关系或事件进度与所选开场白冲突，一律以开场白的描写为当前起点。',
+      '- 在开场白之后承接本条消息，不要回退或重写已经发生的场景。',
+      '</initial_setup>'
+    );
+    return lines.join('\n');
   }
 
   function worldbookEntry(content) {
@@ -110,10 +139,8 @@
 
     await updateWorldbookWith(bookName, entries => {
       const profile = worldbookEntry(content);
-      const exists = entries.some(entry => entry.name === ENTRY_NAME);
-      return exists
-        ? entries.map(entry => entry.name === ENTRY_NAME ? { ...entry, ...profile } : entry)
-        : [...entries, profile];
+      // New setup replaces every stale copy instead of layering player profiles.
+      return [...entries.filter(entry => entry.name !== ENTRY_NAME), profile];
     }, { render: 'immediate' });
 
     return bookName;
@@ -226,12 +253,15 @@
 
     try {
       toast(root, '正在写入本次开局档案…', 'info');
-      const bookName = await saveProfile(openingContent(data));
+      const bookName = await saveProfile(worldbookProfile(data));
       if (mode(root) === 'preset') await applyPresetGreeting(root);
       root.dataset.complete = 'true';
-      const message = mode(root) === 'custom'
-        ? `【自定义开局】\n${customOpening}\n\n【我的动作】\n${action}`
-        : action;
+      const message = openingMessage(
+        data,
+        action,
+        mode(root) === 'custom' ? customOpening : '',
+        mode(root) === 'custom' ? '自定义开局' : GREETING_NAMES[greetingIndex(root)]
+      );
       sendOpening(message);
       toast(root, `档案已写入「${bookName}」，故事开始。`);
     } catch (error) {
@@ -295,14 +325,14 @@
 
   function bind() {
     windows().forEach(win => {
-      if (win.__jiyangOpeningBoundV5) return;
-      win.__jiyangOpeningBoundV5 = true;
+      if (win.__jiyangOpeningBoundV6) return;
+      win.__jiyangOpeningBoundV6 = true;
       win.addEventListener('click', handleClick, true);
       win.addEventListener('submit', handleSubmit, true);
       cleanups.push(() => {
         win.removeEventListener('click', handleClick, true);
         win.removeEventListener('submit', handleSubmit, true);
-        try { delete win.__jiyangOpeningBoundV5; } catch (_) { win.__jiyangOpeningBoundV5 = false; }
+        try { delete win.__jiyangOpeningBoundV6; } catch (_) { win.__jiyangOpeningBoundV6 = false; }
       });
     });
   }
