@@ -1,7 +1,7 @@
 (() => {
   const ROOT_SELECTOR = '[data-jy-opening]';
   const ENTRY_NAME = '玩家开局设定';
-  const GLOBAL_KEY = '__jiyangOpeningSetupControllerV4';
+  const GLOBAL_KEY = '__jiyangOpeningSetupControllerV5';
   const cleanups = [];
 
   try { window[GLOBAL_KEY]?.stop?.(); } catch (_) {}
@@ -63,9 +63,9 @@
   }
 
   function mode(root) { return root.dataset.openingMode || 'preset'; }
-  function greetingIndex(root) { return Number(root.dataset.greetingIndex || 0); }
+  function greetingIndex(root) { return Number(root.dataset.greetingIndex || 1); }
 
-  const GREETING_NAMES = ['开学第一天', '慕佳芊', '苏晓樯', '温书语', '沈幼楚', '凌知夏', '陈芷汀', '虞淑婉'];
+  const GREETING_NAMES = ['开局设定界面', '开学第一天', '慕佳芊', '苏晓樯', '温书语', '沈幼楚', '凌知夏', '陈芷汀', '虞淑婉'];
 
   function openingContent(data) {
     return [
@@ -141,21 +141,25 @@
     return true;
   }
 
-  function presetGreeting(character, index) {
-    const sources = [
+  function presetGreeting(character, displayIndex) {
+    const alternateSources = [
       character?.alternate_greetings,
-      character?.data?.alternate_greetings,
+      character?.data?.alternate_greetings
+    ];
+    for (const source of alternateSources) {
+      const greeting = source?.[displayIndex - 1];
+      if (typeof greeting === 'string' && greeting.trim()) return greeting;
+    }
+
+    const legacySources = [
       character?.first_messages,
       character?.data?.first_messages
     ];
-
-    for (const source of sources) {
+    for (const source of legacySources) {
       if (!Array.isArray(source)) continue;
-      const direct = source[index];
-      if (typeof direct === 'string' && direct.trim()) return direct;
-      // Older Tavern Helper payloads include the setup screen at index 0.
-      const offset = source[index + 1];
-      if (typeof offset === 'string' && offset.trim()) return offset;
+      // Legacy payloads reserve first_messages[0] for the opening UI.
+      const greeting = source[displayIndex];
+      if (typeof greeting === 'string' && greeting.trim()) return greeting;
     }
     return '';
   }
@@ -291,14 +295,14 @@
 
   function bind() {
     windows().forEach(win => {
-      if (win.__jiyangOpeningBoundV4) return;
-      win.__jiyangOpeningBoundV4 = true;
+      if (win.__jiyangOpeningBoundV5) return;
+      win.__jiyangOpeningBoundV5 = true;
       win.addEventListener('click', handleClick, true);
       win.addEventListener('submit', handleSubmit, true);
       cleanups.push(() => {
         win.removeEventListener('click', handleClick, true);
         win.removeEventListener('submit', handleSubmit, true);
-        try { delete win.__jiyangOpeningBoundV4; } catch (_) { win.__jiyangOpeningBoundV4 = false; }
+        try { delete win.__jiyangOpeningBoundV5; } catch (_) { win.__jiyangOpeningBoundV5 = false; }
       });
     });
   }
