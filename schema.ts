@@ -10,6 +10,7 @@ export const Schema = z.object({
   剧情: z.object({
     推进节奏: z.string().prefault('日常铺垫'),
     当前事件: z.string().prefault('无'),
+    当前nsfw: z.coerce.boolean().prefault(false),
     事件冷却: z.coerce.number().transform(v => _.clamp(v, 0, 5)).prefault(0),
     上次焦点角色: z.string().prefault('无'),
     校园活动: z.string().prefault('无'),
@@ -105,6 +106,10 @@ export const Schema = z.object({
   主角: z.object({
     当前位置: z.string().prefault('高二重点班教室'),
     外貌: z.string().prefault('普通暨阳中学男生，穿干净校服，神情还有些没睡醒'),
+    重要物品: z.array(z.object({
+      名称: z.string(),
+      描述: z.string(),
+    })).prefault([]),
   }).prefault({}),
 }).prefault({});
 

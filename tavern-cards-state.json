@@ -571,6 +571,17 @@
           "虞校长"
         ],
         "abstract": "虞淑婉的基础档案：33岁的暨阳中学校长，克制利落的成熟御姐。已婚六年但丈夫性无能且出轨，婚姻名存实亡，没有孩子是隐秘遗憾。铠甲般的克制之下藏着多年未被触碰的渴望——直到<user>的出现让她开始质疑自己维系了太久的克制",
+        "contents": [
+          {
+            "content": "---\n<character_basic character=\"虞淑婉\">"
+          },
+          {
+            "file": "世界书/角色/虞淑婉/基础信息.yaml"
+          },
+          {
+            "content": "</character_basic>"
+          }
+        ],
         "uid": 43,
         "enabled": true,
         "strategy": {
@@ -584,18 +595,7 @@
         "position": {
           "type": "after_character_definition",
           "order": 74
-        },
-        "contents": [
-          {
-            "content": "---\n<character_basic character=\"虞淑婉\">"
-          },
-          {
-            "file": "世界书/角色/虞淑婉/基础信息.yaml"
-          },
-          {
-            "content": "</character_basic>"
-          }
-        ]
+        }
       },
       "虞淑婉_性格调色盘": {
         "scope": "specific",
@@ -604,6 +604,17 @@
           "虞淑婉"
         ],
         "abstract": "虞淑婉的五阶段性格调色盘：底色克制，师生期(距离专业)→留意期(留意审视)→动摇期(挣扎自省，前进后退拉锯)→越界期(失控渴望，双线萌芽)→托付期(交付释放+NSFW，感情/炮友双线)。90+解锁多年压抑后的完整交付",
+        "contents": [
+          {
+            "content": "---\n<character_personality character=\"虞淑婉\">"
+          },
+          {
+            "file": "世界书/角色/虞淑婉/性格调色盘.yaml"
+          },
+          {
+            "content": "</character_personality>"
+          }
+        ],
         "uid": 44,
         "enabled": true,
         "strategy": {
@@ -615,18 +626,7 @@
         "position": {
           "type": "after_character_definition",
           "order": 75
-        },
-        "contents": [
-          {
-            "content": "---\n<character_personality character=\"虞淑婉\">"
-          },
-          {
-            "file": "世界书/角色/虞淑婉/性格调色盘.yaml"
-          },
-          {
-            "content": "</character_personality>"
-          }
-        ]
+        }
       },
       "虞淑婉_NSFW指导": {
         "scope": "specific",
@@ -634,6 +634,11 @@
           "虞淑婉"
         ],
         "abstract": "虞淑婉的NSFW实战指导：体位偏好、成熟女人被剥夺六年后的释放型行为速查、感情/炮友双模式语料库与硬约束（含婚姻伦理与权力关系底线）",
+        "contents": [
+          {
+            "file": "世界书/角色/虞淑婉/NSFW指导.yaml"
+          }
+        ],
         "uid": 45,
         "enabled": true,
         "strategy": {
@@ -645,27 +650,6 @@
         "position": {
           "type": "after_character_definition",
           "order": 106
-        },
-        "contents": [
-          {
-            "file": "世界书/角色/虞淑婉/NSFW指导.yaml"
-          }
-        ]
-      },
-      "<user>": {
-        "path": "世界书/角色/<user>.yaml",
-        "scope": "specific",
-        "part": "basic",
-        "keywords": [],
-        "abstract": "<user>的自定义档案：姓名、年龄、家庭背景、性格、外貌等基础信息，由用户在 YAML 文件中自行填写",
-        "uid": 32,
-        "enabled": true,
-        "strategy": {
-          "type": "constant"
-        },
-        "position": {
-          "type": "before_character_definition",
-          "order": 80
         }
       }
     },
@@ -676,6 +660,11 @@
           "班长"
         ],
         "abstract": "吴臻臻的NPC档案：班长兼学生会副主席，虚荣驱动型人格，一切行为都离不开被看见被认可被羡慕，表面兄弟实则暗自较劲，帮了你之后会在心里计分",
+        "contents": [
+          {
+            "file": "世界书/NPC/吴臻臻/基础信息.yaml"
+          }
+        ],
         "uid": 16,
         "enabled": true,
         "strategy": {
@@ -688,12 +677,7 @@
         "position": {
           "type": "after_character_definition",
           "order": 90
-        },
-        "contents": [
-          {
-            "file": "世界书/NPC/吴臻臻/基础信息.yaml"
-          }
-        ]
+        }
       }
     },
     "NSFW指导": {
@@ -703,6 +687,11 @@
           "苏晓樯"
         ],
         "abstract": "苏晓樯的NSFW实战指导：体位偏好（骑乘主导+后入）、语料库、敏感点（耳后/腰侧/大腿内侧）、主动主导型行为速查与硬约束",
+        "contents": [
+          {
+            "file": "世界书/角色/苏晓樯/NSFW指导.yaml"
+          }
+        ],
         "uid": 23,
         "enabled": true,
         "strategy": {
@@ -714,12 +703,7 @@
         "position": {
           "type": "after_character_definition",
           "order": 100
-        },
-        "contents": [
-          {
-            "file": "世界书/角色/苏晓樯/NSFW指导.yaml"
-          }
-        ]
+        }
       },
       "温书语_NSFW指导": {
         "scope": "specific",
@@ -727,6 +711,11 @@
           "温书语"
         ],
         "abstract": "温书语的NSFW实战指导：体位偏好（传教士+面对面侧躺）、语料库、敏感点（耳垂/锁骨/脊柱/手腕）、安静承受型行为速查与硬约束",
+        "contents": [
+          {
+            "file": "世界书/角色/温书语/NSFW指导.yaml"
+          }
+        ],
         "uid": 24,
         "enabled": true,
         "strategy": {
@@ -738,12 +727,7 @@
         "position": {
           "type": "after_character_definition",
           "order": 101
-        },
-        "contents": [
-          {
-            "file": "世界书/角色/温书语/NSFW指导.yaml"
-          }
-        ]
+        }
       },
       "沈幼楚_NSFW指导": {
         "scope": "specific",
@@ -751,6 +735,11 @@
           "沈幼楚"
         ],
         "abstract": "沈幼楚的NSFW实战指导：体位偏好（传教士+面对面拥抱式，禁背后位初期）、语料库、敏感点与禁区（脚踝为禁区）、创伤知情行为速查与硬约束",
+        "contents": [
+          {
+            "file": "世界书/角色/沈幼楚/NSFW指导.yaml"
+          }
+        ],
         "uid": 25,
         "enabled": true,
         "strategy": {
@@ -762,12 +751,7 @@
         "position": {
           "type": "after_character_definition",
           "order": 102
-        },
-        "contents": [
-          {
-            "file": "世界书/角色/沈幼楚/NSFW指导.yaml"
-          }
-        ]
+        }
       },
       "凌知夏_NSFW指导": {
         "scope": "specific",
@@ -775,6 +759,11 @@
           "凌知夏"
         ],
         "abstract": "凌知夏的NSFW实战指导：体位偏好（传教士+面对面坐姿，后入经由利弊分析后加入轮换）、语料库、敏感点（脖子两侧/耳垂下方/肩胛骨间）、研究型行为速查与硬约束",
+        "contents": [
+          {
+            "file": "世界书/角色/凌知夏/NSFW指导.yaml"
+          }
+        ],
         "uid": 26,
         "enabled": true,
         "strategy": {
@@ -786,12 +775,7 @@
         "position": {
           "type": "after_character_definition",
           "order": 103
-        },
-        "contents": [
-          {
-            "file": "世界书/角色/凌知夏/NSFW指导.yaml"
-          }
-        ]
+        }
       },
       "慕佳芊_NSFW指导": {
         "scope": "specific",
@@ -799,6 +783,11 @@
           "慕佳芊"
         ],
         "abstract": "慕佳芊的NSFW实战指导：体位偏好（骑乘+传教士+沙发/椅子）、语料库、敏感点（耳后/乳房/大腿内侧根部/腰窝）、引导型向交付型过渡行为速查与硬约束（含师生伦理底线）",
+        "contents": [
+          {
+            "file": "世界书/角色/慕佳芊/NSFW指导.yaml"
+          }
+        ],
         "uid": 27,
         "enabled": true,
         "strategy": {
@@ -810,12 +799,7 @@
         "position": {
           "type": "after_character_definition",
           "order": 104
-        },
-        "contents": [
-          {
-            "file": "世界书/角色/慕佳芊/NSFW指导.yaml"
-          }
-        ]
+        }
       },
       "陈芷汀_NSFW指导": {
         "scope": "specific",
@@ -823,6 +807,11 @@
           "陈芷汀"
         ],
         "abstract": "陈芷汀的NSFW实战指导：享乐主义型，体位偏好（女上位+后入+传教士+半公共场所）、语料库（含电话场景）、敏感点（耳垂后方/后腰/大腿内侧/锁骨）、刺激场所偏好（学校树林/空教室/厕所/天台/商场试衣间/电影院/车里）、电话调情与通话中做爱、物质宠溺的性爱加成。核心区分：性和爱对她从来是分开的——弧线是第一次在同一个人身上合二为一",
+        "contents": [
+          {
+            "file": "世界书/角色/陈芷汀/NSFW指导.yaml"
+          }
+        ],
         "uid": 30,
         "enabled": true,
         "strategy": {
@@ -834,45 +823,10 @@
         "position": {
           "type": "after_character_definition",
           "order": 105
-        },
-        "contents": [
-          {
-            "file": "世界书/角色/陈芷汀/NSFW指导.yaml"
-          }
-        ]
+        }
       }
     },
     "事件": {
-      "开学第一天": {
-        "keywords": [
-          "开学",
-          "第一天"
-        ],
-        "abstract": "开学第一天的初始场景：九月初早晨，五个角色在教室中各就各位，以各自的方式注意到<user>走进来",
-        "contents": [
-          {
-            "content": "场景: 九月初，暨阳中学高二重点班，开学第一天"
-          },
-          {
-            "file": "世界书/事件/开学第一天.yaml"
-          }
-        ],
-        "uid": 17,
-        "enabled": true,
-        "strategy": {
-          "type": "selective",
-          "keys": [
-            "开学",
-            "第一天"
-          ]
-        },
-        "position": {
-          "type": "at_depth",
-          "role": "system",
-          "depth": 0,
-          "order": 110
-        }
-      },
       "[mvu_plot]剧情推动器": {
         "path": "世界书/事件/剧情推动器.yaml",
         "keywords": [
@@ -913,8 +867,7 @@
           "type": "constant"
         },
         "position": {
-          "type": "before_character_definition",
-          "depth": 9999,
+          "type": "after_character_definition",
           "order": 112
         }
       },
@@ -935,9 +888,7 @@
           ]
         },
         "position": {
-          "type": "at_depth",
-          "role": "system",
-          "depth": 0,
+          "type": "after_character_definition",
           "order": 113
         }
       },
@@ -974,9 +925,7 @@
           ]
         },
         "position": {
-          "type": "at_depth",
-          "role": "system",
-          "depth": 0,
+          "type": "after_character_definition",
           "order": 114
         }
       },
@@ -1005,9 +954,7 @@
           ]
         },
         "position": {
-          "type": "at_depth",
-          "role": "system",
-          "depth": 0,
+          "type": "after_character_definition",
           "order": 115
         }
       },
@@ -1042,9 +989,7 @@
           ]
         },
         "position": {
-          "type": "at_depth",
-          "role": "system",
-          "depth": 0,
+          "type": "after_character_definition",
           "order": 116
         }
       },
@@ -1081,9 +1026,7 @@
           ]
         },
         "position": {
-          "type": "at_depth",
-          "role": "system",
-          "depth": 0,
+          "type": "after_character_definition",
           "order": 117
         }
       },
@@ -1124,9 +1067,7 @@
           ]
         },
         "position": {
-          "type": "at_depth",
-          "role": "system",
-          "depth": 0,
+          "type": "after_character_definition",
           "order": 118
         }
       }
@@ -1388,6 +1329,42 @@
             "buttons": []
           },
           "data": {}
+        },
+        "开局设定交互V3": {
+          "type": "script",
+          "script_file": "脚本/开局设定按钮绑定脚本.js",
+          "enabled": true,
+          "id": "7ad3bd58-7b36-48ea-9690-bcb99903f74e",
+          "info": "处理开局模式切换、开场预览，并将玩家资料写入当前角色卡世界书。",
+          "button": {
+            "enabled": false,
+            "buttons": []
+          },
+          "data": {}
+        },
+        "开局设定旧界面兼容V5": {
+          "type": "script",
+          "script_file": "脚本/开局设定旧界面兼容V4.js",
+          "enabled": true,
+          "id": "5db9bd58-6f5a-47e3-993c-79c036d12b74",
+          "info": "兼容旧聊天中的 custom-jy 开局界面，修正面板与选中态显示，并处理开场预览。",
+          "button": {
+            "enabled": false,
+            "buttons": []
+          },
+          "data": {}
+        },
+        "悬浮音乐播放器": {
+          "type": "script",
+          "script_file": "脚本/悬浮音乐播放器.js",
+          "enabled": true,
+          "id": "47b347f8-8d71-4cea-b2f8-689138aebd92",
+          "info": "悬浮 BGM 播放器：本卡歌单、拖动位置、音量与当前选曲均保存在本地。",
+          "button": {
+            "enabled": false,
+            "buttons": []
+          },
+          "data": {}
         }
       },
       "variables": {}
@@ -1480,6 +1457,38 @@
       "markdownOnly": true,
       "promptOnly": false,
       "runOnEdit": false,
+      "substituteRegex": 0,
+      "minDepth": null,
+      "maxDepth": null
+    },
+    "对AI隐藏开局设定界面": {
+      "id": "3c378252-13e5-4ce5-bc7f-529bb9b9afef",
+      "findRegex": "<OpeningSetupUI/>",
+      "replaceString": "",
+      "trimStrings": [],
+      "placement": [
+        2
+      ],
+      "disabled": false,
+      "markdownOnly": false,
+      "promptOnly": true,
+      "runOnEdit": true,
+      "substituteRegex": 0,
+      "minDepth": null,
+      "maxDepth": null
+    },
+    "开局设定界面": {
+      "id": "f98bb3d3-cc8e-4c76-b441-9fbca4d49972",
+      "findRegex": "<OpeningSetupUI/>",
+      "replace_file": "正则/开局设定界面.html",
+      "trimStrings": [],
+      "placement": [
+        2
+      ],
+      "disabled": false,
+      "markdownOnly": true,
+      "promptOnly": false,
+      "runOnEdit": true,
       "substituteRegex": 0,
       "minDepth": null,
       "maxDepth": null

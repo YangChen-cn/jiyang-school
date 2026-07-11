@@ -14,7 +14,6 @@ format: |-
   <JSONPatch>
   [
     { "op": "replace", "path": "${/path/to/variable}", "value": ${new_value} },
-    { "op": "delta", "path": "${/path/to/number/variable}", "value": "${positive_or_negative_delta}" },
     { "op": "add", "path": "${/path/to/object/newKey}", "value": ${content} },
     { "op": "remove", "path": "${/path/to/array/0}" },
     ...
@@ -22,3 +21,17 @@ format: |-
   </JSONPatch>
   </UpdateVariable>
 </update_variable_rules>
+
+<important_item_patch>
+When adding an important item, use exactly this JSON Patch shape. The field names must stay in Chinese: `名称` and `描述`. Never use `description`.
+[
+  {
+    "op": "add",
+    "path": "/主角/重要物品/-",
+    "value": {
+      "名称": "入学材料",
+      "描述": "原本要去送的资料，现在被虞淑婉扣在了桌上"
+    }
+  }
+]
+</important_item_patch>

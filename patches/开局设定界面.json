@@ -1,0 +1,90 @@
+[
+  {
+    "op": "remove",
+    "path": "/entryManifest/角色/<user>"
+  },
+  {
+    "op": "add",
+    "path": "/extensions/tavern_helper/scripts/开局设定交互V3",
+    "value": {
+      "type": "script",
+      "script_file": "脚本/开局设定按钮绑定脚本.js",
+      "enabled": true,
+      "id": "7ad3bd58-7b36-48ea-9690-bcb99903f74e",
+      "info": "处理开局模式切换、开场预览，并将玩家资料写入当前角色卡世界书。",
+      "button": {
+        "enabled": false,
+        "buttons": []
+      },
+      "data": {}
+    }
+  },
+  {
+    "op": "add",
+    "path": "/extensions/tavern_helper/scripts/开局设定旧界面兼容V5",
+    "value": {
+      "type": "script",
+      "script_file": "脚本/开局设定旧界面兼容V4.js",
+      "enabled": true,
+      "id": "5db9bd58-6f5a-47e3-993c-79c036d12b74",
+      "info": "兼容旧聊天中的 custom-jy 开局界面，修正面板与选中态显示，并处理开场预览。",
+      "button": {
+        "enabled": false,
+        "buttons": []
+      },
+      "data": {}
+    }
+  },
+  {
+    "op": "add",
+    "path": "/extensions/tavern_helper/scripts/悬浮音乐播放器",
+    "value": {
+      "type": "script",
+      "script_file": "脚本/悬浮音乐播放器.js",
+      "enabled": true,
+      "id": "47b347f8-8d71-4cea-b2f8-689138aebd92",
+      "info": "悬浮 BGM 播放器：本卡歌单、拖动位置、音量与当前选曲均保存在本地。",
+      "button": {
+        "enabled": false,
+        "buttons": []
+      },
+      "data": {}
+    }
+  },
+  {
+    "op": "add",
+    "path": "/regex_scripts/对AI隐藏开局设定界面",
+    "value": {
+      "id": "3c378252-13e5-4ce5-bc7f-529bb9b9afef",
+      "findRegex": "<OpeningSetupUI/>",
+      "replaceString": "",
+      "trimStrings": [],
+      "placement": [2],
+      "disabled": false,
+      "markdownOnly": false,
+      "promptOnly": true,
+      "runOnEdit": true,
+      "substituteRegex": 0,
+      "minDepth": null,
+      "maxDepth": null
+    }
+  },
+  {
+    "op": "add",
+    "path": "/regex_scripts/开局设定界面",
+    "value": {
+      "id": "f98bb3d3-cc8e-4c76-b441-9fbca4d49972",
+      "findRegex": "<OpeningSetupUI/>",
+      "replace_file": "正则/开局设定界面.html",
+      "trimStrings": [],
+      "placement": [2],
+      "disabled": false,
+      "markdownOnly": true,
+      "promptOnly": false,
+      "runOnEdit": true,
+      "substituteRegex": 0,
+      "minDepth": null,
+      "maxDepth": null
+    }
+  }
+]

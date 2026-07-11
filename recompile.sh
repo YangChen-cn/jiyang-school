@@ -225,7 +225,7 @@ if isinstance(regex_sources, dict):
     regex_scripts.sort(key=lambda script: order.get(script.get('scriptName') or script.get('name'), len(order)))
 # Read alternate greeting files
 greetings = []
-for fn in sorted(f for f in os.listdir('开场白') if f.endswith('.txt') and f != '0.txt'):
+for fn in sorted(f for f in os.listdir('开场白') if f.endswith('.txt') and f[:1].isdigit() and f != '0.txt'):
     with open(f'开场白/{fn}', 'r') as fh:
         greetings.append(fh.read())
 

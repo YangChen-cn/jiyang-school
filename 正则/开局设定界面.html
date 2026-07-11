@@ -1,0 +1,184 @@
+<style>
+  .jy-opening {
+    --paper: #f8fbf8;
+    --ink: #26312e;
+    --muted: #65736c;
+    --line: #cbd8d1;
+    --green: #237b6c;
+    --gold: #c58a35;
+    max-width: 820px;
+    margin: 16px auto;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--ink);
+    background: var(--paper);
+    box-shadow: 0 12px 30px rgba(31, 55, 48, 0.13);
+    font-family: "Noto Sans SC", "PingFang SC", sans-serif;
+    overflow: hidden;
+  }
+
+  .jy-opening *, .jy-opening *::before, .jy-opening *::after { box-sizing: border-box; }
+
+  .jy-opening-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: start;
+    padding: 20px 22px 16px;
+    border-bottom: 1px solid var(--line);
+    background: #eaf2ee;
+  }
+
+  .jy-opening-kicker { color: var(--green); font-size: 11px; font-weight: 800; }
+  .jy-opening-title { margin-top: 4px; font-size: 24px; font-weight: 800; line-height: 1.2; }
+  .jy-opening-copy { margin: 6px 0 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+  .jy-opening-stamp { align-self: center; border: 2px solid var(--gold); color: #9e671e; font-size: 12px; font-weight: 800; letter-spacing: 2px; padding: 8px 10px; transform: rotate(-3deg); }
+
+  .jy-opening-form { padding: 16px 22px 20px; }
+  .jy-opening-section { padding: 14px 0 2px; border-top: 1px solid var(--line); }
+  .jy-opening-section:first-child { padding-top: 0; border-top: 0; }
+  .jy-opening-section-title { margin-bottom: 10px; color: var(--green); font-size: 12px; font-weight: 800; }
+  .jy-opening-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; }
+  .jy-opening-field { min-width: 0; }
+  .jy-opening-field.wide { grid-column: 1 / -1; }
+  .jy-opening-label { display: block; margin-bottom: 5px; color: var(--muted); font-size: 12px; font-weight: 700; }
+  .jy-opening-input, .jy-opening-textarea {
+    width: 100%; min-width: 0; border: 1px solid var(--line); border-radius: 5px; padding: 9px 10px;
+    color: var(--ink); background: #fff; font: inherit; font-size: 13px; line-height: 1.45;
+  }
+  .jy-opening-input:focus, .jy-opening-textarea:focus { outline: 2px solid rgba(35, 123, 108, 0.22); border-color: var(--green); }
+  .jy-opening-textarea { min-height: 68px; resize: vertical; }
+  .jy-opening-textarea.tall { min-height: 82px; }
+  .jy-opening-mode-switch { display: inline-flex; gap: 0; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
+  .jy-opening-mode { border: 0; border-right: 1px solid var(--line); padding: 8px 11px; color: var(--muted); background: #fff; font: inherit; font-size: 12px; font-weight: 800; cursor: pointer; }
+  .jy-opening-mode:last-child { border-right: 0; }
+  .jy-opening-mode.is-active { color: #fff; background: var(--green); }
+  .jy-opening-panel { display: none; margin-top: 12px; }
+  .jy-opening-panel.is-active { display: block; }
+  .jy-opening-scenes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; }
+  .jy-opening-scene { min-height: 74px; border: 1px solid var(--line); border-radius: 5px; padding: 8px; text-align: left; color: var(--ink); background: #fff; font: inherit; cursor: pointer; }
+  .jy-opening-scene:hover { border-color: var(--green); background: #f0f7f3; }
+  .jy-opening-scene.is-active { border-color: var(--green); background: var(--green); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12); }
+  .jy-opening-scene.is-active .jy-opening-scene-number, .jy-opening-scene.is-active .jy-opening-scene-name, .jy-opening-scene.is-active .jy-opening-scene-note { color: #fff; }
+  .jy-opening-scene-number { display: block; color: var(--green); font-size: 10px; font-weight: 800; }
+  .jy-opening-scene-name { display: block; margin-top: 3px; font-size: 12px; font-weight: 800; }
+  .jy-opening-scene-note { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; line-height: 1.3; }
+  .jy-opening-preview { position: fixed; z-index: 9999; inset: 0; display: none; place-items: start center; padding: 44px 18px 18px; background: rgba(22, 42, 36, 0.55); }
+  .jy-opening-preview.is-open { display: grid; }
+  .jy-opening-preview-card { display: grid; grid-template-rows: auto minmax(0, 1fr); width: min(760px, 100%); max-height: min(78vh, 760px); border: 1px solid var(--line); border-radius: 8px; background: var(--paper); box-shadow: 0 22px 60px rgba(18, 30, 26, 0.3); overflow: hidden; }
+  .jy-opening-preview-head { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 10px 12px 10px 16px; border-bottom: 1px solid var(--line); background: #eaf2ee; }
+  .jy-opening-preview-title { font-size: 14px; font-weight: 800; }
+  .jy-opening-preview-close { width: 30px; height: 30px; border: 0; color: var(--muted); background: transparent; font-size: 22px; line-height: 1; cursor: pointer; }
+  .jy-opening-preview-content { min-height: 0; margin: 0; padding: 16px; overflow: auto; white-space: pre-wrap; color: var(--ink); font: 13px/1.72 "Noto Serif SC", "Songti SC", serif; }
+  .jy-opening-preview-actions { display: flex; justify-content: flex-end; gap: 8px; margin-left: auto; }
+  .jy-opening-preview-actions .jy-opening-button { min-height: 31px; padding: 6px 9px; font-size: 12px; }
+  .jy-opening-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+  .jy-opening-note { flex: 1 1 280px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+  .jy-opening-button { min-height: 36px; border: 1px solid var(--line); border-radius: 5px; padding: 8px 12px; color: var(--ink); background: #fff; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+  .jy-opening-button:hover { border-color: var(--green); color: var(--green); }
+  .jy-opening-button.primary { border-color: var(--green); color: #fff; background: var(--green); }
+  .jy-opening-button.primary:hover { color: #fff; background: #186457; }
+  .jy-opening-toast { display: none; margin-top: 10px; color: var(--green); font-size: 12px; font-weight: 700; }
+  .jy-opening-toast.is-visible { display: block; }
+  .jy-opening[data-complete="true"] .jy-opening-form { opacity: 0.72; }
+
+  @media (max-width: 640px) {
+    .jy-opening { margin: 10px 6px; }
+    .jy-opening-head { grid-template-columns: 1fr; padding: 16px; }
+    .jy-opening-stamp { justify-self: start; }
+    .jy-opening-form { padding: 14px 16px 18px; }
+    .jy-opening-grid { grid-template-columns: 1fr; }
+    .jy-opening-scenes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .jy-opening-field.wide { grid-column: auto; }
+    .jy-opening-button { flex: 1 1 auto; }
+  }
+</style>
+
+<section class="jy-opening" data-jy-opening data-complete="false">
+  <header class="jy-opening-head">
+    <div>
+      <div class="jy-opening-kicker">暨阳中学 · 高二新生档案</div>
+      <div class="jy-opening-title">先写下你是谁</div>
+      <p class="jy-opening-copy">这份档案会成为本次故事里所有人认识你的起点。</p>
+    </div>
+    <div class="jy-opening-stamp">已备案</div>
+  </header>
+
+  <form class="jy-opening-form" autocomplete="off">
+    <div class="jy-opening-section">
+      <div class="jy-opening-section-title">基本资料</div>
+      <div class="jy-opening-grid">
+        <label class="jy-opening-field"><span class="jy-opening-label">姓名</span><input class="jy-opening-input" data-field="姓名" placeholder="例如：陈默" required></label>
+        <label class="jy-opening-field"><span class="jy-opening-label">年龄</span><input class="jy-opening-input" data-field="年龄" value="17岁" placeholder="例如：17岁"></label>
+        <label class="jy-opening-field"><span class="jy-opening-label">性别 / 称谓</span><input class="jy-opening-input" data-field="性别或称谓" placeholder="可留空"></label>
+        <label class="jy-opening-field"><span class="jy-opening-label">班级 / 身份</span><input class="jy-opening-input" data-field="班级或身份" value="暨阳中学高二重点班学生" placeholder="例如：转学生、走读生"></label>
+      </div>
+    </div>
+
+    <div class="jy-opening-section">
+      <div class="jy-opening-section-title">人物底色</div>
+      <div class="jy-opening-grid">
+        <label class="jy-opening-field wide"><span class="jy-opening-label">外貌</span><textarea class="jy-opening-textarea" data-field="外貌" placeholder="身形、发型、校服或常穿的衣服、容易被注意到的细节。"></textarea></label>
+        <label class="jy-opening-field wide"><span class="jy-opening-label">性格</span><textarea class="jy-opening-textarea" data-field="性格" placeholder="写下脾气、习惯、擅长掩饰的部分，或一个矛盾点。"></textarea></label>
+        <label class="jy-opening-field wide"><span class="jy-opening-label">擅长与学业</span><textarea class="jy-opening-textarea" data-field="擅长与学业" placeholder="成绩、社团、运动、乐器、技能或不愿被人知道的本事。"></textarea></label>
+      </div>
+    </div>
+
+    <div class="jy-opening-section">
+      <div class="jy-opening-section-title">生活与来处</div>
+      <div class="jy-opening-grid">
+        <label class="jy-opening-field wide"><span class="jy-opening-label">家庭背景</span><textarea class="jy-opening-textarea tall" data-field="家庭背景" placeholder="住在哪里、家人关系、经济情况、家里对你的期待。"></textarea></label>
+        <label class="jy-opening-field"><span class="jy-opening-label">重要物品</span><textarea class="jy-opening-textarea" data-field="重要物品" placeholder="车辆、礼物、信物、证据或会影响后续剧情的物品。"></textarea></label>
+        <label class="jy-opening-field"><span class="jy-opening-label">开局心事</span><textarea class="jy-opening-textarea" data-field="开局心事" placeholder="刚分班时在意什么，想靠近谁，或想避开什么。"></textarea></label>
+      </div>
+    </div>
+
+    <div class="jy-opening-section">
+      <div class="jy-opening-section-title">选择开场</div>
+      <div class="jy-opening-mode-switch" role="tablist" aria-label="开场方式">
+        <button class="jy-opening-mode is-active" type="button" data-action="select-mode" data-mode="preset">预写开场</button>
+        <button class="jy-opening-mode" type="button" data-action="select-mode" data-mode="custom">自定义开局</button>
+      </div>
+
+      <div class="jy-opening-panel is-active" data-mode-panel="preset">
+        <div class="jy-opening-scenes" role="listbox" aria-label="预写开场白">
+          <button class="jy-opening-scene is-active" type="button" data-action="select-greeting" data-greeting="0"><span class="jy-opening-scene-number">0</span><span class="jy-opening-scene-name">开学第一天</span><span class="jy-opening-scene-note">走进重点班</span></button>
+          <button class="jy-opening-scene" type="button" data-action="select-greeting" data-greeting="1"><span class="jy-opening-scene-number">1</span><span class="jy-opening-scene-name">慕佳芊</span><span class="jy-opening-scene-note">办公室</span></button>
+          <button class="jy-opening-scene" type="button" data-action="select-greeting" data-greeting="2"><span class="jy-opening-scene-number">2</span><span class="jy-opening-scene-name">苏晓樯</span><span class="jy-opening-scene-note">车祸之后</span></button>
+          <button class="jy-opening-scene" type="button" data-action="select-greeting" data-greeting="3"><span class="jy-opening-scene-number">3</span><span class="jy-opening-scene-name">温书语</span><span class="jy-opening-scene-note">图书馆</span></button>
+          <button class="jy-opening-scene" type="button" data-action="select-greeting" data-greeting="4"><span class="jy-opening-scene-number">4</span><span class="jy-opening-scene-name">沈幼楚</span><span class="jy-opening-scene-note">小巷</span></button>
+          <button class="jy-opening-scene" type="button" data-action="select-greeting" data-greeting="5"><span class="jy-opening-scene-number">5</span><span class="jy-opening-scene-name">凌知夏</span><span class="jy-opening-scene-note">竞赛名单</span></button>
+          <button class="jy-opening-scene" type="button" data-action="select-greeting" data-greeting="6"><span class="jy-opening-scene-number">6</span><span class="jy-opening-scene-name">陈芷汀</span><span class="jy-opening-scene-note">Tinder</span></button>
+          <button class="jy-opening-scene" type="button" data-action="select-greeting" data-greeting="7"><span class="jy-opening-scene-number">7</span><span class="jy-opening-scene-name">虞淑婉</span><span class="jy-opening-scene-note">校长室</span></button>
+        </div>
+      </div>
+
+      <div class="jy-opening-panel" data-mode-panel="custom">
+        <label class="jy-opening-field"><span class="jy-opening-label">自定义开局</span><textarea class="jy-opening-textarea tall" data-custom-opening placeholder="写下此刻的地点、人物、发生过的事，或你希望 AI 接住的开场画面。"></textarea></label>
+      </div>
+
+      <label class="jy-opening-field wide" style="display:block; margin-top:12px;"><span class="jy-opening-label">你的开局动作</span><textarea class="jy-opening-textarea" data-opening-action placeholder="例如：我把书包放到最后一排，抬头看向讲台。"></textarea></label>
+    </div>
+
+    <div class="jy-opening-actions">
+      <div class="jy-opening-note">未填写的项目会按“未设定”处理；之后仍可在对话中自然补充。</div>
+      <button class="jy-opening-button" type="button" data-action="clear">清空</button>
+      <button class="jy-opening-button primary" type="submit" data-action="confirm">确认档案并开始</button>
+    </div>
+    <div class="jy-opening-toast" data-toast aria-live="polite"></div>
+  </form>
+
+  <div class="jy-opening-preview" data-preview aria-hidden="true">
+    <div class="jy-opening-preview-card" role="dialog" aria-modal="true" aria-labelledby="jy-opening-preview-title">
+      <div class="jy-opening-preview-head">
+        <div class="jy-opening-preview-title" id="jy-opening-preview-title" data-preview-title>开场白预览</div>
+        <div class="jy-opening-preview-actions">
+          <button class="jy-opening-button" type="button" data-action="close-preview">返回选择</button>
+          <button class="jy-opening-button primary" type="button" data-action="use-preview">使用此开场</button>
+        </div>
+        <button class="jy-opening-preview-close" type="button" data-action="close-preview" aria-label="关闭预览">×</button>
+      </div>
+      <pre class="jy-opening-preview-content" data-preview-content></pre>
+    </div>
+  </div>
+</section>
