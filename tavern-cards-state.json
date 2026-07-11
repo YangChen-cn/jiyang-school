@@ -1492,6 +1492,23 @@
       "substituteRegex": 0,
       "minDepth": null,
       "maxDepth": null
+    },
+    "开局档案通知书": {
+      "id": "47d61f8c-b786-4908-9e6c-27a65e6f3f34",
+      "findRegex": "/<letter>\\s*([\\s\\S]*?)\\s*<\\/letter>/gsi",
+      "replace_file": "正则/开局档案通知书.html",
+      "trimStrings": [],
+      "placement": [
+        1,
+        2
+      ],
+      "disabled": false,
+      "markdownOnly": true,
+      "promptOnly": false,
+      "runOnEdit": true,
+      "substituteRegex": 0,
+      "minDepth": null,
+      "maxDepth": null
     }
   }
 }

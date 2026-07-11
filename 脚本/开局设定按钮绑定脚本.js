@@ -117,7 +117,7 @@
       '- 在开场白之后承接本条消息，不要回退或重写已经发生的场景。',
       '</initial_setup>'
     );
-    return lines.join('\n');
+    return ['<letter>', lines.join('\n'), '</letter>'].join('\n');
   }
 
   function worldbookEntry(content) {
