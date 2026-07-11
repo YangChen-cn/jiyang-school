@@ -1802,6 +1802,20 @@
     showJumpToast(root, text);
   }
 
+  function revealModal(modal) {
+    if (!modal) return;
+    const card = modal.firstElementChild || modal;
+    const reveal = () => {
+      try {
+        card.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+      } catch (error) {
+        card.scrollIntoView();
+      }
+    };
+    requestAnimationFrame(reveal);
+    window.setTimeout(reveal, 90);
+  }
+
   function bindStatus(root) {
     if (!root) return;
     if (root.dataset.avatarBoundVersion === "9") {
@@ -1921,6 +1935,7 @@
       title.textContent = name;
       modal.dataset.open = "true";
       modal.setAttribute("aria-hidden", "false");
+      revealModal(modal);
     }
 
     function closeAvatar() {
@@ -1934,6 +1949,7 @@
       if (!mapModal) return;
       mapModal.dataset.open = "true";
       mapModal.setAttribute("aria-hidden", "false");
+      revealModal(mapModal);
     }
 
     function closeMap() {
@@ -1947,6 +1963,7 @@
       renderInventory();
       inventoryModal.dataset.open = "true";
       inventoryModal.setAttribute("aria-hidden", "false");
+      revealModal(inventoryModal);
     }
 
     function closeInventory() {
@@ -2024,6 +2041,7 @@
       renderAlbum();
       albumModal.dataset.open = "true";
       albumModal.setAttribute("aria-hidden", "false");
+      revealModal(albumModal);
     }
 
     function closeAlbum() {
@@ -2040,6 +2058,7 @@
       if (photoViewerCaption) photoViewerCaption.textContent = label || "相册照片";
       photoViewer.dataset.open = "true";
       photoViewer.setAttribute("aria-hidden", "false");
+      revealModal(photoViewer);
     }
 
     function closePhotoViewer() {
