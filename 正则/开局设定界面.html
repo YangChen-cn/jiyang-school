@@ -58,8 +58,10 @@
   .jy-opening-scenes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; }
   .jy-opening-scene { min-height: 74px; border: 1px solid var(--line); border-radius: 5px; padding: 8px; text-align: left; color: var(--ink); background: #fff; font: inherit; cursor: pointer; }
   .jy-opening-scene:hover { border-color: var(--green); background: #f0f7f3; }
-  .jy-opening-scene.is-active { border-color: var(--green); background: var(--green); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12); }
-  .jy-opening-scene.is-active .jy-opening-scene-number, .jy-opening-scene.is-active .jy-opening-scene-name, .jy-opening-scene.is-active .jy-opening-scene-note { color: #fff; }
+  .jy-opening-scene.is-active { border-color: var(--green); background: #dceee7; box-shadow: inset 0 0 0 1px rgba(35, 123, 108, 0.08); }
+  .jy-opening-scene.is-active .jy-opening-scene-number { color: var(--green); }
+  .jy-opening-scene.is-active .jy-opening-scene-name { color: var(--ink); }
+  .jy-opening-scene.is-active .jy-opening-scene-note { color: #526a61; }
   .jy-opening-scene-number { display: block; color: var(--green); font-size: 10px; font-weight: 800; }
   .jy-opening-scene-name { display: block; margin-top: 3px; font-size: 12px; font-weight: 800; }
   .jy-opening-scene-note { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; line-height: 1.3; }

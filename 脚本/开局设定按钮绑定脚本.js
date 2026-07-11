@@ -1,7 +1,7 @@
 (() => {
   const ROOT_SELECTOR = '[data-jy-opening]';
   const ENTRY_NAME = '玩家开局设定';
-  const GLOBAL_KEY = '__jiyangOpeningSetupControllerV3';
+  const GLOBAL_KEY = '__jiyangOpeningSetupControllerV4';
   const cleanups = [];
 
   try { window[GLOBAL_KEY]?.stop?.(); } catch (_) {}
@@ -141,11 +141,29 @@
     return true;
   }
 
+  function presetGreeting(character, index) {
+    const sources = [
+      character?.alternate_greetings,
+      character?.data?.alternate_greetings,
+      character?.first_messages,
+      character?.data?.first_messages
+    ];
+
+    for (const source of sources) {
+      if (!Array.isArray(source)) continue;
+      const direct = source[index];
+      if (typeof direct === 'string' && direct.trim()) return direct;
+      // Older Tavern Helper payloads include the setup screen at index 0.
+      const offset = source[index + 1];
+      if (typeof offset === 'string' && offset.trim()) return offset;
+    }
+    return '';
+  }
+
   async function applyPresetGreeting(root) {
     const character = await getCharacter('current');
     const index = greetingIndex(root);
-    // first_messages[0] is the setup UI; the selectable library starts at 1.
-    const greeting = character?.first_messages?.[index + 1];
+    const greeting = presetGreeting(character, index);
     if (!greeting) throw new Error(`未找到编号 ${index} 的开场白。请重新导入完整角色卡。`);
     const cleanGreeting = greeting.trim();
     await setChatMessages([{ message_id: 0, message: cleanGreeting }], { refresh: 'affected' });
@@ -162,7 +180,7 @@
   async function previewGreeting(root, index) {
     try {
       const character = await getCharacter('current');
-      const greeting = character?.first_messages?.[index + 1];
+      const greeting = presetGreeting(character, index);
       if (!greeting) throw new Error(`未找到编号 ${index} 的开场白。请重新导入完整角色卡。`);
       const preview = root.querySelector('[data-preview]');
       root._previewGreeting = index;
@@ -273,14 +291,14 @@
 
   function bind() {
     windows().forEach(win => {
-      if (win.__jiyangOpeningBoundV3) return;
-      win.__jiyangOpeningBoundV3 = true;
+      if (win.__jiyangOpeningBoundV4) return;
+      win.__jiyangOpeningBoundV4 = true;
       win.addEventListener('click', handleClick, true);
       win.addEventListener('submit', handleSubmit, true);
       cleanups.push(() => {
         win.removeEventListener('click', handleClick, true);
         win.removeEventListener('submit', handleSubmit, true);
-        try { delete win.__jiyangOpeningBoundV3; } catch (_) { win.__jiyangOpeningBoundV3 = false; }
+        try { delete win.__jiyangOpeningBoundV4; } catch (_) { win.__jiyangOpeningBoundV4 = false; }
       });
     });
   }
