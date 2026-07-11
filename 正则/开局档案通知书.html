@@ -1,55 +1,89 @@
-<section class="jy-letter">
-  <div class="jy-letter-topline">
-    <span>暨阳中学</span>
-    <span>教务处收件记录</span>
+<section class="jy-admission-letter">
+  <div class="jy-admission-ribbon">暨阳中学 · 新生档案接收中...</div>
+  <div class="jy-admission-topline">
+    <span>暨阳中学教务处</span>
+    <span>2020 学年 · 入学存档</span>
   </div>
-  <div class="jy-letter-heading">
-    <span class="jy-letter-mark" aria-hidden="true">档</span>
+  <header class="jy-admission-heading">
+    <div class="jy-admission-emblem" aria-hidden="true">暨阳</div>
     <div>
-      <h3>暨阳中学 · 新生档案接收中...</h3>
-      <p>Jiyang High School · Student Affairs Office</p>
+      <h2>新生录取通知书</h2>
+      <p>ADMISSION NOTICE · JIYANG HIGH SCHOOL</p>
     </div>
+  </header>
+  <div class="jy-admission-rule"></div>
+  <p class="jy-admission-address">致 <strong>$1</strong> 同学：</p>
+  <p class="jy-admission-copy">经核验，你已被录取进入暨阳中学。请携带这份档案，走进属于你的新学期。</p>
+
+  <div class="jy-admission-facts">
+    <div><span>姓名</span><b>$1</b></div>
+    <div><span>年龄</span><b>$2</b></div>
+    <div><span>称谓</span><b>$3</b></div>
+    <div class="jy-admission-fact-wide"><span>班级 / 身份</span><b>$4</b></div>
   </div>
-  <div class="jy-letter-rule"></div>
-  <pre class="jy-letter-content">$1</pre>
-  <div class="jy-letter-foot">
-    <span>已录入本次故事起点</span>
-    <span class="jy-letter-seal">教务处 · 已接收</span>
+
+  <div class="jy-admission-profile">
+    <div class="jy-admission-row"><span>外貌</span><p>$5</p></div>
+    <div class="jy-admission-row"><span>性格</span><p>$6</p></div>
+    <div class="jy-admission-row"><span>擅长与学业</span><p>$7</p></div>
+    <div class="jy-admission-row"><span>家庭背景</span><p>$8</p></div>
+    <div class="jy-admission-row"><span>重要物品</span><p>$9</p></div>
+  </div>
+
+  <div class="jy-admission-opening">
+    <span>报到时的心事</span>
+    <p>$10</p>
+  </div>
+  <div class="jy-admission-foot">
+    <span>起始场景：$11</span>
+    <span class="jy-admission-seal">教务处 · 已录取</span>
   </div>
 </section>
 
 <style>
-  .jy-letter {
+  .jy-admission-letter {
     width: min(760px, calc(100% - 20px));
     margin: 14px auto;
-    border: 1px solid #bfd2c9;
+    border: 1px solid #bccfc6;
     border-radius: 8px;
     color: #26312e;
     background:
-      linear-gradient(90deg, rgba(35, 123, 108, 0.06) 1px, transparent 1px) 0 0 / 21px 21px,
-      linear-gradient(rgba(35, 123, 108, 0.045) 1px, transparent 1px) 0 0 / 21px 21px,
-      #fbfdfb;
-    box-shadow: 0 12px 26px rgba(29, 57, 48, 0.12);
+      linear-gradient(90deg, rgba(35, 123, 108, 0.055) 1px, transparent 1px) 0 0 / 22px 22px,
+      linear-gradient(rgba(35, 123, 108, 0.04) 1px, transparent 1px) 0 0 / 22px 22px,
+      #fcfefd;
+    box-shadow: 0 13px 30px rgba(29, 57, 48, 0.13);
     font-family: "Noto Sans SC", "PingFang SC", sans-serif;
     overflow: hidden;
   }
 
-  .jy-letter *, .jy-letter *::before, .jy-letter *::after { box-sizing: border-box; }
-  .jy-letter-topline { display: flex; justify-content: space-between; gap: 12px; padding: 9px 14px; color: #587168; background: rgba(35, 123, 108, 0.08); font-size: 11px; font-weight: 750; }
-  .jy-letter-heading { display: flex; align-items: center; gap: 12px; padding: 15px 16px 12px; }
-  .jy-letter-mark { display: grid; flex: 0 0 auto; width: 36px; height: 36px; place-items: center; border: 2px solid #237b6c; border-radius: 50%; color: #237b6c; font-size: 16px; font-weight: 850; }
-  .jy-letter h3 { margin: 0; color: #1d4e44; font-size: 17px; font-weight: 850; line-height: 1.3; }
-  .jy-letter-heading p { margin: 2px 0 0; color: #72857d; font-size: 10px; font-weight: 700; letter-spacing: 0; }
-  .jy-letter-rule { height: 2px; margin: 0 16px; background: linear-gradient(90deg, #237b6c, rgba(35, 123, 108, 0.12)); }
-  .jy-letter-content { max-height: 360px; margin: 0; padding: 15px 16px; overflow: auto; color: #394b45; font: 12px/1.7 "Noto Serif SC", "Songti SC", serif; white-space: pre-wrap; overflow-wrap: anywhere; }
-  .jy-letter-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 16px; border-top: 1px solid #d7e3dd; color: #6c8178; font-size: 11px; font-weight: 700; }
-  .jy-letter-seal { flex: 0 0 auto; border: 1px solid #b67a4a; border-radius: 4px; color: #9a6135; font-weight: 800; letter-spacing: 1px; padding: 4px 7px; transform: rotate(-2deg); }
-  .jy-letter-content::-webkit-scrollbar { width: 6px; }
-  .jy-letter-content::-webkit-scrollbar-thumb { border-radius: 6px; background: rgba(35, 123, 108, 0.34); }
+  .jy-admission-letter *, .jy-admission-letter *::before, .jy-admission-letter *::after { box-sizing: border-box; }
+  .jy-admission-ribbon { padding: 8px 16px; color: #edf8f4; background: #237b6c; font-size: 11px; font-weight: 800; letter-spacing: 0; }
+  .jy-admission-topline { display: flex; justify-content: space-between; gap: 12px; padding: 10px 16px 0; color: #6c8178; font-size: 10px; font-weight: 750; }
+  .jy-admission-heading { display: flex; align-items: center; justify-content: center; gap: 13px; padding: 12px 16px 14px; text-align: left; }
+  .jy-admission-emblem { display: grid; width: 46px; height: 46px; place-items: center; border: 2px solid #237b6c; border-radius: 50%; color: #237b6c; font-family: "Noto Serif SC", "Songti SC", serif; font-size: 13px; font-weight: 850; }
+  .jy-admission-heading h2 { margin: 0; color: #1e4f45; font-family: "Noto Serif SC", "Songti SC", serif; font-size: 22px; font-weight: 850; line-height: 1.2; letter-spacing: 0; }
+  .jy-admission-heading p { margin: 3px 0 0; color: #6f857b; font-size: 9px; font-weight: 750; letter-spacing: 1px; }
+  .jy-admission-rule { height: 2px; margin: 0 16px; background: linear-gradient(90deg, transparent, #237b6c 16%, #237b6c 84%, transparent); }
+  .jy-admission-address { margin: 17px 18px 0; color: #34443f; font-family: "Noto Serif SC", "Songti SC", serif; font-size: 14px; }
+  .jy-admission-address strong { color: #1f7162; font-size: 16px; }
+  .jy-admission-copy { margin: 7px 18px 14px; color: #50645c; font: 12px/1.65 "Noto Serif SC", "Songti SC", serif; }
+  .jy-admission-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; margin: 0 16px; }
+  .jy-admission-facts > div { min-width: 0; border: 1px solid #d2e0da; border-radius: 5px; background: rgba(255, 255, 255, 0.68); padding: 8px 9px; }
+  .jy-admission-facts span, .jy-admission-row > span, .jy-admission-opening > span { display: block; color: #698077; font-size: 10px; font-weight: 800; }
+  .jy-admission-facts b { display: block; margin-top: 3px; overflow: hidden; color: #2e3e39; font-size: 12px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+  .jy-admission-fact-wide { grid-column: 1 / -1; }
+  .jy-admission-profile { display: grid; gap: 7px; margin: 11px 16px 0; }
+  .jy-admission-row { display: grid; grid-template-columns: 82px minmax(0, 1fr); gap: 10px; align-items: start; border-left: 3px solid rgba(35, 123, 108, 0.5); background: rgba(35, 123, 108, 0.045); padding: 8px 10px; }
+  .jy-admission-row p, .jy-admission-opening p { margin: 0; color: #3e514a; font: 12px/1.58 "Noto Serif SC", "Songti SC", serif; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .jy-admission-opening { margin: 11px 16px 0; border: 1px dashed rgba(182, 122, 74, 0.45); background: rgba(182, 122, 74, 0.055); padding: 9px 10px; }
+  .jy-admission-opening > span { color: #9a6339; margin-bottom: 4px; }
+  .jy-admission-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 13px; padding: 10px 16px; border-top: 1px solid #d8e3de; color: #6b8178; font-size: 11px; font-weight: 750; }
+  .jy-admission-seal { flex: 0 0 auto; border: 1px solid #af6943; border-radius: 4px; color: #995b33; font-weight: 850; letter-spacing: 1px; padding: 4px 7px; transform: rotate(-2deg); }
 
   @media (max-width: 520px) {
-    .jy-letter { width: calc(100% - 12px); }
-    .jy-letter-topline, .jy-letter-foot { align-items: flex-start; flex-direction: column; gap: 6px; }
-    .jy-letter-content { max-height: 300px; }
+    .jy-admission-letter { width: calc(100% - 12px); }
+    .jy-admission-topline, .jy-admission-foot { align-items: flex-start; flex-direction: column; gap: 6px; }
+    .jy-admission-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .jy-admission-row { grid-template-columns: 1fr; gap: 4px; }
   }
 </style>

@@ -1495,7 +1495,7 @@
     },
     "开局档案通知书": {
       "id": "47d61f8c-b786-4908-9e6c-27a65e6f3f34",
-      "findRegex": "/<letter>\\s*([\\s\\S]*?)\\s*<\\/letter>/gsi",
+      "findRegex": "/<letter>\\s*<initial_setup>[\\s\\S]*?姓名:\\s*([^\\r\\n]*)\\r?\\n年龄:\\s*([^\\r\\n]*)\\r?\\n性别或称谓:\\s*([^\\r\\n]*)\\r?\\n班级或身份:\\s*([^\\r\\n]*)\\r?\\n外貌:\\s*([\\s\\S]*?)\\r?\\n性格:\\s*([\\s\\S]*?)\\r?\\n擅长与学业:\\s*([\\s\\S]*?)\\r?\\n家庭背景:\\s*([\\s\\S]*?)\\r?\\n重要物品:\\s*([\\s\\S]*?)\\r?\\n开局心事:\\s*([\\s\\S]*?)\\r?\\n\\s*当前开场:\\s*([^\\r\\n]*)([\\s\\S]*?)<\\/initial_setup>\\s*<\\/letter>/gsi",
       "replace_file": "正则/开局档案通知书.html",
       "trimStrings": [],
       "placement": [
