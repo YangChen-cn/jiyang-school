@@ -35,3 +35,5 @@
 好了。
 
 该找个座了。
+
+<OpeningSetupUI/>

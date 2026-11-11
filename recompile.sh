@@ -37,16 +37,21 @@ cd "$SCRIPT_DIR"
 
 echo "=== 重新编译 $DISPLAY_NAME ==="
 
+# Step 0: 从根目录 schema.ts 生成 脚本/Zod.txt（卡内运行时 schema 的唯一事实源是 schema.ts）
+node "$SCRIPT_DIR/脚本/生成Zod.mjs"
+echo "  -> Zod.txt 生成完成"
+
 # Step 1: forge pack
 node "$FORGE" pack "$PROJECT"
 echo "  -> forge pack 完成"
 
 # Step 1.5: extract JSON from PNG (forge outputs PNG directly when avatar exists)
 python3 -c "
-import json, struct, base64
+import json, struct, base64, sys, os
 with open('$OUTPUT_PNG', 'rb') as f:
     png = f.read()
 pos = 8
+found = False
 while pos < len(png):
     length = struct.unpack('>I', png[pos:pos+4])[0]
     chunk_type = png[pos+4:pos+8]
@@ -56,16 +61,22 @@ while pos < len(png):
         if null_pos > 0 and chunk_data[:null_pos] == b'chara':
             b64 = chunk_data[null_pos+1:]
             j = json.loads(base64.b64decode(b64).decode('utf-8'))
-            with open('暨阳中学.json', 'w') as fw:
+            tmp = '暨阳中学.json.tmp'
+            with open(tmp, 'w') as fw:
                 json.dump(j, fw, ensure_ascii=False, indent=2)
+            os.replace(tmp, '暨阳中学.json')
+            found = True
             break
     pos += 12 + length
+if not found:
+    print('  !! PNG 中未找到 chara chunk（forge 打包失败）', file=sys.stderr)
+    sys.exit(1)
 "
 echo "  -> JSON 提取完成"
 
 # Step 2: inject the current JSON card data and alternate greetings into PNG
 python3 -c "
-import json, struct, base64, zlib, os
+import json, struct, base64, zlib, os, sys
 
 # Use the JSON artifact as the source of truth for metadata. This preserves
 # regex replaceString details that forge may normalize differently in PNG.
@@ -85,6 +96,8 @@ json_card['name'] = display_name
 json_card.setdefault('data', {})['name'] = display_name
 json_card.setdefault('data', {})['character_version'] = '$CARD_VERSION'
 json_card.setdefault('data', {}).setdefault('character_book', {})['name'] = display_name
+# V2 兼容：character_book 必须存在 extensions 键（即使为空对象）
+json_card['data']['character_book'].setdefault('extensions', {})
 
 entry_sources = {}
 
@@ -108,57 +121,27 @@ for entry in entries:
         with open(source_path, 'r') as fh:
             entry['content'] = fh.read()
 
-# Inject missing manifest entries that forge pack didn't include
-# Match by comment name (more reliable than uid which forge may differ on)
+# MVU 的状态注入条目（at_depth，extensions.position == 4）必须常驻，不参与预算裁剪，
+# 否则长对话里变量列表/规则可能被 ST 的 token budget 截断，导致状态系统失灵。
+# 注意：ST 卡导入只认 extensions.ignore_budget（snake_case），顶层 ignoreBudget 会被忽略。
+for entry in entries:
+    if (entry.get('extensions') or {}).get('position') == 4:
+        entry.setdefault('extensions', {})['ignore_budget'] = True
+
+# forge pack 必须把 state 中所有 enabled 条目全部打进卡里。
+# 旧版这里有一套"补注入"逻辑，但它写的是旧式 position 数值(1/2/3)且不带 extensions，
+# 与 ST 的 0/1/4 + extensions.position 语义不一致，属于潜伏错位——已废弃，改为 fail-fast。
 existing_comments = {e.get('comment', '') for e in entries}
-pos_map = {'before_character_definition': 1, 'after_character_definition': 2, 'at_depth': 3}
-role_map = {'system': 0, 'user': 1, 'assistant': 2}
+missing_entries = []
 for type_entries in state.get('entryManifest', {}).values():
     for entry_name, leaf in type_entries.items():
         if entry_name in existing_comments or not leaf.get('enabled', True):
             continue
-        source_path = leaf.get('path')
-        if not source_path or not os.path.exists(source_path):
-            continue
-        strategy = leaf.get('strategy', {})
-        position = leaf.get('position', {})
-        pos_type = position.get('type', 'after_character_definition')
-        entries.append({
-            'uid': leaf.get('uid'),
-            'key': strategy.get('keys', []) if isinstance(strategy.get('keys'), list) else [],
-            'keysecondary': [],
-            'comment': entry_name,
-            'content': open(source_path, 'r').read(),
-            'constant': strategy.get('type') == 'constant',
-            'selective': strategy.get('type') == 'selective',
-            'selectiveLogic': 0,
-            'addMemo': False,
-            'order': position.get('order', 0),
-            'position': pos_map.get(pos_type, 1),
-            'disable': False,
-            'ignoreBudget': False,
-            'excludeRecursion': True,
-            'preventRecursion': True,
-            'delayUntilRecursion': False,
-            'probability': 100,
-            'useProbability': True,
-            'depth': position.get('depth', 0),
-            'outletName': '',
-            'role': role_map.get(position.get('role', 'system'), 0),
-            'group': '',
-            'groupOverride': False,
-            'groupWeight': 100,
-            'scanDepth': None,
-            'caseSensitive': None,
-            'matchWholeWords': None,
-            'useGroupScoring': False,
-            'automationId': '',
-            'displayIndex': leaf.get('uid', 0),
-            'sticky': None,
-            'cooldown': None,
-            'delay': None,
-        })
-        print(f'  -> 补充缺失条目: {entry_name}')
+        missing_entries.append(entry_name)
+
+if missing_entries:
+    print('  !! forge pack 缺条目: ' + '、'.join(missing_entries), file=sys.stderr)
+    raise SystemExit('构建失败：请修复 tavern-cards-state.json 与 forge pack 的条目同步（补注入旧通道已废弃）')
 
 tavern_helper = json_card.get('data', {}).get('extensions', {}).get('tavern_helper')
 if isinstance(tavern_helper, list):
@@ -232,8 +215,10 @@ for fn in sorted(f for f in os.listdir('开场白') if f.endswith('.txt') and f[
 if greetings:
     json_card['data']['alternate_greetings'] = greetings
 
-with open('暨阳中学.json', 'w') as fh:
+json_tmp = '暨阳中学.json.tmp'
+with open(json_tmp, 'w') as fh:
     json.dump(json_card, fh, ensure_ascii=False, indent=2)
+os.replace(json_tmp, '暨阳中学.json')
 
 # Read PNG
 with open('$OUTPUT_PNG', 'rb') as f:
@@ -267,7 +252,13 @@ for chunk_type, chunk_data, length in chunks:
 def png_crc(ct, d):
     return struct.pack('>I', zlib.crc32(ct + d) & 0xffffffff)
 
-with open('$OUTPUT_PNG', 'wb') as f:
+out_png = '$OUTPUT_PNG'
+# 备份上一版可用产物，再写临时文件
+if os.path.exists(out_png):
+    import shutil
+    shutil.copyfile(out_png, out_png + '.bak')
+tmp_png = out_png + '.tmp'
+with open(tmp_png, 'wb') as f:
     f.write(b'\x89PNG\r\n\x1a\n')
     for ct, cd, cl in new_chunks:
         f.write(struct.pack('>I', cl))
@@ -275,7 +266,37 @@ with open('$OUTPUT_PNG', 'wb') as f:
         f.write(cd)
         f.write(png_crc(ct, cd))
 
-print(f'  -> 写入 JSON 元数据并注入 {len(greetings)} 篇 alternate greetings')
+# 回读验证：chara（以及存在时的 ccv3）必须与内存中的 JSON 深比较一致
+def read_card_chunks(path):
+    with open(path, 'rb') as fh:
+        raw = fh.read()
+    result = {}
+    i = 8
+    while i < len(raw):
+        ln = struct.unpack('>I', raw[i:i+4])[0]
+        typ = raw[i+4:i+8].decode('latin1')
+        if typ == 'tEXt':
+            k, v = raw[i+8:i+8+ln].split(b'\x00', 1)
+            result[k.decode()] = v
+        i += 12 + ln
+    return result
+
+saved = read_card_chunks(tmp_png)
+def matches(key):
+    if key not in saved:
+        return False
+    return json.loads(base64.b64decode(saved[key])) == json_card
+
+if not matches('chara'):
+    raise SystemExit('构建失败：回读 PNG 的 chara 与内存 JSON 不一致')
+if 'ccv3' in saved and not matches('ccv3'):
+    raise SystemExit('构建失败：回读 PNG 的 ccv3 与内存 JSON 不一致')
+os.replace(tmp_png, out_png)
+
+print(f'  -> 写入 JSON 元数据并注入 {len(greetings)} 篇 alternate greetings，产物已校验')
 "
+
+echo "=== 构建校验 ==="
+python3 脚本/validate.py
 
 echo "=== 完成 ==="

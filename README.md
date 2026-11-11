@@ -1,0 +1,76 @@
+# 暨阳中学 · SillyTavern 角色卡
+
+一张以江南强县级市百年重点高中为背景的校园群像角色卡：7 位可攻略角色 + 班主任/校长线与可推进的校园事件。使用 MVU 变量系统驱动关系阶段、在场状态、时间推进与 NSFW 解锁。
+
+## 运行环境（重要）
+
+本卡不是"导入即用"的纯文本卡，依赖以下运行时：
+
+| 依赖 | 必需性 | 说明 |
+|---|---|---|
+| SillyTavern ≥ 1.12（支持 character card v3） | 必需 | 卡的 spec 为 `chara_card_v3` |
+| Tavern Helper / JS-Slash-Runner 扩展 | 必需 | 卡内 5 个 TH 脚本（MVU、Zod、开局设定、旧界面兼容、悬浮音乐播放器）由它执行 |
+| MagVarUpdate（MVU） | 必需 | `脚本/MVU.txt` 从 CDN 引入 `bundle.js`；负责变量初始化、每轮追加状态栏占位符、变量更新 |
+| mvu_zod 桥接 | 必需 | `脚本/Zod.txt` 从 CDN 引入 `mvu_zod.js`；负责 schema 校验回写 |
+| Tavern Helper「宏」功能开启 | 必需 | 状态栏使用 `{{format_message_variable::stat_data...}}`，关闭宏会导致 AI 看到字面文本、状态失忆 |
+| ST-Prompt-Template | 视条目而定 | 若世界书条目首行使用 `@@generate_before`/`@@if` 等装饰器时需要；当前变量系统不再依赖 `@@` |
+
+**CDN 依赖未锁定版本**（使用 jsDelivr `artifact/bundle.js` 等可变地址）。上游更新可能改变行为；发布新版本前建议在真实环境冒烟。离线/内网环境需要把这两个脚本改为本地托管。
+
+## 目录结构
+
+```
+schema.ts                    变量 schema 的【唯一事实源】（TS 对象字面量）
+脚本/生成Zod.mjs             从 schema.ts 生成 脚本/Zod.txt（构建前自动执行）
+脚本/Zod.txt                 生成物，卡内运行时 schema，请勿手改
+脚本/MVU.txt                 MVU bundle 引入语句
+脚本/validate.py             构建一致性校验器（构建末尾自动执行；0 error 才算成功）
+脚本/开局设定按钮绑定脚本.js   <OpeningSetupUI/> 开局页的交互 binder
+脚本/悬浮音乐播放器.js        悬浮 BGM 播放器
+正则/                        regex 脚本源文件（replaceString 在构建时注入）
+开场白/                       0.txt=first_mes 挂载标记；0-*.txt 起为 alternate greetings
+世界书/                       世界书条目正文（多数是给 AI 的 prompt 文本，不是严格 YAML）
+世界书/变量/initvar.yaml      MVU 初始变量（全空，第一轮由 AI 按开场白补齐）
+世界书/变量/变量更新规则.yaml  MVU 变量更新规则（运行时注入）
+世界书/变量/变量输出格式.txt  MVU 输出格式说明（运行时注入）
+tavern-cards-state.json      构建事实源：条目清单/关键词/位置/脚本/正则清单
+创作规划.yaml                策划文档（不参与构建，见文件头说明）
+recompile.sh                 打包：forge pack → 注入源文件 → 校验
+release-version.sh           升版本 + 改版本号引用 + 重编译
+```
+
+## 构建
+
+```bash
+./recompile.sh
+```
+
+流程：`schema.ts → Zod.txt` → forge pack → 从 PNG 提取 JSON → 用 `世界书/` 源文件覆盖条目正文 → 注入 TH 脚本与正则 → 注入 alternate greetings → 原子写回 PNG/JSON → `脚本/validate.py` 门禁。
+
+构建必须 **0 error**。校验器覆盖：PNG 与 JSON 同源、state↔卡条目一致、源文件与卡内容逐字、脚本/正则注入一致、版本号一致、EJS 配对、schema↔initvar↔更新规则 覆盖、开场白映射、token 预算提示。
+
+依赖：`node`（运行 forge 与生成脚本）、`python3` + `PyYAML`。forge 位于 `~/.codex/skills/tavern-cards/scripts/tavern-cards-forge.mjs`（脚本内有 `~/.claude` 回退）。
+
+## 变量系统
+
+- **初始变量全空**：`initvar.yaml` 的日期/地点/在场/关系阶段等一律为空字符串/0/false。第一轮 AI 必须依据当前开场白与玩家开局设定补齐（不同 alternate greeting 的时间线不同）。
+- **key 字段**：`世界`（日期/星期/时间段/天气/当前位置/所在区域/私密程度）、`剧情`（推进节奏/当前事件/当前nsfw/事件冷却/上次焦点角色/校园活动/学期）、7 位角色各 11 字段（含 NSFW）、`主角`（姓名/年龄/性别/班级/当前位置/外观等）。
+- **NSFW 解锁单向**：7 位角色初始 `NSFW=false`，首次性行为后翻 true 不回退。
+- **schema 是唯一事实源**：改字段/类型请改 `schema.ts`，再跑 `recompile.sh`（自动重新生成 Zod.txt）。不要手改 `脚本/Zod.txt`。
+- 变量更新规则中 `replace` 路径必须已存在；新增重要物品只能 `add /主角/重要物品/-`，字段名必须中文 `名称`/`描述`。
+
+## 升版本
+
+```bash
+./release-version.sh 1.7
+./recompile.sh
+```
+
+版本号会同步到 state、`.cardrc.json`、卡名、世界书名与状态栏标题；旧 PNG 会保留为 `.bak`（构建时自动备份）。
+
+## 已知限制
+
+- 状态栏占位符 `<StatusPlaceHolderImpl/>` 由 MVU 在每轮 AI 回复后自动追加，因此状态栏依赖 MVU 正常加载、且每层消息会渲染一个 iframe。
+- 8 篇 alternate greetings 各自有独立的日期/时间/地点/在场设定，由开局脚本写入初始变量补丁；不经过开局页直接 swipe 备选开场时，仍需第一轮 AI 按正文补齐。
+- 玩家档案默认写入 MVU `主角` 变量（不再写世界书条目），跨聊天不会残留；旧聊天中的「玩家开局设定」世界书条目不会被删除。
+- `素材/`、旧版 PNG 与 `.bak` 不参与运行时，也不应提交到 git（本地保留即可）。

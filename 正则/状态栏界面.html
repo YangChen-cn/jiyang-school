@@ -1,6 +1,7 @@
 ```
 <style>
   .jy-status {
+    position: relative;
     --c-ink: #26312f;
     --c-muted: #6d7873;
     --c-soft: #8b9a91;
@@ -666,7 +667,7 @@
   }
 
   .jy-avatar-modal {
-    position: fixed;
+    position: absolute;
     z-index: 9999;
     inset: 0;
     display: none;
@@ -681,7 +682,7 @@
   }
 
   .jy-map-modal {
-    position: fixed;
+    position: absolute;
     z-index: 9998;
     inset: 0;
     display: none;
@@ -696,7 +697,7 @@
   }
 
   .jy-inventory-modal {
-    position: fixed;
+    position: absolute;
     z-index: 9998;
     inset: 0;
     display: none;
@@ -711,7 +712,7 @@
   }
 
   .jy-album-modal {
-    position: fixed;
+    position: absolute;
     z-index: 10000;
     inset: 0;
     display: none;
@@ -726,7 +727,7 @@
   }
 
   .jy-photo-viewer {
-    position: fixed;
+    position: absolute;
     z-index: 10001;
     inset: 0;
     display: none;
@@ -1292,6 +1293,14 @@
     0%, 100% { transform: translateY(0); opacity: 0.38; }
     50%      { transform: translateY(-8px); opacity: 0.68; }
   }
+  .jy-map-card[data-img-missing="true"]::after {
+    content: "地图加载失败，请检查网络后再试。";
+    display: block;
+    padding: 40px 0;
+    text-align: center;
+    color: #6b7f78;
+    font-size: 14px;
+  }
 </style>
 <body>
 
@@ -1307,7 +1316,7 @@
         </div>
       </div>
       <div class="jy-title">
-        <div class="jy-kicker">暨阳中学 v1.6 · 当前坐标</div>
+        <div class="jy-kicker">暨阳中学 v1.7 · 当前坐标</div>
         <div class="jy-location">{{format_message_variable::stat_data.世界.当前位置}}</div>
       </div>
       <button class="jy-map-button" type="button" data-action="open-map">地图</button>
@@ -1405,7 +1414,7 @@
     <div class="jy-people">
       <div class="jy-person" data-tone="warm" data-present="{{format_message_variable::stat_data.苏晓樯.是否在场}}">
         <div class="jy-person-head">
-          <img class="jy-avatar" alt="苏晓樯" data-avatar-key="苏晓樯" src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/xiaoqiang.png">
+          <img class="jy-avatar" alt="苏晓樯" data-avatar-key="苏晓樯" src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/xiaoqiang.png" data-fallback-src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/xiaoqiang.png">
           <div class="jy-name-wrap">
             <div class="jy-name">苏晓樯</div>
             <div class="jy-stage">{{format_message_variable::stat_data.苏晓樯.关系阶段}}</div>
@@ -1428,7 +1437,7 @@
 
       <div class="jy-person" data-tone="quiet" data-present="{{format_message_variable::stat_data.温书语.是否在场}}">
         <div class="jy-person-head">
-          <img class="jy-avatar" alt="温书语" data-avatar-key="温书语" src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/shuyu.png">
+          <img class="jy-avatar" alt="温书语" data-avatar-key="温书语" src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/shuyu.png" data-fallback-src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/shuyu.png">
           <div class="jy-name-wrap">
             <div class="jy-name">温书语</div>
             <div class="jy-stage">{{format_message_variable::stat_data.温书语.关系阶段}}</div>
@@ -1451,7 +1460,7 @@
 
       <div class="jy-person" data-tone="guard" data-present="{{format_message_variable::stat_data.沈幼楚.是否在场}}">
         <div class="jy-person-head">
-          <img class="jy-avatar" alt="沈幼楚" data-avatar-key="沈幼楚" src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/youchu.png">
+          <img class="jy-avatar" alt="沈幼楚" data-avatar-key="沈幼楚" src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/youchu.png" data-fallback-src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/youchu.png">
           <div class="jy-name-wrap">
             <div class="jy-name">沈幼楚</div>
             <div class="jy-stage">{{format_message_variable::stat_data.沈幼楚.关系阶段}}</div>
@@ -1478,7 +1487,7 @@
 
       <div class="jy-person" data-tone="clear" data-present="{{format_message_variable::stat_data.凌知夏.是否在场}}">
         <div class="jy-person-head">
-          <img class="jy-avatar" alt="凌知夏" data-avatar-key="凌知夏" src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/zhixia.png">
+          <img class="jy-avatar" alt="凌知夏" data-avatar-key="凌知夏" src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/zhixia.png" data-fallback-src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/zhixia.png">
           <div class="jy-name-wrap">
             <div class="jy-name">凌知夏</div>
             <div class="jy-stage">{{format_message_variable::stat_data.凌知夏.关系阶段}}</div>
@@ -1501,7 +1510,7 @@
 
       <div class="jy-person" data-tone="bright" data-present="{{format_message_variable::stat_data.慕佳芊.是否在场}}">
         <div class="jy-person-head">
-          <img class="jy-avatar" alt="慕佳芊" data-avatar-key="慕佳芊" src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/jiaqian.png">
+          <img class="jy-avatar" alt="慕佳芊" data-avatar-key="慕佳芊" src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/jiaqian.png" data-fallback-src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/jiaqian.png">
           <div class="jy-name-wrap">
             <div class="jy-name">慕佳芊</div>
             <div class="jy-stage">{{format_message_variable::stat_data.慕佳芊.关系阶段}}</div>
@@ -1524,7 +1533,7 @@
 
       <div class="jy-person" data-tone="silk" data-present="{{format_message_variable::stat_data.陈芷汀.是否在场}}">
         <div class="jy-person-head">
-          <img class="jy-avatar" alt="陈芷汀" data-avatar-key="陈芷汀" src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/zhiting.png">
+          <img class="jy-avatar" alt="陈芷汀" data-avatar-key="陈芷汀" src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/zhiting.png" data-fallback-src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/zhiting.png">
           <div class="jy-name-wrap">
             <div class="jy-name">陈芷汀</div>
             <div class="jy-stage">{{format_message_variable::stat_data.陈芷汀.关系阶段}}</div>
@@ -1547,7 +1556,7 @@
 
       <div class="jy-person" data-tone="principal" data-present="{{format_message_variable::stat_data.虞淑婉.是否在场}}">
         <div class="jy-person-head">
-          <img class="jy-avatar" alt="虞淑婉" data-avatar-key="虞淑婉" src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v1/avatars/shuwan.png">
+          <img class="jy-avatar" alt="虞淑婉" data-avatar-key="虞淑婉" src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v1/avatars/shuwan.png" data-fallback-src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v1/avatars/shuwan.png">
           <div class="jy-name-wrap">
             <div class="jy-name">虞淑婉</div>
             <div class="jy-stage">{{format_message_variable::stat_data.虞淑婉.关系阶段}}</div>
@@ -1596,7 +1605,7 @@
         <span class="jy-map-title">暨阳中学校园地图</span>
         <button class="jy-avatar-button" type="button" data-action="close-map">关闭</button>
       </div>
-      <img class="jy-map-image" alt="暨阳中学校园地图" src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v1/map.jpg">
+      <img class="jy-map-image" alt="暨阳中学校园地图" src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v1/map.jpg" data-fallback-src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v1/map.jpg">
     </div>
   </div>
 
@@ -1637,7 +1646,8 @@
 (() => {
   const STORAGE_PREFIX = "jy-avatar:";
   const ALBUM_STORAGE_PREFIX = "jy-album:";
-  const ASSET_BASE = "https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/albums/v1";
+  const ASSET_BASE = "https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/albums/v1";
+  const ASSET_BASE_FALLBACK = "https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/albums/v1";
   const ALBUMS = {
     "苏晓樯": [
       ["su/campus.png", "校园走廊"], ["su/outdoor.png", "天台咖啡"],
@@ -1702,6 +1712,39 @@
       console.warn("相册保存失败，可能是浏览器本地存储空间不足。");
       return false;
     }
+  }
+
+  function escapeXmlText(value) {
+    return String(value || "").replace(/[&<>'"]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[ch]));
+  }
+
+  function fallbackAvatarUri(label) {
+    const text = escapeXmlText(String(label || "?").trim().slice(0, 1) || "?");
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><rect width="128" height="128" rx="64" fill="#e6eee9"/><text x="64" y="82" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="54" font-weight="600" fill="#3d6b5f">${text}</text></svg>`;
+    return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+  }
+
+  function guardImage(image) {
+    if (!image || image.dataset.jyGuard === "1") return;
+    image.dataset.jyGuard = "1";
+    image.addEventListener("error", () => {
+      const fallback = image.dataset.fallbackSrc || "";
+      if (fallback && image.getAttribute("src") !== fallback) {
+        image.setAttribute("src", fallback);
+        return;
+      }
+      if (image.dataset.jyFallbackDone === "1") return;
+      image.dataset.jyFallbackDone = "1";
+      if (image.classList.contains("jy-map-image")) {
+        image.style.display = "none";
+        const card = image.closest(".jy-map-card");
+        if (card) card.dataset.imgMissing = "true";
+        return;
+      }
+      if (image.classList.contains("jy-photo-viewer-image")) return;
+      const label = image.getAttribute("alt") || image.dataset.avatarKey || image.dataset.albumKey || "?";
+      image.src = fallbackAvatarUri(label);
+    });
   }
 
   function compactImage(dataUrl, done, maxSize = 1536, quality = 0.95) {
@@ -1820,6 +1863,7 @@
     if (!root) return;
     if (root.dataset.avatarBoundVersion === "9") {
       applyStoredAvatars(root);
+      root.querySelectorAll("img").forEach(guardImage);
       return;
     }
     root.dataset.avatarBound = "true";
@@ -1861,11 +1905,13 @@
         avatar.setAttribute("role", "button");
         avatar.setAttribute("tabindex", "0");
         avatar.setAttribute("title", name + "头像");
+        guardImage(avatar);
         if (saved) avatar.src = saved;
       });
     }
 
     applyStoredAvatars(root);
+    root.querySelectorAll("img").forEach(guardImage);
 
     function parseInventory(raw) {
       if (!raw || raw === "[]" || raw === "{}") return [];
@@ -1987,11 +2033,13 @@
       image.src = item.src;
       image.alt = item.label;
       image.loading = "lazy";
+      image.dataset.fallbackSrc = item.fallbackSrc || "";
       image.setAttribute("role", "button");
       image.setAttribute("tabindex", "0");
       image.dataset.action = "open-album-photo";
       image.dataset.photoSrc = item.src;
       image.dataset.photoLabel = item.label;
+      guardImage(image);
       const caption = document.createElement("div");
       caption.className = "jy-album-caption";
       caption.textContent = item.label;
@@ -2020,7 +2068,7 @@
 
     function renderAlbum() {
       if (!albumGrid || !activeAlbumKey) return;
-      const remote = (ALBUMS[activeAlbumKey] || []).map(([path, label]) => ({ src: `${ASSET_BASE}/${path}`, label }));
+      const remote = (ALBUMS[activeAlbumKey] || []).map(([path, label]) => ({ src: `${ASSET_BASE}/${path}`, fallbackSrc: `${ASSET_BASE_FALLBACK}/${path}`, label }));
       const local = getStoredAlbum(activeAlbumKey);
       albumGrid.replaceChildren();
       if (!remote.length && !local.length) {
@@ -2207,8 +2255,18 @@
     }
   }
 
+  let initTimer = null;
+
   function init() {
     document.querySelectorAll(".jy-status").forEach(bindStatus);
+  }
+
+  function scheduleInit() {
+    if (initTimer) return;
+    initTimer = setTimeout(() => {
+      initTimer = null;
+      init();
+    }, 150);
   }
 
   if (document.readyState === "loading") {
@@ -2222,7 +2280,7 @@
   setTimeout(init, 1200);
 
   if (typeof MutationObserver !== "undefined") {
-    const observer = new MutationObserver(init);
+    const observer = new MutationObserver(scheduleInit);
     observer.observe(document.documentElement, { childList: true, subtree: true });
   }
 })();

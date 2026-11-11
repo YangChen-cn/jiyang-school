@@ -52,21 +52,23 @@
   .jy-opening-mode-switch { display: inline-flex; gap: 0; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
   .jy-opening-mode { border: 0; border-right: 1px solid var(--line); padding: 8px 11px; color: var(--muted); background: #fff; font: inherit; font-size: 12px; font-weight: 800; cursor: pointer; }
   .jy-opening-mode:last-child { border-right: 0; }
-  .jy-opening-mode.is-active { color: #fff; background: var(--green); }
+  .jy-opening[data-opening-mode="preset"] .jy-opening-mode[data-mode="preset"],
+  .jy-opening[data-opening-mode="custom"] .jy-opening-mode[data-mode="custom"] { color: #fff; background: var(--green); }
   .jy-opening-panel { display: none; margin-top: 12px; }
-  .jy-opening-panel.is-active { display: block; }
+  .jy-opening[data-opening-mode="preset"] .jy-opening-panel[data-mode-panel="preset"],
+  .jy-opening[data-opening-mode="custom"] .jy-opening-panel[data-mode-panel="custom"] { display: block; }
   .jy-opening-scenes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; }
   .jy-opening-scene { min-height: 74px; border: 1px solid var(--line); border-radius: 5px; padding: 8px; text-align: left; color: var(--ink); background: #fff; font: inherit; cursor: pointer; }
   .jy-opening-scene:hover { border-color: var(--green); background: #f0f7f3; }
-  .jy-opening .jy-opening-scene.is-active { border-color: var(--green) !important; background: #dceee7 !important; box-shadow: inset 0 0 0 1px rgba(35, 123, 108, 0.08) !important; }
-  .jy-opening .jy-opening-scene.is-active .jy-opening-scene-number { color: var(--green) !important; }
-  .jy-opening .jy-opening-scene.is-active .jy-opening-scene-name { color: var(--ink) !important; }
-  .jy-opening .jy-opening-scene.is-active .jy-opening-scene-note { color: #526a61 !important; }
+  .jy-opening .jy-opening-scene[data-selected="true"] { border-color: var(--green) !important; background: #dceee7 !important; box-shadow: inset 0 0 0 1px rgba(35, 123, 108, 0.08) !important; }
+  .jy-opening .jy-opening-scene[data-selected="true"] .jy-opening-scene-number { color: var(--green) !important; }
+  .jy-opening .jy-opening-scene[data-selected="true"] .jy-opening-scene-name { color: var(--ink) !important; }
+  .jy-opening .jy-opening-scene[data-selected="true"] .jy-opening-scene-note { color: #526a61 !important; }
   .jy-opening-scene-number { display: block; color: var(--green); font-size: 10px; font-weight: 800; }
   .jy-opening-scene-name { display: block; margin-top: 3px; font-size: 12px; font-weight: 800; }
   .jy-opening-scene-note { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; line-height: 1.3; }
   .jy-opening-preview { position: fixed; z-index: 9999; inset: 0; display: none; place-items: start center; padding: 44px 18px 18px; background: rgba(22, 42, 36, 0.55); }
-  .jy-opening-preview.is-open { display: grid; }
+  .jy-opening-preview[data-open="true"] { display: grid; }
   .jy-opening-preview-card { display: grid; grid-template-rows: auto minmax(0, 1fr); width: min(760px, 100%); max-height: min(78vh, 760px); border: 1px solid var(--line); border-radius: 8px; background: var(--paper); box-shadow: 0 22px 60px rgba(18, 30, 26, 0.3); overflow: hidden; }
   .jy-opening-preview-head { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 10px 12px 10px 16px; border-bottom: 1px solid var(--line); background: #eaf2ee; }
   .jy-opening-preview-title { font-size: 14px; font-weight: 800; }
@@ -80,9 +82,18 @@
   .jy-opening-button:hover { border-color: var(--green); color: var(--green); }
   .jy-opening-button.primary { border-color: var(--green); color: #fff; background: var(--green); }
   .jy-opening-button.primary:hover { color: #fff; background: #186457; }
+  .jy-opening-button[disabled] { opacity: 0.6; cursor: wait; }
+  .jy-opening[data-opening-state="submitting"] .jy-opening-button[data-action="confirm"] { opacity: 0.6; pointer-events: none; }
   .jy-opening-toast { display: none; margin-top: 10px; color: var(--green); font-size: 12px; font-weight: 700; }
-  .jy-opening-toast.is-visible { display: block; }
-  .jy-opening[data-complete="true"] .jy-opening-form { opacity: 0.72; }
+  .jy-opening-toast[data-show="true"] { display: block; }
+  .jy-opening-toast[data-type="error"] { color: #a3352b; }
+  .jy-opening[data-opening-state="complete"] .jy-opening-form { display: none; }
+  .jy-opening-summary { display: none; padding: 18px 22px 20px; }
+  .jy-opening[data-opening-state="complete"] .jy-opening-summary { display: block; }
+  .jy-opening-summary-title { color: var(--green); font-size: 13px; font-weight: 800; letter-spacing: 1px; }
+  .jy-opening-summary-text { margin: 8px 0 0; color: var(--ink); font-size: 13px; line-height: 1.6; white-space: pre-wrap; }
+  .jy-opening-summary-hint { margin: 4px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+  .jy-opening-summary-actions { display: flex; gap: 8px; margin-top: 12px; }
 
   @media (max-width: 640px) {
     .jy-opening { margin: 10px 6px; }
@@ -93,10 +104,23 @@
     .jy-opening-scenes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .jy-opening-field.wide { grid-column: auto; }
     .jy-opening-button { flex: 1 1 auto; }
+    .jy-opening-preview { padding: 60px 10px 10px; }
+    .jy-opening-preview-head { flex-wrap: wrap; }
+  }
+
+  @media (max-width: 420px) {
+    .jy-opening { margin: 8px 0; border-radius: 6px; }
+    .jy-opening-head { padding: 12px 12px 10px; }
+    .jy-opening-title { font-size: 20px; }
+    .jy-opening-form { padding: 12px 12px 14px; }
+    .jy-opening-scenes { grid-template-columns: 1fr; }
+    .jy-opening-scene { min-height: 0; padding: 7px 8px; }
+    .jy-opening-summary { padding: 14px 12px 16px; }
+    .jy-opening-preview-card { max-height: min(82vh, 760px); }
   }
 </style>
 
-<section class="jy-opening" data-jy-opening data-complete="false">
+<section class="jy-opening" data-jy-opening data-opening-state="editing" data-opening-mode="preset" data-greeting-index="1">
   <header class="jy-opening-head">
     <div>
       <div class="jy-opening-kicker">暨阳中学 · 高二新生档案</div>
@@ -138,13 +162,13 @@
     <div class="jy-opening-section">
       <div class="jy-opening-section-title">选择开场</div>
       <div class="jy-opening-mode-switch" role="tablist" aria-label="开场方式">
-        <button class="jy-opening-mode is-active" type="button" data-action="select-mode" data-mode="preset">预写开场</button>
-        <button class="jy-opening-mode" type="button" data-action="select-mode" data-mode="custom">自定义开局</button>
+        <button class="jy-opening-mode" type="button" data-action="select-mode" data-mode="preset" aria-selected="true">预写开场</button>
+        <button class="jy-opening-mode" type="button" data-action="select-mode" data-mode="custom" aria-selected="false">自定义开局</button>
       </div>
 
-      <div class="jy-opening-panel is-active" data-mode-panel="preset">
+      <div class="jy-opening-panel" data-mode-panel="preset">
         <div class="jy-opening-scenes" role="listbox" aria-label="预写开场白">
-          <button class="jy-opening-scene is-active" type="button" data-action="select-greeting" data-greeting="1"><span class="jy-opening-scene-number">1</span><span class="jy-opening-scene-name">开学第一天</span><span class="jy-opening-scene-note">走进重点班</span></button>
+          <button class="jy-opening-scene" type="button" data-action="select-greeting" data-greeting="1" data-selected="true"><span class="jy-opening-scene-number">1</span><span class="jy-opening-scene-name">开学第一天</span><span class="jy-opening-scene-note">走进重点班</span></button>
           <button class="jy-opening-scene" type="button" data-action="select-greeting" data-greeting="2"><span class="jy-opening-scene-number">2</span><span class="jy-opening-scene-name">慕佳芊</span><span class="jy-opening-scene-note">办公室</span></button>
           <button class="jy-opening-scene" type="button" data-action="select-greeting" data-greeting="3"><span class="jy-opening-scene-number">3</span><span class="jy-opening-scene-name">苏晓樯</span><span class="jy-opening-scene-note">车祸之后</span></button>
           <button class="jy-opening-scene" type="button" data-action="select-greeting" data-greeting="4"><span class="jy-opening-scene-number">4</span><span class="jy-opening-scene-name">温书语</span><span class="jy-opening-scene-note">图书馆</span></button>
@@ -167,10 +191,19 @@
       <button class="jy-opening-button" type="button" data-action="clear">清空</button>
       <button class="jy-opening-button primary" type="submit" data-action="confirm">确认档案并开始</button>
     </div>
-    <div class="jy-opening-toast" data-toast aria-live="polite"></div>
+    <div class="jy-opening-toast" data-toast data-show="false" aria-live="polite"></div>
   </form>
 
-  <div class="jy-opening-preview" data-preview aria-hidden="true">
+  <div class="jy-opening-summary" data-opening-summary>
+    <div class="jy-opening-summary-title">档案已提交</div>
+    <p class="jy-opening-summary-text" data-opening-summary-text></p>
+    <p class="jy-opening-summary-hint">如需修改，可以重新展开设定；再次提交只更新当前版本，不会重复发送开局消息。</p>
+    <div class="jy-opening-summary-actions">
+      <button class="jy-opening-button" type="button" data-action="reset-opening">重新设定</button>
+    </div>
+  </div>
+
+  <div class="jy-opening-preview" data-preview data-open="false" aria-hidden="true">
     <div class="jy-opening-preview-card" role="dialog" aria-modal="true" aria-labelledby="jy-opening-preview-title">
       <div class="jy-opening-preview-head">
         <div class="jy-opening-preview-title" id="jy-opening-preview-title" data-preview-title>开场白预览</div>

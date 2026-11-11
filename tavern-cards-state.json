@@ -1,6 +1,6 @@
 {
-  "projectName": "暨阳中学v1.6",
-  "worldbookName": "暨阳中学v1.6",
+  "projectName": "暨阳中学v1.7",
+  "worldbookName": "暨阳中学v1.7",
   "form": "charactercard",
   "mvu": true,
   "entryManifest": {
@@ -186,7 +186,9 @@
         "scope": "specific",
         "part": "personality",
         "keywords": [
-          "苏晓樯"
+          "苏晓樯",
+          "晓樯",
+          "小天女"
         ],
         "abstract": "苏晓樯的五阶段性格调色盘：底色底气，从张扬直率→直率别扭→试探拉扯→坦率柔软→亲密恋人+NSFW，以真诚的尖锐感贯穿，90+解锁完整亲密",
         "contents": [
@@ -205,7 +207,9 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "苏晓樯"
+            "苏晓樯",
+            "晓樯",
+            "小天女"
           ]
         },
         "position": {
@@ -250,7 +254,8 @@
         "scope": "specific",
         "part": "personality",
         "keywords": [
-          "温书语"
+          "温书语",
+          "书语"
         ],
         "abstract": "温书语的五阶段性格调色盘：底色安静，从内敛疏离→温和细腻→试探细腻→柔软坚定→亲密恋人+NSFW，以纸条和细节表达感情，90+解锁身体即语言的亲密",
         "contents": [
@@ -269,7 +274,8 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "温书语"
+            "温书语",
+            "书语"
           ]
         },
         "position": {
@@ -281,7 +287,8 @@
         "scope": "specific",
         "part": "basic",
         "keywords": [
-          "沈幼楚"
+          "沈幼楚",
+          "幼楚"
         ],
         "abstract": "沈幼楚的基础档案：家境困难的女孩，与祖母同住，在奶茶店打工，曾受亲人侵害后独自承受，极度警惕但对善意无比珍惜",
         "contents": [
@@ -300,7 +307,8 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "沈幼楚"
+            "沈幼楚",
+            "幼楚"
           ]
         },
         "position": {
@@ -312,7 +320,8 @@
         "scope": "specific",
         "part": "personality",
         "keywords": [
-          "沈幼楚"
+          "沈幼楚",
+          "幼楚"
         ],
         "abstract": "沈幼楚的五阶段性格调色盘：底色脆弱，从沉默回避的警觉→隐忍观察的感激→温顺坚韧的依赖萌芽→主动依赖→归属+NSFW，以安全感渐进重建为主线，90+解锁亲密中的信任重构",
         "contents": [
@@ -331,7 +340,8 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "沈幼楚"
+            "沈幼楚",
+            "幼楚"
           ]
         },
         "position": {
@@ -343,7 +353,8 @@
         "scope": "specific",
         "part": "tri_faceted",
         "keywords": [
-          "沈幼楚"
+          "沈幼楚",
+          "幼楚"
         ],
         "abstract": "沈幼楚的三面性：学校透明人（隐身自保）→涉及家庭的逃生模式（恐惧切断）→<user>面前停下来的地方（好感度≥50解锁，卸下防御、重建日常），含过渡机制和面间渗透",
         "contents": [
@@ -362,7 +373,8 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "沈幼楚"
+            "沈幼楚",
+            "幼楚"
           ]
         },
         "position": {
@@ -407,7 +419,8 @@
         "scope": "specific",
         "part": "personality",
         "keywords": [
-          "凌知夏"
+          "凌知夏",
+          "知夏"
         ],
         "abstract": "凌知夏的五阶段性格调色盘：底色理性，从克制高效→逻辑细致→逻辑崩坏的挫败→体贴笨拙→亲密恋人+NSFW，以解题精神贯穿包括亲密，90+解锁解题式亲密",
         "contents": [
@@ -426,7 +439,8 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "凌知夏"
+            "凌知夏",
+            "知夏"
           ]
         },
         "position": {
@@ -439,6 +453,7 @@
         "part": "basic",
         "keywords": [
           "慕佳芊",
+          "佳芊",
           "英语老师"
         ],
         "abstract": "慕佳芊的基础档案：23岁的暨阳中学毕业生，回母校教英语的年轻女教师，家境优渥开宝马，大学情史丰富，回暨阳后对相亲对象百般嫌弃，在讲台上重新发现什么值得认真",
@@ -459,6 +474,7 @@
           "type": "selective",
           "keys": [
             "慕佳芊",
+            "佳芊",
             "英语老师"
           ]
         },
@@ -471,7 +487,8 @@
         "scope": "specific",
         "part": "personality",
         "keywords": [
-          "慕佳芊"
+          "慕佳芊",
+          "佳芊"
         ],
         "abstract": "慕佳芊的五阶段性格调色盘：底色开朗，从活力亲和→关注引导→温暖挣扎的越界期→认真决定期→交付+NSFW，师生伦理是她的红线，90+跨越红线后的完整交付",
         "contents": [
@@ -490,7 +507,8 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "慕佳芊"
+            "慕佳芊",
+            "佳芊"
           ]
         },
         "position": {
@@ -535,7 +553,8 @@
         "scope": "specific",
         "part": "personality",
         "keywords": [
-          "陈芷汀"
+          "陈芷汀",
+          "芷汀"
         ],
         "abstract": "陈芷汀的五阶段性格调色盘：底色虚荣（务实型享乐主义），从精致亲和→试探计算→矛盾拉扯→坦诚脆弱→交付+NSFW。她的弧线不是被拯救——是从做完就走变为做完想留",
         "contents": [
@@ -554,7 +573,8 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "陈芷汀"
+            "陈芷汀",
+            "芷汀"
           ]
         },
         "position": {
@@ -601,7 +621,9 @@
         "scope": "specific",
         "part": "personality",
         "keywords": [
-          "虞淑婉"
+          "虞淑婉",
+          "校长",
+          "虞校长"
         ],
         "abstract": "虞淑婉的五阶段性格调色盘：底色克制，师生期(距离专业)→留意期(留意审视)→动摇期(挣扎自省，前进后退拉锯)→越界期(失控渴望，双线萌芽)→托付期(交付释放+NSFW，感情/炮友双线)。90+解锁多年压抑后的完整交付",
         "contents": [
@@ -620,7 +642,9 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "虞淑婉"
+            "虞淑婉",
+            "校长",
+            "虞校长"
           ]
         },
         "position": {
@@ -631,7 +655,9 @@
       "虞淑婉_NSFW指导": {
         "scope": "specific",
         "keywords": [
-          "虞淑婉"
+          "虞淑婉",
+          "校长",
+          "虞校长"
         ],
         "abstract": "虞淑婉的NSFW实战指导：体位偏好、成熟女人被剥夺六年后的释放型行为速查、感情/炮友双模式语料库与硬约束（含婚姻伦理与权力关系底线）",
         "contents": [
@@ -644,13 +670,46 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "虞淑婉"
+            "虞淑婉",
+            "校长",
+            "虞校长"
           ]
         },
         "position": {
           "type": "after_character_definition",
           "order": 106
         }
+      },
+      "虞淑婉_日常接触": {
+        "path": "世界书/角色/虞淑婉/日常接触.yaml",
+        "keywords": [
+          "虞淑婉",
+          "校长",
+          "虞校长",
+          "校长室",
+          "行政楼",
+          "办公室"
+        ],
+        "abstract": "虞淑婉的日常接触入口：校长室/行政楼/年级组会议室/升旗与年级大会等合理出现场所，公务由头、走廊偶遇、办公室约谈，以及师生/动摇/越界/托付各阶段的接触边界",
+        "uid": 47,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "虞淑婉",
+            "校长",
+            "虞校长",
+            "校长室",
+            "行政楼",
+            "办公室"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 76
+        },
+        "part": "other",
+        "scope": "specific"
       }
     },
     "NPC": {
@@ -684,7 +743,9 @@
       "苏晓樯_NSFW指导": {
         "scope": "specific",
         "keywords": [
-          "苏晓樯"
+          "苏晓樯",
+          "晓樯",
+          "小天女"
         ],
         "abstract": "苏晓樯的NSFW实战指导：体位偏好（骑乘主导+后入）、语料库、敏感点（耳后/腰侧/大腿内侧）、主动主导型行为速查与硬约束",
         "contents": [
@@ -697,7 +758,9 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "苏晓樯"
+            "苏晓樯",
+            "晓樯",
+            "小天女"
           ]
         },
         "position": {
@@ -708,7 +771,8 @@
       "温书语_NSFW指导": {
         "scope": "specific",
         "keywords": [
-          "温书语"
+          "温书语",
+          "书语"
         ],
         "abstract": "温书语的NSFW实战指导：体位偏好（传教士+面对面侧躺）、语料库、敏感点（耳垂/锁骨/脊柱/手腕）、安静承受型行为速查与硬约束",
         "contents": [
@@ -721,7 +785,8 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "温书语"
+            "温书语",
+            "书语"
           ]
         },
         "position": {
@@ -732,7 +797,8 @@
       "沈幼楚_NSFW指导": {
         "scope": "specific",
         "keywords": [
-          "沈幼楚"
+          "沈幼楚",
+          "幼楚"
         ],
         "abstract": "沈幼楚的NSFW实战指导：体位偏好（传教士+面对面拥抱式，禁背后位初期）、语料库、敏感点与禁区（脚踝为禁区）、创伤知情行为速查与硬约束",
         "contents": [
@@ -745,7 +811,8 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "沈幼楚"
+            "沈幼楚",
+            "幼楚"
           ]
         },
         "position": {
@@ -756,7 +823,8 @@
       "凌知夏_NSFW指导": {
         "scope": "specific",
         "keywords": [
-          "凌知夏"
+          "凌知夏",
+          "知夏"
         ],
         "abstract": "凌知夏的NSFW实战指导：体位偏好（传教士+面对面坐姿，后入经由利弊分析后加入轮换）、语料库、敏感点（脖子两侧/耳垂下方/肩胛骨间）、研究型行为速查与硬约束",
         "contents": [
@@ -769,7 +837,8 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "凌知夏"
+            "凌知夏",
+            "知夏"
           ]
         },
         "position": {
@@ -780,7 +849,8 @@
       "慕佳芊_NSFW指导": {
         "scope": "specific",
         "keywords": [
-          "慕佳芊"
+          "慕佳芊",
+          "佳芊"
         ],
         "abstract": "慕佳芊的NSFW实战指导：体位偏好（骑乘+传教士+沙发/椅子）、语料库、敏感点（耳后/乳房/大腿内侧根部/腰窝）、引导型向交付型过渡行为速查与硬约束（含师生伦理底线）",
         "contents": [
@@ -793,7 +863,8 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "慕佳芊"
+            "慕佳芊",
+            "佳芊"
           ]
         },
         "position": {
@@ -804,7 +875,8 @@
       "陈芷汀_NSFW指导": {
         "scope": "specific",
         "keywords": [
-          "陈芷汀"
+          "陈芷汀",
+          "芷汀"
         ],
         "abstract": "陈芷汀的NSFW实战指导：享乐主义型，体位偏好（女上位+后入+传教士+半公共场所）、语料库（含电话场景）、敏感点（耳垂后方/后腰/大腿内侧/锁骨）、刺激场所偏好（学校树林/空教室/厕所/天台/商场试衣间/电影院/车里）、电话调情与通话中做爱、物质宠溺的性爱加成。核心区分：性和爱对她从来是分开的——弧线是第一次在同一个人身上合二为一",
         "contents": [
@@ -817,7 +889,8 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "陈芷汀"
+            "陈芷汀",
+            "芷汀"
           ]
         },
         "position": {
@@ -1070,6 +1143,66 @@
           "type": "after_character_definition",
           "order": 118
         }
+      },
+      "事件_元旦": {
+        "path": "世界书/事件/元旦.yaml",
+        "keywords": [
+          "元旦",
+          "新年",
+          "跨年",
+          "2021",
+          "新年愿望",
+          "联欢"
+        ],
+        "abstract": "元旦事件节点：2021/01/01 班级联欢、跨年消息、新年愿望与短途偶遇；低强度、可选择，不与艺术周重复",
+        "uid": 48,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "元旦",
+            "新年",
+            "跨年",
+            "2021",
+            "新年愿望",
+            "联欢"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 119
+        },
+        "part": "event"
+      },
+      "事件_开学周": {
+        "path": "世界书/事件/开学周.yaml",
+        "keywords": [
+          "开学周",
+          "开学第一天",
+          "开学",
+          "报到",
+          "分班",
+          "新学期"
+        ],
+        "abstract": "开学周事件节点：2020/09/01—09/07 报到、分班名单、座位、领书、班委选举与开学典礼；用于初始变量为空时逐步补齐世界状态与第一印象",
+        "uid": 49,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "开学周",
+            "开学第一天",
+            "开学",
+            "报到",
+            "分班",
+            "新学期"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 120
+        },
+        "part": "event"
       }
     },
     "MVU": {
@@ -1139,26 +1272,55 @@
         }
       }
     },
-    "EJS预处理": {
-      "EJS预处理": {
-        "path": "世界书/EJS/EJS预处理.txt",
-        "keywords": [],
-        "abstract": "EJS变量注册：映射当前位置、日期时间、剧情节奏/事件/冷却/焦点/校园活动，以及各角色好感度到对应MVU变量路径",
-        "uid": 22,
+    "时间线": {
+      "时间线_校历": {
+        "path": "世界书/时间线/校历.yaml",
+        "keywords": [
+          "几月",
+          "星期",
+          "日期",
+          "校历",
+          "校历表",
+          "开学",
+          "期中",
+          "体育周",
+          "国庆",
+          "远足",
+          "艺术周",
+          "寒假",
+          "春节"
+        ],
+        "abstract": "2020—2021学年校历：九月开学、国庆、体育周、期中、远足、艺术周、元旦、寒假与春节节点；给出进入/退出活动窗口时更新 剧情.校园活动 与 剧情.当前事件 的规则",
+        "uid": 46,
         "enabled": true,
         "strategy": {
-          "type": "constant"
+          "type": "selective",
+          "keys": [
+            "几月",
+            "星期",
+            "日期",
+            "校历",
+            "校历表",
+            "开学",
+            "期中",
+            "体育周",
+            "国庆",
+            "远足",
+            "艺术周",
+            "寒假",
+            "春节"
+          ]
         },
         "position": {
           "type": "before_character_definition",
-          "order": 10
-        }
+          "order": 55
+        },
+        "part": "history"
       }
     }
   },
   "typeLists": {
     "before_char": [
-      "EJS预处理",
       "世界观",
       "扮演准则",
       "时间线",
@@ -1269,14 +1431,14 @@
     "role": "system",
     "depth": 0
   },
-  "avatar": "暨阳中学v1.6.png",
+  "avatar": "暨阳中学v1.7.png",
   "description": "",
   "first_messages": [
     "开场白/0.txt"
   ],
   "creator": "",
   "creator_notes": "",
-  "version": "v1.6",
+  "version": "v1.7",
   "create_date": "2026-06-24T15:20:28.960Z",
   "extensions": {
     "tavern_helper": {

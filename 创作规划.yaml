@@ -1,3 +1,10 @@
+# ============================================================================
+# 策划文档（非构建输入）
+# 构建事实源是 tavern-cards-state.json：forge pack 只读取 state，不读取本文件。
+# 本文件用于作者规划、条目命名/顺序参考与 EJS 设计意图记录；其中 entries 的
+# path 列表与 ejs.entries 的 condition 目前不会进入构建产物（entry condition 未接入）。
+# 已知文档债：条目列表可能滞后于实际 state；修改条目请以 state.json 为准。
+# ============================================================================
 project:
   name: 暨阳中学
   worldbookName: 暨阳中学
@@ -407,14 +414,13 @@ entries:
     type: NPC
     path: 世界书/NPC/吴臻臻/基础信息.yaml
     keywords: [吴臻臻, 班长]
-  - name: 开学第一天
-    type: 事件
-    path: 世界书/事件/开学第一天.yaml
+  # 开学第一天：原 世界书/事件/开学第一天.yaml 已在 e88f20e 删除，本条目不再存在。
+  # 当前开局由 first_mes 的 <OpeningSetupUI/> + 玩家开局设定条目承担。
   - name: 剧情推动器
     type: 事件
     path: 世界书/事件/剧情推动器.yaml
     keywords: [剧情推动, 事件池, 日常铺垫, 余波处理]
-- name: 国庆假期
+  - name: 国庆假期
     type: 事件
     path: 世界书/事件/国庆假期.yaml
     keywords: [国庆, 假期, 放假, 出游, 杭州, 上海, 绍兴, 朋友圈, 国庆出游, 短途]
@@ -523,14 +529,16 @@ mvu:
   variables:  # 待细化：取值范围和格式约束待创作阶段补充
 
 ejs:
-  generate_before:  # 待细化：创作阶段推导变量映射
+  # 注意：本段为设计意图记录，当前不会进入构建。条目显隐/段落控制实际由
+  # 世界书正文内的 EJS / ST-Prompt-Template 装饰器执行。
+  generate_before:  # 已废弃：原 EJS预处理 条目已从构建移除（define 名全卡零引用）
   entries:
     - name: 学校详情
       complexity: 条目显隐
-      condition: current_location?.includes('校园')
+      condition: 'getvar(''stat_data.世界.所在区域'', { defaults: '''' }) === ''校园'''
     - name: 周边街区
       complexity: 条目显隐
-      condition: current_location?.includes('周边')
+      condition: 'getvar(''stat_data.世界.所在区域'', { defaults: '''' }) === ''周边'''
     - name: 苏晓樯_性格调色盘
       complexity: 段落控制
       stages:
@@ -574,11 +582,11 @@ ejs:
       complexity: 段落控制
       stages:
         - name: 在校期间
-          condition: current_location?.includes('校园')
+          condition: 'getvar(''stat_data.世界.所在区域'', { defaults: '''' }) === ''校园'''
         - name: 涉及家庭相关
-          condition: getvar('stat_data.沈幼楚.触发家庭话题', { defaults: false }) === true
-        - name: 安全环境
-          condition: affection_youchu >= 50
+          condition: 'getvar(''stat_data.沈幼楚.触发家庭话题'', { defaults: false }) === true'
+        - name: 安全环境（独处 + 依赖/归属）
+          condition: '关系阶段 ∈ {依赖, 归属} 且 世界.私密程度 === ''独处'''
     - name: 凌知夏_性格调色盘
       complexity: 段落控制
       stages:
@@ -607,19 +615,19 @@ ejs:
           condition: affection_jiaqian >= 90
     - name: 苏晓樯_NSFW指导
       complexity: 条目显隐
-      condition: getvar('stat_data.苏晓樯.NSFW', { defaults: false }) === true
+      condition: 'getvar(''stat_data.苏晓樯.NSFW'', { defaults: false }) === true'
     - name: 温书语_NSFW指导
       complexity: 条目显隐
-      condition: getvar('stat_data.温书语.NSFW', { defaults: false }) === true
+      condition: 'getvar(''stat_data.温书语.NSFW'', { defaults: false }) === true'
     - name: 沈幼楚_NSFW指导
       complexity: 条目显隐
-      condition: getvar('stat_data.沈幼楚.NSFW', { defaults: false }) === true
+      condition: 'getvar(''stat_data.沈幼楚.NSFW'', { defaults: false }) === true'
     - name: 凌知夏_NSFW指导
       complexity: 条目显隐
-      condition: getvar('stat_data.凌知夏.NSFW', { defaults: false }) === true
+      condition: 'getvar(''stat_data.凌知夏.NSFW'', { defaults: false }) === true'
     - name: 慕佳芊_NSFW指导
       complexity: 条目显隐
-      condition: getvar('stat_data.慕佳芊.NSFW', { defaults: false }) === true
+      condition: 'getvar(''stat_data.慕佳芊.NSFW'', { defaults: false }) === true'
     - name: 陈芷汀_性格调色盘
       complexity: 段落控制
       stages:
@@ -635,7 +643,7 @@ ejs:
           condition: affection_zhiting >= 90
     - name: 陈芷汀_NSFW指导
       complexity: 条目显隐
-      condition: getvar('stat_data.陈芷汀.NSFW', { defaults: true }) === true
+      condition: 'getvar(''stat_data.陈芷汀.NSFW'', { defaults: true }) === true'
     - name: 虞淑婉_性格调色盘
       complexity: 段落控制
       stages:
@@ -651,10 +659,8 @@ ejs:
           condition: affection_shuwan >= 90
     - name: 虞淑婉_NSFW指导
       complexity: 条目显隐
-      condition: getvar('stat_data.虞淑婉.NSFW', { defaults: false }) === true
-    - name: 开学第一天
-      complexity: 条目显隐
-      condition: current_day === '开学第一天'
+      condition: 'getvar(''stat_data.虞淑婉.NSFW'', { defaults: false }) === true'
+    # 开学第一天：已无对应条目，删除该条件记录。
 
 first_message:
   format: 叙事式

@@ -52,7 +52,7 @@
 依赖衍生二：收到<user>的礼物不会再在心里换算价格然后想着怎么还——学会说"谢谢"，学会按下那个算账的反射
 <%_ } _%>
 
-<%_ if (getvar('stat_data.陈芷汀.好感度', { defaults: 0 }) >= 40) { _%>
+<%_ if (getvar('stat_data.剧情.当前nsfw', { defaults: false }) === true && getvar('stat_data.陈芷汀.NSFW', { defaults: false }) === true && getvar('stat_data.陈芷汀.好感度', { defaults: 0 }) >= 40) { _%>
 —— NSFW调色盘 ——
 陈芷汀的亲密是她最放松的游乐场。她不需要被拯救——她早就会了。她享受做爱、享受刺激、享受被宠爱。底色是享乐——性、物质、关注，三者是她的快乐套餐。
 

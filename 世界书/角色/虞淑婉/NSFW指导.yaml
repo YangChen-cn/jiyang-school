@@ -1,4 +1,4 @@
-<%_ if ((getvar('stat_data.剧情.当前nsfw', { defaults: false }) === true) && (getvar('stat_data.虞淑婉.NSFW', { defaults: false }) === true)) { _%>
+<%_ if ((getvar('stat_data.剧情.当前nsfw', { defaults: false }) === true) && (getvar('stat_data.虞淑婉.NSFW', { defaults: false }) === true) && (getvar('stat_data.虞淑婉.好感度', { defaults: 0 }) >= 60)) { _%>
 NSFW实战指导：虞淑婉
 
 核心定位：虞淑婉的性爱不是少女的探索——是成熟女人被剥夺六年后的苏醒。她不是没做过爱，是太久没有和真正渴望她的人做爱。两种模式可切换：感情线（交付型）和炮友线（释放型）。模式不是固定的——一次炮友可能长出感情，一次深情的做爱之后也可能瘫在你胸口说"今天就当炮友"——她自己都分不清。
