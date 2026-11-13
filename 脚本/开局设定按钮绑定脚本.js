@@ -369,8 +369,12 @@
 
   function buildMvuPatches(formData, mode, scene) {
     var patches = [];
+    var startYear = parseInt(formData['开始年份'], 10);
+    if (!(startYear >= 1900 && startYear <= 2100)) startYear = 2020;
+    patches.push(['世界.起始年份', String(startYear)]);
     if (mode === 'preset' && scene) {
-      patches.push(['世界.日期', scene.date]);
+      var sceneDate = String(scene.date || '').replace(/^\d{4}/, String(startYear));
+      patches.push(['世界.日期', sceneDate]);
       patches.push(['世界.星期', scene.week]);
       patches.push(['世界.时间段', scene.time]);
       patches.push(['世界.天气', scene.weather]);
@@ -606,11 +610,13 @@
   }
 
   function summaryText(data, mode, index, action) {
+    var year = parseInt(data['开始年份'], 10);
+    if (!(year >= 1900 && year <= 2100)) year = 2020;
     if (mode === 'custom') {
-      return '姓名：' + data['姓名'] + '\n开局方式：自定义开局\n开局行动：' + action;
+      return '姓名：' + data['姓名'] + '\n开局方式：自定义开局\n开始年份：' + year + ' 年\n开局行动：' + action;
     }
     var scene = GREETING_SCENES[index];
-    return '姓名：' + data['姓名'] + '\n开局：' + GREETING_NAMES[index] + '（' + (scene ? scene.location : '') + '）\n开局行动：' + action;
+    return '姓名：' + data['姓名'] + '\n开局：' + GREETING_NAMES[index] + '（' + (scene ? scene.location : '') + '）\n开始年份：' + year + ' 年\n开局行动：' + action;
   }
 
   function renderSummary(root, data, mode, index, action) {

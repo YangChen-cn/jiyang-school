@@ -6,6 +6,7 @@ export const Schema = z.object({
   // 初始变量一律为空/0/false：不同开场白的时间、地点、在场角色不同，
   // 由第一轮 AI 依据开场白与玩家设定补齐，之后按 变量更新规则 推进。
   世界: z.object({
+    起始年份: z.string().prefault(''),      // 开局设定写入，如 '2020'；学期/毕业按此推算
     日期: z.string().prefault(''),
     星期: z.string().prefault(''),
     时间段: z.string().prefault(''),

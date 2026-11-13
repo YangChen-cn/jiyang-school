@@ -1070,16 +1070,16 @@
         <div class="jy-calendar-body">
           <p data-schedule>普通上课日有早自习、上午课、午休、下午课与晚自习。周末、假期和临时活动以通知为准。</p>
           <ul class="jy-calendar-list">
-            <li data-start="2020-09-01" data-end="2020-09-07"><time>9 月 1–7 日</time>开学周</li>
-            <li data-start="2020-10-01" data-end="2020-10-07"><time>10 月 1–7 日</time>国庆假期</li>
-            <li data-start="2020-10-11" data-end="2020-10-31"><time>10 月中下旬</time>体育周</li>
-            <li data-start="2020-11-01" data-end="2020-11-10"><time>11 月上旬</time>期中考试</li>
-            <li data-start="2020-11-11" data-end="2020-11-30"><time>11 月中下旬</time>远足</li>
-            <li data-start="2020-12-01" data-end="2020-12-31"><time>12 月</time>艺术周</li>
-            <li data-start="2021-01-01" data-end="2021-01-01"><time>1 月 1 日</time>元旦</li>
-            <li data-start="2021-01-21" data-end="2021-02-20"><time>1 月下旬至 2 月中旬</time>寒假</li>
-            <li data-start="2021-02-12" data-end="2021-02-12"><time>2 月 12 日</time>春节</li>
-            <li data-start="2021-02-21" data-end="2021-02-28"><time>2 月下旬</time>春季开学</li>
+            <li data-md-start="09-01" data-md-end="09-07"><time>9 月 1–7 日</time>开学周</li>
+            <li data-md-start="10-01" data-md-end="10-07"><time>10 月 1–7 日</time>国庆假期</li>
+            <li data-md-start="10-11" data-md-end="10-31"><time>10 月中下旬</time>体育周</li>
+            <li data-md-start="11-01" data-md-end="11-10"><time>11 月上旬</time>期中考试</li>
+            <li data-md-start="11-11" data-md-end="11-30"><time>11 月中下旬</time>远足</li>
+            <li data-md-start="12-01" data-md-end="12-31"><time>12 月</time>艺术周</li>
+            <li data-md-start="01-01" data-md-end="01-01"><time>1 月 1 日</time>元旦</li>
+            <li data-md-start="01-21" data-md-end="02-20"><time>1 月下旬至 2 月中旬</time>寒假</li>
+            <li data-md-start="02-12" data-md-end="02-12"><time>2 月 12 日</time>春节</li>
+            <li data-md-start="02-21" data-md-end="02-28"><time>2 月下旬</time>春季开学</li>
           </ul>
         </div>
       </details>
@@ -1651,17 +1651,27 @@
 
     const date = sceneValue(root.querySelector(".jy-date")).replaceAll("/", "-");
     if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-      const upcoming = [...root.querySelectorAll(".jy-calendar-list li")];
-      const next = upcoming.find((item) => item.dataset.start > date);
-      upcoming.forEach((item) => {
-        const status = date > item.dataset.end ? "已过" : date >= item.dataset.start ? "当前窗口" : item === next ? "下一节点" : "";
+      const [calendarYear, calendarMonth] = date.split("-").map(Number);
+      const academicStart = calendarMonth >= 9 ? calendarYear : calendarYear - 1;
+      const anchored = (md) => {
+        const [mm, dd] = String(md || "").split("-").map(Number);
+        return `${mm >= 9 ? academicStart : academicStart + 1}-${String(mm).padStart(2, "0")}-${String(dd).padStart(2, "0")}`;
+      };
+      const upcoming = [...root.querySelectorAll(".jy-calendar-list li")].map((item) => ({
+        item,
+        start: anchored(item.dataset.mdStart),
+        end: anchored(item.dataset.mdEnd),
+      }));
+      const next = upcoming.find((entry) => entry.start > date);
+      upcoming.forEach(({ item, start, end }) => {
+        const status = date > end ? "已过" : date >= start ? "当前窗口" : (next && next.item === item) ? "下一节点" : "";
         if (!status) return;
         const label = document.createElement("span");
         label.className = "jy-calendar-state";
         label.textContent = status;
         item.append(label);
       });
-      const holiday = upcoming.some((item) => /国庆假期|寒假/.test(item.textContent) && date >= item.dataset.start && date <= item.dataset.end);
+      const holiday = upcoming.some(({ item, start, end }) => /国庆假期|寒假/.test(item.textContent) && date >= start && date <= end);
       const day = new Date(date + "T12:00:00Z").getUTCDay();
       if (holiday || day === 0 || day === 6) {
         root.querySelector("[data-schedule]").textContent = "当天处于周末或假期。开放、值班和补课安排以校内通知为准。";

@@ -18,6 +18,16 @@
     '虞淑婉': 'v1/avatars/shuwan.png',
   };
   const reserved = new Set(['旁白', '系统', '状态', '状态栏', '选项', '规则', '内心独白']);
+  // 模型偶尔会用称呼写标签，映射回标准角色名，才能命中同名头像缓存。
+  const nameAliases = {
+    '小天女': '苏晓樯', '书语': '温书语', '幼楚': '沈幼楚', '知夏': '凌知夏',
+    '佳芊': '慕佳芊', '慕老师': '慕佳芊', '英语老师': '慕佳芊',
+    '芷汀': '陈芷汀', '虞校长': '虞淑婉', '校长': '虞淑婉', '淑婉': '虞淑婉',
+  };
+  const PLAYER_ALIASES = new Set(['主角', '玩家', 'user', '我', '你']);
+  function canonicalName(name) {
+    return Object.hasOwn(defaults, name) ? name : (nameAliases[name] || name);
+  }
   const mounted = new Map();
   let timer = null;
   let stopped = false;
@@ -68,7 +78,7 @@
   }
 
   function playerNames(message) {
-    const names = new Set(['主角', '玩家', 'user']);
+    const names = new Set(PLAYER_ALIASES);
     try {
       const id = Number(message.getAttribute('mesid'));
       const read = window.getVariables || host.TavernHelper?.getVariables;
@@ -129,9 +139,9 @@
   function refreshRow(row, names) {
     const name = row.dataset.speaker;
     // A named NPC wins over a coincidentally identical persona name.
-    const isPlayer = !Object.hasOwn(defaults, name) && names.has(name);
+    const isPlayer = (!Object.hasOwn(defaults, name) || PLAYER_ALIASES.has(name)) && names.has(name);
     row.dataset.player = String(isPlayer);
-    paintAvatar(row.querySelector('[data-jy-dialogue-avatar]'), isPlayer ? '主角' : name);
+    paintAvatar(row.querySelector('[data-jy-dialogue-avatar]'), isPlayer ? '主角' : canonicalName(name));
   }
 
   function decorate(p, names) {
@@ -216,6 +226,18 @@
   host.addEventListener(AVATAR_EVENT, schedule);
   host.addEventListener('storage', storageChanged);
   window.addEventListener('pagehide', destroy, { once: true });
-  host[KEY] = { destroy };
+  function debug() {
+    let keys = [];
+    try {
+      keys = Object.keys(host.localStorage).filter((key) => key.startsWith('jy-avatar:')).map((key) => ({ key, length: String(host.localStorage.getItem(key) || '').length }));
+    } catch (_) {}
+    const rows = [...doc.querySelectorAll('[data-jy-dialogue-row]')].map((row) => {
+      const avatar = row.querySelector('[data-jy-dialogue-avatar]');
+      const image = avatar?.querySelector('img');
+      return { speaker: row.dataset.speaker, player: row.dataset.player, signature: (avatar?.dataset.signature || '').slice(0, 48), src: (image?.src || '').slice(0, 40), loaded: image ? !image.hidden && image.naturalWidth > 0 : false };
+    });
+    return { top: host === host.top, keys, rows };
+  }
+  host[KEY] = { destroy, debug };
   scan();
 })();
