@@ -592,6 +592,11 @@
     if (content) content.textContent = text;
     preview.setAttribute('data-open', 'true');
     preview.setAttribute('aria-hidden', 'false');
+    if (content) {
+      content.scrollTop = 0;
+      content.focus({ preventScroll: true });
+    }
+    preview.scrollIntoView({ block: 'start', inline: 'nearest' });
   }
 
   function closePreview(root) {
@@ -761,6 +766,7 @@
     if (action === 'select-mode') {
       event.preventDefault();
       root.__jyUserEditing = true;
+      closePreview(root);
       setMode(root, target.getAttribute('data-mode'));
     } else if (action === 'select-greeting') {
       event.preventDefault();
@@ -792,6 +798,8 @@
     } else if (action === 'close-preview' || action === 'use-preview') {
       event.preventDefault();
       closePreview(root);
+      var selected = root.querySelector('[data-action="select-greeting"][data-selected="true"]');
+      if (selected) selected.focus();
     } else if (action === 'reset-opening') {
       event.preventDefault();
       resetToEditing(root);
@@ -811,9 +819,17 @@
     activeRoot = root;
     var onClick = function (event) { handleClick(root, event); };
     var onSubmit = function (event) { handleSubmit(root, event); };
+    var onKeydown = function (event) {
+      if (event.key !== 'Escape') return;
+      var close = event.target.closest('[data-preview][data-open="true"]')?.querySelector('[data-action="close-preview"]');
+      if (!close) return;
+      event.preventDefault();
+      close.click();
+    };
     root.addEventListener('click', onClick);
     root.addEventListener('submit', onSubmit);
-    cleanups.push(function () { root.removeEventListener('click', onClick); root.removeEventListener('submit', onSubmit); root.__jyOpeningBoundV7 = false; });
+    root.addEventListener('keydown', onKeydown);
+    cleanups.push(function () { root.removeEventListener('click', onClick); root.removeEventListener('submit', onSubmit); root.removeEventListener('keydown', onKeydown); root.__jyOpeningBoundV7 = false; });
     syncRoot(root);
   }
 
