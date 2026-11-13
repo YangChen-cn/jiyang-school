@@ -962,6 +962,8 @@
     font-weight: 800;
     box-shadow: 0 4px 10px rgba(239, 131, 84, 0.28);
   }
+  .jy-avatar.jy-me-avatar { width: 40px; height: 40px; object-fit: cover; cursor: pointer; }
+  .jy-avatar-notice { flex-basis: 100%; margin: 0; font-size: 12px; color: #795137; }
   .jy-me-main { min-width: 0; }
   .jy-me-name { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px; color: #23413e; font-size: 13px; font-weight: 800; }
   .jy-me-name > span:first-child { margin-right: 2px; }
@@ -1038,7 +1040,7 @@
       </div>
     </header>
     <div class="jy-me">
-      <div class="jy-me-avatar" aria-hidden="true">我</div>
+      <img class="jy-avatar jy-me-avatar" data-avatar-key="主角" data-avatar-name="主角" alt="主角" role="button" tabindex="0" title="主角头像：点击导入本机图片">
       <div class="jy-me-main">
         <div class="jy-me-name">
           <span data-scene-value>{{format_message_variable::stat_data.主角.姓名}}</span>
@@ -1265,10 +1267,11 @@
         <span class="jy-avatar-title"></span>
         <label class="jy-avatar-button">
           换头像
-          <input class="jy-avatar-input" type="file" accept="image/*">
+          <input class="jy-avatar-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif" aria-label="从本机导入头像">
         </label>
         <button class="jy-avatar-button" type="button" data-action="reset-avatar">还原</button>
         <button class="jy-avatar-button" type="button" data-action="close-avatar">关闭</button>
+        <p class="jy-avatar-notice" role="status" aria-live="polite">图片仅保存在此浏览器，刷新后自动读取。</p>
       </div>
     </div>
   </div>
@@ -1480,27 +1483,55 @@
     ]
   };
 
+  let avatarHost = window;
+  try { if (window.top.document) avatarHost = window.top; } catch (_) {}
+  const AVATAR_EVENT = "jy-avatar-changed";
+
   function getStoredAvatar(name) {
-    try {
-      return localStorage.getItem(STORAGE_PREFIX + name);
-    } catch (error) {
-      return null;
-    }
+    try { return avatarHost.localStorage.getItem(STORAGE_PREFIX + name); }
+    catch (_) { return null; }
+  }
+
+  function syncAvatars() {
+    document.querySelectorAll(".jy-avatar").forEach((avatar) => {
+      const key = avatar.dataset.avatarKey || avatar.getAttribute("alt");
+      const src = getStoredAvatar(key) || avatar.dataset.defaultSrc;
+      if (src && avatar.getAttribute("src") !== src) {
+        delete avatar.dataset.jyFallbackDone;
+        avatar.src = src;
+      }
+    });
+  }
+
+  function announceAvatarChange() {
+    avatarHost.dispatchEvent(new avatarHost.CustomEvent(AVATAR_EVENT));
   }
 
   function setStoredAvatar(name, dataUrl) {
     try {
-      localStorage.setItem(STORAGE_PREFIX + name, dataUrl);
-    } catch (error) {
-      console.warn("头像保存失败，可能是图片过大或浏览器限制。");
-    }
+      avatarHost.localStorage.setItem(STORAGE_PREFIX + name, dataUrl);
+      announceAvatarChange();
+      return true;
+    } catch (_) { return false; }
   }
 
   function removeStoredAvatar(name) {
     try {
-      localStorage.removeItem(STORAGE_PREFIX + name);
-    } catch (error) {}
+      avatarHost.localStorage.removeItem(STORAGE_PREFIX + name);
+      announceAvatarChange();
+      return true;
+    } catch (_) { return false; }
   }
+
+  function avatarStorageChanged(event) {
+    if (event.key === null || event.key?.startsWith(STORAGE_PREFIX)) syncAvatars();
+  }
+  avatarHost.addEventListener(AVATAR_EVENT, syncAvatars);
+  window.addEventListener("storage", avatarStorageChanged);
+  window.addEventListener("pagehide", () => {
+    avatarHost.removeEventListener(AVATAR_EVENT, syncAvatars);
+    window.removeEventListener("storage", avatarStorageChanged);
+  }, { once: true });
 
   function getStoredAlbum(name) {
     try {
@@ -1672,13 +1703,13 @@
 
   function bindStatus(root) {
     if (!root) return;
-    if (root.dataset.avatarBoundVersion === "10") {
+    if (root.dataset.avatarBoundVersion === "11") {
       applyStoredAvatars(root);
       root.querySelectorAll("img").forEach(guardImage);
       return;
     }
     root.dataset.avatarBound = "true";
-    root.dataset.avatarBoundVersion = "10";
+    root.dataset.avatarBoundVersion = "11";
 
     const modal = root.querySelector(".jy-avatar-modal");
     const big = root.querySelector(".jy-avatar-big");
@@ -1700,6 +1731,9 @@
     const photoViewerCaption = root.querySelector(".jy-photo-viewer-caption");
     const hasAvatarModal = Boolean(modal && big && title && input);
     let activeAvatar = null;
+    let avatarImportId = 0;
+    const avatarNotice = root.querySelector(".jy-avatar-notice");
+    function showAvatarNotice(message) { if (avatarNotice) avatarNotice.textContent = message; }
     let activeAlbumKey = "";
 
     function getAvatars() {
@@ -1711,14 +1745,15 @@
         const name = avatar.dataset.avatarName || avatar.getAttribute("alt") || "头像";
         const key = avatar.dataset.avatarKey || name;
         const saved = getStoredAvatar(key);
-        if (!avatar.dataset.defaultSrc) avatar.dataset.defaultSrc = avatar.currentSrc || avatar.src;
+        if (!avatar.dataset.defaultSrc) avatar.dataset.defaultSrc = avatar.getAttribute("src") || fallbackAvatarUri(key === "主角" ? "我" : name);
         avatar.dataset.avatarName = name;
         avatar.dataset.avatarKey = key;
         avatar.setAttribute("role", "button");
         avatar.setAttribute("tabindex", "0");
         avatar.setAttribute("title", name + "头像");
         guardImage(avatar);
-        if (saved) avatar.src = saved;
+        if (saved && avatar.getAttribute("src") !== saved) avatar.src = saved;
+        else if (!avatar.getAttribute("src")) avatar.src = avatar.dataset.defaultSrc;
       });
     }
 
@@ -1786,7 +1821,9 @@
 
     function openAvatar(avatar) {
       if (!hasAvatarModal) return;
+      avatarImportId++;
       activeAvatar = avatar;
+      showAvatarNotice("图片仅保存在此浏览器，刷新后自动读取。");
       const name = avatar.dataset.avatarName || avatar.getAttribute("alt") || "头像";
       big.src = avatar.src;
       big.alt = name;
@@ -1801,6 +1838,8 @@
       modal.dataset.open = "false";
       modal.setAttribute("aria-hidden", "true");
       input.value = "";
+      avatarImportId++;
+      activeAvatar?.focus({ preventScroll: true });
     }
 
     try {
@@ -1844,8 +1883,10 @@
     function setAvatarFromAlbum(name, src) {
       const avatar = getAvatars().find((item) => (item.dataset.avatarKey || item.getAttribute("alt")) === name);
       if (!avatar || !src) return;
-      avatar.src = src;
-      setStoredAvatar(name, src);
+      if (!setStoredAvatar(name, src)) {
+        openAvatar(avatar);
+        showAvatarNotice("头像未保存：浏览器缓存不可用或空间不足。请换一张较小的图片。");
+      }
     }
 
     function makeAlbumItem(item, isLocal) {
@@ -1982,9 +2023,11 @@
 
       if (hasAvatarModal && event.target.closest('[data-action="reset-avatar"]') && activeAvatar) {
         const key = activeAvatar.dataset.avatarKey || activeAvatar.dataset.avatarName || activeAvatar.getAttribute("alt") || "头像";
-        removeStoredAvatar(key);
-        activeAvatar.src = activeAvatar.dataset.defaultSrc;
-        big.src = activeAvatar.src;
+        avatarImportId++;
+        if (removeStoredAvatar(key)) {
+          big.src = activeAvatar.src;
+          showAvatarNotice("已还原默认头像并清除自选缓存。");
+        } else showAvatarNotice("还原失败：浏览器缓存不可用。");
         return;
       }
 
@@ -2034,17 +2077,42 @@
     if (hasAvatarModal) {
       input.addEventListener("change", () => {
         const file = input.files && input.files[0];
-        if (!file || !activeAvatar || !file.type.startsWith("image/")) return;
-
+        input.value = "";
+        if (!file || !activeAvatar) return;
+        if (!/^image\/(png|jpeg|webp|gif)$/.test(file.type) || file.size > 10 * 1024 * 1024) {
+          showAvatarNotice("请选择不超过 10 MB 的 PNG、JPEG、WebP 或 GIF 图片。");
+          return;
+        }
+        const target = activeAvatar;
+        const key = target.dataset.avatarKey;
+        const requestId = ++avatarImportId;
+        showAvatarNotice("正在读取图片…");
         const reader = new FileReader();
+        const fail = () => {
+          if (requestId === avatarImportId) showAvatarNotice("图片读取失败，原头像已保留，请换一张图片。");
+        };
+        reader.onerror = fail;
         reader.onload = () => {
-          const dataUrl = String(reader.result || "");
-          const key = activeAvatar.dataset.avatarKey || activeAvatar.dataset.avatarName || activeAvatar.getAttribute("alt") || "头像";
-          compactImage(dataUrl, (compactUrl) => {
-            activeAvatar.src = compactUrl;
-            big.src = compactUrl;
-            setStoredAvatar(key, compactUrl);
-          });
+          const image = new Image();
+          image.onerror = fail;
+          image.onload = () => {
+            if (requestId !== avatarImportId) return;
+            try {
+              const scale = Math.min(1, 512 / Math.max(image.width, image.height));
+              const canvas = document.createElement("canvas");
+              canvas.width = Math.max(1, Math.round(image.width * scale));
+              canvas.height = Math.max(1, Math.round(image.height * scale));
+              canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+              const compactUrl = canvas.toDataURL("image/png");
+              if (!setStoredAvatar(key, compactUrl)) {
+                showAvatarNotice("头像未保存：浏览器缓存不可用或空间不足，原头像已保留。");
+                return;
+              }
+              big.src = compactUrl;
+              showAvatarNotice("已保存到本机缓存，状态栏和正文头像已同步。");
+            } catch (_) { fail(); }
+          };
+          image.src = String(reader.result || "");
         };
         reader.readAsDataURL(file);
       });

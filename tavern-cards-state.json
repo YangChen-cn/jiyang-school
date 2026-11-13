@@ -52,6 +52,20 @@
           "type": "before_character_definition",
           "order": 31
         }
+      },
+      "正文对白格式": {
+        "path": "世界书/扮演准则/正文对白格式.txt",
+        "keywords": [],
+        "abstract": "正文对白的说话者标记与行文规范",
+        "uid": 83,
+        "enabled": true,
+        "strategy": {
+          "type": "constant"
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 32
+        }
       }
     },
     "地理": {
@@ -2102,6 +2116,18 @@
           "enabled": true,
           "id": "47b347f8-8d71-4cea-b2f8-689138aebd92",
           "info": "悬浮 BGM 播放器：本卡歌单、拖动位置、音量与当前选曲均保存在本地。",
+          "button": {
+            "enabled": false,
+            "buttons": []
+          },
+          "data": {}
+        },
+        "正文对白": {
+          "type": "script",
+          "script_file": "脚本/正文对白.js",
+          "enabled": true,
+          "id": "c8aeefda-7d9e-4417-a782-5d6811870e94",
+          "info": "正文标名对白美化；头像读取状态栏的本机缓存，不修改剧情或聊天原文。",
           "button": {
             "enabled": false,
             "buttons": []
