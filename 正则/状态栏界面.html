@@ -858,13 +858,10 @@
   .jy-avatar { width: 40px; height: 40px; }
   .jy-bar-row { margin-top: 5px; }
   .jy-bar { height: 5px; }
-  .jy-detail-grid { display: none; margin-top: 6px; }
-  .jy-person-more { margin-top: 5px; border-top: 1px dashed var(--c-line); }
-  .jy-person-more > summary { list-style: none; padding-top: 5px; color: var(--c-muted); font-size: 10px; cursor: pointer; }
-  .jy-person-more > summary::-webkit-details-marker { display: none; }
-  .jy-person-more > summary::after { content: " ▾"; }
-  .jy-person-more[open] > summary::after { content: " ▴"; }
-  .jy-person-more[open] .jy-detail-grid { display: grid; }
+  .jy-detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px 10px; margin-top: 6px; }
+  .jy-detail { display: flex; gap: 4px; align-items: baseline; min-width: 0; padding: 0; border-radius: 0; background: none; }
+  .jy-detail b { display: inline; flex: 0 0 auto; color: #9aa8a2; font-size: 10px; font-weight: 600; }
+  .jy-detail span { display: inline; margin-top: 0; overflow: hidden; color: #5f716b; font-size: 10.5px; text-overflow: ellipsis; white-space: nowrap; }
   .jy-calendar-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 14px; }
   .jy-calendar-list li { padding: 3px 0; }
   .jy-calendar-list time { min-width: 0; margin-right: 6px; font-size: 11px; }
@@ -1016,7 +1013,8 @@
   .jy-person-more > summary { color: #7c918b; font-size: 10px; }
   .jy-album-button { width: 27px; height: 27px; border-radius: 8px; }
 
-  .jy-status:has(.jy-avatar-modal[data-open="true"], .jy-album-modal[data-open="true"], .jy-map-modal[data-open="true"], .jy-inventory-modal[data-open="true"], .jy-photo-viewer[data-open="true"]) { min-height: min(78vh, 720px); }
+  .jy-status:has(.jy-avatar-modal[data-open="true"], .jy-album-modal[data-open="true"], .jy-map-modal[data-open="true"], .jy-inventory-modal[data-open="true"], .jy-photo-viewer[data-open="true"]) { min-height: 700px; }
+  body:has(.jy-avatar-modal[data-open="true"], .jy-album-modal[data-open="true"], .jy-map-modal[data-open="true"], .jy-inventory-modal[data-open="true"], .jy-photo-viewer[data-open="true"]) { min-height: 700px; }
   .jy-album-card, .jy-avatar-card, .jy-photo-viewer-card, .jy-map-card { border-radius: 14px; }
 </style>
 <body>
@@ -1524,7 +1522,13 @@
   }
 
   function escapeXmlText(value) {
-    return String(value || "").replace(/[&<>'"]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[ch]));
+    const amp = String.fromCharCode(38, 97, 109, 112, 59);
+    const lt = String.fromCharCode(38, 108, 116, 59);
+    const gt = String.fromCharCode(38, 103, 116, 59);
+    const apos = String.fromCharCode(38, 35, 51, 57, 59);
+    const quot = String.fromCharCode(38, 113, 117, 111, 116, 59);
+    const table = { "&": amp, "<": lt, ">": gt, "'": apos, '"': quot };
+    return String(value || "").replace(/[&<>'"]/g, (ch) => table[ch]);
   }
 
   function fallbackAvatarUri(label) {
@@ -1587,22 +1591,16 @@
 
   function sceneValue(element) {
     const value = element?.textContent.trim() || "";
-    return /^(?:\{\{|undefined$|null$|待确定$)/i.test(value) ? "" : value;
+    const bracePair = String.fromCharCode(123, 123);
+    return (value.startsWith(bracePair) || /^(?:undefined$|null$|待确定$)/i.test(value)) ? "" : value;
   }
 
   function enhancePersonCards(root) {
     root.querySelectorAll(".jy-person").forEach((card) => {
-      if (card.dataset.moreBound === "1") return;
-      const grid = card.querySelector(".jy-detail-grid");
-      if (!grid) return;
-      card.dataset.moreBound = "1";
-      const more = document.createElement("details");
-      more.className = "jy-person-more";
-      const summary = document.createElement("summary");
-      summary.textContent = "衣着 · 位置 · 动作";
-      more.appendChild(summary);
-      grid.parentNode.insertBefore(more, grid);
-      more.appendChild(grid);
+      card.classList.add("jy-person-rich");
+      card.querySelectorAll(".jy-detail-grid .jy-detail").forEach((row) => {
+        if (row.querySelector("span")?.textContent.trim()) row.hidden = false;
+      });
     });
   }
 

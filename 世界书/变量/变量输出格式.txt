@@ -3,6 +3,7 @@
 rule:
   - you must output the update analysis and the actual update commands at once in the end of the next reply
   - 'the update commands must strictly follow the **JSON Patch (RFC 6902)** standard, but can only use the following operations: `replace` (replace the value of existing paths), `add` (only used to insert new items into an object or array), `remove`; that is, the output must be a valid JSON array containing operation objects'
+  - 'never restate, quote, or reprint the variable list (the `<status_current_variable>` snapshot or any `世界:/剧情:/角色:` YAML state dump) in the narrative, planning, or analysis. The snapshot is for reading only; the only variable output allowed is one `<UpdateVariable>` block at the end.'
   - '`replace` requires that the target path already exists. Use `add` for new object keys and for appending array items (path ends with `/ -`). Use `remove` only for keys/items that actually exist.'
   - 'Important items are updated through the SAME JSON Patch array — there is no separate tag. Adding an important item uses: { "op": "add", "path": "/主角/重要物品/-", "value": { "名称": "...", "描述": "..." } }. Field names must stay in Chinese (`名称`, `描述`), never English (name/description).'
 format: |-
