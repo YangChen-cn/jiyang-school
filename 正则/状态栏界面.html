@@ -844,6 +844,31 @@
   .jy-place-current { margin-left: 4px; }
   .jy-map-scene-image { display: block; width: 100%; aspect-ratio: 3 / 1; object-fit: cover; border-radius: 6px; margin-bottom: 8px; }
   .jy-status :is(summary, input, button):focus-visible { outline: 2px solid #805420; outline-offset: 2px; }
+
+  /* —— 紧凑排版覆盖（v2.0.1） —— */
+  .jy-status { width: min(700px, calc(100% - 12px)); margin: 8px auto; font-size: 12px; }
+  .jy-head { padding: 10px 12px 9px; gap: 6px 10px; }
+  .jy-location { font-size: 15px; }
+  .jy-time { min-width: 118px; padding: 5px 8px; gap: 2px; }
+  .jy-map-button { min-height: 34px; min-width: 62px; padding: 4px 8px; font-size: 12px; }
+  .jy-inventory-button { width: 34px; min-width: 34px; min-height: 34px; }
+  .jy-scene-now { padding: 6px 12px; font-size: 12px; }
+  .jy-people { gap: 6px; padding: 0 12px 12px; }
+  .jy-person { padding: 8px 9px; border-radius: 7px; }
+  .jy-avatar { width: 40px; height: 40px; }
+  .jy-bar-row { margin-top: 5px; }
+  .jy-bar { height: 5px; }
+  .jy-detail-grid { display: none; margin-top: 6px; }
+  .jy-person-more { margin-top: 5px; border-top: 1px dashed var(--c-line); }
+  .jy-person-more > summary { list-style: none; padding-top: 5px; color: var(--c-muted); font-size: 10px; cursor: pointer; }
+  .jy-person-more > summary::-webkit-details-marker { display: none; }
+  .jy-person-more > summary::after { content: " ▾"; }
+  .jy-person-more[open] > summary::after { content: " ▴"; }
+  .jy-person-more[open] .jy-detail-grid { display: grid; }
+  .jy-calendar-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 14px; }
+  .jy-calendar-list li { padding: 3px 0; }
+  .jy-calendar-list time { min-width: 0; margin-right: 6px; font-size: 11px; }
+  @media (max-width: 560px) { .jy-calendar-list { grid-template-columns: 1fr; } }
 </style>
 <body>
 
@@ -1030,7 +1055,7 @@
           <button class="jy-album-button" type="button" data-action="open-album" data-album-key="虞淑婉" aria-label="查看虞淑婉相册" title="查看相册">▧</button>
         </div>
         <div class="jy-bar-row">
-          <div class="jy-bar-top"><span>信任</span><span class="jy-num">{{format_message_variable::stat_data.虞淑婉.好感度}}</span></div>
+          <div class="jy-bar-top"><span>好感</span><span class="jy-num">{{format_message_variable::stat_data.虞淑婉.好感度}}</span></div>
           <div class="jy-bar"><span class="jy-fill" style="--v: {{format_message_variable::stat_data.虞淑婉.好感度}};"></span></div>
         </div>
         <div class="jy-detail-grid">
@@ -1380,6 +1405,22 @@
     return /^(?:\{\{|undefined$|null$|待确定$)/i.test(value) ? "" : value;
   }
 
+  function enhancePersonCards(root) {
+    root.querySelectorAll(".jy-person").forEach((card) => {
+      if (card.dataset.moreBound === "1") return;
+      const grid = card.querySelector(".jy-detail-grid");
+      if (!grid) return;
+      card.dataset.moreBound = "1";
+      const more = document.createElement("details");
+      more.className = "jy-person-more";
+      const summary = document.createElement("summary");
+      summary.textContent = "衣着 · 位置 · 动作";
+      more.appendChild(summary);
+      grid.parentNode.insertBefore(more, grid);
+      more.appendChild(grid);
+    });
+  }
+
   function bindSceneReadouts(root, mapModal) {
     root.querySelectorAll("[data-scene-value], .jy-stage, .jy-num, .jy-detail span").forEach((field) => {
       if (!sceneValue(field)) field.textContent = "待确定";
@@ -1387,6 +1428,7 @@
     const people = [...root.querySelectorAll(".jy-person")];
     const present = people.filter((person) => /^(?:true|1|是|在场)$/i.test(person.dataset.present.trim()));
     people.forEach((person) => { person.hidden = !present.includes(person); });
+    enhancePersonCards(root);
     const knownPresence = Boolean(sceneValue(root.querySelector(".jy-location"))) && people.some((person) => /^(?:true|false|1|0|是|否|在场|不在场)$/i.test(person.dataset.present.trim()));
     root.querySelector("[data-present-names]").textContent = present.map((person) => person.querySelector(".jy-name").textContent).join("、") || (knownPresence ? "暂无主要角色在场" : "待确定");
     const event = root.querySelector("[data-event-name]");

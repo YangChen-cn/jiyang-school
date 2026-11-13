@@ -2251,6 +2251,23 @@
       "substituteRegex": 0,
       "minDepth": null,
       "maxDepth": null
+    },
+    "隐藏变量列表原文": {
+      "id": "f56d03f8-b805-4591-b1c8-2a2091b877ac",
+      "findRegex": "<status_current_variable>[\\s\\S]*?</status_current_variable>",
+      "replaceString": "",
+      "trimStrings": [],
+      "placement": [
+        1,
+        2
+      ],
+      "disabled": false,
+      "markdownOnly": true,
+      "promptOnly": false,
+      "runOnEdit": true,
+      "substituteRegex": 0,
+      "minDepth": null,
+      "maxDepth": null
     }
   }
 }
