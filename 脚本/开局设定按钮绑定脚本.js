@@ -17,6 +17,7 @@
   var observer = null;
   var activeRoot = null;
   var submitting = false;
+  var bindTimer = null;
 
   // 八条预写开场对应的场景补丁（按各自开场白正文事实填写，不统一套 9/1 早自习）。
   var GREETING_SCENES = {
@@ -87,6 +88,8 @@
     cleanups = [];
     timers.forEach(function (id) { clearTimeout(id); clearInterval(id); });
     timers = [];
+    clearTimeout(bindTimer);
+    bindTimer = null;
     if (observer) { try { observer.disconnect(); } catch (e) { /* noop */ } observer = null; }
     activeRoot = null;
   }
@@ -290,7 +293,7 @@
   }
 
   function chatLetter() {
-    return findLetterMessage(getMessages('0-'));
+    return findLetterMessage(getMessages('0--1'));
   }
 
   function parseLetter(text) {
@@ -417,32 +420,27 @@
     return patches;
   }
 
-  async function writeMvuOpening(formData, mode, scene) {
+  async function prepareMvuOpening(formData, mode, scene) {
     var api = mvuApi();
-    if (!api || typeof api.getCurrentMvuData !== 'function' || typeof api.setMvuVariable !== 'function') {
-      toastrCall('error', '未检测到 MVU 变量接口，已跳过变量写入；请确认 MVU 已加载后再点确认。');
-      return false;
+    if (!api || typeof api.getMvuData !== 'function' || typeof api.setMvuVariable !== 'function') {
+      throw new Error('MVU 尚未加载。请确认卡内 MVU 脚本已启用后重试。');
     }
-    var mvuData = null;
-    try { mvuData = api.getCurrentMvuData(); } catch (e) { console.warn('[暨阳开局] getCurrentMvuData 失败', e); }
-    if (!mvuData || !mvuData.stat_data) {
-      try { mvuData = api.getMvuData({ type: 'message', message_id: 'latest' }); } catch (e) { /* noop */ }
+    // 全局脚本没有所属消息楼层，显式读取首楼当前 swipe 的变量。
+    var original = await api.getMvuData({ type: 'message', message_id: 0 });
+    var next = JSON.parse(JSON.stringify(original || {}));
+    if (!next.stat_data || !Object.keys(next.stat_data).length) {
+      next.stat_data = {};
+      if (typeof api.reloadInitVar === 'function') await api.reloadInitVar(next);
     }
-    if (!mvuData || !mvuData.stat_data) mvuData = { stat_data: {}, display_data: {}, delta_data: {} };
-    var patches = buildMvuPatches(formData, mode, scene);
-    for (var i = 0; i < patches.length; i += 1) {
-      var pair = patches[i];
-      try { await api.setMvuVariable(mvuData, pair[0], pair[1], { reason: '玩家开局设定' }); } catch (e) { console.warn('[暨阳开局] setMvuVariable 失败', pair[0], e); }
+    if (!next.stat_data || !Object.keys(next.stat_data).length) {
+      throw new Error('首楼 MVU 变量尚未初始化。请确认卡内世界书已绑定，重新读取初始变量后重试。');
     }
-    try {
-      if (typeof api.replaceCurrentMvuData === 'function') await api.replaceCurrentMvuData(mvuData);
-      else if (typeof api.replaceMvuData === 'function') await api.replaceMvuData(mvuData, { type: 'message', message_id: '0' });
-      else throw new Error('MVU 接口缺少写入方法');
-      return true;
-    } catch (e) {
-      toastrCall('error', '变量写入失败：' + (e && e.message ? e.message : e));
-      return false;
+    for (var pair of buildMvuPatches(formData, mode, scene)) {
+      if (await api.setMvuVariable(next, pair[0], pair[1], { reason: '玩家开局设定' }) === false) {
+        throw new Error('初始变量缺少「' + pair[0] + '」。请重新读取本卡初始变量后重试。');
+      }
     }
+    return { original: original || {}, next: next };
   }
 
   // ---------- 输入框 ----------
@@ -504,12 +502,13 @@
     } catch (e) { console.warn('[暨阳开局] 恢复输入框草稿失败', e); }
   }
 
-  function waitForLetter(timeout) {
+  function waitForLetter(timeout, stillInChat) {
     return new Promise(function (resolve) {
       var start = Date.now();
       function tick() {
+        if (!stillInChat()) { resolve(false); return; }
         if (chatLetter()) { resolve(true); return; }
-        if (Date.now() - start >= (timeout || 2800)) { resolve(false); return; }
+        if (Date.now() - start >= timeout) { resolve(false); return; }
         setTimeout(tick, 150);
       }
       setTimeout(tick, 120);
@@ -625,6 +624,9 @@
     if (root.__jyUserEditing === true || root.__jySyncPending) return;
     var messages = getMessages('0-3');
     var messageZero = messages.length ? messageText(messages[0]) : '';
+    var letter = findLetterMessage(messages);
+    var letterText = messageText(letter);
+    if (root.__jySyncedMessage === messageZero && root.__jySyncedLetter === letterText) return;
     var index = 0;
     if (normalizeText(messageZero)) {
       root.__jySyncPending = true;
@@ -633,16 +635,17 @@
       if (submitting || !root.isConnected || root.__jyUserEditing === true ||
           messageText(getMessages('0-3')[0]) !== messageZero) return;
     }
+    root.__jySyncedMessage = messageZero;
+    root.__jySyncedLetter = letterText;
     if (index) setGreetingIndex(root, index);
-    var letter = findLetterMessage(messages);
     if (letter) {
-      var parsed = parseLetter(messageText(letter));
+      var parsed = parseLetter(letterText);
       fillForm(root, parsed);
       if (index) setMode(root, 'preset');
       else if (normalizeText(messageZero)) {
         setMode(root, 'custom');
         var customBox = root.querySelector('[data-custom-opening]');
-        if (customBox) customBox.value = normalizeText(messageZero);
+        if (customBox) customBox.value = parsed['自定义开局'] || messageZero.replace(/<OpeningSetupUI\s*\/>/gi, '').trim();
       }
       if (parsed['开局行动']) {
         var actionBox = root.querySelector('[data-opening-action]');
@@ -708,48 +711,87 @@
     var input = findInput();
     var sendButton = findSendButton();
     if (!input) return fail('未找到酒馆输入框，请确认聊天界面已加载后重试。');
-    if (!sendButtonUsable(sendButton)) return fail('酒馆发送按钮当前不可用（可能尚未连接模型后端），请连接后重试。');
 
-    var messages = getMessages('0-3');
-    var originalMessageZero = messages.length ? messageText(messages[0]) : PLACEHOLDER;
-    var alreadySubmitted = !!findLetterMessage(messages);
+    var messageZero = getMessages(0)[0];
+    if (!messageZero) return fail('当前聊天没有可写入的开场消息。');
+    var originalMessageZero = messageText(messageZero);
+    var existingLetter = chatLetter();
+    var alreadySubmitted = !!existingLetter;
+    if (!alreadySubmitted && !sendButtonUsable(sendButton)) return fail('酒馆发送按钮当前不可用，请检查模型连接或正在进行的生成后重试。');
     var draft = snapshotDraft(input);
+    var owner = input.ownerDocument.defaultView;
+    var context = owner.SillyTavern?.getContext();
+    var chatId = context?.getCurrentChatId?.();
+    var stillInChat = function () { return context?.getCurrentChatId?.() === chatId; };
+    var variables;
+    var staged = false;
+    var usedInput = false;
+    var letter = openingMessage(formData, action, custom, mode === 'custom' ? '自定义开局' : GREETING_NAMES[index]);
 
     submitting = true;
     setState(root, 'submitting');
     toast(root, '正在写入开局设定…', 'info');
 
     try {
-      await writeMvuOpening(formData, mode, mode === 'preset' ? GREETING_SCENES[index] : null);
+      try {
+        variables = await prepareMvuOpening(formData, mode, mode === 'preset' ? GREETING_SCENES[index] : null);
+      } catch (error) {
+        throw new Error('开局变量准备失败：' + error.message);
+      }
+      if (!root.isConnected || !stillInChat()) return;
 
-      // 先把开场写进首楼，保证模型生成第一回应时能看到开场场景
-      await setChatMessagesSafe([{ message_id: 0, message: seedText }]);
+      // 正文和 MVU 数据在同一次首楼更新中提交，完成刷新后再发送。
+      staged = true;
+      var updates = [{ message_id: 0, message: seedText, data: variables.next }];
+      if (existingLetter) updates.push({ message_id: existingLetter.message_id, message: letter });
+      await setChatMessagesSafe(updates);
+      if (!stillInChat()) return;
 
       if (!alreadySubmitted) {
-        var letter = openingMessage(formData, action, custom, mode === 'custom' ? '自定义开局' : GREETING_NAMES[index]);
+        if (!sendButtonUsable(sendButton)) throw new Error('首楼更新后发送按钮不可用，请检查酒馆发送状态后重试。');
+        usedInput = true;
         writeInput(input, letter);
         sendButton.click();
-        var sent = await waitForLetter(2800);
-        if (!sent) {
-          try { await setChatMessagesSafe([{ message_id: 0, message: originalMessageZero || PLACEHOLDER }]); } catch (e) { /* noop */ }
-          restoreDraft(input, draft);
-          throw new Error('开局消息没有发送成功，请检查酒馆是否已连接模型后端后重试。');
-        }
+        var sent = await waitForLetter(8000, stillInChat);
+        if (!stillInChat()) return;
+        if (!sent) throw new Error('酒馆未把开局动作加入聊天。请检查发送状态或模型连接后重试。');
       }
 
       if (WRITE_LEGACY_WORLDBOOK) {
         try { await legacySaveWorldbook(worldbookProfile(formData)); } catch (error) { console.warn('[暨阳开局] 旧版世界书写入失败', error); }
       }
 
-      root.__jyUserEditing = false;
-      root.setAttribute('data-opening-state', 'complete');
-      renderSummary(root, formData, mode, index, action);
+      bindAll();
+      var visibleRoot = root.isConnected ? root : activeRoot;
+      if (!visibleRoot?.isConnected) return;
+      visibleRoot.__jyUserEditing = false;
+      setState(visibleRoot, 'complete');
+      renderSummary(visibleRoot, formData, mode, index, action);
+      closePreview(visibleRoot);
       toast(root, '档案已写入' + (bookName ? '「' + bookName + '」' : '') + '，故事开始。', 'info');
     } catch (error) {
-      setState(root, 'editing');
-      root.__jyUserEditing = true;
-      restoreDraft(input, draft);
-      toast(root, (error && error.message) ? error.message : '开局提交失败，请重试。', 'error');
+      if (!stillInChat()) return;
+      var errorMessage = error.message || '开局提交失败，请重试。';
+      if (staged && !alreadySubmitted && !chatLetter()) {
+        try {
+          await setChatMessagesSafe([{ message_id: 0, message: originalMessageZero, data: variables.original }]);
+        } catch (rollbackError) {
+          errorMessage += ' 首楼恢复失败：' + rollbackError.message;
+        }
+      }
+      if (usedInput) restoreDraft(input, draft);
+      bindAll();
+      var retryRoot = root.isConnected ? root : activeRoot;
+      if (retryRoot?.isConnected) {
+        setState(retryRoot, 'editing');
+        retryRoot.__jyUserEditing = true;
+        fillForm(retryRoot, formData);
+        setMode(retryRoot, mode);
+        setGreetingIndex(retryRoot, index);
+        retryRoot.querySelector('[data-opening-action]').value = action;
+        retryRoot.querySelector('[data-custom-opening]').value = custom;
+      }
+      toast(retryRoot, errorMessage, 'error');
     } finally {
       submitting = false;
     }
@@ -841,7 +883,11 @@
   }
 
   function scheduleBind() {
-    timers.push(setTimeout(bindAll, 120));
+    if (bindTimer !== null) return;
+    bindTimer = setTimeout(function () {
+      bindTimer = null;
+      bindAll();
+    }, 120);
   }
 
   function start() {
