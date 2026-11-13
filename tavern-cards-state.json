@@ -1,6 +1,6 @@
 {
-  "projectName": "暨阳中学v1.7",
-  "worldbookName": "暨阳中学v1.7",
+  "projectName": "暨阳中学v2.0",
+  "worldbookName": "暨阳中学v2.0",
   "form": "charactercard",
   "mvu": true,
   "entryManifest": {
@@ -62,7 +62,7 @@
           "暨阳中学",
           "校园"
         ],
-        "abstract": "暨阳中学校园场景详情：高二重点班教室、操场、图书馆、天台、食堂、小花园、实验楼，各场景的特征和人物关联",
+        "abstract": "常驻地点与相邻区域索引，现场细节由对应地点条目提供",
         "contents": [
           {
             "content": "---\n<region region=\"暨阳中学校内\">"
@@ -100,7 +100,7 @@
           "老鹰山",
           "暨阳站"
         ],
-        "abstract": "暨阳中学校园周边：校门口雄风老商场、KFC与正新鸡排、青悦城、遇见奶茶店、浣江步道、老城次坞打面、城东万风新天地、万达宝龙商圈、老鹰山和暨阳站",
+        "abstract": "常驻地点与相邻区域索引，现场细节由对应地点条目提供",
         "contents": [
           {
             "content": "---\n<region region=\"暨阳中学校园周边\">"
@@ -121,6 +121,598 @@
           "type": "before_character_definition",
           "order": 50
         }
+      },
+      "地点_高二重点班教室": {
+        "path": "世界书/地理/地点/高二重点班教室.yaml",
+        "keywords": [
+          "高二重点班教室",
+          "八班",
+          "高二（8）班",
+          "高二(8)班",
+          "教学楼",
+          "教室"
+        ],
+        "abstract": "四楼东侧，楼梯通往英语办公室，出楼可去食堂。",
+        "uid": 60,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "高二重点班教室",
+            "八班",
+            "高二（8）班",
+            "高二(8)班",
+            "教学楼",
+            "教室"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
+      },
+      "地点_高二教师办公室（英语组）": {
+        "path": "世界书/地理/地点/高二教师办公室（英语组）.yaml",
+        "keywords": [
+          "高二教师办公室（英语组）",
+          "英语办公室",
+          "英语组",
+          "教师办公室"
+        ],
+        "abstract": "教学楼三楼西侧，从八班下楼。",
+        "uid": 61,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "高二教师办公室（英语组）",
+            "英语办公室",
+            "英语组",
+            "教师办公室"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
+      },
+      "地点_操场": {
+        "path": "世界书/地理/地点/操场.yaml",
+        "keywords": [
+          "操场",
+          "篮球场",
+          "跑道"
+        ],
+        "abstract": "教学区外侧，从食堂与教学楼之间可绕过去。",
+        "uid": 62,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "操场",
+            "篮球场",
+            "跑道"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
+      },
+      "地点_图书馆": {
+        "path": "世界书/地理/地点/图书馆.yaml",
+        "keywords": [
+          "图书馆",
+          "借还台",
+          "文学社长桌",
+          "旧书库"
+        ],
+        "abstract": "校园东南角，从教学楼沿连廊过去。",
+        "uid": 63,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "图书馆",
+            "借还台",
+            "文学社长桌",
+            "旧书库"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
+      },
+      "地点_天台": {
+        "path": "世界书/地理/地点/天台.yaml",
+        "keywords": [
+          "天台",
+          "楼顶",
+          "天台铁门"
+        ],
+        "abstract": "教学楼楼梯尽头。",
+        "uid": 64,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "天台",
+            "楼顶",
+            "天台铁门"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
+      },
+      "地点_食堂": {
+        "path": "世界书/地理/地点/食堂.yaml",
+        "keywords": [
+          "食堂",
+          "小炒窗口",
+          "食堂后门"
+        ],
+        "abstract": "教学楼与实验楼之间，后侧连廊可往实验楼。",
+        "uid": 65,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "食堂",
+            "小炒窗口",
+            "食堂后门"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
+      },
+      "地点_小花园": {
+        "path": "世界书/地理/地点/小花园.yaml",
+        "keywords": [
+          "小花园",
+          "鹅卵石路",
+          "花园长椅"
+        ],
+        "abstract": "教学楼与实验楼之间的小路。",
+        "uid": 66,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "小花园",
+            "鹅卵石路",
+            "花园长椅"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
+      },
+      "地点_实验楼": {
+        "path": "世界书/地理/地点/实验楼.yaml",
+        "keywords": [
+          "实验楼",
+          "竞赛自习室",
+          "竞赛教室",
+          "物理实验室"
+        ],
+        "abstract": "食堂后侧连廊可到，三楼有竞赛自习室。",
+        "uid": 67,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "实验楼",
+            "竞赛自习室",
+            "竞赛教室",
+            "物理实验室"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
+      },
+      "地点_行政楼": {
+        "path": "世界书/地理/地点/行政楼.yaml",
+        "keywords": [
+          "行政楼",
+          "年级组会议室",
+          "家长接待室",
+          "校长室",
+          "校长办公室",
+          "教务处"
+        ],
+        "abstract": "从教学区往行政楼入口，校长室在一楼。",
+        "uid": 68,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "行政楼",
+            "年级组会议室",
+            "家长接待室",
+            "校长室",
+            "校长办公室",
+            "教务处"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
+      },
+      "地点_暨阳路校门口": {
+        "path": "世界书/地理/地点/暨阳路校门口.yaml",
+        "keywords": [
+          "暨阳路校门口",
+          "校门口",
+          "校门公交站",
+          "公交站",
+          "暨阳路"
+        ],
+        "abstract": "出门接暨阳路，沿临街店铺可走到老雄风或青悦城方向。",
+        "uid": 69,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "暨阳路校门口",
+            "校门口",
+            "校门公交站",
+            "公交站",
+            "暨阳路"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
+      },
+      "地点_雄风老商场": {
+        "path": "世界书/地理/地点/雄风老商场.yaml",
+        "keywords": [
+          "雄风老商场",
+          "雄风商场",
+          "老雄风",
+          "雄风"
+        ],
+        "abstract": "从校门沿街可步行到达，街侧有快餐店。",
+        "uid": 70,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "雄风老商场",
+            "雄风商场",
+            "老雄风",
+            "雄风"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
+      },
+      "地点_KFC与正新鸡排": {
+        "path": "世界书/地理/地点/KFC与正新鸡排.yaml",
+        "keywords": [
+          "KFC与正新鸡排",
+          "肯德基",
+          "KFC",
+          "正新鸡排"
+        ],
+        "abstract": "雄风外侧临街，回校门沿同一条街走。",
+        "uid": 71,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "KFC与正新鸡排",
+            "肯德基",
+            "KFC",
+            "正新鸡排"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
+      },
+      "地点_青悦城": {
+        "path": "世界书/地理/地点/青悦城.yaml",
+        "keywords": [
+          "青悦城",
+          "无招牌咖啡馆",
+          "青悦城四楼"
+        ],
+        "abstract": "由校门沿主路步行可达，继续向城区可换乘。",
+        "uid": 72,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "青悦城",
+            "无招牌咖啡馆",
+            "青悦城四楼"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
+      },
+      "地点_遇见奶茶店": {
+        "path": "世界书/地理/地点/遇见奶茶店.yaml",
+        "keywords": [
+          "遇见奶茶店",
+          "遇见奶茶",
+          "遇见店"
+        ],
+        "abstract": "在放学步行圈内，从校门沿临街铺面找。",
+        "uid": 73,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "遇见奶茶店",
+            "遇见奶茶",
+            "遇见店"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
+      },
+      "地点_晨光文具复印店": {
+        "path": "世界书/地理/地点/晨光文具复印店.yaml",
+        "keywords": [
+          "晨光文具复印店",
+          "晨光文具",
+          "复印店",
+          "文印店"
+        ],
+        "abstract": "校门对面临街店铺之一。",
+        "uid": 74,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "晨光文具复印店",
+            "晨光文具",
+            "复印店",
+            "文印店"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
+      },
+      "地点_浣江步道": {
+        "path": "世界书/地理/地点/浣江步道.yaml",
+        "keywords": [
+          "浣江步道",
+          "浣江边",
+          "浦阳江",
+          "浦阳江边",
+          "河边步道",
+          "浣江路"
+        ],
+        "abstract": "从老城临江街口下到步道，沿江可往西施故里方向。",
+        "uid": 75,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "浣江步道",
+            "浣江边",
+            "浦阳江",
+            "浦阳江边",
+            "河边步道",
+            "浣江路"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
+      },
+      "地点_老城生活圈": {
+        "path": "世界书/地理/地点/老城生活圈.yaml",
+        "keywords": [
+          "老城生活圈",
+          "老城窄巷",
+          "老城",
+          "艮塔公园",
+          "次坞打面"
+        ],
+        "abstract": "由暨阳路往旧街和临江巷口走。",
+        "uid": 76,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "老城生活圈",
+            "老城窄巷",
+            "老城",
+            "艮塔公园",
+            "次坞打面"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
+      },
+      "地点_西施故里与御江湾": {
+        "path": "世界书/地理/地点/西施故里与御江湾.yaml",
+        "keywords": [
+          "西施故里与御江湾",
+          "西施故里",
+          "御江湾"
+        ],
+        "abstract": "从临江步道接景区入口；住宅区有独立门岗。",
+        "uid": 77,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "西施故里与御江湾",
+            "西施故里",
+            "御江湾"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
+      },
+      "地点_城东万风新天地": {
+        "path": "世界书/地理/地点/城东万风新天地.yaml",
+        "keywords": [
+          "城东万风新天地",
+          "万风新天地",
+          "万风"
+        ],
+        "abstract": "由老城向东，可坐公交或由接送车辆前往。",
+        "uid": 78,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "城东万风新天地",
+            "万风新天地",
+            "万风"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
+      },
+      "地点_万达宝龙商圈": {
+        "path": "世界书/地理/地点/万达宝龙商圈.yaml",
+        "keywords": [
+          "万达宝龙商圈",
+          "万达广场",
+          "宝龙广场",
+          "万达",
+          "宝龙"
+        ],
+        "abstract": "两处在不同商业板块，查清目的地再换乘。",
+        "uid": 79,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "万达宝龙商圈",
+            "万达广场",
+            "宝龙广场",
+            "万达",
+            "宝龙"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
+      },
+      "地点_老鹰山": {
+        "path": "世界书/地理/地点/老鹰山.yaml",
+        "keywords": [
+          "老鹰山",
+          "老鹰山步道",
+          "老鹰山山脚"
+        ],
+        "abstract": "从城区先到山脚入口，再沿步道上山。",
+        "uid": 80,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "老鹰山",
+            "老鹰山步道",
+            "老鹰山山脚"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
+      },
+      "地点_暨阳站": {
+        "path": "世界书/地理/地点/暨阳站.yaml",
+        "keywords": [
+          "暨阳站",
+          "高铁站",
+          "暨阳火车站"
+        ],
+        "abstract": "在城西，从校门或老城坐公交或打车。",
+        "uid": 81,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "暨阳站",
+            "高铁站",
+            "暨阳火车站"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 51
+        },
+        "part": "scene"
       }
     },
     "角色": {
@@ -1290,30 +1882,30 @@
           "寒假",
           "春节"
         ],
-        "abstract": "2020—2021学年校历：九月开学、国庆、体育周、期中、远足、艺术周、元旦、寒假与春节节点；给出进入/退出活动窗口时更新 剧情.校园活动 与 剧情.当前事件 的规则",
+        "abstract": "2020—2021 校历与活动背景规则，玩家自主决定是否参与",
         "uid": 46,
         "enabled": true,
         "strategy": {
-          "type": "selective",
-          "keys": [
-            "几月",
-            "星期",
-            "日期",
-            "校历",
-            "校历表",
-            "开学",
-            "期中",
-            "体育周",
-            "国庆",
-            "远足",
-            "艺术周",
-            "寒假",
-            "春节"
-          ]
+          "type": "constant"
         },
         "position": {
           "type": "before_character_definition",
           "order": 55
+        },
+        "part": "history"
+      },
+      "时间线_校园作息": {
+        "path": "世界书/时间线/校园作息.yaml",
+        "keywords": [],
+        "abstract": "普通上课日与假期节奏，七位主要角色及班长的常见去向",
+        "uid": 82,
+        "enabled": true,
+        "strategy": {
+          "type": "constant"
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 54
         },
         "part": "history"
       }
@@ -1431,14 +2023,14 @@
     "role": "system",
     "depth": 0
   },
-  "avatar": "暨阳中学v1.7.png",
+  "avatar": "暨阳中学v2.0.png",
   "description": "",
   "first_messages": [
     "开场白/0.txt"
   ],
   "creator": "",
   "creator_notes": "",
-  "version": "v1.7",
+  "version": "v2.0",
   "create_date": "2026-06-24T15:20:28.960Z",
   "extensions": {
     "tavern_helper": {

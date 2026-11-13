@@ -53,7 +53,7 @@
       }
     },
     5: {
-      date: '2020/09/07', week: '星期一', time: '晚自习', weather: '晴', location: '老城窄巷（学校东南侧）',
+      date: '2020/09/07', week: '星期一', time: '夜间', weather: '晴', location: '老城窄巷（学校东南侧）',
       area: '城区', privacy: '半私密', pace: '事件触发', semester: '高二上', focus: '沈幼楚', schoolEvent: '无',
       present: {
         '沈幼楚': { pos: '青砖墙边', top: '洗得发白的校服短袖', bottom: '洗得发白的校服长裤', action: '背贴着墙，攥紧书包带发抖', mood: '恐惧到极点', inner: '谁来……谁都好。' }
@@ -67,8 +67,8 @@
       }
     },
     7: {
-      date: '2020/09/12', week: '星期六', time: '下午', weather: '多云', location: '城东青悦城四楼 无招牌咖啡馆',
-      area: '城区', privacy: '半私密', pace: '日常铺垫', semester: '高二上', focus: '陈芷汀', schoolEvent: '无',
+      date: '2020/09/12', week: '星期六', time: '下午', weather: '多云', location: '青悦城四楼 无招牌咖啡馆',
+      area: '周边', privacy: '半私密', pace: '日常铺垫', semester: '高二上', focus: '陈芷汀', schoolEvent: '无',
       present: {
         '陈芷汀': { pos: '靠窗卡座', top: '黑色无袖连衣裙', bottom: '（连衣裙）', action: '托着腮看向门口，指尖轻轻敲杯壁', mood: '打量与试探的兴致', inner: '照片和本人差多少呢。' }
       }
