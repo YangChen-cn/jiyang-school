@@ -251,32 +251,32 @@
     return String(text || '').replace(/<OpeningSetupUI\s*\/>/gi, ' ').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
   }
 
-  function currentCharacter() {
+  async function readGreetings() {
     var fn = th('getCharacter');
-    if (!fn) return null;
-    try { return fn('current'); } catch (e) { console.warn('[暨阳开局] getCharacter 失败', e); return null; }
+    if (!fn) throw new Error('酒馆助手尚未提供角色资料接口，请确认扩展已加载后重试。');
+    var character = await fn('current');
+    if (!character) throw new Error('当前角色资料尚未加载，请重试。');
+    if (Array.isArray(character.first_messages) && character.first_messages.length > 1) {
+      return character.first_messages.slice(1);
+    }
+    if (character.data && Array.isArray(character.data.alternate_greetings)) return character.data.alternate_greetings;
+    return Array.isArray(character.alternate_greetings) ? character.alternate_greetings : [];
   }
 
-  function greetingTextAt(index) {
-    var character = currentCharacter();
-    if (!character) return '';
-    var alternates = null;
-    if (character.data && Array.isArray(character.data.alternate_greetings)) alternates = character.data.alternate_greetings;
-    if (!alternates && Array.isArray(character.alternate_greetings)) alternates = character.alternate_greetings;
-    if (alternates && typeof alternates[index - 1] === 'string') return alternates[index - 1];
-    var legacy = Array.isArray(character.first_messages) ? character.first_messages : null;
-    if (legacy && typeof legacy[index] === 'string') return legacy[index];
-    return '';
+  async function greetingTextAt(index) {
+    var text = (await readGreetings())[index - 1];
+    return typeof text === 'string' ? text.replace(/<OpeningSetupUI\s*\/>/gi, '').trim() : '';
   }
 
-  function inferGreetingIndex(messageZeroText) {
+  async function inferGreetingIndex(messageZeroText) {
     var normalized = normalizeText(messageZeroText);
     if (!normalized) return 0;
-    for (var i = 1; i <= 8; i += 1) {
-      var greeting = normalizeText(greetingTextAt(i));
+    var greetings = await readGreetings();
+    for (var i = 0; i < Math.min(8, greetings.length); i += 1) {
+      var greeting = normalizeText(greetings[i]);
       if (!greeting) continue;
       var head = greeting.slice(0, 80);
-      if (head && normalized.indexOf(head) !== -1) return i;
+      if (head && normalized.indexOf(head) !== -1) return i + 1;
     }
     return 0;
   }
@@ -309,7 +309,7 @@
   function setChatMessagesSafe(messages) {
     var fn = th('setChatMessages');
     if (!fn) throw new Error('未检测到 setChatMessages 接口，请确认酒馆助手已正确加载。');
-    fn(messages, { refresh: 'affected' });
+    return fn(messages, { refresh: 'affected' });
   }
 
   function checkPrimaryWorldbook() {
@@ -323,7 +323,7 @@
     var names = [];
     try { names = getNames() || []; } catch (e) { /* noop */ }
     if (!primary || names.indexOf(primary) === -1) {
-      throw new Error('角色卡的内嵌世界书「' + (primary || '暨阳中学v1.6') + '」尚未导入。请在角色管理中打开该角色，选择 Import Card Lore（导入卡内世界书）后重新确认。');
+      throw new Error('角色卡的内嵌世界书' + (primary ? '「' + primary + '」' : '') + '尚未导入或绑定。请在角色管理中选择 Import Card Lore（导入卡内世界书）后重试。');
     }
     return primary;
   }
@@ -615,12 +615,19 @@
   }
 
   // ---------- 同步状态 ----------
-  function syncRoot(root) {
+  async function syncRoot(root) {
     if (submitting || root.getAttribute('data-opening-state') === 'submitting') return;
-    if (root.__jyUserEditing === true) return;
+    if (root.__jyUserEditing === true || root.__jySyncPending) return;
     var messages = getMessages('0-3');
     var messageZero = messages.length ? messageText(messages[0]) : '';
-    var index = inferGreetingIndex(messageZero);
+    var index = 0;
+    if (normalizeText(messageZero)) {
+      root.__jySyncPending = true;
+      try { index = await inferGreetingIndex(messageZero); } catch (error) { return; }
+      finally { root.__jySyncPending = false; }
+      if (submitting || !root.isConnected || root.__jyUserEditing === true ||
+          messageText(getMessages('0-3')[0]) !== messageZero) return;
+    }
     if (index) setGreetingIndex(root, index);
     var letter = findLetterMessage(messages);
     if (letter) {
@@ -677,13 +684,18 @@
     if (!formData['姓名'] || formData['姓名'] === '未设定') return fail('请先填写姓名。');
     if (!action) return fail('请先填写「你的开局动作」。');
     if (mode === 'custom' && !custom) return fail('选择自定义开局时，请填写开场正文。');
+    root.__jyPreviewRequest = (root.__jyPreviewRequest || 0) + 1;
 
     var bookName = '';
     try { bookName = checkPrimaryWorldbook(); } catch (error) { return fail(error.message); }
 
     var greeting = '';
     if (mode === 'preset') {
-      try { greeting = greetingTextAt(index).trim(); } catch (error) { /* noop */ }
+      submitting = true;
+      setState(root, 'submitting');
+      try { greeting = await greetingTextAt(index); }
+      catch (error) { return fail('读取开场白失败：' + error.message); }
+      if (!root.isConnected) { submitting = false; return; }
       if (!greeting) return fail('未找到编号 ' + index + ' 的开场白，请重新导入完整角色卡后再试。');
     }
     var seedText = (mode === 'custom' ? custom : greeting) + '\n\n' + PLACEHOLDER;
@@ -706,7 +718,7 @@
       await writeMvuOpening(formData, mode, mode === 'preset' ? GREETING_SCENES[index] : null);
 
       // 先把开场写进首楼，保证模型生成第一回应时能看到开场场景
-      setChatMessagesSafe([{ message_id: 0, message: seedText }]);
+      await setChatMessagesSafe([{ message_id: 0, message: seedText }]);
 
       if (!alreadySubmitted) {
         var letter = openingMessage(formData, action, custom, mode === 'custom' ? '自定义开局' : GREETING_NAMES[index]);
@@ -714,7 +726,7 @@
         sendButton.click();
         var sent = await waitForLetter(2800);
         if (!sent) {
-          try { setChatMessagesSafe([{ message_id: 0, message: originalMessageZero || PLACEHOLDER }]); } catch (e) { /* noop */ }
+          try { await setChatMessagesSafe([{ message_id: 0, message: originalMessageZero || PLACEHOLDER }]); } catch (e) { /* noop */ }
           restoreDraft(input, draft);
           throw new Error('开局消息没有发送成功，请检查酒馆是否已连接模型后端后重试。');
         }
@@ -739,10 +751,13 @@
   }
 
   // ---------- 事件 ----------
-  function handleClick(root, event) {
+  async function handleClick(root, event) {
     var target = event.target && event.target.closest ? event.target.closest('[data-action]') : null;
     if (!target || !root.contains(target)) return;
     var action = target.getAttribute('data-action');
+    if (submitting) { event.preventDefault(); return; }
+    var request = (root.__jyPreviewRequest || 0) + 1;
+    root.__jyPreviewRequest = request;
     if (action === 'select-mode') {
       event.preventDefault();
       root.__jyUserEditing = true;
@@ -752,7 +767,13 @@
       root.__jyUserEditing = true;
       var index = Number(target.getAttribute('data-greeting')) || 1;
       setGreetingIndex(root, index);
-      var text = greetingTextAt(index);
+      var text;
+      try { text = await greetingTextAt(index); }
+      catch (error) {
+        if (root.isConnected && root.__jyPreviewRequest === request) toast(root, '读取开场白失败：' + error.message, 'error');
+        return;
+      }
+      if (submitting || !root.isConnected || root.__jyPreviewRequest !== request) return;
       if (text) openPreview(root, index, text);
       else toast(root, '未找到该开场白文本，请重新导入完整角色卡。', 'error');
     } else if (action === 'clear') {
