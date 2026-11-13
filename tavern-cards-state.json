@@ -2096,18 +2096,6 @@
           },
           "data": {}
         },
-        "开局设定旧界面兼容V5": {
-          "type": "script",
-          "script_file": "脚本/开局设定旧界面兼容V4.js",
-          "enabled": true,
-          "id": "5db9bd58-6f5a-47e3-993c-79c036d12b74",
-          "info": "兼容旧聊天中的 custom-jy 开局界面，修正面板与选中态显示，并处理开场预览。",
-          "button": {
-            "enabled": false,
-            "buttons": []
-          },
-          "data": {}
-        },
         "悬浮音乐播放器": {
           "type": "script",
           "script_file": "脚本/悬浮音乐播放器.js",

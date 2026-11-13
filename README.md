@@ -9,7 +9,7 @@
 | 依赖 | 必需性 | 说明 |
 |---|---|---|
 | SillyTavern ≥ 1.12（支持 character card v3） | 必需 | 卡的 spec 为 `chara_card_v3` |
-| Tavern Helper / JS-Slash-Runner 扩展 | 必需 | 卡内 5 个 TH 脚本（MVU、Zod、开局设定、旧界面兼容、悬浮音乐播放器）由它执行 |
+| Tavern Helper / JS-Slash-Runner 扩展 | 必需 | 卡内 4 个 TH 脚本（MVU、Zod、开局设定、悬浮音乐播放器）由它执行 |
 | MagVarUpdate（MVU） | 必需 | `脚本/MVU.txt` 从 CDN 引入 `bundle.js`；负责变量初始化、每轮追加状态栏占位符、变量更新 |
 | mvu_zod 桥接 | 必需 | `脚本/Zod.txt` 从 CDN 引入 `mvu_zod.js`；负责 schema 校验回写 |
 | Tavern Helper「宏」功能开启 | 必需 | 状态栏使用 `{{format_message_variable::stat_data...}}`，关闭宏会导致 AI 看到字面文本、状态失忆 |
