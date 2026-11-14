@@ -1084,14 +1084,6 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .jy-card-ranking {
-    padding: 2px 5px;
-    border-radius: 4px;
-    background: rgba(47, 143, 131, 0.12);
-    color: #1b534b;
-    font-size: 9.5px;
-    font-weight: 700;
-  }
   .jy-card-dossier {
     margin-top: 8px;
     border-top: 1px dashed rgba(47, 143, 131, 0.3);
@@ -1491,10 +1483,6 @@
           <div class="jy-card-row">
             <b>班级</b>
             <span><span data-scene-value>{{format_message_variable::stat_data.主角.班级}}</span><span class="jy-me-dot">·</span><span data-scene-value>{{format_message_variable::stat_data.主角.当前位置}}</span></span>
-          </div>
-          <div class="jy-card-row">
-            <b>学业排位</b>
-            <span class="jy-card-ranking">重点班前40名（冲刺双一流）· 德育A</span>
           </div>
           <div class="jy-me-look" data-scene-value>{{format_message_variable::stat_data.主角.外貌}}</div>
         </div>
@@ -2260,7 +2248,7 @@
           if (source.includes(key)) return prof;
         }
         if (item.渠道 === '公告') return { name: '暨中教务处公告', initial: '校', bg: '#1d4ed8' };
-        if (item.渠道 === '班群') return { name: '高二(1)班微群', initial: '班', bg: '#059669' };
+        if (item.渠道 === '班群') return { name: '班级群', initial: '班', bg: '#059669' };
         if (item.渠道 === '八卦') return { name: source ? `${source}情报员` : '暨中校园树洞', initial: '洞', bg: '#b45309' };
         if (item.渠道 === '趣事') return { name: source || '暨阳市井见闻', initial: '趣', bg: '#0891b2' };
         if (item.渠道 === '余波') return { name: source ? `${source}反响` : '全校课后热议', initial: '波', bg: '#be123c' };
@@ -2318,8 +2306,8 @@
         footer.append(meta);
         box.append(header, title, body, footer);
 
-        const rawLikes = Array.isArray(item.点赞) ? item.点赞.filter(v => typeof v === 'string' && v.trim()) : [];
-        const rawComments = Array.isArray(item.互动) ? item.互动.filter(c => c && typeof c === 'object' && (c.用户 || c.角色) && (c.内容 || c.评论)) : [];
+        const rawLikes = Array.isArray(item.点赞) ? [...new Set(item.点赞.filter(v => typeof v === 'string').map(v => v.trim()).filter(Boolean))].slice(-6) : [];
+        const rawComments = Array.isArray(item.互动) ? item.互动.filter(c => c && typeof c === 'object' && (c.用户 || c.角色) && (c.内容 || c.评论)).slice(-3) : [];
 
         if (rawLikes.length > 0 || rawComments.length > 0) {
           const interactions = document.createElement('div');
@@ -2341,7 +2329,7 @@
               cUser.textContent = String(c.用户 || c.角色) + ': ';
               const cText = document.createElement('span');
               cText.className = 'jy-comment-text';
-              cText.textContent = String(c.内容 || c.评论);
+              cText.textContent = Array.from(String(c.内容 || c.评论)).slice(0, 40).join('');
               commentRow.append(cUser, cText);
               interactions.append(commentRow);
             }

@@ -2,6 +2,23 @@ import { registerMvuSchema } from 'https://testingcf.jsdelivr.net/gh/StageDog/ta
 
 // 本文件由 脚本/生成Zod.mjs 从根目录 schema.ts 生成，请勿手工编辑。
 // 当前 Zod schema 只影响变量面板的类型提示/校验回写；registerMvuSchema 不会拦截 MVU 的写入。
+const CampusInteractions = z.object({
+  点赞: z.array(z.string().catch('')).catch([]).transform(names =>
+    [...new Set(names.map(name => name.trim()).filter(Boolean))].slice(-6)
+  ),
+  互动: z.array(z.object({
+    用户: z.string().optional().catch(undefined),
+    内容: z.string().optional().catch(undefined),
+    角色: z.string().optional().catch(undefined),
+    评论: z.string().optional().catch(undefined),
+  }).catch({}).transform(comment => ({
+    用户: comment.用户?.trim() || comment.角色?.trim() || '',
+    内容: Array.from(comment.内容?.trim() || comment.评论?.trim() || '').slice(0, 40).join(''),
+  }))).catch([]).transform(comments =>
+    comments.filter(comment => comment.用户 && comment.内容).slice(-3)
+  ),
+});
+
 export const Schema = z.object({
   // 初始变量一律为空/0/false：不同开场白的时间、地点、在场角色不同，
   // 由第一轮 AI 依据开场白与玩家设定补齐，之后按 变量更新规则 推进。
@@ -38,11 +55,7 @@ export const Schema = z.object({
       活动标识: z.string().optional(),
       确认开始: z.string().optional(),
       确认结束: z.string().optional(),
-      点赞: z.array(z.string()).prefault([]),
-      互动: z.array(z.object({
-        用户: z.string().prefault(''),
-        内容: z.string().prefault(''),
-      })).prefault([]),
+      ...CampusInteractions.shape,
     })).transform(items => items.slice(-8)).prefault([]),
   }).prefault({}),
 
@@ -162,8 +175,12 @@ $(async () => {
   await waitGlobalInitialized('Mvu');
   eventOn(Mvu.events.BEFORE_MESSAGE_UPDATE, ({ variables }) => {
     const campus = variables?.stat_data?.校园;
-    if (Array.isArray(campus?.消息) && campus.消息.length > 8) {
-      campus.消息 = campus.消息.slice(-8);
+    if (!Array.isArray(campus?.消息)) return;
+    campus.消息 = campus.消息.slice(-8);
+    for (const post of campus.消息) {
+      if (post && (Array.isArray(post.点赞) || Array.isArray(post.互动))) {
+        Object.assign(post, CampusInteractions.parse(post));
+      }
     }
   });
 });

@@ -1,3 +1,20 @@
+const CampusInteractions = z.object({
+  点赞: z.array(z.string().catch('')).catch([]).transform(names =>
+    [...new Set(names.map(name => name.trim()).filter(Boolean))].slice(-6)
+  ),
+  互动: z.array(z.object({
+    用户: z.string().optional().catch(undefined),
+    内容: z.string().optional().catch(undefined),
+    角色: z.string().optional().catch(undefined),
+    评论: z.string().optional().catch(undefined),
+  }).catch({}).transform(comment => ({
+    用户: comment.用户?.trim() || comment.角色?.trim() || '',
+    内容: Array.from(comment.内容?.trim() || comment.评论?.trim() || '').slice(0, 40).join(''),
+  }))).catch([]).transform(comments =>
+    comments.filter(comment => comment.用户 && comment.内容).slice(-3)
+  ),
+});
+
 export const Schema = z.object({
   // 初始变量一律为空/0/false：不同开场白的时间、地点、在场角色不同，
   // 由第一轮 AI 依据开场白与玩家设定补齐，之后按 变量更新规则 推进。
@@ -34,11 +51,7 @@ export const Schema = z.object({
       活动标识: z.string().optional(),
       确认开始: z.string().optional(),
       确认结束: z.string().optional(),
-      点赞: z.array(z.string()).prefault([]),
-      互动: z.array(z.object({
-        用户: z.string().prefault(''),
-        内容: z.string().prefault(''),
-      })).prefault([]),
+      ...CampusInteractions.shape,
     })).transform(items => items.slice(-8)).prefault([]),
   }).prefault({}),
 
