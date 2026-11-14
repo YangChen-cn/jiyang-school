@@ -70,7 +70,11 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const select=d.querySelector('[data-period-select]'); select.value='高三下';select.dispatchEvent(new w.Event('change'));
  assert.ok(d.querySelector('[data-calendar-events]').textContent.includes('毕业册的最后一页'));
  select.value='高二上';select.dispatchEvent(new w.Event('change'));
- assert.equal(d.querySelectorAll('[data-calendar-events] li').length,9);
+ assert.equal(d.querySelectorAll('[data-calendar-events] li').length,8);
+ assert.doesNotMatch(d.querySelector('[data-calendar-events]').textContent,/艺术周/);
+ select.value='高二下';select.dispatchEvent(new w.Event('change'));
+ assert.ok([...d.querySelectorAll('.jy-calendar-entry')].some(row => row.querySelector('strong').textContent === '艺术周' && row.querySelector('.jy-event-window').textContent === '4月'));
+ select.value='高二上';select.dispatchEvent(new w.Event('change'));
  assert.ok([...d.querySelectorAll('.jy-calendar-entry')].some(row => row.querySelector('strong').textContent === '体育周' && row.querySelector('.jy-event-window').textContent === '2020-10-20（正式通知）'));
  assert.ok([...d.querySelectorAll('.jy-calendar-entry')].some(row => row.querySelector('strong').textContent === '春节' && row.querySelector('.jy-event-state').textContent === '日期待确认'));
  const campus=d.querySelector('[data-campus-messages]');
