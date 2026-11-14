@@ -1356,6 +1356,8 @@
   .jy-feed-tag[data-channel="朋友圈"] { background: #fce4ec; color: #c2185b; }
   .jy-feed-tag[data-channel="八卦"] { background: #fff3e0; color: #e65100; }
   .jy-feed-tag[data-channel="来信"] { background: #f3e5f5; color: #7b1fa2; }
+  .jy-feed-tag[data-channel="趣事"] { background: #e0f7fa; color: #00838f; }
+  .jy-feed-tag[data-channel="余波"] { background: #ffebee; color: #c62828; }
   .jy-feed-source {
     font-size: 10.5px;
     color: #8c857b;
@@ -2259,6 +2261,8 @@
         if (item.渠道 === '公告') return { name: '暨中教务处公告', initial: '校', bg: '#1d4ed8' };
         if (item.渠道 === '班群') return { name: '高二(1)班微群', initial: '班', bg: '#059669' };
         if (item.渠道 === '八卦') return { name: source ? `${source}情报员` : '暨中校园树洞', initial: '洞', bg: '#b45309' };
+        if (item.渠道 === '趣事') return { name: source || '暨阳市井见闻', initial: '趣', bg: '#0891b2' };
+        if (item.渠道 === '余波') return { name: source ? `${source}反响` : '全校课后热议', initial: '波', bg: '#be123c' };
         if (item.渠道 === '来信') return { name: source ? `${source}` : '匿名便签', initial: '信', bg: '#7c3aed' };
         if (item.渠道 === '朋友圈') return { name: source || '同级好友', initial: '友', bg: '#2563eb' };
         return { name: source || '暨阳校园简讯', initial: '讯', bg: '#475569' };
@@ -2291,6 +2295,25 @@
             ]
           ];
           comments = options[abs % options.length];
+        } else if (item.渠道 === '趣事') {
+          likes = ['Margot.', '汀汀不听话✨', '小楚'];
+          const options = [
+            [
+              { user: '汀汀不听话✨', text: '真的！今天放学我也看到了哈哈哈～' },
+              { user: '小楚', text: '那家店给的分量确实很足…' }
+            ],
+            [
+              { user: 'Margot.', text: '见怪不怪了。' },
+              { user: '兰舟.', text: '人间烟火气。' }
+            ]
+          ];
+          comments = options[abs % options.length];
+        } else if (item.渠道 === '余波') {
+          likes = ['ZX.', '高二(1)班吴臻臻', '兰舟.'];
+          comments = [
+            { user: '高二(1)班吴臻臻', text: '活动圆满结束，大家收心回归备考节奏。' },
+            { user: '汀汀不听话✨', text: '意犹未尽！' }
+          ];
         } else if (item.渠道 === '班群') {
           likes = ['高二(1)班吴臻臻', 'ZX.', '兰舟.'];
           comments = [
