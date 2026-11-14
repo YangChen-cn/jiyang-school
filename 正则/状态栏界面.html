@@ -1024,12 +1024,106 @@
   .jy-map-picture { margin: 12px 0; }
   .jy-map-picture summary { cursor: pointer; padding: 10px 0; }
   .jy-map-head { position: sticky; top: 0; z-index: 2; background: #f7faf7; }
-  [data-memory-list] { margin: 0; padding-left: 20px; }
-  [data-memory-list] li { margin: 12px 0; overflow-wrap: anywhere; }
-  [data-memory-list] p { margin: 4px 0; }
   .jy-map-card { max-width: calc(100% - 16px); max-height: 80dvh; overflow: auto; overscroll-behavior: contain; }
   .jy-map-card input, .jy-place { min-width: 0; box-sizing: border-box; overflow-wrap: anywhere; }
   @media (max-width: 420px) { .jy-map-card { padding: 12px; } .jy-readouts { display: block; } .jy-readout { margin-top: 8px; } }
+
+  /* Campus notebook */
+  .jy-status .jy-shell {
+    border-color: #d8d0ba;
+    border-radius: 14px;
+    background: #fffaf0;
+    box-shadow: 0 4px 0 -1px #ede3d0, 0 8px 0 -3px #f7efde, 0 13px 25px #392b1d14;
+  }
+  .jy-status .jy-shell::before { opacity: 0; }
+  .jy-status .jy-head {
+    border-bottom: 1px solid #d9d1ba;
+    background: #eee8d6;
+    background-image: repeating-linear-gradient(0deg, transparent 0 22px, #796d4a12 22px 23px);
+  }
+  .jy-status .jy-badge {
+    border: 1px solid #526951;
+    border-radius: 7px;
+    background: #526951;
+    box-shadow: 2px 2px 0 #fff8e7;
+  }
+  .jy-status .jy-location { font-size: clamp(17px, 3.5vw, 23px); font-family: ui-serif, "Songti SC", "Noto Serif CJK SC", serif; color: #32473a; }
+  .jy-status .jy-kicker { color: #5e6d52; letter-spacing: .06em; }
+  .jy-status .jy-time { border-color: #c6ba9f; background: #fffaf1; }
+  .jy-status .jy-date { color: #8b4e32; font-variant-numeric: tabular-nums; }
+  .jy-status .jy-me { background: #fffaf1; }
+  .jy-status .jy-scene-now { background: #f3eddc; border-color: #e4dac3; }
+  .jy-status .jy-scene-now b { color: #466451; }
+  .jy-status .jy-readouts { display: grid; gap: 7px; padding: 12px; }
+  .jy-status .jy-readout {
+    --jy-tab: #ece7d6;
+    --jy-tab-ink: #415945;
+    min-width: 0;
+    margin: 0;
+    border: 1px solid #dfd6bf;
+    border-radius: 8px;
+    background: #fffcf4;
+  }
+  .jy-status [data-campus-messages] { --jy-tab: #f1e5d9; --jy-tab-ink: #76482f; }
+  .jy-status .jy-calendar { --jy-tab: #e8ecdc; --jy-tab-ink: #3e593e; }
+  .jy-status .jy-readout > summary {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 44px;
+    padding: 4px 12px;
+    border-radius: 7px;
+    color: var(--jy-tab-ink);
+    background: var(--jy-tab);
+    font-size: 13px;
+  }
+  .jy-status .jy-readout[open] > summary { border-radius: 7px 7px 0 0; }
+  .jy-status .jy-readout > summary::before { content: none; }
+  .jy-status .jy-readout > summary::after { content: "＋"; margin-left: auto; font-size: 16px; }
+  .jy-status .jy-readout[open] > summary::after { content: "−"; }
+  .jy-tab-mark { width: 21px; text-align: center; font-size: 16px; }
+  .jy-status .jy-calendar-body { padding: 12px; color: #404c3c; }
+  .jy-page-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 9px; }
+  .jy-page-toolbar label { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; }
+  .jy-status .jy-calendar-body select { min-height: 36px; padding: 3px 7px; border-color: #cbbc9e; border-radius: 6px; background: #fffdf7; color: #3f4d3a; }
+  .jy-status .jy-calendar-body .jy-page-note { margin: 0; color: #636653; font-size: 11.5px; }
+  .jy-status .jy-calendar-body .jy-calendar-foot { margin-top: 10px; }
+  .jy-status [data-schedule] { margin: 0 0 11px; border-left: 3px solid #b5be9e; padding: 4px 8px; color: #55664e; line-height: 1.6; }
+  .jy-status [data-calendar-events] { display: grid; grid-template-columns: 1fr; gap: 6px; }
+  .jy-status .jy-calendar-entry {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 8px;
+    border: 1px solid #e5dcc5;
+    border-radius: 7px;
+    background: #fffdf7;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+  }
+  .jy-calendar-entry[data-near] { border-color: #a8b798; background: #f0f3e7; }
+  .jy-month-stamp { padding: 4px 2px; border-radius: 5px; background: #eee8d6; color: #625136; text-align: center; font-weight: 750; font-size: 11px; }
+  .jy-event-window { padding-top: 1px; color: #626852; font-size: 11px; }
+  .jy-event-state { padding: 3px 6px; border-radius: 6px; background: #eeeadd; color: #635c49; font-size: 10px; white-space: nowrap; }
+  .jy-calendar-entry[data-near] .jy-event-state { background: #dbe5cc; color: #3c583b; }
+  .jy-status .jy-calendar-body .jy-forum-edition { display: inline-flex; align-items: center; gap: 7px; margin: 0; color: #76482f; font-size: 13px; font-weight: 750; }
+  .jy-forum-edition span { width: 7px; height: 7px; border-radius: 50%; background: #a55a3e; }
+  .jy-forum-toolbar { border-bottom: 2px solid #8e523b; padding-bottom: 8px; }
+  .jy-status .jy-feed { display: grid; grid-template-columns: minmax(0, 1fr); margin: 0; padding: 0; list-style: none; }
+  .jy-feed li { min-width: 0; padding: 12px 4px; border-bottom: 1px solid #e7d8bc; overflow-wrap: anywhere; }
+  .jy-feed li:last-child { border-bottom: 0; }
+  .jy-feed-top { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin-bottom: 5px; }
+  .jy-feed-tag { padding: 2px 6px; border-radius: 3px; background: #ebdfc4; color: #624c32; font-size: 10px; font-weight: 700; }
+  .jy-feed-tag[data-channel="八卦"] { background: #f1dbd9; color: #783e42; }
+  .jy-feed-tag[data-channel="朋友圈"] { background: #dfe7d1; color: #415c3e; }
+  .jy-feed-source, .jy-feed small { color: #69634f; font-size: 11px; }
+  .jy-feed strong { display: block; font-family: ui-serif, "Songti SC", "Noto Serif CJK SC", serif; color: #32473a; font-size: 15px; line-height: 1.45; }
+  .jy-status .jy-feed p { margin: 4px 0 5px; line-height: 1.6; }
+  @media (max-width: 360px) {
+    .jy-status .jy-readouts, .jy-status .jy-calendar-body { padding: 8px; }
+    .jy-status .jy-calendar-entry { grid-template-columns: 35px minmax(0, 1fr) auto; gap: 5px; padding: 6px; }
+  }
 </style>
 <body>
 
@@ -1079,31 +1173,32 @@
     </div>
     <div class="jy-readouts">
       <details class="jy-readout" data-campus-messages>
-        <summary>校园消息</summary>
+        <summary><span class="jy-tab-mark" aria-hidden="true">✎</span><span>校园论坛</span></summary>
         <div class="jy-calendar-body">
-          <label>渠道 <select data-campus-channel><option>全部</option><option>公告</option><option>班群</option><option>来信</option></select></label>
-          <p data-campus-status role="status"></p>
-          <ul class="jy-calendar-list" data-campus-list></ul>
+          <div class="jy-page-toolbar jy-forum-toolbar">
+            <p class="jy-forum-edition"><span aria-hidden="true"></span>校园短讯</p>
+            <label>栏目 <select data-campus-channel><option>全部</option><option>趣事</option><option>八卦</option><option>余波</option><option>朋友圈</option><option>公告</option><option>班群</option><option>来信</option></select></label>
+          </div>
+          <p class="jy-page-note" data-campus-status role="status"></p>
+          <ul class="jy-feed" data-campus-list></ul>
         </div>
       </details>
-      <details class="jy-readout jy-memories">
-        <summary>往事与约定</summary>
-        <div class="jy-calendar-body"><p data-memory-status>展开后读取这条消息的记录。</p><ul data-memory-list></ul></div>
-      </details>
       <details class="jy-readout jy-calendar">
-        <summary>校历与作息</summary>
+        <summary><span class="jy-tab-mark" aria-hidden="true">▤</span><span>校历与作息</span></summary>
         <div class="jy-calendar-body">
           <p data-schedule>普通上课日有早自习、上午课、午休、下午课与晚自习。周末、假期和临时活动以通知为准。</p>
           <span hidden data-start-year>{{format_message_variable::stat_data.世界.起始年份}}</span>
           <span hidden data-academic>{{format_message_variable::stat_data.剧情.学期}}</span>
-          <label>查阅阶段 <select data-period-select aria-label="查阅学期"></select></label>
-          <p data-calendar-context></p>
+          <div class="jy-page-toolbar">
+            <label>学期 <select data-period-select aria-label="查阅学期"></select></label>
+            <p class="jy-page-note" data-calendar-context></p>
+          </div>
           <ul class="jy-calendar-list" data-calendar-events></ul>
-          <p>日期为预计窗口，具体安排以剧情中的通知为准。春节随年份变化，寒假及毕业日可依通知调整。</p>
+          <p class="jy-page-note jy-calendar-foot">日期为预计窗口，以正式通知为准。</p>
         </div>
       </details>
       <details class="jy-readout">
-        <summary>人物关系</summary>
+        <summary><span class="jy-tab-mark" aria-hidden="true">♧</span><span>人物关系</span></summary>
     <div class="jy-people">
       <div class="jy-person" data-tone="warm" data-present="{{format_message_variable::stat_data.苏晓樯.是否在场}}">
         <div class="jy-person-head">
@@ -1716,37 +1811,6 @@
     return JY_PERIODS.find(p => date >= anchor(p.start) && date <= anchor(p.end)) || null;
   }
 
-  async function renderMemories(root) {
-    const list = root.querySelector('[data-memory-list]');
-    const status = root.querySelector('[data-memory-status]');
-    if (!list || !status) return;
-    const request = String(Number(root.dataset.memoryRequest || 0) + 1);
-    root.dataset.memoryRequest = request;
-    list.replaceChildren();
-    try {
-      // Never read "latest": browsing an earlier message must not reveal later discoveries.
-      const id = window.getCurrentMessageId?.();
-      if (!Number.isInteger(id) || id < 0) throw new Error('message unavailable');
-      const read = window.getVariables || window.parent?.TavernHelper?.getVariables;
-      if (typeof read !== 'function') throw new Error('variables unavailable');
-      const data = await read({ type: 'message', message_id: id });
-      if (root.dataset.memoryRequest !== request) return;
-      if (!data?.stat_data) throw new Error('snapshot unavailable');
-      const records = data.stat_data.探索?.记录;
-      if (records != null && !Array.isArray(records)) throw new Error('invalid records');
-      const items = (records || []).filter(item => item && typeof item.内容 === 'string');
-      status.textContent = items.length ? '仅显示这条回复当时已知的事情。' : '这条消息暂无探索记录，旧聊天可在后续自然积累。';
-      for (const item of items) {
-        const li = document.createElement('li');
-        const title = document.createElement('strong');
-        title.textContent = [item.类别, item.状态, item.日期].filter(v => typeof v === 'string' && v).join(' · ');
-        const body = document.createElement('p'); body.textContent = item.内容;
-        const source = document.createElement('small'); source.textContent = typeof item.来源 === 'string' && item.来源 ? '来源：' + item.来源 : '来源待核实';
-        li.append(title, body, source); list.append(li);
-      }
-    } catch (_) { if (root.dataset.memoryRequest === request) status.textContent = '暂时无法读取这条消息的记录；可在酒馆聊天记录中回看。'; }
-  }
-
   function bindSceneReadouts(root, mapModal) {
     root.querySelectorAll("[data-scene-value], .jy-stage, .jy-num, .jy-detail span").forEach((field) => {
       if (!sceneValue(field)) field.textContent = "待确定";
@@ -1782,11 +1846,11 @@
       const period = JY_PERIODS.find(p => p.id === select.value);
       if (!period) return;
       const anchor = edge => edge ? `${year + edge[0]}-${edge[1]}` : '';
-      root.querySelector('[data-calendar-context]').textContent = (currentPeriod ? '当前：' + currentPeriod.id : '当前阶段待确定') + ' · 查阅：' + period.id;
+      root.querySelector('[data-calendar-context]').textContent = currentPeriod ? '当前学期 · ' + currentPeriod.id : '当前学期未定';
       const list = root.querySelector('[data-calendar-events]');
       list.replaceChildren();
       for (const activity of period.activities || []) {
-        const notice = messages.find(item => item.活动标识 === activity.id);
+        const notice = messages.find(item => item.渠道 === '公告' && item.活动标识 === activity.id);
         const confirmedStart = dateKey(notice?.确认开始);
         const confirmedEnd = dateKey(notice?.确认结束);
         const confirmed = confirmedStart && confirmedEnd && confirmedStart <= confirmedEnd;
@@ -1796,7 +1860,22 @@
         const state = days === null ? '日期待确认' : date > end ? '已过' : days > 7 ? '尚未到期' : days > 0 ? '临近' : '窗口内';
         const windowText = confirmed ? (start === end ? start : start + ' 至 ' + end) + '（正式通知）' : activity.window;
         const li = document.createElement('li');
-        li.textContent = [activity.name, windowText, state].join(' · ');
+        li.className = 'jy-calendar-entry';
+        if (days !== null && date <= end && days <= 7) li.dataset.near = '';
+        const stamp = document.createElement('span');
+        stamp.className = 'jy-month-stamp';
+        stamp.textContent = start ? Number(start.slice(5, 7)) + '月' : '农历';
+        const info = document.createElement('div');
+        const title = document.createElement('strong');
+        title.textContent = activity.name;
+        const when = document.createElement('div');
+        when.className = 'jy-event-window';
+        when.textContent = windowText;
+        info.append(title, when);
+        const badge = document.createElement('span');
+        badge.className = 'jy-event-state';
+        badge.textContent = state;
+        li.append(stamp, info, badge);
         list.append(li);
       }
       if (!list.childElementCount) list.textContent = '本阶段暂无校历活动。';
@@ -1812,42 +1891,66 @@
     const renderMessages = () => {
       messageList.replaceChildren();
       const visible = messages.filter(item => channel.value === '全部' || item.渠道 === channel.value);
-      messageStatus.textContent = readState || (visible.length ? '' : '没有符合筛选条件的消息。');
+      messageStatus.textContent = readState || (visible.length ? '' : '这个分类暂时没有动态。');
+      messageStatus.hidden = !messageStatus.textContent;
       for (const item of visible) {
         const li = document.createElement('li');
+        const header = document.createElement('div');
+        header.className = 'jy-feed-top';
+        const tag = document.createElement('span');
+        tag.className = 'jy-feed-tag';
+        tag.dataset.channel = item.渠道 || '';
+        tag.textContent = item.渠道 || '动态';
+        const source = document.createElement('span');
+        source.className = 'jy-feed-source';
+        source.textContent = typeof item.来源 === 'string' ? item.来源 : '';
+        header.append(tag, source);
         const title = document.createElement('strong');
         title.textContent = item.标题;
         const body = document.createElement('p');
         body.textContent = item.摘要;
         const meta = document.createElement('small');
-        meta.textContent = [item.日期, item.渠道, item.来源, item.状态].filter(value => typeof value === 'string').join(' · ');
-        li.append(title, body, meta);
+        meta.textContent = [item.日期, item.状态 !== '有效' ? item.状态 : ''].filter(value => typeof value === 'string' && value).join(' · ');
+        li.append(header, title, body, meta);
         messageList.append(li);
       }
     };
     channel.addEventListener('change', renderMessages);
     renderMessages();
-    (async () => {
+    let campusRead = 0;
+    const readCampus = async () => {
+      const sequence = ++campusRead;
       try {
         const id = window.getCurrentMessageId?.();
         const read = window.getVariables || window.parent?.TavernHelper?.getVariables;
         if (!Number.isInteger(id) || id < 0 || typeof read !== 'function') throw new Error('message unavailable');
         const data = await read({ type: 'message', message_id: id });
+        if (sequence !== campusRead) return;
         const items = data?.stat_data?.校园?.消息;
         if (!data?.stat_data || (items != null && !Array.isArray(items))) throw new Error('invalid snapshot');
         const seen = new Set();
-        messages = (items || []).slice(-20).reverse().filter(item => {
+        messages = (items || []).slice().reverse().filter(item => {
           if (!item || typeof item.标识 !== 'string' || !item.标识 || seen.has(item.标识) || typeof item.标题 !== 'string' || typeof item.摘要 !== 'string') return false;
           seen.add(item.标识);
           return true;
-        });
-        readState = messages.length ? '' : '这条消息当时还没有校园消息。';
+        }).slice(0, 8);
+        readState = messages.length ? '' : '这一页暂时没有校园动态。';
       } catch (_) {
-        readState = '暂时无法读取这条消息的校园记录。';
+        if (sequence !== campusRead) return;
+        messages = [];
+        readState = '暂时无法读取本页动态。';
       }
       renderCalendar();
       renderMessages();
-    })();
+    };
+    readCampus();
+    panel.addEventListener('toggle', () => { if (panel.open) readCampus(); });
+    if (typeof eventOn === 'function') {
+      eventOn('mag_variable_update_ended', () => {
+        // MVU may publish the event before persisting the message snapshot.
+        window.setTimeout(readCampus, 250);
+      });
+    }
     if (currentPeriod) {
       const day = new Date(date + 'T12:00:00Z').getUTCDay();
       const md = date.slice(5);
@@ -1855,7 +1958,6 @@
       if (currentPeriod.id === '已毕业') root.querySelector('[data-schedule]').textContent = '已毕业。返校先确认访客登记与开放安排。';
       else if (holiday || day === 0 || day === 6) root.querySelector('[data-schedule]').textContent = '周末或预计假期窗口；是否补课、值班和开放，以已公布通知为准。';
     }
-    root.querySelector('.jy-memories')?.addEventListener('toggle', event => { if (event.target.open) renderMemories(root); });
 
     if (!mapModal) return;
     const location = sceneValue(root.querySelector(".jy-location")).toLowerCase();

@@ -13,7 +13,7 @@ const html = read('正则/状态栏界面.html');
 const periods = JSON.parse(read('数据/学期.json'));
 const template = read('世界书/时间线/学期生活.txt');
 const cases = [['2020-08-31','高二上'],['2021-02-20','高二上'],['2021-02-21','高二下'],['2021-06-30','高二下'],['2021-07-01','暑假'],['2021-08-31','暑假'],['2021-09-01','高三上'],['2022-02-20','高三上'],['2022-02-21','高三下'],['2022-06-30','高三下'],['2022-07-01','已毕业']];
-const pure = html.slice(html.indexOf('  // JY_PERIODS_BEGIN'), html.indexOf('  async function renderMemories'));
+const pure = html.slice(html.indexOf('  // JY_PERIODS_BEGIN'), html.indexOf('  function bindSceneReadouts'));
 const sandbox = {}; vm.createContext(sandbox); vm.runInContext(pure + '\nthis.pick = jyPeriodFor;', sandbox);
 for (const [date, id] of cases) {
   assert.equal(sandbox.pick(date, 2020)?.id, id);
@@ -30,7 +30,7 @@ assert.equal(sandbox.pick('',2020),null);
 const schemaBox = {z,_}; vm.createContext(schemaBox);
 vm.runInContext(read('schema.ts').replace('export const Schema','const Schema').replace(/^export type .*$/gm,'')+'\nthis.schema = Schema;', schemaBox);
 const old = schemaBox.schema.parse({世界:{当前位置:'我找到的小巷'},主角:{姓名:'测试同学',重要物品:[{名称:'借书',描述:'已借未还'}]},苏晓樯:{好感度:17}});
-assert.equal(old.世界.当前位置,'我找到的小巷');assert.equal(old.苏晓樯.好感度,17);assert.equal(old.主角.重要物品.length,1);assert.equal(old.探索.记录.length,0);
+assert.equal(old.世界.当前位置,'我找到的小巷');assert.equal(old.苏晓樯.好感度,17);assert.equal(old.主角.重要物品.length,1);
 assert.equal(old.校园.消息.length,0);
 const manifest = JSON.parse(read('tavern-cards-state.json'));
 for (const alias of ['老鹰山','听风亭','旧值守屋','周伯','山路旧照']) assert.ok(manifest.entryManifest.事件.老鹰山仙人.strategy.keys.includes(alias));
@@ -55,8 +55,13 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  stored.stat_data.校园={消息:[
    {标识:'sports-1',日期:'2020-10-15',渠道:'公告',标题:'原赛程',摘要:'旧安排',状态:'有效'},
    {标识:'sports-1',日期:'2020-10-16',渠道:'公告',标题:'更新赛程',摘要:'<img src=x>只是文本',状态:'已更正',活动标识:'sports',确认开始:'2020-10-20',确认结束:'2020-10-20'},
-   {标识:'letter-1',日期:'2020-10-17',渠道:'来信',标题:'借书归还',摘要:'可稍后归还',状态:'有效'}
+   {标识:'letter-1',日期:'2020-10-17',渠道:'来信',标题:'借书归还',摘要:'可稍后归还',状态:'有效'},
+   {标识:'campus-1',日期:'2020-10-18',渠道:'八卦',来源:'操场闲聊',标题:'有人说比赛改期',摘要:'消息待核实',状态:'有效',活动标识:'sports',确认开始:'2020-11-20',确认结束:'2020-11-20'}
  ]};
+ stored.stat_data.校园.消息.unshift(...Array.from({length:7},(_,i)=>({
+   标识:'old-'+i, 日期:'2020-10-10', 渠道:'趣事', 标题:'旧帖'+i, 摘要:'课间随记', 状态:'有效'
+ })));
+ assert.equal(schemaBox.schema.parse(stored.stat_data).校园.消息.length,8);
  const snapshot=JSON.stringify(stored);
  const dom=new JSDOM('<textarea id="send_textarea">尚未发送的草稿</textarea>'+neutral,{runScripts:'dangerously',url:'http://localhost:18967',pretendToBeVisual:true,virtualConsole:vc,beforeParse(w){w.HTMLElement.prototype.scrollIntoView=function(){};w.scrollTo=()=>{};w.getCurrentMessageId=()=>7;w.getVariables=opts=>{reads.push(opts);return stored;};}});
  const w=dom.window,d=w.document;
@@ -66,10 +71,14 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.ok(d.querySelector('[data-calendar-events]').textContent.includes('毕业册的最后一页'));
  select.value='高二上';select.dispatchEvent(new w.Event('change'));
  assert.equal(d.querySelectorAll('[data-calendar-events] li').length,9);
- assert.match(d.querySelector('[data-calendar-events]').textContent,/体育周 · 2020-10-20（正式通知）/);
- assert.match(d.querySelector('[data-calendar-events]').textContent,/春节 · 农历正月初一 · 日期待确认/);
+ assert.ok([...d.querySelectorAll('.jy-calendar-entry')].some(row => row.querySelector('strong').textContent === '体育周' && row.querySelector('.jy-event-window').textContent === '2020-10-20（正式通知）'));
+ assert.ok([...d.querySelectorAll('.jy-calendar-entry')].some(row => row.querySelector('strong').textContent === '春节' && row.querySelector('.jy-event-state').textContent === '日期待确认'));
  const campus=d.querySelector('[data-campus-messages]');
  assert.equal(campus.open,false);
+ assert.equal(campus.querySelectorAll('li').length,8);
+ assert.match(campus.querySelector('li').textContent,/有人说比赛改期/);
+ assert.doesNotMatch(campus.textContent,/旧帖0|旧帖1/);
+
  campus.open=true;
  const channel=campus.querySelector('select');
  channel.value='公告';channel.dispatchEvent(new w.Event('change'));
@@ -77,6 +86,9 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.match(campus.textContent,/更新赛程/);
  assert.doesNotMatch(campus.textContent,/原赛程|借书归还/);
  assert.equal(campus.querySelector('img'),null);
+ channel.value='八卦';channel.dispatchEvent(new w.Event('change'));
+ assert.equal(campus.querySelectorAll('li').length,1);
+ assert.match(campus.textContent,/有人说比赛改期/);
  campus.open=false;
  assert.equal(d.querySelector('[data-map-location]').textContent,'当前位置：我找到的小巷');
  d.querySelector('[data-action="open-map"]').click();
@@ -95,12 +107,8 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  }
  d.querySelector('[data-action="close-map"]').click();
  assert.equal(d.querySelector('.jy-map-modal').dataset.open,'false');
- const panel=d.querySelector('.jy-memories');panel.open=true;panel.dispatchEvent(new w.Event('toggle'));
- await new Promise(r=>w.setTimeout(r,20));
- assert.equal(d.querySelectorAll('[data-memory-list] li').length,1);
+ assert.equal(d.querySelector('[data-memory-list]'),null);
  assert.ok(reads.length);assert.ok(reads.every(v=>v.message_id===7&&v.type==='message'));
- assert.equal(d.querySelector('[data-memory-list] img'),null);
- assert.ok(d.querySelector('[data-memory-list]').textContent.includes('<img'));
  assert.equal(JSON.stringify(stored),snapshot);
  assert.equal(d.querySelector('#send_textarea').value,'尚未发送的草稿');
  assert.equal(d.querySelectorAll('[data-period-select] option').length,periods.length);

@@ -30,7 +30,7 @@ export const Schema = z.object({
     消息: z.array(z.object({
       标识: z.string().prefault(''),
       日期: z.string().prefault(''),
-      渠道: z.enum(['公告', '班群', '来信']).prefault('公告'),
+      渠道: z.enum(['公告', '班群', '来信', '趣事', '八卦', '余波', '朋友圈']).prefault('公告'),
       来源: z.string().prefault(''),
       标题: z.string().prefault(''),
       摘要: z.string().prefault(''),
@@ -38,17 +38,7 @@ export const Schema = z.object({
       活动标识: z.string().optional(),
       确认开始: z.string().optional(),
       确认结束: z.string().optional(),
-    })).transform(items => items.slice(-20)).prefault([]),
-  }).prefault({}),
-
-  探索: z.object({
-    记录: z.array(z.object({
-      日期: z.string().prefault(''),
-      类别: z.enum(['线索', '约定', '经历']).prefault('经历'),
-      内容: z.string().prefault(''),
-      来源: z.string().prefault(''),
-      状态: z.enum(['待核实', '未完', '已确认', '已结束']).prefault('待核实'),
-    })).prefault([]),
+    })).transform(items => items.slice(-8)).prefault([]),
   }).prefault({}),
 
   苏晓樯: z.object({

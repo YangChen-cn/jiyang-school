@@ -1612,7 +1612,7 @@
           "寒假",
           "春节"
         ],
-        "abstract": "校园活动总控节点：定义国庆假期、体育周、期中考试、远足、艺术周、寒假、春节的时间安排、触发边界和玩家可拒绝原则，作为各活动分支的全局约束",
+        "abstract": "校园动态生成与正式通知写回",
         "uid": 35,
         "enabled": true,
         "strategy": {
@@ -1969,21 +1969,6 @@
         "keywords": [],
         "abstract": "学期生活",
         "uid": 85,
-        "enabled": true,
-        "strategy": {
-          "type": "constant",
-          "scan_depth": 2
-        },
-        "position": {
-          "type": "before_character_definition",
-          "order": 56
-        }
-      },
-      "探索记录规则": {
-        "path": "世界书/变量/探索记录规则.yaml",
-        "keywords": [],
-        "abstract": "探索记录规则",
-        "uid": 86,
         "enabled": true,
         "strategy": {
           "type": "constant",

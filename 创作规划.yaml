@@ -675,6 +675,5 @@ exploration_expansion:
   calendar_source: 数据/学期.json
   calendar_generator: 脚本/生成学期.py
   mountain_source: 世界书/事件/老鹰山仙人.yaml
-  memory: 探索.记录保存在对应消息层；旧存档缺字段时渐进补齐。
   extension_boundary: 下一轮如增加事件，在学期数据中明确新增结构与窗口，再同步生成器；不得复制一份硬编码前端校历。新增山线角色或地点先核对已有线索和知情范围。
   deferred: 暂不确认超自然能力；不增加更多学期事件；真实酒馆生成与浏览器验收由用户进行。
