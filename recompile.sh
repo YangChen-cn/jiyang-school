@@ -37,6 +37,9 @@ cd "$SCRIPT_DIR"
 
 echo "=== 重新编译 $DISPLAY_NAME ==="
 
+# 学期配置同步到世界书和前端（不改版本号）
+python3 "$SCRIPT_DIR/脚本/生成学期.py"
+
 # Step 0: 从根目录 schema.ts 生成 脚本/Zod.txt（卡内运行时 schema 的唯一事实源是 schema.ts）
 node "$SCRIPT_DIR/脚本/生成Zod.mjs"
 echo "  -> Zod.txt 生成完成"

@@ -1018,6 +1018,17 @@
   .jy-status:has(.jy-avatar-modal[data-open="true"], .jy-album-modal[data-open="true"], .jy-map-modal[data-open="true"], .jy-inventory-modal[data-open="true"], .jy-photo-viewer[data-open="true"]) { min-height: 700px; }
   body:has(.jy-avatar-modal[data-open="true"], .jy-album-modal[data-open="true"], .jy-map-modal[data-open="true"], .jy-inventory-modal[data-open="true"], .jy-photo-viewer[data-open="true"]) { min-height: 700px; }
   .jy-album-card, .jy-avatar-card, .jy-photo-viewer-card, .jy-map-card { border-radius: 14px; }
+
+  .jy-calendar-body select { max-width: 100%; padding: 8px; font: inherit; border: 1px solid #b9ccc7; border-radius: 8px; background: #fffdf7; color: #263b37; }
+  .jy-map-picture { margin: 12px 0; }
+  .jy-map-picture summary { cursor: pointer; padding: 10px 0; }
+  .jy-map-head { position: sticky; top: 0; z-index: 2; background: #f7faf7; }
+  [data-memory-list] { margin: 0; padding-left: 20px; }
+  [data-memory-list] li { margin: 12px 0; overflow-wrap: anywhere; }
+  [data-memory-list] p { margin: 4px 0; }
+  .jy-map-card { max-width: calc(100% - 16px); max-height: 80dvh; overflow: auto; overscroll-behavior: contain; }
+  .jy-map-card input, .jy-place { min-width: 0; box-sizing: border-box; overflow-wrap: anywhere; }
+  @media (max-width: 420px) { .jy-map-card { padding: 12px; } .jy-readouts { display: block; } .jy-readout { margin-top: 8px; } }
 </style>
 <body>
 
@@ -1060,27 +1071,26 @@
       </details>
     </div>
     <div class="jy-scene-now">
+      <span><b>阶段</b> <span data-stage-display>待确定</span></span>
       <span class="jy-weather" data-weather><b>天气</b> <span data-scene-value>{{format_message_variable::stat_data.世界.天气}}</span></span>
       <span><b>在场</b> <span data-present-names>待确定</span></span>
       <span data-scene-event hidden><b>本段</b> <span data-event-name>{{format_message_variable::stat_data.剧情.当前事件}}</span></span>
     </div>
     <div class="jy-readouts">
+      <details class="jy-readout jy-memories">
+        <summary>往事与约定</summary>
+        <div class="jy-calendar-body"><p data-memory-status>展开后读取这条消息的记录。</p><ul data-memory-list></ul></div>
+      </details>
       <details class="jy-readout jy-calendar">
         <summary>校历与作息</summary>
         <div class="jy-calendar-body">
           <p data-schedule>普通上课日有早自习、上午课、午休、下午课与晚自习。周末、假期和临时活动以通知为准。</p>
-          <ul class="jy-calendar-list">
-            <li data-md-start="09-01" data-md-end="09-07"><time>9 月 1–7 日</time>开学周</li>
-            <li data-md-start="10-01" data-md-end="10-07"><time>10 月 1–7 日</time>国庆假期</li>
-            <li data-md-start="10-11" data-md-end="10-31"><time>10 月中下旬</time>体育周</li>
-            <li data-md-start="11-01" data-md-end="11-10"><time>11 月上旬</time>期中考试</li>
-            <li data-md-start="11-11" data-md-end="11-30"><time>11 月中下旬</time>远足</li>
-            <li data-md-start="12-01" data-md-end="12-31"><time>12 月</time>艺术周</li>
-            <li data-md-start="01-01" data-md-end="01-01"><time>1 月 1 日</time>元旦</li>
-            <li data-md-start="01-21" data-md-end="02-20"><time>1 月下旬至 2 月中旬</time>寒假</li>
-            <li data-md-start="02-12" data-md-end="02-12"><time>2 月 12 日</time>春节</li>
-            <li data-md-start="02-21" data-md-end="02-28"><time>2 月下旬</time>春季开学</li>
-          </ul>
+          <span hidden data-start-year>{{format_message_variable::stat_data.世界.起始年份}}</span>
+          <span hidden data-academic>{{format_message_variable::stat_data.剧情.学期}}</span>
+          <label>查阅阶段 <select data-period-select aria-label="查阅学期"></select></label>
+          <p data-calendar-context></p>
+          <ul class="jy-calendar-list" data-calendar-events></ul>
+          <p>日期为预计窗口，具体安排以剧情中的通知为准。春节随年份变化，寒假及毕业日可依通知调整。</p>
         </div>
       </details>
       <details class="jy-readout">
@@ -1277,20 +1287,23 @@
   </div>
 
   <div class="jy-map-modal" data-open="false" aria-hidden="true">
-    <div class="jy-map-card" role="dialog" aria-label="暨阳中学校园地图">
+    <div class="jy-map-card" role="dialog" aria-label="暨阳地点册">
       <div class="jy-map-head">
-        <span class="jy-map-title">暨阳中学校园地图</span>
+        <span class="jy-map-title">暨阳地点册</span>
         <button class="jy-avatar-button" type="button" data-action="close-map">关闭</button>
       </div>
+      <details class="jy-map-picture"><summary>查看校园示意图</summary>
       <img class="jy-map-image" alt="暨阳中学校园地图" src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v1/map.jpg" data-fallback-src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v1/map.jpg">
       <p class="jy-map-unavailable" role="status">地图暂时无法加载。</p>
+      </details>
+      <p data-map-location></p>
       <div class="jy-place-directory">
         <label for="jy-place-search">查找地点</label>
         <input id="jy-place-search" type="search" placeholder="地点名或别名" autocomplete="off">
         <p data-place-empty hidden>没有匹配的地点。</p>
         <section class="jy-place-group" aria-label="校园">
           <h3>校园</h3>
-          <details class="jy-place" data-place="高二重点班教室" data-aliases="八班|高二（8）班|高二(8)班|教学楼|教室" data-scene="corridor">
+          <details class="jy-place" data-place="高二重点班教室" data-aliases="八班|高二（8）班|高二(8)班|高三八班|高三教室|教学楼|教室" data-scene="corridor">
             <summary>高二重点班教室 <span class="jy-place-current" hidden>当前位置</span></summary>
             <p>四楼东侧，楼梯通往英语办公室，出楼可去食堂。</p>
             <p>上课以本班师生为主；课间看布告栏和当天值日，放学后可能只剩值日生。</p>
@@ -1399,8 +1412,8 @@
             <p>两处在不同商业板块，查清目的地再换乘。</p>
             <p>电影、购物和吃饭各有时段；出发前确认是哪个商场。</p>
           </details>
-          <details class="jy-place" data-place="老鹰山" data-aliases="老鹰山步道|老鹰山山脚">
-            <summary>老鹰山 <span class="jy-place-current" hidden>当前位置</span></summary>
+          <details class="jy-place" data-place="老鹰山" data-aliases="老鹰山步道|老鹰山山脚|听风亭|老鹰山观景台">
+            <summary>老鹰山 <span class="jy-place-current" hidden>当前位置</span></summary><p>路线：城区 → 山脚入口 → 主步道 → 听风亭 → 观景台；可原路返回。</p><p>白天按公告开放，雨后侧路湿滑，雷雨或封山时另约。春季新叶、夏季阵雨、秋季远足和冬季短日照会改变现场。</p>
             <p>从城区先到山脚入口，再沿步道上山。</p>
             <p>周末天气好时有散步和登山的人；雨后或天黑后按现场管制。</p>
           </details>
@@ -1610,6 +1623,7 @@
     if (!modal) return;
     const card = modal.firstElementChild || modal;
     const reveal = () => {
+      if (modal.dataset.open !== "true") return;
       try {
         card.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
       } catch (error) {
@@ -1635,6 +1649,48 @@
     });
   }
 
+  // JY_PERIODS_BEGIN
+  const JY_PERIODS = [{"id":"高二上","start":[0,"08-01"],"end":[1,"02-20"],"event":"原有秋季活动","window":"9 月至寒假","detail":"沿用开学周、体育周、远足和艺术周等既有安排。"},{"id":"高二下","start":[1,"02-21"],"end":[1,"06-30"],"event":"春日采风册","window":"4 月中下旬","detail":"文学社征集一页关于暨阳的观察记录。可以写校门店铺、河岸，也可调查老鹰山传闻。温书语协助整理，但不负责替别人补稿；凌知夏愿意核对可验证的现象，需要先问她是否有空。玩家可投稿、帮忙核对、只看成册结果或退出。争议来自一张照片的地点被记错，查证后可以署名更正，也可保留为待考。公开展示须征得被拍摄或被采访者同意。成册后保留真正提交的内容，不补写玩家参与。","eventStart":[1,"04-11"],"eventEnd":[1,"04-30"]},{"id":"暑假","start":[1,"07-01"],"end":[1,"08-31"],"event":"暑假失物招领","window":"7 月，具体周末由店铺公告确定","detail":"晨光文具复印店清理学期末留下的文稿和旧物，留出一个周末认领。一只无名文件袋装着旧公交票、山路照片和未寄出的明信片；它属于曾来复印地方资料的普通居民，不是宝藏凭证。店主只提供业务范围内的线索，不公开顾客联系方式。玩家可以留下自己的联系方式、核对公开资料、帮助分类或完全不管。认领期限后由店主保管，不把物品自动送给玩家；老鹰山线索可在之后经当事人允许获得。","eventStart":[1,"07-01"],"eventEnd":[1,"07-31"]},{"id":"高三上","start":[1,"09-01"],"end":[2,"02-20"],"event":"旧书交换午休","window":"10 月的一次午休，以班级通知为准","detail":"吴臻臻组织旧书交换，课外书和学习资料都可。一本旧书夹着没有署名的批注页，几个人对归属意见不同。可以按借阅痕迹询问、保留在失物处、只交换自己的书或离开；不能凭字迹直接读出别人的秘密。凌知夏整理仍有用的题目，沈幼楚考虑成本与是否需要，其他人按日程参与。午休结束活动收摊，未解决的归属问题延后；赠送、借阅与交换明确区分并留下实际记录。","eventStart":[1,"10-01"],"eventEnd":[1,"10-31"]},{"id":"高三下","start":[2,"02-21"],"end":[2,"06-30"],"event":"毕业册的最后一页","window":"5 月下旬至 6 月，按班级实际安排","detail":"班级准备一本可留空的毕业册，最后一页写给未来会回来的同学。有人想放合照，有人只愿写一句话，也有人不想留下联系方式。玩家可以采访、排版、留白、拒绝拍摄或提出另一种纪念方式。慕佳芊协助安排时间，虞淑婉处理场地申请，不代替学生决定内容。印制前确认署名与照片许可；只保留真正交出的文字和约定。可以在毕业后回访看到成品，不自动安排聚会或决定任何人的去向。","eventStart":[2,"05-21"],"eventEnd":[2,"06-30"]},{"id":"已毕业","start":[2,"07-01"],"end":[99,"12-31"],"event":"重访","window":"按玩家决定","detail":"保留已发生的关系和约定，返校须看开放与访客安排。不会自动赴约、配对或总结玩家未来。"}];
+  // JY_PERIODS_END
+  function jyPeriodFor(date, year) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
+    const parsed = new Date(date + "T12:00:00Z");
+    if (!Number.isFinite(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== date) return null;
+    const anchor = edge => `${year + edge[0]}-${edge[1]}`;
+    return JY_PERIODS.find(p => date >= anchor(p.start) && date <= anchor(p.end)) || null;
+  }
+
+  async function renderMemories(root) {
+    const list = root.querySelector('[data-memory-list]');
+    const status = root.querySelector('[data-memory-status]');
+    if (!list || !status) return;
+    const request = String(Number(root.dataset.memoryRequest || 0) + 1);
+    root.dataset.memoryRequest = request;
+    list.replaceChildren();
+    try {
+      // Never read "latest": browsing an earlier message must not reveal later discoveries.
+      const id = window.getCurrentMessageId?.();
+      if (!Number.isInteger(id) || id < 0) throw new Error('message unavailable');
+      const read = window.getVariables || window.parent?.TavernHelper?.getVariables;
+      if (typeof read !== 'function') throw new Error('variables unavailable');
+      const data = await read({ type: 'message', message_id: id });
+      if (root.dataset.memoryRequest !== request) return;
+      if (!data?.stat_data) throw new Error('snapshot unavailable');
+      const records = data.stat_data.探索?.记录;
+      if (records != null && !Array.isArray(records)) throw new Error('invalid records');
+      const items = (records || []).filter(item => item && typeof item.内容 === 'string');
+      status.textContent = items.length ? '仅显示这条回复当时已知的事情。' : '这条消息暂无探索记录，旧聊天可在后续自然积累。';
+      for (const item of items) {
+        const li = document.createElement('li');
+        const title = document.createElement('strong');
+        title.textContent = [item.类别, item.状态, item.日期].filter(v => typeof v === 'string' && v).join(' · ');
+        const body = document.createElement('p'); body.textContent = item.内容;
+        const source = document.createElement('small'); source.textContent = typeof item.来源 === 'string' && item.来源 ? '来源：' + item.来源 : '来源待核实';
+        li.append(title, body, source); list.append(li);
+      }
+    } catch (_) { if (root.dataset.memoryRequest === request) status.textContent = '暂时无法读取这条消息的记录；可在酒馆聊天记录中回看。'; }
+  }
+
   function bindSceneReadouts(root, mapModal) {
     root.querySelectorAll("[data-scene-value], .jy-stage, .jy-num, .jy-detail span").forEach((field) => {
       if (!sceneValue(field)) field.textContent = "待确定";
@@ -1650,36 +1706,44 @@
     event.parentElement.hidden = !name || name === "无";
 
     const date = sceneValue(root.querySelector(".jy-date")).replaceAll("/", "-");
-    if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-      const [calendarYear, calendarMonth] = date.split("-").map(Number);
-      const academicStart = calendarMonth >= 9 ? calendarYear : calendarYear - 1;
-      const anchored = (md) => {
-        const [mm, dd] = String(md || "").split("-").map(Number);
-        return `${mm >= 9 ? academicStart : academicStart + 1}-${String(mm).padStart(2, "0")}-${String(dd).padStart(2, "0")}`;
-      };
-      const upcoming = [...root.querySelectorAll(".jy-calendar-list li")].map((item) => ({
-        item,
-        start: anchored(item.dataset.mdStart),
-        end: anchored(item.dataset.mdEnd),
-      }));
-      const next = upcoming.find((entry) => entry.start > date);
-      upcoming.forEach(({ item, start, end }) => {
-        const status = date > end ? "已过" : date >= start ? "当前窗口" : (next && next.item === item) ? "下一节点" : "";
-        if (!status) return;
-        const label = document.createElement("span");
-        label.className = "jy-calendar-state";
-        label.textContent = status;
-        item.append(label);
-      });
-      const holiday = upcoming.some(({ item, start, end }) => /国庆假期|寒假/.test(item.textContent) && date >= start && date <= end);
-      const day = new Date(date + "T12:00:00Z").getUTCDay();
-      if (holiday || day === 0 || day === 6) {
-        root.querySelector("[data-schedule]").textContent = "当天处于周末或假期。开放、值班和补课安排以校内通知为准。";
-      }
+    const year = Number(sceneValue(root.querySelector('[data-start-year]'))) || 2020;
+    const currentPeriod = sceneValue(root.querySelector('[data-academic]')) === '已毕业' ? JY_PERIODS.find(p => p.id === '已毕业') : jyPeriodFor(date, year);
+    root.querySelector('[data-stage-display]').textContent = currentPeriod?.id || '待确定';
+    const select = root.querySelector('[data-period-select]');
+    for (const period of JY_PERIODS) {
+      const option = document.createElement('option'); option.value = period.id; option.textContent = period.id;
+      select.append(option);
     }
+    select.value = currentPeriod?.id || '高二上';
+    const renderCalendar = () => {
+      const period = JY_PERIODS.find(p => p.id === select.value);
+      const anchor = edge => `${year + edge[0]}-${edge[1]}`;
+      root.querySelector('[data-calendar-context]').textContent = (currentPeriod ? '当前：' + currentPeriod.id : '当前阶段待确定') + ' · 查阅：' + period.id;
+      const list = root.querySelector('[data-calendar-events]'); list.replaceChildren();
+      const li = document.createElement('li');
+      const state = !currentPeriod ? '预计窗口' : date > anchor(period.end) ? '阶段已过' : date < anchor(period.start) ? '未来阶段' : '本阶段';
+      const windowState = !period.eventStart || !currentPeriod ? state : date > anchor(period.eventEnd) ? '预计窗口已过' : date < anchor(period.eventStart) ? '尚未到预计窗口' : '预计活动窗口内';
+      li.textContent = `${period.window} · ${period.event} · ${windowState}`;
+      list.append(li);
+      if (period.id === '高二上') {
+        const original = document.createElement('li');
+        original.textContent = '9月开学周；10月国庆、体育周；11月期中、远足；12月艺术周；1月元旦与期末。';
+        list.append(original);
+      }
+    };
+    select.addEventListener('change', renderCalendar); renderCalendar();
+    if (currentPeriod) {
+      const day = new Date(date + 'T12:00:00Z').getUTCDay();
+      const md = date.slice(5);
+      const holiday = currentPeriod.id === '暑假' || (md >= '01-21' && md <= '02-20') || (md >= '10-01' && md <= '10-07');
+      if (currentPeriod.id === '已毕业') root.querySelector('[data-schedule]').textContent = '已毕业。返校先确认访客登记与开放安排。';
+      else if (holiday || day === 0 || day === 6) root.querySelector('[data-schedule]').textContent = '周末或预计假期窗口；是否补课、值班和开放，以已公布通知为准。';
+    }
+    root.querySelector('.jy-memories')?.addEventListener('toggle', event => { if (event.target.open) renderMemories(root); });
 
     if (!mapModal) return;
     const location = sceneValue(root.querySelector(".jy-location")).toLowerCase();
+    mapModal.querySelector("[data-map-location]").textContent = "当前位置：" + (sceneValue(root.querySelector(".jy-location")) || "待确定");
     const places = [...mapModal.querySelectorAll(".jy-place")];
     const namesFor = (place) => [place.dataset.place, ...place.dataset.aliases.split("|")].map((alias) => alias.toLowerCase());
     let current = null;
@@ -1861,7 +1925,16 @@
       if (!sceneValue(field)) field.hidden = true;
     });
 
+    let mapReturnScroll = null;
+    mapModal?.addEventListener('keydown', event => {
+      if (event.key !== 'Tab') return;
+      const focusable = [...mapModal.querySelectorAll('button,input,summary,select')].filter(el => !el.closest('[hidden]') && el.getClientRects().length);
+      const first = focusable[0], last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    });
     function openMap() {
+      mapReturnScroll = { x: window.scrollX, y: window.scrollY };
       if (!mapModal) return;
       mapModal.dataset.open = "true";
       mapModal.setAttribute("aria-hidden", "false");
@@ -1874,6 +1947,7 @@
       mapButton?.focus({ preventScroll: true });
       mapModal.dataset.open = "false";
       mapModal.setAttribute("aria-hidden", "true");
+      if (mapReturnScroll) window.scrollTo(mapReturnScroll.x, mapReturnScroll.y);
     }
 
     function openInventory() {

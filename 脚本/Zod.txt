@@ -26,6 +26,16 @@ export const Schema = z.object({
     学期: z.string().prefault(''),       // 高二上 | 高二下 | 高三上 | 高三下 | 已毕业
   }).prefault({}),
 
+  探索: z.object({
+    记录: z.array(z.object({
+      日期: z.string().prefault(''),
+      类别: z.enum(['线索', '约定', '经历']).prefault('经历'),
+      内容: z.string().prefault(''),
+      来源: z.string().prefault(''),
+      状态: z.enum(['待核实', '未完', '已确认', '已结束']).prefault('待核实'),
+    })).prefault([]),
+  }).prefault({}),
+
   苏晓樯: z.object({
     是否在场: z.coerce.boolean().prefault(false),
     好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
