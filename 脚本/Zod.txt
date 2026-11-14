@@ -152,6 +152,13 @@ export const Schema = z.object({
 }).prefault({});
 
 
-$(() => {
+$(async () => {
   registerMvuSchema(Schema);
+  await waitGlobalInitialized('Mvu');
+  eventOn(Mvu.events.BEFORE_MESSAGE_UPDATE, ({ variables }) => {
+    const campus = variables?.stat_data?.校园;
+    if (Array.isArray(campus?.消息) && campus.消息.length > 8) {
+      campus.消息 = campus.消息.slice(-8);
+    }
+  });
 });
