@@ -90,7 +90,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    assert.equal(photo.hasAttribute('src'),false);
    place.open=true;
    place.dispatchEvent(new w.Event('toggle'));
-   assert.match(photo.getAttribute('src'),/^data:image\/webp;base64,/);
+   assert.match(photo.getAttribute('src'),/^https:\/\/cdn\.jsdelivr\.net\/gh\/YangChen-cn\/jiyang-school-assets@/);
    assert.ok(photo.alt.trim());
  }
  d.querySelector('[data-action="close-map"]').click();
