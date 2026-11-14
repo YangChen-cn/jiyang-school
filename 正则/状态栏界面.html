@@ -2268,74 +2268,6 @@
         return { name: source || '暨阳校园简讯', initial: '讯', bg: '#475569' };
       };
 
-      const getInteractions = (item) => {
-        const id = String(item.标识 || item.标题 || '');
-        let hash = 0;
-        for (let i = 0; i < id.length; i++) hash = ((hash << 5) - hash) + id.charCodeAt(i);
-        const abs = Math.abs(hash);
-
-        let likes = [];
-        let comments = [];
-
-        if (item.渠道 === '公告') {
-          likes = ['高二(1)班吴臻臻', '兰舟.', 'ZX.', '等38人已阅'];
-          comments = [
-            { user: '高二(1)班吴臻臻', text: '收到，已在班级黑板右侧完成同步通知。' }
-          ];
-        } else if (item.渠道 === '八卦') {
-          likes = ['Margot.', '汀汀不听话✨', 'ZX.'];
-          const options = [
-            [
-              { user: '汀汀不听话✨', text: '真的假的？下午体活课我还准备去呢！' },
-              { user: 'Margot.', text: '别急着传，等班委或老师正式核实。' }
-            ],
-            [
-              { user: 'ZX.', text: '建议以公布的书面日程为准。' },
-              { user: '兰舟.', text: '大家稍安勿躁。' }
-            ]
-          ];
-          comments = options[abs % options.length];
-        } else if (item.渠道 === '趣事') {
-          likes = ['Margot.', '汀汀不听话✨', '小楚'];
-          const options = [
-            [
-              { user: '汀汀不听话✨', text: '真的！今天放学我也看到了哈哈哈～' },
-              { user: '小楚', text: '那家店给的分量确实很足…' }
-            ],
-            [
-              { user: 'Margot.', text: '见怪不怪了。' },
-              { user: '兰舟.', text: '人间烟火气。' }
-            ]
-          ];
-          comments = options[abs % options.length];
-        } else if (item.渠道 === '余波') {
-          likes = ['ZX.', '高二(1)班吴臻臻', '兰舟.'];
-          comments = [
-            { user: '高二(1)班吴臻臻', text: '活动圆满结束，大家收心回归备考节奏。' },
-            { user: '汀汀不听话✨', text: '意犹未尽！' }
-          ];
-        } else if (item.渠道 === '班群') {
-          likes = ['高二(1)班吴臻臻', 'ZX.', '兰舟.'];
-          comments = [
-            { user: '高二(1)班吴臻臻', text: '请各组组长放学前收齐，注意按学号排序。' }
-          ];
-        } else {
-          likes = ['Margot.', '小楚', '兰舟.'];
-          const generalOptions = [
-            [
-              { user: '汀汀不听话✨', text: '前排围观！' },
-              { user: '兰舟.', text: '岁月静好。' }
-            ],
-            [
-              { user: 'Margot.', text: '略有耳闻。' },
-              { user: '小楚', text: '大家辛苦了…' }
-            ]
-          ];
-          comments = generalOptions[abs % generalOptions.length];
-        }
-        return { likes, comments };
-      };
-
       for (const item of visible) {
         const li = document.createElement('li');
 
@@ -2383,34 +2315,39 @@
         meta.textContent = [item.日期, item.状态 !== '有效' ? item.状态 : ''].filter(value => typeof value === 'string' && value).join(' · ');
 
         footer.append(meta);
+        box.append(header, title, body, footer);
 
-        const { likes, comments } = getInteractions(item);
-        const interactions = document.createElement('div');
-        interactions.className = 'jy-moment-interactions';
+        const rawLikes = Array.isArray(item.点赞) ? item.点赞.filter(v => typeof v === 'string' && v.trim()) : [];
+        const rawComments = Array.isArray(item.互动) ? item.互动.filter(c => c && typeof c === 'object' && (c.用户 || c.角色) && (c.内容 || c.评论)) : [];
 
-        if (likes.length) {
-          const likesRow = document.createElement('div');
-          likesRow.className = 'jy-moment-likes';
-          likesRow.textContent = likes.join(', ');
-          interactions.append(likesRow);
-        }
+        if (rawLikes.length > 0 || rawComments.length > 0) {
+          const interactions = document.createElement('div');
+          interactions.className = 'jy-moment-interactions';
 
-        if (comments.length) {
-          for (const c of comments) {
-            const commentRow = document.createElement('div');
-            commentRow.className = 'jy-moment-comment';
-            const cUser = document.createElement('span');
-            cUser.className = 'jy-comment-user';
-            cUser.textContent = c.user + ': ';
-            const cText = document.createElement('span');
-            cText.className = 'jy-comment-text';
-            cText.textContent = c.text;
-            commentRow.append(cUser, cText);
-            interactions.append(commentRow);
+          if (rawLikes.length > 0) {
+            const likesRow = document.createElement('div');
+            likesRow.className = 'jy-moment-likes';
+            likesRow.textContent = rawLikes.join(', ');
+            interactions.append(likesRow);
           }
+
+          if (rawComments.length > 0) {
+            for (const c of rawComments) {
+              const commentRow = document.createElement('div');
+              commentRow.className = 'jy-moment-comment';
+              const cUser = document.createElement('span');
+              cUser.className = 'jy-comment-user';
+              cUser.textContent = String(c.用户 || c.角色) + ': ';
+              const cText = document.createElement('span');
+              cText.className = 'jy-comment-text';
+              cText.textContent = String(c.内容 || c.评论);
+              commentRow.append(cUser, cText);
+              interactions.append(commentRow);
+            }
+          }
+          box.append(interactions);
         }
 
-        box.append(header, title, body, footer, interactions);
         li.append(avatar, box);
         messageList.append(li);
       }

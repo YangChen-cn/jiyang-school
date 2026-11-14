@@ -34,6 +34,11 @@ export const Schema = z.object({
       活动标识: z.string().optional(),
       确认开始: z.string().optional(),
       确认结束: z.string().optional(),
+      点赞: z.array(z.string()).prefault([]),
+      互动: z.array(z.object({
+        用户: z.string().prefault(''),
+        内容: z.string().prefault(''),
+      })).prefault([]),
     })).transform(items => items.slice(-8)).prefault([]),
   }).prefault({}),
 
