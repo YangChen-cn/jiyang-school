@@ -1850,6 +1850,126 @@
           "type": "before_character_definition",
           "order": 57
         }
+      },
+      "高校研学实践": {
+        "path": "世界书/事件/高校研学实践.yaml",
+        "keywords": [
+          "高校研学实践",
+          "研学",
+          "研学实践",
+          "紫金港",
+          "之江校区"
+        ],
+        "abstract": "高校研学实践的筹备、参访路线与现场互动素材",
+        "uid": 90,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "高校研学实践",
+            "研学",
+            "研学实践",
+            "紫金港",
+            "之江校区"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 121
+        },
+        "part": "event"
+      },
+      "暑期工读与家教实践": {
+        "path": "世界书/事件/暑期工读与家教实践.yaml",
+        "keywords": [
+          "暑期工读与家教实践",
+          "暑期工读",
+          "家教实践",
+          "暑假实践",
+          "暑期兼职"
+        ],
+        "abstract": "暑期工读与家教实践的日常分流与场景素材",
+        "uid": 91,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "暑期工读与家教实践",
+            "暑期工读",
+            "家教实践",
+            "暑假实践",
+            "暑期兼职"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 122
+        },
+        "part": "event"
+      },
+      "十八岁成人礼与首考誓师": {
+        "path": "世界书/事件/十八岁成人礼与首考誓师.yaml",
+        "keywords": [
+          "十八岁成人礼与首考誓师",
+          "十八岁成人礼",
+          "成人礼",
+          "首考誓师",
+          "成人门",
+          "成人仪式"
+        ],
+        "abstract": "十八岁成人礼与首考誓师的仪式流程与场景素材",
+        "uid": 92,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "十八岁成人礼与首考誓师",
+            "十八岁成人礼",
+            "成人礼",
+            "首考誓师",
+            "成人门",
+            "成人仪式"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 123
+        },
+        "part": "event"
+      },
+      "最后一课与毕业散伙狂欢夜": {
+        "path": "世界书/事件/最后一课与毕业散伙狂欢夜.yaml",
+        "keywords": [
+          "最后一课与毕业散伙狂欢夜",
+          "最后一课",
+          "毕业散伙宴",
+          "毕业狂欢",
+          "谢师宴",
+          "散伙狂欢"
+        ],
+        "abstract": "最后一课与毕业散伙狂欢夜的告别与聚会素材",
+        "uid": 93,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "最后一课与毕业散伙狂欢夜",
+            "最后一课",
+            "毕业散伙宴",
+            "毕业狂欢",
+            "谢师宴",
+            "散伙狂欢"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 124
+        },
+        "part": "event"
       }
     },
     "MVU": {
