@@ -942,44 +942,225 @@
   .jy-map-button { min-height: 34px; min-width: 60px; font-size: 12px; }
   .jy-inventory-button { width: 34px; min-width: 34px; min-height: 34px; }
 
-  .jy-me {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    gap: 3px 9px;
+    .jy-student-card {
+    position: relative;
+    margin: 8px 10px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ffffff 0%, #f4f8f7 100%);
+    border: 1.5px solid #234d44;
+    box-shadow: 0 4px 14px rgba(31, 69, 61, 0.12), inset 0 0 0 1px rgba(255, 255, 255, 0.9);
+    overflow: hidden;
+  }
+  .jy-card-top-decor {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding: 8px 14px;
-    border-bottom: 1px solid rgba(47, 143, 131, 0.1);
-    background: rgba(255, 255, 255, 0.55);
+    border-bottom: 2px solid #234d44;
+    padding-bottom: 5px;
+    margin-bottom: 8px;
   }
-  .jy-me-avatar {
-    display: grid;
-    place-items: center;
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #ef8354, #f4b6c2);
-    color: #fff;
-    font-size: 12px;
+  .jy-card-school {
+    display: flex;
+    flex-direction: column;
+  }
+  .jy-card-school-cn {
+    font-size: 13px;
+    font-weight: 900;
+    color: #1a3c35;
+    letter-spacing: 0.5px;
+    font-family: ui-serif, "Songti SC", "Noto Serif CJK SC", serif;
+  }
+  .jy-card-school-en {
+    font-size: 8px;
+    font-weight: 700;
+    color: #4a756b;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+  .jy-card-badge {
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: #234d44;
+    color: #ffffff;
+    font-size: 9.5px;
     font-weight: 800;
-    box-shadow: 0 4px 10px rgba(239, 131, 84, 0.28);
+    letter-spacing: 0.5px;
   }
-  .jy-avatar.jy-me-avatar { width: 40px; height: 40px; object-fit: cover; cursor: pointer; }
-  .jy-avatar-notice { flex-basis: 100%; margin: 0; font-size: 12px; color: #795137; }
-  .jy-me-main { min-width: 0; }
-  .jy-me-name { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px; color: #23413e; font-size: 13px; font-weight: 800; }
-  .jy-me-name > span:first-child { margin-right: 2px; }
-  .jy-me-tag { padding: 0 6px; border-radius: 999px; background: rgba(111, 168, 214, 0.16); color: #3d6e93; font-size: 10px; font-weight: 700; }
-  .jy-me-meta { margin-top: 1px; overflow: hidden; color: #5e7772; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
-  .jy-me-dot { margin: 0 5px; color: #a9b8b3; }
-  .jy-me-look { margin-top: 1px; overflow: hidden; color: #7d8b86; font-size: 10.5px; text-overflow: ellipsis; white-space: nowrap; }
-  .jy-me-more { grid-column: 1 / -1; }
-  .jy-me-more > summary { list-style: none; width: max-content; cursor: pointer; padding: 2px 9px; border-radius: 999px; background: rgba(47, 143, 131, 0.1); color: #2f7d72; font-size: 10.5px; font-weight: 700; }
-  .jy-me-more > summary::-webkit-details-marker { display: none; }
-  .jy-me-more[open] > summary { background: rgba(47, 143, 131, 0.18); }
-  .jy-me-grid { margin: 5px 0 1px; padding: 7px 9px; border: 1px dashed rgba(47, 143, 131, 0.25); border-radius: 10px; background: rgba(255, 255, 255, 0.7); }
-  .jy-me-grid div { display: grid; grid-template-columns: 62px minmax(0, 1fr); gap: 7px; padding: 2px 0; }
-  .jy-me-grid b { color: #2f7d72; font-size: 10.5px; }
-  .jy-me-grid span { color: #4a5c58; font-size: 11px; overflow-wrap: anywhere; }
+  .jy-card-body {
+    display: grid;
+    grid-template-columns: 78px minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+  }
+  .jy-card-photo-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+  .jy-card-photo-frame {
+    width: 74px;
+    height: 94px;
+    border: 2px solid #3d695f;
+    border-radius: 4px;
+    background: linear-gradient(180deg, #3a6073 0%, #16222f 100%);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .jy-card-photo-frame .jy-avatar.jy-me-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    object-fit: cover;
+    cursor: pointer;
+  }
+  .jy-card-photo-stamp {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    font-size: 7.5px;
+    padding: 1px 3px;
+    background: rgba(35, 77, 68, 0.88);
+    color: #fff;
+    border-radius: 2px;
+    pointer-events: none;
+    letter-spacing: 0.5px;
+  }
+  .jy-card-info-table {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5px;
+    font-size: 11px;
+    color: #2c423e;
+    min-width: 0;
+  }
+  .jy-card-name-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 2px;
+    flex-wrap: wrap;
+  }
+  .jy-card-name-val {
+    font-size: 16px;
+    font-weight: 900;
+    color: #162e29;
+  }
+  .jy-me-tag {
+    padding: 0 6px;
+    border-radius: 999px;
+    background: rgba(111, 168, 214, 0.16);
+    color: #3d6e93;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  .jy-card-row {
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr);
+    line-height: 1.4;
+    font-size: 11px;
+  }
+  .jy-card-row b {
+    color: #4a756b;
+    font-size: 10.5px;
+  }
+  .jy-card-id-num {
+    font-size: 10.5px;
+    color: #55756e;
+    font-family: monospace;
+    font-weight: 700;
+  }
+  .jy-me-dot { margin: 0 4px; color: #a9b8b3; }
+  .jy-me-look {
+    margin-top: 2px;
+    overflow: hidden;
+    color: #6a7c77;
+    font-size: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .jy-card-ranking {
+    padding: 2px 5px;
+    border-radius: 4px;
+    background: rgba(47, 143, 131, 0.12);
+    color: #1b534b;
+    font-size: 9.5px;
+    font-weight: 700;
+  }
+  .jy-card-dossier {
+    margin-top: 8px;
+    border-top: 1px dashed rgba(47, 143, 131, 0.3);
+    padding-top: 6px;
+    position: relative;
+    grid-column: 1 / -1;
+  }
+  .jy-card-dossier summary {
+    list-style: none;
+    cursor: pointer;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #234d44;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    user-select: none;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: rgba(47, 143, 131, 0.08);
+  }
+  .jy-card-dossier summary::-webkit-details-marker { display: none; }
+  .jy-card-dossier summary::after { content: '▾'; font-size: 9px; }
+  .jy-card-dossier[open] summary::after { content: '▴'; }
+  .jy-card-dossier-grid {
+    margin-top: 6px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+    font-size: 10.5px;
+    padding-right: 70px;
+  }
+  .jy-card-dossier-grid div {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 6px;
+  }
+  .jy-card-dossier-grid b { color: #4a756b; font-size: 10px; }
+  .jy-card-dossier-grid span { color: #2d423e; font-size: 10.5px; overflow-wrap: anywhere; }
+
+  /* 拟真教务处学籍专用公章 (纯CSS绘制，免外部图片) */
+  .jy-card-seal {
+    position: absolute;
+    bottom: 2px;
+    right: 6px;
+    width: 64px;
+    height: 64px;
+    border: 2px dashed rgba(198, 40, 40, 0.68);
+    border-radius: 50%;
+    transform: rotate(-13deg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: rgba(198, 40, 40, 0.82);
+    font-size: 6.5px;
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.1;
+    pointer-events: none;
+    user-select: none;
+    background: radial-gradient(circle, rgba(255, 235, 238, 0.28) 0%, transparent 70%);
+  }
+  .jy-card-seal-star {
+    font-size: 11px;
+    line-height: 1;
+    color: rgba(198, 40, 40, 0.82);
+    margin: 1px 0;
+  }
 
   .jy-scene-now { gap: 4px 14px; padding: 7px 14px; border-bottom: 1px solid rgba(47, 143, 131, 0.08); background: rgba(47, 143, 131, 0.035); font-size: 11.5px; }
   .jy-scene-now b { color: #2f7d72; }
@@ -1051,7 +1232,7 @@
   .jy-status .jy-kicker { color: #5e6d52; letter-spacing: .06em; }
   .jy-status .jy-time { border-color: #c6ba9f; background: #fffaf1; }
   .jy-status .jy-date { color: #8b4e32; font-variant-numeric: tabular-nums; }
-  .jy-status .jy-me { background: #fffaf1; }
+  .jy-status .jy-student-card.jy-me { background: linear-gradient(135deg, #ffffff 0%, #f4f8f7 100%); }
   .jy-status .jy-scene-now { background: #f3eddc; border-color: #e4dac3; }
   .jy-status .jy-scene-now b { color: #466451; }
   .jy-status .jy-readouts { display: grid; gap: 7px; padding: 12px; }
@@ -1110,16 +1291,151 @@
   .jy-status .jy-calendar-body .jy-forum-edition { display: inline-flex; align-items: center; gap: 7px; margin: 0; color: #76482f; font-size: 13px; font-weight: 750; }
   .jy-forum-edition span { width: 7px; height: 7px; border-radius: 50%; background: #a55a3e; }
   .jy-forum-toolbar { border-bottom: 2px solid #8e523b; padding-bottom: 8px; }
-  .jy-status .jy-feed { display: grid; grid-template-columns: minmax(0, 1fr); margin: 0; padding: 0; list-style: none; }
-  .jy-feed li { min-width: 0; padding: 12px 4px; border-bottom: 1px solid #e7d8bc; overflow-wrap: anywhere; }
-  .jy-feed li:last-child { border-bottom: 0; }
-  .jy-feed-top { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin-bottom: 5px; }
-  .jy-feed-tag { padding: 2px 6px; border-radius: 3px; background: #ebdfc4; color: #624c32; font-size: 10px; font-weight: 700; }
-  .jy-feed-tag[data-channel="八卦"] { background: #f1dbd9; color: #783e42; }
-  .jy-feed-tag[data-channel="朋友圈"] { background: #dfe7d1; color: #415c3e; }
-  .jy-feed-source, .jy-feed small { color: #69634f; font-size: 11px; }
-  .jy-feed strong { display: block; font-family: ui-serif, "Songti SC", "Noto Serif CJK SC", serif; color: #32473a; font-size: 15px; line-height: 1.45; }
-  .jy-status .jy-feed p { margin: 4px 0 5px; line-height: 1.6; }
+  /* 拟真微信朋友圈/班群流 */
+  .jy-status .jy-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0;
+    padding: 6px 0 10px;
+    list-style: none;
+  }
+  .jy-feed li {
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #ffffff;
+    border: 1px solid #e7ded0;
+    box-shadow: 0 2px 6px rgba(60, 48, 32, 0.04);
+    overflow-wrap: anywhere;
+  }
+  .jy-moment-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 800;
+    color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+    user-select: none;
+    flex-shrink: 0;
+  }
+  .jy-moment-box {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .jy-feed-top {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 3px;
+    flex-wrap: wrap;
+  }
+  .jy-moment-user {
+    font-size: 13.5px;
+    font-weight: 750;
+    color: #3b597b;
+    letter-spacing: 0.2px;
+  }
+  .jy-feed-tag {
+    padding: 1.5px 6px;
+    border-radius: 4px;
+    background: #e9ecef;
+    color: #495057;
+    font-size: 9.5px;
+    font-weight: 700;
+  }
+  .jy-feed-tag[data-channel="公告"] { background: #e3f2fd; color: #1565c0; }
+  .jy-feed-tag[data-channel="班群"] { background: #e8f5e9; color: #2e7d32; }
+  .jy-feed-tag[data-channel="朋友圈"] { background: #fce4ec; color: #c2185b; }
+  .jy-feed-tag[data-channel="八卦"] { background: #fff3e0; color: #e65100; }
+  .jy-feed-tag[data-channel="来信"] { background: #f3e5f5; color: #7b1fa2; }
+  .jy-feed-source {
+    font-size: 10.5px;
+    color: #8c857b;
+  }
+  .jy-feed strong, .jy-moment-title {
+    display: block;
+    margin: 2px 0 3px;
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #24332c;
+    line-height: 1.4;
+  }
+  .jy-status .jy-feed p, .jy-moment-body {
+    margin: 0 0 5px;
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: #3d3b38;
+  }
+  .jy-moment-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10.5px;
+    color: #9e978e;
+    margin-bottom: 4px;
+  }
+  .jy-feed small {
+    color: #8c857b;
+    font-size: 10.5px;
+  }
+  .jy-moment-interactions {
+    margin-top: 4px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    background: #f7f6f2;
+    border: 1px solid #eee7db;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 11px;
+    position: relative;
+  }
+  .jy-moment-interactions::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: 12px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid #eee7db;
+  }
+  .jy-moment-likes {
+    color: #4a6fa5;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #e8e2d5;
+    line-height: 1.35;
+  }
+  .jy-moment-likes::before {
+    content: "♡";
+    font-size: 12px;
+    color: #e57373;
+    font-weight: bold;
+  }
+  .jy-moment-comment {
+    line-height: 1.4;
+    color: #333333;
+    font-size: 11px;
+  }
+  .jy-comment-user {
+    font-weight: 750;
+    color: #4a6fa5;
+    margin-right: 4px;
+  }
+  .jy-comment-text {
+    color: #444444;
+  }
   @media (max-width: 360px) {
     .jy-status .jy-readouts, .jy-status .jy-calendar-body { padding: 8px; }
     .jy-status .jy-calendar-entry { grid-template-columns: 35px minmax(0, 1fr) auto; gap: 5px; padding: 6px; }
@@ -1145,25 +1461,55 @@
         <button class="jy-inventory-button" type="button" data-action="open-inventory" aria-label="打开物品栏" title="物品栏"><span class="jy-inventory-count" data-inventory-count>0</span></button>
       </div>
     </header>
-    <div class="jy-me">
-      <img class="jy-avatar jy-me-avatar" data-avatar-key="主角" data-avatar-name="主角" alt="主角" role="button" tabindex="0" title="主角头像：点击导入本机图片">
-      <div class="jy-me-main">
-        <div class="jy-me-name">
-          <span data-scene-value>{{format_message_variable::stat_data.主角.姓名}}</span>
-          <span class="jy-me-tag" data-scene-value>{{format_message_variable::stat_data.主角.年龄}}</span>
-          <span class="jy-me-tag" data-scene-value>{{format_message_variable::stat_data.主角.性别}}</span>
+    <div class="jy-student-card jy-me">
+      <div class="jy-card-top-decor">
+        <div class="jy-card-school">
+          <span class="jy-card-school-cn">浙江省暨阳高级中学 · 学生证</span>
+          <span class="jy-card-school-en">ZHEJIANG JIYANG SENIOR HIGH SCHOOL · STUDENT ID</span>
         </div>
-        <div class="jy-me-meta"><span data-scene-value>{{format_message_variable::stat_data.主角.班级}}</span><span class="jy-me-dot">·</span><span data-scene-value>{{format_message_variable::stat_data.主角.当前位置}}</span></div>
-        <div class="jy-me-look" data-scene-value>{{format_message_variable::stat_data.主角.外貌}}</div>
+        <span class="jy-card-badge">高二重点班</span>
       </div>
-      <details class="jy-me-more">
-        <summary>档案</summary>
-        <div class="jy-me-grid">
-          <div><b>性格</b><span data-scene-value>{{format_message_variable::stat_data.主角.性格}}</span></div>
-          <div><b>擅长与学业</b><span data-scene-value>{{format_message_variable::stat_data.主角.擅长与学业}}</span></div>
-          <div><b>家庭背景</b><span data-scene-value>{{format_message_variable::stat_data.主角.家庭背景}}</span></div>
+      <div class="jy-card-body">
+        <div class="jy-card-photo-box">
+          <div class="jy-card-photo-frame">
+            <img class="jy-avatar jy-me-avatar" data-avatar-key="主角" data-avatar-name="主角" alt="主角" role="button" tabindex="0" title="主角免冠学生照：点击导入本机图片" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 74 94' fill='%233a6073'><rect width='74' height='94' fill='%2325433d'/><circle cx='37' cy='36' r='18' fill='%23e0ece8'/><path d='M14 84 c0 -18 12 -28 23 -28 s23 10 23 28 Z' fill='%23e0ece8'/><text x='37' y='90' font-size='8' fill='%2388b0a5' text-anchor='middle' font-family='sans-serif'>一寸免冠照</text></svg>" data-default-src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 74 94' fill='%233a6073'><rect width='74' height='94' fill='%2325433d'/><circle cx='37' cy='36' r='18' fill='%23e0ece8'/><path d='M14 84 c0 -18 12 -28 23 -28 s23 10 23 28 Z' fill='%23e0ece8'/><text x='37' y='90' font-size='8' fill='%2388b0a5' text-anchor='middle' font-family='sans-serif'>一寸免冠照</text></svg>">
+            <span class="jy-card-photo-stamp">教务验讫</span>
+          </div>
         </div>
-      </details>
+        <div class="jy-card-info-table">
+          <div class="jy-card-name-row">
+            <span class="jy-card-name-val" data-scene-value>{{format_message_variable::stat_data.主角.姓名}}</span>
+            <span class="jy-me-tag" data-scene-value>{{format_message_variable::stat_data.主角.性别}}</span>
+            <span class="jy-me-tag" data-scene-value>{{format_message_variable::stat_data.主角.年龄}}</span>
+          </div>
+          <div class="jy-card-row">
+            <b>学号</b>
+            <span class="jy-card-id-num"><span data-scene-value>{{format_message_variable::stat_data.世界.起始年份}}</span>020142</span>
+          </div>
+          <div class="jy-card-row">
+            <b>班级</b>
+            <span><span data-scene-value>{{format_message_variable::stat_data.主角.班级}}</span><span class="jy-me-dot">·</span><span data-scene-value>{{format_message_variable::stat_data.主角.当前位置}}</span></span>
+          </div>
+          <div class="jy-card-row">
+            <b>学业排位</b>
+            <span class="jy-card-ranking">重点班前40名（冲刺双一流）· 德育A</span>
+          </div>
+          <div class="jy-me-look" data-scene-value>{{format_message_variable::stat_data.主角.外貌}}</div>
+        </div>
+        <details class="jy-card-dossier jy-me-more">
+          <summary>档案详录与学籍签章</summary>
+          <div class="jy-card-dossier-grid jy-me-grid">
+            <div><b>性格</b><span data-scene-value>{{format_message_variable::stat_data.主角.性格}}</span></div>
+            <div><b>擅长与学业</b><span data-scene-value>{{format_message_variable::stat_data.主角.擅长与学业}}</span></div>
+            <div><b>家庭背景</b><span data-scene-value>{{format_message_variable::stat_data.主角.家庭背景}}</span></div>
+          </div>
+          <div class="jy-card-seal" aria-hidden="true">
+            <span>浙江省暨阳高级中学</span>
+            <span class="jy-card-seal-star">★</span>
+            <span>教务处学籍专用章</span>
+          </div>
+        </details>
+      </div>
     </div>
     <div class="jy-scene-now">
       <span><b>阶段</b> <span data-stage-display>待确定</span></span>
@@ -1893,25 +2239,156 @@
       const visible = messages.filter(item => channel.value === '全部' || item.渠道 === channel.value);
       messageStatus.textContent = readState || (visible.length ? '' : '这个分类暂时没有动态。');
       messageStatus.hidden = !messageStatus.textContent;
+
+      const PROFILES = {
+        '苏晓樯': { name: 'Margot.', initial: 'M', bg: '#c85a70' },
+        '温书语': { name: '兰舟.', initial: '舟', bg: '#4a7c79' },
+        '沈幼楚': { name: '小楚', initial: '楚', bg: '#d97736' },
+        '凌知夏': { name: 'ZX.', initial: '夏', bg: '#456789' },
+        '陈芷汀': { name: '汀汀不听话✨', initial: '汀', bg: '#d83168' },
+        '慕佳芊': { name: 'Mumu慕老师', initial: '芊', bg: '#8e3ea1' },
+        '虞淑婉': { name: '虞淑婉', initial: '婉', bg: '#2e8b7d' },
+        '吴臻臻': { name: '高二(1)班吴臻臻', initial: '臻', bg: '#3f8a42' },
+      };
+
+      const getAuthorProfile = (item) => {
+        const source = String(item.来源 || '');
+        for (const [key, prof] of Object.entries(PROFILES)) {
+          if (source.includes(key)) return prof;
+        }
+        if (item.渠道 === '公告') return { name: '暨中教务处公告', initial: '校', bg: '#1d4ed8' };
+        if (item.渠道 === '班群') return { name: '高二(1)班微群', initial: '班', bg: '#059669' };
+        if (item.渠道 === '八卦') return { name: source ? `${source}情报员` : '暨中校园树洞', initial: '洞', bg: '#b45309' };
+        if (item.渠道 === '来信') return { name: source ? `${source}` : '匿名便签', initial: '信', bg: '#7c3aed' };
+        if (item.渠道 === '朋友圈') return { name: source || '同级好友', initial: '友', bg: '#2563eb' };
+        return { name: source || '暨阳校园简讯', initial: '讯', bg: '#475569' };
+      };
+
+      const getInteractions = (item) => {
+        const id = String(item.标识 || item.标题 || '');
+        let hash = 0;
+        for (let i = 0; i < id.length; i++) hash = ((hash << 5) - hash) + id.charCodeAt(i);
+        const abs = Math.abs(hash);
+
+        let likes = [];
+        let comments = [];
+
+        if (item.渠道 === '公告') {
+          likes = ['高二(1)班吴臻臻', '兰舟.', 'ZX.', '等38人已阅'];
+          comments = [
+            { user: '高二(1)班吴臻臻', text: '收到，已在班级黑板右侧完成同步通知。' }
+          ];
+        } else if (item.渠道 === '八卦') {
+          likes = ['Margot.', '汀汀不听话✨', 'ZX.'];
+          const options = [
+            [
+              { user: '汀汀不听话✨', text: '真的假的？下午体活课我还准备去呢！' },
+              { user: 'Margot.', text: '别急着传，等班委或老师正式核实。' }
+            ],
+            [
+              { user: 'ZX.', text: '建议以公布的书面日程为准。' },
+              { user: '兰舟.', text: '大家稍安勿躁。' }
+            ]
+          ];
+          comments = options[abs % options.length];
+        } else if (item.渠道 === '班群') {
+          likes = ['高二(1)班吴臻臻', 'ZX.', '兰舟.'];
+          comments = [
+            { user: '高二(1)班吴臻臻', text: '请各组组长放学前收齐，注意按学号排序。' }
+          ];
+        } else {
+          likes = ['Margot.', '小楚', '兰舟.'];
+          const generalOptions = [
+            [
+              { user: '汀汀不听话✨', text: '前排围观！' },
+              { user: '兰舟.', text: '岁月静好。' }
+            ],
+            [
+              { user: 'Margot.', text: '略有耳闻。' },
+              { user: '小楚', text: '大家辛苦了…' }
+            ]
+          ];
+          comments = generalOptions[abs % generalOptions.length];
+        }
+        return { likes, comments };
+      };
+
       for (const item of visible) {
         const li = document.createElement('li');
+
+        const profile = getAuthorProfile(item);
+
+        const avatar = document.createElement('div');
+        avatar.className = 'jy-moment-avatar';
+        avatar.style.background = profile.bg;
+        avatar.textContent = profile.initial;
+        avatar.setAttribute('aria-hidden', 'true');
+
+        const box = document.createElement('div');
+        box.className = 'jy-moment-box';
+
         const header = document.createElement('div');
         header.className = 'jy-feed-top';
+
+        const user = document.createElement('span');
+        user.className = 'jy-moment-user';
+        user.textContent = profile.name;
+
         const tag = document.createElement('span');
         tag.className = 'jy-feed-tag';
         tag.dataset.channel = item.渠道 || '';
         tag.textContent = item.渠道 || '动态';
+
         const source = document.createElement('span');
         source.className = 'jy-feed-source';
         source.textContent = typeof item.来源 === 'string' ? item.来源 : '';
-        header.append(tag, source);
+
+        header.append(user, tag, source);
+
         const title = document.createElement('strong');
+        title.className = 'jy-moment-title';
         title.textContent = item.标题;
+
         const body = document.createElement('p');
+        body.className = 'jy-moment-body';
         body.textContent = item.摘要;
+
+        const footer = document.createElement('div');
+        footer.className = 'jy-moment-footer';
+
         const meta = document.createElement('small');
         meta.textContent = [item.日期, item.状态 !== '有效' ? item.状态 : ''].filter(value => typeof value === 'string' && value).join(' · ');
-        li.append(header, title, body, meta);
+
+        footer.append(meta);
+
+        const { likes, comments } = getInteractions(item);
+        const interactions = document.createElement('div');
+        interactions.className = 'jy-moment-interactions';
+
+        if (likes.length) {
+          const likesRow = document.createElement('div');
+          likesRow.className = 'jy-moment-likes';
+          likesRow.textContent = likes.join(', ');
+          interactions.append(likesRow);
+        }
+
+        if (comments.length) {
+          for (const c of comments) {
+            const commentRow = document.createElement('div');
+            commentRow.className = 'jy-moment-comment';
+            const cUser = document.createElement('span');
+            cUser.className = 'jy-comment-user';
+            cUser.textContent = c.user + ': ';
+            const cText = document.createElement('span');
+            cText.className = 'jy-comment-text';
+            cText.textContent = c.text;
+            commentRow.append(cUser, cText);
+            interactions.append(commentRow);
+          }
+        }
+
+        box.append(header, title, body, footer, interactions);
+        li.append(avatar, box);
         messageList.append(li);
       }
     };
