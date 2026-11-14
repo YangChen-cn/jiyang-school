@@ -84,6 +84,15 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal([...d.querySelectorAll('.jy-place')].filter(p=>!p.hidden).length,1);
  assert.equal(d.querySelector('.jy-place:not([hidden])').dataset.place,'老鹰山');
  d.querySelector('.jy-map-image').dispatchEvent(new w.Event('error'));
+ for (const key of ['mountain','sports','arts','copyshop']) {
+   const place=d.querySelector(`[data-scene="${key}"]`);
+   const photo=place.querySelector('img');
+   assert.equal(photo.hasAttribute('src'),false);
+   place.open=true;
+   place.dispatchEvent(new w.Event('toggle'));
+   assert.match(photo.getAttribute('src'),/^data:image\/webp;base64,/);
+   assert.ok(photo.alt.trim());
+ }
  d.querySelector('[data-action="close-map"]').click();
  assert.equal(d.querySelector('.jy-map-modal').dataset.open,'false');
  const panel=d.querySelector('.jy-memories');panel.open=true;panel.dispatchEvent(new w.Event('toggle'));
