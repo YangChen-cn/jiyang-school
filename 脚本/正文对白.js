@@ -54,7 +54,7 @@
     [data-jy-dialogue-row][data-player=true] { flex-direction:row-reverse; --jy-ink:#795137; --jy-edge:#e5cdb9; }
     [data-jy-dialogue-avatar] { flex:0 0 46px; width:46px; height:46px; position:relative; display:grid; place-items:center; overflow:hidden; border:1px solid var(--jy-edge); border-radius:50%; background:#e9f1ec; color:var(--jy-ink); font-size:19px; }
     [data-jy-dialogue-avatar] img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; margin:0; border:0; border-radius:inherit; }
-    [data-jy-dialogue-avatar] img[hidden] { display:none; }
+    [data-jy-dialogue-avatar] img:not([data-ready]) { opacity:0; }
     [data-jy-dialogue-bubble] { display:block; min-width:0; max-width:min(680px, calc(100% - 58px)); padding:11px 16px 13px; background:#f7faf7; border:1px solid var(--jy-edge); border-radius:4px 16px 16px; color:#263e38; overflow-wrap:anywhere; white-space:pre-wrap; font-size:1em; box-shadow:0 3px 10px #163f2910; }
     [data-player=true] [data-jy-dialogue-bubble] { background:#fff8f0; border-radius:16px 4px 16px 16px; }
     [data-jy-dialogue-name] { display:block; color:var(--jy-ink); font-size:.82em; font-weight:650; margin-bottom:3px; }
@@ -159,16 +159,18 @@
     if (!sources.length) return;
     const img = doc.createElement('img');
     img.alt = '';
-    img.loading = 'lazy';
-    img.hidden = true;
+    img.decoding = 'async';
+    // A display:none lazy image may never start loading. Keep its box laid
+    // out and leave the initial visible until a candidate has loaded.
     let index = 0;
-    img.onload = () => { img.hidden = false; };
+    img.onload = () => { img.dataset.ready = ''; };
     img.onerror = () => {
-      img.hidden = true;
+      delete img.dataset.ready;
       if (++index < sources.length) img.src = sources[index];
+      else img.remove();
     };
-    img.src = sources[0];
     avatar.append(img);
+    img.src = sources[0];
   }
 
   function makeRow(dialogue, names) {
@@ -302,7 +304,7 @@
     const rows = [...doc.querySelectorAll('[data-jy-dialogue-row]')].map((row) => {
       const avatar = row.querySelector('[data-jy-dialogue-avatar]');
       const image = avatar?.querySelector('img');
-      return { speaker: row.dataset.speaker, player: row.dataset.player, signature: (avatar?.dataset.signature || '').slice(0, 48), src: (image?.src || '').slice(0, 40), loaded: image ? !image.hidden && image.naturalWidth > 0 : false };
+      return { speaker: row.dataset.speaker, player: row.dataset.player, signature: (avatar?.dataset.signature || '').slice(0, 48), src: (image?.src || '').slice(0, 40), loaded: image ? image.hasAttribute('data-ready') && image.naturalWidth > 0 : false };
     });
     return { top: host === host.top, keys, rows };
   }
