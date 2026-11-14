@@ -68,7 +68,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  await new Promise(r=>w.setTimeout(r,220));
  assert.equal(d.querySelector('[data-period-select]').value,'暑假');
  const select=d.querySelector('[data-period-select]'); select.value='高三下';select.dispatchEvent(new w.Event('change'));
- assert.ok(d.querySelector('[data-calendar-events]').textContent.includes('毕业册的最后一页'));
+ assert.ok(d.querySelector('[data-calendar-events]').textContent.includes('最后一课与毕业散伙狂欢夜'));
  select.value='高二上';select.dispatchEvent(new w.Event('change'));
  assert.equal(d.querySelectorAll('[data-calendar-events] li').length,8);
  assert.doesNotMatch(d.querySelector('[data-calendar-events]').textContent,/艺术周/);
