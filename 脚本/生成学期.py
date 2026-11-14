@@ -20,7 +20,7 @@ for period in periods:
         window = event['window']
         if start and end:
             window = f"<%= _Y + {start[0]} %>/{start[1]} 至 <%= _Y + {end[0]} %>/{end[1]}（{window}）"
-        calendar += f"  {event['name']}: {period['id']}，{window}；{event['places']}。\n"
+        calendar += f"  {event['name']}（{event['id']}）: {period['id']}，{window}；{event['places']}。\n"
 (ROOT/'世界书/时间线/校历.yaml').write_text(calendar)
 # EJS uses current message variables. Only the current period body enters the prompt.
 text='''<%_

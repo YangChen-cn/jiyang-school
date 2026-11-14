@@ -1077,6 +1077,14 @@
       <span data-scene-event hidden><b>本段</b> <span data-event-name>{{format_message_variable::stat_data.剧情.当前事件}}</span></span>
     </div>
     <div class="jy-readouts">
+      <details class="jy-readout" data-campus-messages>
+        <summary>校园消息</summary>
+        <div class="jy-calendar-body">
+          <label>渠道 <select data-campus-channel><option>全部</option><option>公告</option><option>班群</option><option>来信</option></select></label>
+          <p data-campus-status role="status"></p>
+          <ul class="jy-calendar-list" data-campus-list></ul>
+        </div>
+      </details>
       <details class="jy-readout jy-memories">
         <summary>往事与约定</summary>
         <div class="jy-calendar-body"><p data-memory-status>展开后读取这条消息的记录。</p><ul data-memory-list></ul></div>
@@ -1718,23 +1726,83 @@
       select.append(option);
     }
     select.value = currentPeriod?.id || '高二上';
+    let messages = [];
+    const dateKey = value => {
+      const key = typeof value === 'string' ? value.replaceAll('/', '-') : '';
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(key)) return '';
+      const parsed = new Date(key + 'T12:00:00Z');
+      return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === key ? key : '';
+    };
     const renderCalendar = () => {
       const period = JY_PERIODS.find(p => p.id === select.value);
-      const anchor = edge => `${year + edge[0]}-${edge[1]}`;
+      if (!period) return;
+      const anchor = edge => edge ? `${year + edge[0]}-${edge[1]}` : '';
       root.querySelector('[data-calendar-context]').textContent = (currentPeriod ? '当前：' + currentPeriod.id : '当前阶段待确定') + ' · 查阅：' + period.id;
-      const list = root.querySelector('[data-calendar-events]'); list.replaceChildren();
-      const li = document.createElement('li');
-      const state = !currentPeriod ? '预计窗口' : date > anchor(period.end) ? '阶段已过' : date < anchor(period.start) ? '未来阶段' : '本阶段';
-      const windowState = !period.eventStart || !currentPeriod ? state : date > anchor(period.eventEnd) ? '预计窗口已过' : date < anchor(period.eventStart) ? '尚未到预计窗口' : '预计活动窗口内';
-      li.textContent = `${period.window} · ${period.event} · ${windowState}`;
-      list.append(li);
-      if (period.id === '高二上') {
-        const original = document.createElement('li');
-        original.textContent = '9月开学周；10月国庆、体育周；11月期中、远足；12月艺术周；1月元旦与期末。';
-        list.append(original);
+      const list = root.querySelector('[data-calendar-events]');
+      list.replaceChildren();
+      for (const activity of period.activities || []) {
+        const notice = messages.find(item => item.活动标识 === activity.id);
+        const confirmedStart = dateKey(notice?.确认开始);
+        const confirmedEnd = dateKey(notice?.确认结束);
+        const confirmed = confirmedStart && confirmedEnd && confirmedStart <= confirmedEnd;
+        const start = confirmed ? confirmedStart : anchor(activity.start);
+        const end = confirmed ? confirmedEnd : anchor(activity.end);
+        const days = start && dateKey(date) ? Math.round((Date.parse(start) - Date.parse(date)) / 86400000) : null;
+        const state = days === null ? '日期待确认' : date > end ? '已过' : days > 7 ? '尚未到期' : days > 0 ? '临近' : '窗口内';
+        const windowText = confirmed ? (start === end ? start : start + ' 至 ' + end) + '（正式通知）' : activity.window;
+        const li = document.createElement('li');
+        li.textContent = [activity.name, windowText, state].join(' · ');
+        list.append(li);
+      }
+      if (!list.childElementCount) list.textContent = '本阶段暂无校历活动。';
+    };
+    select.addEventListener('change', renderCalendar);
+    renderCalendar();
+
+    const panel = root.querySelector('[data-campus-messages]');
+    const channel = panel.querySelector('[data-campus-channel]');
+    const messageList = panel.querySelector('[data-campus-list]');
+    const messageStatus = panel.querySelector('[data-campus-status]');
+    let readState = '正在读取本层消息…';
+    const renderMessages = () => {
+      messageList.replaceChildren();
+      const visible = messages.filter(item => channel.value === '全部' || item.渠道 === channel.value);
+      messageStatus.textContent = readState || (visible.length ? '' : '没有符合筛选条件的消息。');
+      for (const item of visible) {
+        const li = document.createElement('li');
+        const title = document.createElement('strong');
+        title.textContent = item.标题;
+        const body = document.createElement('p');
+        body.textContent = item.摘要;
+        const meta = document.createElement('small');
+        meta.textContent = [item.日期, item.渠道, item.来源, item.状态].filter(value => typeof value === 'string').join(' · ');
+        li.append(title, body, meta);
+        messageList.append(li);
       }
     };
-    select.addEventListener('change', renderCalendar); renderCalendar();
+    channel.addEventListener('change', renderMessages);
+    renderMessages();
+    (async () => {
+      try {
+        const id = window.getCurrentMessageId?.();
+        const read = window.getVariables || window.parent?.TavernHelper?.getVariables;
+        if (!Number.isInteger(id) || id < 0 || typeof read !== 'function') throw new Error('message unavailable');
+        const data = await read({ type: 'message', message_id: id });
+        const items = data?.stat_data?.校园?.消息;
+        if (!data?.stat_data || (items != null && !Array.isArray(items))) throw new Error('invalid snapshot');
+        const seen = new Set();
+        messages = (items || []).slice(-20).reverse().filter(item => {
+          if (!item || typeof item.标识 !== 'string' || !item.标识 || seen.has(item.标识) || typeof item.标题 !== 'string' || typeof item.摘要 !== 'string') return false;
+          seen.add(item.标识);
+          return true;
+        });
+        readState = messages.length ? '' : '这条消息当时还没有校园消息。';
+      } catch (_) {
+        readState = '暂时无法读取这条消息的校园记录。';
+      }
+      renderCalendar();
+      renderMessages();
+    })();
     if (currentPeriod) {
       const day = new Date(date + 'T12:00:00Z').getUTCDay();
       const md = date.slice(5);

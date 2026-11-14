@@ -22,6 +22,21 @@ export const Schema = z.object({
     学期: z.string().prefault(''),       // 高二上 | 高二下 | 高三上 | 高三下 | 已毕业
   }).prefault({}),
 
+  校园: z.object({
+    消息: z.array(z.object({
+      标识: z.string().prefault(''),
+      日期: z.string().prefault(''),
+      渠道: z.enum(['公告', '班群', '来信']).prefault('公告'),
+      来源: z.string().prefault(''),
+      标题: z.string().prefault(''),
+      摘要: z.string().prefault(''),
+      状态: z.enum(['有效', '已更正', '已结束']).prefault('有效'),
+      活动标识: z.string().optional(),
+      确认开始: z.string().optional(),
+      确认结束: z.string().optional(),
+    })).transform(items => items.slice(-20)).prefault([]),
+  }).prefault({}),
+
   探索: z.object({
     记录: z.array(z.object({
       日期: z.string().prefault(''),
