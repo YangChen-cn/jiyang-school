@@ -57,6 +57,7 @@ for period in periods:
 # Native keys still match speech. This hook supplies a fresh date gate and
 # supplements activation if the current scene has already established the activity.
 text = '''@@generate_before
+@@always_enabled
 <%_
 if (typeof charLoreBook === 'string' && charLoreBook === world_info.world) {
 '''+timeline+'\n\n'+routes+'''
@@ -69,6 +70,7 @@ if (jyRoute.activate) await activewi(charLoreBook, jyRoute.activate, true);
 if (jyRoute.period) {
 _%>
 当前生活阶段：<%= jyRoute.period.id %>。<%= jyRoute.period.notice %>
+人物档案中的年龄、年级和教职是开局资料。后续称谓按实际年级、升学、教职变动和毕业经历；生日未知时沿用已确认年龄或使用阶段称呼。亲友到场和年龄均不能从成年仪式本身推定。
 个人邀约、家长是否到场、信件、陪同与去向，以各自实际安排、已发生的事和双方选择为准。校园动态涉及既有剧情时，只引用已经公开的事实。
 <%_ } } _%>
 '''

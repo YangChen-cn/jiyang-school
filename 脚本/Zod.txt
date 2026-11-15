@@ -165,6 +165,7 @@ export const Schema = z.object({
   主角: z.object({
     姓名: z.string().prefault(''),
     年龄: z.string().prefault(''),
+    出生日期: z.string().prefault(''),     // 仅记录本人确认的日期，允许空白
     性别: z.string().prefault(''),
     班级: z.string().prefault(''),
     当前位置: z.string().prefault(''),
@@ -200,6 +201,21 @@ function campusPeriod(periods, date, year, academic) {
   date = campusDate(date);
   if (!date) return null;
   return periods.find(period => date >= campusAnchor(period.start, year) && date <= campusAnchor(period.end, year)) || null;
+}
+
+function campusAgeAt(birthday, date) {
+  const birth = campusDate(birthday);
+  const now = campusDate(date);
+  if (!birth || !now || birth > now) return null;
+  return Number(now.slice(0, 4)) - Number(birth.slice(0, 4)) - Number(now.slice(5) < birth.slice(5));
+}
+
+function campusPlayerClass(identity, academic) {
+  // Keep custom identities, transfers and class changes from the story.
+  if (identity !== '暨阳中学高二重点班学生' && identity !== '暨阳中学高三重点班学生') return identity;
+  if (academic === '已毕业') return '暨阳中学毕业生';
+  if (academic === '高三上' || academic === '高三下') return '暨阳中学高三重点班学生';
+  return identity;
 }
 
 // Shared by the message writeback and the read-only preview of old snapshots.
@@ -274,6 +290,7 @@ function normalizeCampus(value, today, activityIds) {
     });
   return {有效公告: announcements, 动态流: feed, 日程: schedule};
 }
+const periodDates = [{"id":"高二上","start":[0,"08-01"],"end":[1,"02-20"]},{"id":"高二下","start":[1,"02-21"],"end":[1,"06-30"]},{"id":"暑假","start":[1,"07-01"],"end":[1,"08-31"]},{"id":"高三上","start":[1,"09-01"],"end":[2,"02-20"]},{"id":"高三下","start":[2,"02-21"],"end":[2,"06-30"]},{"id":"已毕业","start":[2,"07-01"],"end":[99,"12-31"]}];
 const activityIds = ["opening","national","sports","midterm","hike","new-year","winter","spring-festival","arts","study-trip","summer-practice","coming-of-age","graduation-night"];
 
 
@@ -282,6 +299,13 @@ $(async () => {
   await waitGlobalInitialized('Mvu');
   eventOn(Mvu.events.BEFORE_MESSAGE_UPDATE, ({ variables }) => {
     const state = variables?.stat_data;
+    const period = campusPeriod(periodDates, state?.世界?.日期, campusYear(state?.世界?.起始年份), state?.剧情?.学期);
+    if (period && state.剧情) state.剧情.学期 = period.id;
+    if (state?.主角) {
+      const age = campusAgeAt(state.主角.出生日期, state.世界?.日期);
+      if (age !== null) state.主角.年龄 = `${age}岁`;
+      state.主角.班级 = campusPlayerClass(state.主角.班级, period?.id);
+    }
     if (!state?.校园) return;
     state.校园 = normalizeCampus(state.校园, state.世界?.日期, activityIds);
     for (const post of [...state.校园.有效公告, ...state.校园.动态流]) {

@@ -1,4 +1,5 @@
 @@generate_before
+@@always_enabled
 <%_
 if (typeof charLoreBook === 'string' && charLoreBook === world_info.world) {
 // Shared by the prompt, calendar and MVU. Dates are in the story's local calendar.
@@ -23,6 +24,21 @@ function campusPeriod(periods, date, year, academic) {
   date = campusDate(date);
   if (!date) return null;
   return periods.find(period => date >= campusAnchor(period.start, year) && date <= campusAnchor(period.end, year)) || null;
+}
+
+function campusAgeAt(birthday, date) {
+  const birth = campusDate(birthday);
+  const now = campusDate(date);
+  if (!birth || !now || birth > now) return null;
+  return Number(now.slice(0, 4)) - Number(birth.slice(0, 4)) - Number(now.slice(5) < birth.slice(5));
+}
+
+function campusPlayerClass(identity, academic) {
+  // Keep custom identities, transfers and class changes from the story.
+  if (identity !== '暨阳中学高二重点班学生' && identity !== '暨阳中学高三重点班学生') return identity;
+  if (academic === '已毕业') return '暨阳中学毕业生';
+  if (academic === '高三上' || academic === '高三下') return '暨阳中学高三重点班学生';
+  return identity;
 }
 
 // Shared by the message writeback and the read-only preview of old snapshots.
@@ -140,5 +156,6 @@ if (jyRoute.activate) await activewi(charLoreBook, jyRoute.activate, true);
 if (jyRoute.period) {
 _%>
 当前生活阶段：<%= jyRoute.period.id %>。<%= jyRoute.period.notice %>
+人物档案中的年龄、年级和教职是开局资料。后续称谓按实际年级、升学、教职变动和毕业经历；生日未知时沿用已确认年龄或使用阶段称呼。亲友到场和年龄均不能从成年仪式本身推定。
 个人邀约、家长是否到场、信件、陪同与去向，以各自实际安排、已发生的事和双方选择为准。校园动态涉及既有剧情时，只引用已经公开的事实。
 <%_ } } _%>

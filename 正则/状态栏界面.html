@@ -1476,7 +1476,8 @@
           <div class="jy-card-name-row">
             <span class="jy-card-name-val" data-scene-value>{{format_message_variable::stat_data.主角.姓名}}</span>
             <span class="jy-me-tag" data-scene-value>{{format_message_variable::stat_data.主角.性别}}</span>
-            <span class="jy-me-tag" data-scene-value>{{format_message_variable::stat_data.主角.年龄}}</span>
+            <span class="jy-me-tag" data-player-age data-scene-value>{{format_message_variable::stat_data.主角.年龄}}</span>
+            <span hidden data-player-birthday>{{format_message_variable::stat_data.主角.出生日期}}</span>
           </div>
           <div class="jy-card-row">
             <b>学号</b>
@@ -1484,7 +1485,7 @@
           </div>
           <div class="jy-card-row">
             <b>班级</b>
-            <span><span data-scene-value>{{format_message_variable::stat_data.主角.班级}}</span><span class="jy-me-dot">·</span><span data-scene-value>{{format_message_variable::stat_data.主角.当前位置}}</span></span>
+            <span><span data-player-class data-scene-value>{{format_message_variable::stat_data.主角.班级}}</span><span class="jy-me-dot">·</span><span data-scene-value>{{format_message_variable::stat_data.主角.当前位置}}</span></span>
           </div>
           <div class="jy-me-look" data-scene-value>{{format_message_variable::stat_data.主角.外貌}}</div>
         </div>
@@ -2171,6 +2172,21 @@
     return periods.find(period => date >= campusAnchor(period.start, year) && date <= campusAnchor(period.end, year)) || null;
   }
 
+  function campusAgeAt(birthday, date) {
+    const birth = campusDate(birthday);
+    const now = campusDate(date);
+    if (!birth || !now || birth > now) return null;
+    return Number(now.slice(0, 4)) - Number(birth.slice(0, 4)) - Number(now.slice(5) < birth.slice(5));
+  }
+
+  function campusPlayerClass(identity, academic) {
+    // Keep custom identities, transfers and class changes from the story.
+    if (identity !== '暨阳中学高二重点班学生' && identity !== '暨阳中学高三重点班学生') return identity;
+    if (academic === '已毕业') return '暨阳中学毕业生';
+    if (academic === '高三上' || academic === '高三下') return '暨阳中学高三重点班学生';
+    return identity;
+  }
+
   // Shared by the message writeback and the read-only preview of old snapshots.
   function normalizeCampus(value, today, activityIds) {
     const now = campusDate(today);
@@ -2262,6 +2278,12 @@
     const year = campusYear(sceneValue(root.querySelector('[data-start-year]')));
     const currentPeriod = campusPeriod(JY_PERIODS, date, year, sceneValue(root.querySelector('[data-academic]')));
     root.querySelector('[data-stage-display]').textContent = currentPeriod?.id || '待确定';
+    const identity = root.querySelector('[data-player-class]');
+    identity.textContent = campusPlayerClass(sceneValue(identity), currentPeriod?.id) || '待确定';
+    const age = root.querySelector('[data-player-age]');
+    const currentAge = campusAgeAt(sceneValue(root.querySelector('[data-player-birthday]')), date);
+    if (currentAge !== null) age.textContent = currentAge + '岁';
+    else if (sceneValue(age)) age.title = '档案年龄，仅在生日或新年龄得到确认时更新';
     const select = root.querySelector('[data-period-select]');
     for (const period of JY_PERIODS) {
       const option = document.createElement('option'); option.value = period.id; option.textContent = period.id;

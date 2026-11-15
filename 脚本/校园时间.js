@@ -21,3 +21,18 @@ function campusPeriod(periods, date, year, academic) {
   if (!date) return null;
   return periods.find(period => date >= campusAnchor(period.start, year) && date <= campusAnchor(period.end, year)) || null;
 }
+
+function campusAgeAt(birthday, date) {
+  const birth = campusDate(birthday);
+  const now = campusDate(date);
+  if (!birth || !now || birth > now) return null;
+  return Number(now.slice(0, 4)) - Number(birth.slice(0, 4)) - Number(now.slice(5) < birth.slice(5));
+}
+
+function campusPlayerClass(identity, academic) {
+  // Keep custom identities, transfers and class changes from the story.
+  if (identity !== '暨阳中学高二重点班学生' && identity !== '暨阳中学高三重点班学生') return identity;
+  if (academic === '已毕业') return '暨阳中学毕业生';
+  if (academic === '高三上' || academic === '高三下') return '暨阳中学高三重点班学生';
+  return identity;
+}

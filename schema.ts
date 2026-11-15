@@ -161,6 +161,7 @@ export const Schema = z.object({
   主角: z.object({
     姓名: z.string().prefault(''),
     年龄: z.string().prefault(''),
+    出生日期: z.string().prefault(''),     // 仅记录本人确认的日期，允许空白
     性别: z.string().prefault(''),
     班级: z.string().prefault(''),
     当前位置: z.string().prefault(''),

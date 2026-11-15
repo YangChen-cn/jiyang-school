@@ -43,6 +43,7 @@ if (!/^export const Schema\s*=\s*z\.object\(/m.test(src)) {
 const campusHelpers = ['校园时间.js', '校园消息.js']
   .map(file => fs.readFileSync(path.join(here, file), 'utf8').trimEnd()).join('\n\n');
 const periods = JSON.parse(fs.readFileSync(path.join(root, '数据/学期.json'), 'utf8'));
+const periodDates = periods.map(({ id, start, end }) => ({ id, start, end }));
 const activityIds = periods.flatMap(period => (period.activities || []).map(activity => activity.id));
 
 const out = [
@@ -52,6 +53,7 @@ const out = [
   '// 当前 Zod schema 只影响变量面板的类型提示/校验回写；registerMvuSchema 不会拦截 MVU 的写入。',
   src,
   campusHelpers,
+  `const periodDates = ${JSON.stringify(periodDates)};`,
   `const activityIds = ${JSON.stringify(activityIds)};`,
   '',
   '',
@@ -60,6 +62,13 @@ const out = [
   "  await waitGlobalInitialized('Mvu');",
   '  eventOn(Mvu.events.BEFORE_MESSAGE_UPDATE, ({ variables }) => {',
   '    const state = variables?.stat_data;',
+  '    const period = campusPeriod(periodDates, state?.世界?.日期, campusYear(state?.世界?.起始年份), state?.剧情?.学期);',
+  '    if (period && state.剧情) state.剧情.学期 = period.id;',
+  '    if (state?.主角) {',
+  '      const age = campusAgeAt(state.主角.出生日期, state.世界?.日期);',
+  "      if (age !== null) state.主角.年龄 = `${age}岁`;",
+  '      state.主角.班级 = campusPlayerClass(state.主角.班级, period?.id);',
+  '    }',
   '    if (!state?.校园) return;',
   '    state.校园 = normalizeCampus(state.校园, state.世界?.日期, activityIds);',
   '    for (const post of [...state.校园.有效公告, ...state.校园.动态流]) {',

@@ -46,7 +46,7 @@ for (const [match, miss] of [['班级篮球对抗赛','路过篮球场'],['国�
 async function renderRoutes(state) {
   const table = {};
   const activations = [];
-  const text = await ejs.render(template.replace(/^@@generate_before\n/, ''), {
+  const text = await ejs.render(template.replace(/^@@generate_before\n@@always_enabled\n/, ''), {
     charLoreBook: '暨阳测试', world_info: {world: '暨阳测试'}, getvar: () => state,
     define: (key, value) => {table[key] = value;}, activewi: async (book, entry) => {activations.push(entry);},
   }, {async:true});
@@ -120,7 +120,7 @@ async function runRoutes() {
   hiking.世界.当前位置='老鹰山远足集合点';
   assert.deepEqual((await renderRoutes(hiking)).activations,['远足']);
 }
-const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_message_variable::stat_data.世界.日期}}','2021/07/03').replaceAll('{{format_message_variable::stat_data.世界.起始年份}}','2020').replaceAll('{{format_message_variable::stat_data.世界.当前位置}}','我找到的小巷');
+const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_message_variable::stat_data.世界.日期}}','2021/07/03').replaceAll('{{format_message_variable::stat_data.世界.起始年份}}','2020').replaceAll('{{format_message_variable::stat_data.世界.当前位置}}','我找到的小巷').replaceAll('{{format_message_variable::stat_data.主角.出生日期}}','2000/07/03').replaceAll('{{format_message_variable::stat_data.主角.班级}}','返乡实习生');
 (async () => {
  await runRoutes();
  const errors=[]; const vc = new VirtualConsole(); vc.on('jsdomError',e=>errors.push(e.message));
@@ -176,11 +176,38 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  update();
  assert.equal(state.校园.日程.arts.状态,'已结束');
  assert.deepEqual(Array.from(state.校园.有效公告, post=>post.标识),['midterm']);
+ const pupil={世界:{起始年份:'2030',日期:'2031/02/20'},剧情:{学期:'高二下'},主角:{年龄:'21岁',班级:'暨阳中学高二重点班学生',重要物品:[{名称:'借书',描述:'已借未还'}]},苏晓樯:{好感度:96}};
+ const pupilTurn=(date,period)=>{
+   pupil.世界.日期=date;
+   callbackBox.write({variables:{stat_data:pupil}});
+   assert.equal(pupil.剧情.学期,period);
+   assert.equal(pupil.苏晓樯.好感度,96);
+   assert.equal(pupil.主角.重要物品[0].名称,'借书');
+ };
+ pupilTurn('2031/02/20','高二上');
+ pupilTurn('2031/02/21','高二下');
+ pupilTurn('2031/08/31','暑假');
+ assert.equal(pupil.主角.年龄,'21岁');
+ pupilTurn('2031/09/01','高三上');
+ assert.equal(pupil.主角.班级,'暨阳中学高三重点班学生');
+ pupil.主角.出生日期='2010-11-02';
+ pupilTurn('2031/11/01','高三上');
+ assert.equal(pupil.主角.年龄,'20岁');
+ pupilTurn('2031/11/02','高三上');
+ assert.equal(pupil.主角.年龄,'21岁');
+ pupilTurn('2032/02/21','高三下');
+ pupilTurn('2032/07/01','已毕业');
+ assert.equal(pupil.主角.班级,'暨阳中学毕业生');
+ pupil.主角.班级='返乡实习生';
+ pupilTurn('2032/07/05','已毕业');
+ assert.equal(pupil.主角.班级,'返乡实习生');
  const snapshot=JSON.stringify(stored);
  const dom=new JSDOM('<textarea id="send_textarea">尚未发送的草稿</textarea>'+neutral,{runScripts:'dangerously',url:'http://localhost:18967',pretendToBeVisual:true,virtualConsole:vc,beforeParse(w){w.HTMLElement.prototype.scrollIntoView=function(){};w.scrollTo=()=>{};w.getCurrentMessageId=()=>7;w.getVariables=opts=>{reads.push(opts);return stored;};}});
  const w=dom.window,d=w.document;
  await new Promise(r=>w.setTimeout(r,220));
  assert.equal(d.querySelector('[data-period-select]').value,'暑假');
+ assert.equal(d.querySelector('[data-player-age]').textContent,'21岁');
+ assert.equal(d.querySelector('[data-player-class]').textContent,'返乡实习生');
  const select=d.querySelector('[data-period-select]'); select.value='高三下';select.dispatchEvent(new w.Event('change'));
  assert.ok(d.querySelector('[data-calendar-events]').textContent.includes('最后一课与毕业散伙狂欢夜'));
  select.value='高二上';select.dispatchEvent(new w.Event('change'));
