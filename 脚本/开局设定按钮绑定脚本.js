@@ -5,7 +5,7 @@
   var GLOBAL_KEY = '__jiyangOpeningSetupControllerV7';
   var LEGACY_ENTRY_NAME = '玩家开局设定';
   var WRITE_LEGACY_WORLDBOOK = false; // 旧版把档案写进世界书；新版改为写 MVU 变量，保留代码路径但默认关闭
-  var GREETING_NAMES = ['开局设定界面', '开学第一天', '慕佳芊', '苏晓樯', '温书语', '沈幼楚', '陈芷汀', '虞淑婉'];
+  var GREETING_NAMES = ['开局设定界面', '开学第一天', '慕佳芊', '苏晓樯', '温书语', '沈幼楚', '许念安', '陈芷汀', '虞淑婉'];
   var CHARACTER_NAMES = ['苏晓樯', '温书语', '沈幼楚', '许念安', '慕佳芊', '陈芷汀', '虞淑婉'];
   var DEFAULT_FIELDS = {
     '年龄': '17岁',
@@ -61,13 +61,20 @@
       }
     },
     6: {
+      date: '2020/09/01', week: '星期二', time: '傍晚', weather: '晴', location: '暨阳中学 教学楼四楼 高二（8）班教室',
+      area: '校园', privacy: '半私密', pace: '日常铺垫', semester: '高二上', focus: '许念安', schoolEvent: '无',
+      present: {
+        '许念安': { pos: '讲台旁', top: '白色短袖校服衬衫', bottom: '深色校服裙', action: '把作业本码齐，抬头看向后门', mood: '温和而笃定', inner: '他回来了。' }
+      }
+    },
+    7: {
       date: '2020/09/12', week: '星期六', time: '下午', weather: '多云', location: '青悦城四楼 无招牌咖啡馆',
       area: '周边', privacy: '半私密', pace: '日常铺垫', semester: '高二上', focus: '陈芷汀', schoolEvent: '无',
       present: {
         '陈芷汀': { pos: '靠窗卡座', top: '黑色无袖连衣裙', bottom: '（连衣裙）', action: '托着腮看向门口，指尖轻轻敲杯壁', mood: '打量与试探的兴致', inner: '照片和本人差多少呢。' }
       }
     },
-    7: {
+    8: {
       date: '2020/09/02', week: '星期三', time: '上午课', weather: '晴', location: '行政楼 校长办公室门口',
       area: '校园', privacy: '半私密', pace: '事件触发', semester: '高二上', focus: '虞淑婉', schoolEvent: '无',
       present: {

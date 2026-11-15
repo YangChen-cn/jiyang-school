@@ -35,7 +35,7 @@ assert.ok(!Object.keys(manifest.entryManifest.角色).some(key=>key.startsWith('
 assert.ok(!Object.keys(manifest.entryManifest.NSFW指导).some(key=>key.startsWith('凌知夏')));
 
 async function checkOpeningMappings() {
- const greetingNames=['开学第一天','慕佳芊','苏晓樯','温书语','沈幼楚','陈芷汀','虞淑婉'];
+ const greetingNames=['开学第一天','慕佳芊','苏晓樯','温书语','沈幼楚','许念安','陈芷汀','虞淑婉'];
  const files=fs.readdirSync(path.join(root,'开场白')).filter(name=>/^\d-.*\.txt$/.test(name)).sort();
  assert.equal(files.length,greetingNames.length);
  const greetings=files.map(file=>read('开场白/'+file));
@@ -58,8 +58,9 @@ async function checkOpeningMappings() {
    assert.ok(!Object.keys(state).some(key=>key.startsWith('凌知夏.')));
    if(index>0) assert.equal(state[name+'.是否在场'],true);
  }
- assert.match(scenes[6].location,/咖啡馆/);
- assert.match(scenes[7].location,/校长办公室/);
+ assert.match(scenes[6].location,/高二（8）班教室/);
+ assert.match(scenes[7].location,/咖啡馆/);
+ assert.match(scenes[8].location,/校长办公室/);
  const first = Object.fromEntries(patches({'开始年份':'2020'}, 'preset', scenes[1]));
  const other = Object.fromEntries(patches({'开始年份':'2020'}, 'preset', scenes[2]));
  assert.equal(first['许念安.是否在场'],true);
