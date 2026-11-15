@@ -42,6 +42,7 @@ if (!/^export const Schema\s*=\s*z\.object\(/m.test(src)) {
 
 const campusHelpers = ['校园时间.js', '校园消息.js']
   .map(file => fs.readFileSync(path.join(here, file), 'utf8').trimEnd()).join('\n\n');
+const relationship = fs.readFileSync(path.join(here, '关系节奏.js'), 'utf8').trimEnd();
 const periods = JSON.parse(fs.readFileSync(path.join(root, '数据/学期.json'), 'utf8'));
 const periodDates = periods.map(({ id, start, end }) => ({ id, start, end }));
 const activityIds = periods.flatMap(period => (period.activities || []).map(activity => activity.id));
@@ -53,6 +54,7 @@ const out = [
   '// 当前 Zod schema 只影响变量面板的类型提示/校验回写；registerMvuSchema 不会拦截 MVU 的写入。',
   src,
   campusHelpers,
+  relationship,
   `const periodDates = ${JSON.stringify(periodDates)};`,
   `const activityIds = ${JSON.stringify(activityIds)};`,
   '',
@@ -60,6 +62,9 @@ const out = [
   '$(async () => {',
   '  registerMvuSchema(Schema);',
   "  await waitGlobalInitialized('Mvu');",
+  '  eventOn(Mvu.events.VARIABLE_UPDATE_ENDED, (variables, before) => {',
+  '    limitRelationshipGains(variables?.stat_data, before?.stat_data);',
+  '  });',
   '  eventOn(Mvu.events.BEFORE_MESSAGE_UPDATE, ({ variables }) => {',
   '    const state = variables?.stat_data;',
   '    const period = campusPeriod(periodDates, state?.世界?.日期, campusYear(state?.世界?.起始年份), state?.剧情?.学期);',

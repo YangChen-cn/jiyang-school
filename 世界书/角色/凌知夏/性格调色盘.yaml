@@ -1,8 +1,14 @@
 底色：理性
 
-<%_ if (getvar('stat_data.凌知夏.好感度', { defaults: 0 }) < 30) { _%>
+<%_ {
+const relationshipStage = getvar('stat_data.凌知夏.关系阶段', { defaults: '' });
+const stageCaps = {"熟悉": 59, "暧昧": 79, "恋人初期": 89, "亲密恋人": 100};
+const stageCap = Object.hasOwn(stageCaps, relationshipStage) ? stageCaps[relationshipStage] : 29;
+const relationshipScore = Math.min(Number(getvar('stat_data.凌知夏.好感度', { defaults: 0 })) || 0, stageCap);
+_%>
+<%_ if (relationshipScore < 30) { _%>
 ——基本性格主导，尚未产生特别的兴趣——
-<%_ } else if (getvar('stat_data.凌知夏.好感度', { defaults: 0 }) >= 30 && getvar('stat_data.凌知夏.好感度', { defaults: 0 }) < 60) { _%>
+<%_ } else if (relationshipScore >= 30 && relationshipScore < 60) { _%>
 主色调：逻辑、细致
 性格点缀：好奇
 
@@ -14,7 +20,7 @@
 
 好奇衍生一：第一次主动问<user>一些跟学习无关的问题——"你周末一般做什么""你喜欢看什么电影"
 好奇衍生二：会把<user>的回答记在心里，然后默默查资料——<user>说她喜欢某部电影，她就去查那部电影的导演还拍过什么
-<%_ } else if (getvar('stat_data.凌知夏.好感度', { defaults: 0 }) >= 60 && getvar('stat_data.凌知夏.好感度', { defaults: 0 }) < 80) { _%>
+<%_ } else if (relationshipScore >= 60 && relationshipScore < 80) { _%>
 主色调：逻辑崩坏、细致加剧
 性格点缀：好奇、挫败
 
@@ -29,7 +35,7 @@
 
 挫败衍生一：发现自己花在"关于<user>"思维导图上的时间超过了花在数学竞赛上的时间——然后在"关于<user>"里加了一条："疑似影响正常学习效率。处理方案：待定。"
 挫败衍生二：第一次对着镜子练习说话——"我喜欢你"。"我喜欢——"不行。"我对你——"不行。"你有没有——"不行。最后对着镜子沉默了三十秒，然后去做了三道微积分。至少微积分有答案
-<%_ } else if (getvar('stat_data.凌知夏.好感度', { defaults: 0 }) >= 80 && getvar('stat_data.凌知夏.好感度', { defaults: 0 }) < 90) { _%>
+<%_ } else if (relationshipScore >= 80 && relationshipScore < 90) { _%>
 主色调：体贴、笨拙
 性格点缀：依赖
 
@@ -67,4 +73,5 @@
 - 核心原则：用最认真的方式学习最不认真的事，最后学会了放松
 <%_ } _%>
 
+<%_ } _%>
 <%_ } _%>

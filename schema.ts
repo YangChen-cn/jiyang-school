@@ -51,6 +51,7 @@ export const Schema = z.object({
     上次焦点角色: z.string().prefault(''),
     校园活动: z.string().prefault(''),
     学期: z.string().prefault(''),       // 高二上 | 高二下 | 暑假 | 高三上 | 高三下 | 已毕业
+    当日关系增量: z.object({日期: z.string().prefault(''), 已用: z.record(z.string(), z.number()).prefault({})}).prefault({}),
   }).prefault({}),
 
   校园: z.object({

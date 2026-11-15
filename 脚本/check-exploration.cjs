@@ -120,6 +120,82 @@ async function runRoutes() {
   hiking.世界.当前位置='老鹰山远足集合点';
   assert.deepEqual((await renderRoutes(hiking)).activations,['远足']);
 }
+
+function checkRelationshipPace(update) {
+ const people=['苏晓樯','温书语','沈幼楚','凌知夏','陈芷汀','慕佳芊','虞淑婉'];
+ const start=()=>({世界:{日期:'2020-09-01'},剧情:{},...Object.fromEntries(people.map(name=>[name,{好感度:0,关系阶段:name==='沈幼楚'?'戒备':name==='慕佳芊'||name==='虞淑婉'?'师生':'初识'}]))});
+ let state=start();
+ state.沈幼楚.信任度=0;
+ const updateState=fn=>{
+   const prior=structuredClone(state);
+   fn(state);
+   update({stat_data:state},{stat_data:prior});
+ };
+ for(let i=0;i<24;i++) updateState(s=>{s.苏晓樯.好感度+=2;});
+ assert.equal(state.苏晓樯.好感度,4);
+ assert.equal(state.苏晓樯.关系阶段,'初识');
+ assert.equal(state.温书语.好感度,0);
+ updateState(s=>{s.苏晓樯.好感度-=2;});
+ updateState(s=>{s.苏晓樯.好感度+=2;});
+ assert.equal(state.苏晓樯.好感度,2);
+ updateState(s=>{s.世界.日期='2020-09-02';s.苏晓樯.好感度+=5;s.沈幼楚.信任度+=4;});
+ assert.equal(state.苏晓樯.好感度,5);
+ assert.equal(state.沈幼楚.好感度,0);
+ assert.equal(state.沈幼楚.信任度,3);
+ state.陈芷汀={好感度:92,关系阶段:'交付'};
+ updateState(()=>{});
+ assert.equal(state.陈芷汀.好感度,92);
+ assert.equal(state.陈芷汀.关系阶段,'交付');
+
+ for(const person of people){
+   const source=read(`世界书/角色/${person}/性格调色盘.yaml`);
+   assert.doesNotThrow(()=>ejs.compile(source));
+   if(person==='沈幼楚') continue;
+   const start=source.indexOf('<%_ {');
+   const end=source.indexOf('_%>',start)+3;
+   const scoreFor=stage=>Number(ejs.render(source.slice(start,end)+'<%= relationshipScore %><%_ } _%>',{
+     getvar: key=>key.endsWith('关系阶段')?stage:95,
+   }));
+   assert.ok(scoreFor('')<40);
+   if(person==='苏晓樯') assert.equal(scoreFor('亲密恋人'),95);
+ }
+
+ // Keep the story dates and selected participants fixed when simulating the old
+ // routine bonuses and the new policy. No model output is assumed by this fixture.
+ const legacy=start(); state=start();
+ const rows=[];
+ for(let floor=1;floor<=300;floor++) {
+   const day=Math.floor((floor-1)/5);
+   const beat=(floor-1)%5;
+   const date=new Date(Date.UTC(2020,8,1+day)).toISOString().slice(0,10);
+   const group=[people[day%people.length],people[(day+2)%people.length]];
+   const focus=group[0];
+   const event=day%6===0&&beat===2?'协作完成一项任务':day%3===0&&beat===1?'首次承担分工':'例行交流';
+   legacy.世界.日期=date;
+   for(const name of group) legacy[name].好感度=Math.min(100,legacy[name].好感度+2);
+   updateState(s=>{
+     s.世界.日期=date;
+     if(event==='协作完成一项任务') s[focus].好感度+=3;
+     else if(event==='首次承担分工') s[focus].好感度+=1;
+   });
+   if(floor%100===0) rows.push({floor,date,legacy:people.map(name=>legacy[name].好感度),current:people.map(name=>state[name].好感度),stages:people.map(name=>state[name].关系阶段)});
+ }
+ assert.equal(rows.length,3);
+ assert.ok(rows.at(-1).legacy.filter(score=>score>=80).length>=5);
+ assert.ok(rows.at(-1).current.every(score=>score<50));
+ assert.ok(rows.at(-1).stages.every(stage=>['初识','戒备','师生'].includes(stage)));
+ console.log('PASS: 关系节奏模拟（角色顺序 '+people.join('、')+'）',JSON.stringify(rows));
+
+ state=start();
+ for(let day=0;day<20;day++) updateState(s=>{
+   s.世界.日期=new Date(Date.UTC(2020,8,1+day)).toISOString().slice(0,10);
+   s.苏晓樯.好感度+=3;
+   if(day===8) s.苏晓樯.关系阶段='熟悉'; // A stage change supplied by the story.
+ });
+ assert.equal(state.苏晓樯.好感度,60);
+ assert.equal(state.苏晓樯.关系阶段,'熟悉');
+ for(const other of people.slice(1)) assert.equal(state[other].好感度,0);
+}
 const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_message_variable::stat_data.世界.日期}}','2021/07/03').replaceAll('{{format_message_variable::stat_data.世界.起始年份}}','2020').replaceAll('{{format_message_variable::stat_data.世界.当前位置}}','我找到的小巷').replaceAll('{{format_message_variable::stat_data.主角.出生日期}}','2000/07/03').replaceAll('{{format_message_variable::stat_data.主角.班级}}','返乡实习生');
 (async () => {
  await runRoutes();
@@ -138,9 +214,10 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const summerNotice={标识:'summer-1',渠道:'班群',来源:'老师',标题:'夏季值班',摘要:'<img src=x>只是一条通知',活动标识:'summer-practice',确认开始:'2021-07-01',确认结束:'2021-08-15',状态:'有效'};
  stored.stat_data.校园.消息.push(summerNotice);
  const activityIds=periods.flatMap(p=>(p.activities || []).map(a=>a.id));
- const callbackBox={z,_,registerMvuSchema:()=>{},waitGlobalInitialized:async()=>{},Mvu:{events:{BEFORE_MESSAGE_UPDATE:'before'}},eventOn(name,callback){if(name==='before')callbackBox.write=callback;},$:(fn)=>fn()};
+ const callbackBox={z,_,registerMvuSchema:()=>{},waitGlobalInitialized:async()=>{},Mvu:{events:{BEFORE_MESSAGE_UPDATE:'before',VARIABLE_UPDATE_ENDED:'ended'}},eventOn(name,callback){if(name==='before')callbackBox.write=callback;else if(name==='ended')callbackBox.pace=callback;},$:(fn)=>fn()};
  vm.createContext(callbackBox);
  await vm.runInContext(read('脚本/Zod.txt').replace(/^import .*$/m,'').replace('export const Schema','const Schema'),callbackBox);
+ checkRelationshipPace(callbackBox.pace);
  const state={世界:{日期:'2021/07/03'},校园:structuredClone(stored.stat_data.校园)};
  const update=()=>callbackBox.write({variables:{stat_data:state}});
  update();
