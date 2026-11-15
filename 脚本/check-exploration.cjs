@@ -12,6 +12,11 @@ const read = p => fs.readFileSync(path.join(root, p), 'utf8');
 const html = read('正则/状态栏界面.html');
 const periods = JSON.parse(read('数据/学期.json'));
 const template = read('世界书/时间线/学期生活.txt');
+const cardEntries = JSON.parse(read('暨阳中学.json')).data.character_book.entries;
+for (const entry of cardEntries) {
+  if (!entry.enabled || !entry.content.includes('<%')) continue;
+  assert.doesNotThrow(() => ejs.compile(entry.content, { async: true }), `EJS 编译失败：${entry.comment}`);
+}
 const cases = [['2020-08-31','高二上'],['2021-02-20','高二上'],['2021-02-21','高二下'],['2021-06-30','高二下'],['2021-07-01','暑假'],['2021-08-31','暑假'],['2021-09-01','高三上'],['2022-02-20','高三上'],['2022-02-21','高三下'],['2022-06-30','高三下'],['2022-07-01','已毕业']];
 const pure = html.slice(html.indexOf('  // JY_PERIODS_BEGIN'), html.indexOf('  function bindSceneReadouts'));
 const sandbox = {}; vm.createContext(sandbox); vm.runInContext(pure + '\nthis.pick = (date, year) => campusPeriod(JY_PERIODS, date, year);', sandbox);
