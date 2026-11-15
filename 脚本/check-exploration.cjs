@@ -60,6 +60,12 @@ async function checkOpeningMappings() {
  }
  assert.match(scenes[6].location,/咖啡馆/);
  assert.match(scenes[7].location,/校长办公室/);
+ const first = Object.fromEntries(patches({'开始年份':'2020'}, 'preset', scenes[1]));
+ const other = Object.fromEntries(patches({'开始年份':'2020'}, 'preset', scenes[2]));
+ assert.equal(first['许念安.是否在场'],true);
+ assert.equal(first['许念安.控制欲'],0);
+ assert.equal(first['许念安.关系阶段'],'表面');
+ assert.equal(other['许念安.是否在场'],false);
 }
 
 function checkRetiredCharacter(write) {
@@ -273,11 +279,28 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const summerNotice={标识:'summer-1',渠道:'班群',来源:'老师',标题:'夏季值班',摘要:'<img src=x>只是一条通知',活动标识:'summer-practice',确认开始:'2021-07-01',确认结束:'2021-08-15',状态:'有效'};
  stored.stat_data.校园.消息.push(summerNotice);
  const activityIds=periods.flatMap(p=>(p.activities || []).map(a=>a.id));
- const callbackBox={z,_,registerMvuSchema:()=>{},waitGlobalInitialized:async()=>{},Mvu:{events:{BEFORE_MESSAGE_UPDATE:'before',VARIABLE_UPDATE_ENDED:'ended'}},eventOn(name,callback){if(name==='before')callbackBox.write=callback;else if(name==='ended')callbackBox.pace=callback;},$:(fn)=>fn()};
+ const callbackBox={z,_,registerMvuSchema:()=>{},waitGlobalInitialized:async()=>{},Mvu:{events:{BEFORE_MESSAGE_UPDATE:'before',VARIABLE_UPDATE_ENDED:'ended',VARIABLE_UPDATE_STARTED:'started'}},eventOn(name,callback){if(name==='before')callbackBox.write=callback;else if(name==='ended')callbackBox.pace=callback;else if(name==='started')callbackBox.start=callback;},$:(fn)=>fn()};
  vm.createContext(callbackBox);
  await vm.runInContext(read('脚本/Zod.txt').replace(/^import .*$/m,'').replace('export const Schema','const Schema'),callbackBox);
  checkRetiredCharacter(callbackBox.write);
  checkRelationshipPace(callbackBox.pace);
+ const palette=read('世界书/角色/许念安/性格调色盘.yaml');
+ const header=palette.slice(0,palette.indexOf('_%>')+3);
+ for(const [stage,affection,control,mode] of [['表面',99,90,'表面'],['观察',20,0,'观察'],['观察',0,40,'观察'],['依恋',99,90,'依恋'],['紧绷',50,70,'紧绷'],['共生',80,85,'共生'],['松绑',90,20,'松绑'],['松绑',95,90,'紧绷']]){
+   const values={关系阶段:stage,好感度:affection,控制欲:control};
+   assert.equal(ejs.render(header+'<%= mode %><%_ } _%>',{getvar:key=>values[key.split('.').at(-1)]}).trim().split('\n').at(-1),mode);
+ }
+ const legacy={剧情:{},世界:{日期:'2020/09/02'}};
+ const migrated=structuredClone(legacy);
+ callbackBox.start({stat_data:migrated});
+ assert.equal(migrated.许念安.控制欲,0);
+ migrated.许念安.好感度=40;
+ migrated.许念安.控制欲=160;
+ callbackBox.pace({stat_data:migrated},{stat_data:legacy});
+ callbackBox.write({variables:{stat_data:migrated}});
+ assert.equal(migrated.许念安.好感度,2);
+ assert.equal(migrated.许念安.控制欲,100);
+ assert.equal(legacy.许念安,undefined);
  const state={世界:{日期:'2021/07/03'},校园:structuredClone(stored.stat_data.校园)};
  const update=()=>callbackBox.write({variables:{stat_data:state}});
  update();

@@ -3,6 +3,7 @@ const relationshipLimits = [
   ['温书语', '好感度', 2, 3],
   ['沈幼楚', '好感度', 2, 3],
   ['沈幼楚', '信任度', 3, 4],
+  ['许念安', '好感度', 2, 3],
   ['陈芷汀', '好感度', 3, 4],
   ['慕佳芊', '好感度', 2, 2],
   ['虞淑婉', '好感度', 2, 2],
@@ -23,7 +24,7 @@ function limitRelationshipGains(state, before) {
     const already = Math.max(0, Math.min(Number(prior?.[key]) || 0, perDay));
     if (already) used[key] = already;
 
-    const oldScore = before[person]?.[metric];
+    const oldScore = before[person]?.[metric] ?? (person === '许念安' ? 0 : undefined);
     const newScore = state[person]?.[metric];
     if (!Number.isFinite(oldScore) || !Number.isFinite(newScore) || newScore <= oldScore) continue;
 

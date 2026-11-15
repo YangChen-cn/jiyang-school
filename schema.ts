@@ -150,7 +150,7 @@ export const Schema = z.object({
     是否在场: z.coerce.boolean().prefault(false),
     好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
     控制欲: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
-    关系阶段: z.string().prefault(''),
+    关系阶段: z.string().prefault('表面'),
     NSFW: z.coerce.boolean().prefault(false),
     当前上装: z.string().prefault(''),
     当前下装: z.string().prefault(''),

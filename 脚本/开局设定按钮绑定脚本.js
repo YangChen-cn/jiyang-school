@@ -6,7 +6,7 @@
   var LEGACY_ENTRY_NAME = '玩家开局设定';
   var WRITE_LEGACY_WORLDBOOK = false; // 旧版把档案写进世界书；新版改为写 MVU 变量，保留代码路径但默认关闭
   var GREETING_NAMES = ['开局设定界面', '开学第一天', '慕佳芊', '苏晓樯', '温书语', '沈幼楚', '陈芷汀', '虞淑婉'];
-  var CHARACTER_NAMES = ['苏晓樯', '温书语', '沈幼楚', '慕佳芊', '陈芷汀', '虞淑婉'];
+  var CHARACTER_NAMES = ['苏晓樯', '温书语', '沈幼楚', '许念安', '慕佳芊', '陈芷汀', '虞淑婉'];
   var DEFAULT_FIELDS = {
     '年龄': '17岁',
     '班级或身份': '暨阳中学高二重点班学生'
@@ -27,6 +27,7 @@
       present: {
         '苏晓樯': { pos: '教室后排靠窗座位', top: '白色短袖校服衬衫', bottom: '深色校服百褶裙', action: '把零食塞进抽屉，回头打量新同学', mood: '好奇里带一点审视', inner: '新来的会坐哪儿？' },
         '温书语': { pos: '窗边第二排', top: '白色短袖校服衬衫', bottom: '深色校服长裤', action: '低头看一本卷了边的课外书', mood: '安静，不愿被打扰', inner: '希望今天不要有人来搭话。' },
+        '许念安': { pos: '讲台旁', top: '白色短袖校服衬衫', bottom: '深色校服裙', action: '整理各科的作业本', mood: '平静', inner: '' },
         '沈幼楚': { pos: '最后一排靠墙角落', top: '洗得发白的校服短袖', bottom: '洗得发白的校服长裤', action: '把自己缩进墙角，低头避开视线', mood: '紧张，想消失', inner: '不要看我。' },
         '慕佳芊': { pos: '讲台上', top: '浅色衬衫', bottom: '及膝浅色半裙', action: '转身写板书，粉笔声清脆', mood: '从容而克制', inner: '这一届会比上一届更难带吗。' }
       }
@@ -399,7 +400,7 @@
         var present = scene.present ? scene.present[name] : null;
         patches.push([name + '.是否在场', !!present]);
         patches.push([name + '.好感度', 0]);
-        patches.push([name + '.关系阶段', '']);
+        patches.push([name + '.关系阶段', name === '许念安' ? '表面' : '']);
         patches.push([name + '.NSFW', false]);
         patches.push([name + '.当前上装', present ? present.top : '']);
         patches.push([name + '.当前下装', present ? present.bottom : '']);
@@ -411,6 +412,7 @@
           patches.push(['沈幼楚.信任度', 0]);
           patches.push(['沈幼楚.触发家庭话题', false]);
         }
+        if (name === '许念安') patches.push(['许念安.控制欲', 0]);
       });
     }
     return patches;
