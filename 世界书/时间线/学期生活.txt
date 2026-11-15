@@ -1,15 +1,144 @@
+@@generate_before
 <%_
-const jyPeriods = [{"id":"高二上","start":[0,"08-01"],"end":[1,"02-20"],"event":"原有秋季活动","window":"9 月至寒假","detail":"沿用开学周、体育周和远足等既有安排。"},{"id":"高二下","start":[1,"02-21"],"end":[1,"06-30"],"event":"高校研学实践","window":"5 月中旬","detail":"高二下期中考后组织赴省城高校研学实践，乘高铁半小时赴杭州参访浙江大学紫金港与之江校区。苏晓樯嘴上嫌弃高铁二等座但请大家喝特调并打探心仪城市；温书语偏爱之江老校区红砖钟楼与近代文人典故；沈幼楚初次出远门显得局促，紧跟在玩家身旁；凌知夏关注前沿实验室并探讨强基与竞赛目标；陈芷汀抓紧拍照打卡；慕佳芊与吴臻臻带队清点人数。玩家可自由组队、参与校园漫步、交流未来志向或只随队观光。 先由相关人员筹备或公布安排；活动结束后场所恢复日常。只承接玩家实际看见的公告和已经发生的经历。","eventStart":[1,"05-10"],"eventEnd":[1,"05-20"]},{"id":"暑假","start":[1,"07-01"],"end":[1,"08-31"],"event":"暑期工读与家教实践","window":"7 月至 8 月中旬","detail":"准高三漫长暑期里的现实生活分流。沈幼楚在遇见奶茶店全天做工并骑电动车穿梭老城居民楼做家教，玩家可前去探班或帮她收工；苏晓樯家里要在御江湾豪宅找一对一伴读私教，傲娇地点名要求玩家来吹空调讲题，给出丰厚课时费；凌知夏泡在暨阳市图书馆自习或去杭州参加竞赛夏令营；陈芷汀在商圈服装店做导购兼职；夏夜大家可相约浣江步道纳凉或老鹰山避暑看日出。玩家可选择打工兼职、去豪宅辅导、自习备考、夏夜出游或单纯在家休息。 先由相关人员筹备或公布安排；活动结束后场所恢复日常。只承接玩家实际看见的公告和已经发生的经历。","eventStart":[1,"07-01"],"eventEnd":[1,"08-15"]},{"id":"高三上","start":[1,"09-01"],"end":[2,"02-20"],"event":"十八岁成人礼与首考誓师","window":"10 月下旬至 11 月上旬，以学校正式通知为准","detail":"迎战浙江新高考1月首考的关键节点，全校隆重举行十八岁成人仪式暨首考百日冲刺誓师。操场铺设红色成人拱门，学生身着正装或统一步调跨越成人门；互换亲笔家书环节中，苏晓樯父母因外贸缺席而暗自落寞，沈幼楚抚摸大山寄来的朴素家书热泪盈眶，温书语代表高三领誓，凌知夏在巨幅誓词横幅上签下首考目标；虞淑婉校长发表沉静深远的成人致辞，慕佳芊给重点班每人分发定制红绳与纪念徽章。玩家可参加跨门、互赠成人信件、写下首考宣誓或在场下见证。 先由相关人员筹备或公布安排；活动结束后场所恢复日常。只承接玩家实际看见的公告和已经发生的经历。","eventStart":[1,"10-20"],"eventEnd":[1,"11-10"]},{"id":"高三下","start":[2,"02-21"],"end":[2,"06-30"],"event":"最后一课与毕业散伙狂欢夜","window":"6 月上旬至中旬，高考后按班级组织","detail":"真正属于高三终局的记忆。6月初高考前夕最后一节班会课，慕佳芊在讲台上发准考证并红了眼眶，晚自习走廊迎来学弟学妹漫天试卷与喊楼助威；6月中旬高考结束后，全班在青悦城或老城大酒楼举办毕业散伙宴与谢师宴，并在白校服背后互相签字涂鸦、写下真挚厚重的毕业同学录。苏晓樯豪迈包下大包间借微醺追问玩家大学城市去向；温书语递上娟秀的长信留言；沈幼楚害羞地敬饮料并写下手心寄语；凌知夏卸下压力在深夜江边看烟火并许下同城之约；陈芷汀换上高跟鞋短裙放肆歌唱；大家通宵KTV或在浣江夜色中漫步道别。玩家可深情话别、留下签名、狂欢庆祝或安静散步。 先由相关人员筹备或公布安排；活动结束后场所恢复日常。只承接玩家实际看见的公告和已经发生的经历。","eventStart":[2,"06-01"],"eventEnd":[2,"06-20"]},{"id":"已毕业","start":[2,"07-01"],"end":[99,"12-31"],"event":"重访","window":"按玩家决定","detail":"保留已发生的关系和约定，返校须看开放与访客安排。不会自动赴约、配对或总结玩家未来。"}];
-const jyY = Number(getvar('stat_data.世界.起始年份', { defaults: '2020' })) || 2020;
-const jyDate = String(getvar('stat_data.世界.日期', { defaults: '' })).replaceAll('/', '-');
-const jyAnchor = edge => `${jyY + edge[0]}-${edge[1]}`;
-const jyAcademic = String(getvar('stat_data.剧情.学期', { defaults: '' }));
-let jyPeriod = /^\d{4}-\d{2}-\d{2}$/.test(jyDate) ? jyPeriods.find(p => jyDate >= jyAnchor(p.start) && jyDate <= jyAnchor(p.end)) : null;
-if (jyAcademic === '已毕业') jyPeriod = jyPeriods.find(p => p.id === '已毕业');
-if (jyPeriod && jyPeriod.id !== '高二上') {
+if (typeof charLoreBook === 'string' && charLoreBook === world_info.world) {
+// Shared by the prompt, calendar and MVU. Dates are in the story's local calendar.
+function campusDate(value) {
+  const date = typeof value === 'string' ? value.replaceAll('/', '-') : '';
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return '';
+  const parsed = new Date(date + 'T12:00:00Z');
+  return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === date ? date : '';
+}
+
+function campusYear(value) {
+  const year = Number(value);
+  return Number.isInteger(year) && year >= 1000 && year <= 9900 ? year : 2020;
+}
+
+function campusAnchor(edge, year) {
+  return edge ? `${year + edge[0]}-${edge[1]}` : '';
+}
+
+function campusPeriod(periods, date, year, academic) {
+  if (academic === '已毕业') return periods.find(period => period.id === '已毕业');
+  date = campusDate(date);
+  if (!date) return null;
+  return periods.find(period => date >= campusAnchor(period.start, year) && date <= campusAnchor(period.end, year)) || null;
+}
+
+// Shared by the message writeback and the read-only preview of old snapshots.
+function normalizeCampus(value, today, activityIds) {
+  const now = campusDate(today);
+  const list = posts => Array.isArray(posts) ? posts.filter(post =>
+    post && typeof post.标识 === 'string' && post.标识 && typeof post.标题 === 'string' && typeof post.摘要 === 'string'
+  ) : [];
+  const isNotice = post => post.渠道 === '公告' || post.渠道 === '班群';
+  const knownActivity = post => isNotice(post) && activityIds.includes(post.活动标识);
+  const dates = post => [campusDate(post.确认开始), campusDate(post.确认结束)];
+  const scheduleRecord = (status, start, end) => {
+    if (start && end && start <= end) return {状态: status, 开始: start, 结束: end};
+    if (status === '已撤销' || status === '已结束') return {状态: status};
+    return null;
+  };
+  const schedule = {};
+  for (const id of activityIds) {
+    const record = value?.日程?.[id];
+    if (!['已确认', '已结束', '已撤销'].includes(record?.状态)) continue;
+    const normalized = scheduleRecord(record.状态, campusDate(record.开始), campusDate(record.结束));
+    if (normalized) {
+      if (normalized.状态 === '已确认' && now && normalized.结束 < now) normalized.状态 = '已结束';
+      schedule[id] = normalized;
+    }
+  }
+
+  const legacy = list(value?.消息);
+  // Only dated official notices, or explicit withdrawals of those notices,
+  // may be promoted from the old mixed array.
+  const legacyNotice = post => {
+    const [start, end] = dates(post);
+    const trustedGroup = post.渠道 === '班群' && /老师|班主任|班长|吴臻臻|教务|年级组|校方/.test(post.来源 || '');
+    return (post.渠道 === '公告' || trustedGroup) && knownActivity(post) && (scheduleRecord('已确认', start, end) ||
+      post.状态 === '已撤销' || (post.渠道 === '公告' && post.状态 === '已结束'));
+  };
+  const datedLegacy = legacy.filter(legacyNotice);
+  const notices = [...datedLegacy, ...list(value?.有效公告).filter(isNotice)];
+  const seenPosts = new Set();
+  const seenActivities = new Set();
+  const active = [];
+  const soon = now ? Date.parse(now) + 7 * 86400000 : 0;
+  for (let i = notices.length - 1; i >= 0; i--) {
+    const post = notices[i];
+    const id = knownActivity(post) ? post.活动标识 : null;
+    if (seenPosts.has(post.标识) || (id && seenActivities.has(id))) continue;
+    seenPosts.add(post.标识);
+    if (id) seenActivities.add(id);
+    const [start, end] = dates(post);
+    const dated = start && end && start <= end;
+    const existing = id ? schedule[id] : null;
+    const result = post.状态 === '已撤销' ? '已撤销'
+      : post.状态 === '已结束' || (dated && now && end < now) ? '已结束' : '已确认';
+    if (result === '已确认' && !dated && ['已撤销', '已结束'].includes(existing?.状态)) continue;
+    if (id) {
+      const record = scheduleRecord(result, dated ? start : existing?.开始, dated ? end : existing?.结束);
+      if (record) schedule[id] = record;
+    }
+    if (result === '已确认') active.push({post, i, near: Boolean(id && now && dated && Date.parse(start) <= soon)});
+  }
+  const announcements = active.sort((a, b) => Number(b.near) - Number(a.near) || b.i - a.i)
+    .slice(0, 3).sort((a, b) => a.i - b.i).map(({post}) => post);
+  const seenDynamics = new Set();
+  const feed = [...legacy.filter(post => !legacyNotice(post)), ...list(value?.动态流)]
+    .reverse().filter(post => {
+      if (seenDynamics.has(post.标识) || seenPosts.has(post.标识)) return false;
+      seenDynamics.add(post.标识);
+      return true;
+    }).slice(0, 6).reverse().map(post => {
+      const {活动标识, 确认开始, 确认结束, ...dynamic} = post;
+      return dynamic;
+    });
+  return {有效公告: announcements, 动态流: feed, 日程: schedule};
+}
+
+function campusEventPhase(activity, calendar, date, year) {
+  const confirmed = calendar?.[activity.id];
+  if (confirmed?.状态 === '已撤销') return {kind: 'cancelled', label: '正式通知已撤销。仅在被问及时回应通知与已发生的准备。'};
+  if (confirmed?.状态 === '已结束') return {kind: 'after', label: '活动已结束。仅承接实际安排、公开结果与已发生的经历。'};
+
+  const start = confirmed?.开始 || campusAnchor(activity.start, year);
+  const end = confirmed?.结束 || campusAnchor(activity.end, year);
+  if (!start) return {kind: 'undated', label: '日期未确认。按当年农历与已知安排回答，先核对日期。'};
+  const range = start === end ? start : `${start} 至 ${end}`;
+  const window = `${confirmed ? '正式日期' : '预计窗口'} ${range}`;
+  if (date < start) return {kind: 'before', label: `${window}，尚未开始。只写询问与筹备。`};
+  if (date > end) return {kind: 'after', label: `${window}，日期已过。只承接已经发生的事。`};
+  if (confirmed) return {kind: 'live', label: `${window}。按当前时段、场所及实际安排判断是否正在进行。`};
+  if (activity.id === 'summer-practice') return {kind: 'window', label: `${window}。可询问工读或家教机会，岗位和排班现场确认。`};
+  return {kind: 'window', label: `${window}。可查通知或筹备，活动是否开始以当前现场为准。`};
+}
+
+function campusRoutes(periods, state) {
+  const rawDate = state.世界?.日期;
+  const hasDate = rawDate != null && rawDate !== '';
+  const year = campusYear(state.世界?.起始年份);
+  const date = hasDate ? campusDate(rawDate) : `${year}-09-01`;
+  const period = campusPeriod(periods, date, year, state.剧情?.学期);
+  const activities = period?.activities || [];
+  const calendar = normalizeCampus(state.校园, date, periods.flatMap(p => (p.activities || []).map(a => a.id))).日程;
+  const phases = Object.fromEntries(activities.map(a => [a.id, campusEventPhase(a, calendar, date, year)]));
+  const location = state.世界?.当前位置;
+  const focus = state.剧情?.校园活动;
+  const active = hasDate ? activities.filter(a => ['window', 'live'].includes(phases[a.id].kind)) : [];
+  const named = focus && active.find(a => (a.name === focus || a.id === focus));
+  const onSite = active.filter(a => phases[a.id].kind === 'live' && a.routePlaces?.includes(location));
+  return {period, phases, activate: named?.entry || (onSite.length === 1 ? onSite[0].entry : '')};
+}
+
+const jyPeriods = [{"id":"高二上","start":[0,"08-01"],"end":[1,"02-20"],"activities":[{"id":"opening","name":"开学周","start":[0,"09-01"],"end":[0,"09-07"],"routePlaces":["高二重点班教室","重点班教室"],"entry":"事件_开学周"},{"id":"national","name":"国庆假期","start":[0,"10-01"],"end":[0,"10-07"],"entry":"国庆假期"},{"id":"sports","name":"体育周","start":[0,"10-11"],"end":[0,"10-31"],"routePlaces":["操场","暨阳中学操场","操场器材室"],"entry":"体育周"},{"id":"midterm","name":"期中考试","start":[0,"11-01"],"end":[0,"11-10"],"entry":"期中考试"},{"id":"hike","name":"远足","start":[0,"11-11"],"end":[0,"11-30"],"routePlaces":["老鹰山远足集合点","老鹰山远足签到点"],"entry":"远足"},{"id":"new-year","name":"元旦","start":[1,"01-01"],"end":[1,"01-01"],"entry":"事件_元旦"},{"id":"winter","name":"寒假","start":[1,"01-21"],"end":[1,"02-20"],"entry":"寒假"},{"id":"spring-festival","name":"春节","start":null,"end":null,"entry":"寒假"}],"notice":"报到、日常课业与班级分工逐渐稳定。开学前以返校准备与学校公开安排为主。"},{"id":"高二下","start":[1,"02-21"],"end":[1,"06-30"],"activities":[{"id":"arts","name":"艺术周","start":[1,"04-01"],"end":[1,"04-30"],"routePlaces":["音乐教室","礼堂后台","大礼堂"],"entry":"艺术周"},{"id":"study-trip","name":"高校研学实践","start":[1,"05-10"],"end":[1,"05-20"],"routePlaces":["浙江大学校园","浙江大学紫金港校区","浙江大学之江校区"],"entry":"高校研学实践"}],"notice":"春季返校后恢复课业。排练、训练和校外集体活动都按各自的通知与报名安排。"},{"id":"暑假","start":[1,"07-01"],"end":[1,"08-31"],"activities":[{"id":"summer-practice","name":"暑期工读与家教实践","start":[1,"07-01"],"end":[1,"08-15"],"routePlaces":["遇见奶茶店"],"entry":"暑期工读与家教实践"}],"notice":"学校按假期开放，查看值班与借阅通知。城内家庭、补课、店铺排班各有安排。"},{"id":"高三上","start":[1,"09-01"],"end":[2,"02-20"],"activities":[{"id":"coming-of-age","name":"十八岁成人礼与首考誓师","start":[1,"10-20"],"end":[1,"11-10"],"routePlaces":["成人门","成人礼签到处"],"entry":"十八岁成人礼与首考誓师"}],"notice":"年级可能换教室并公布备考安排。社团与班务的交接由实际负责人确认。"},{"id":"高三下","start":[2,"02-21"],"end":[2,"06-30"],"activities":[{"id":"graduation-night","name":"最后一课与毕业散伙狂欢夜","start":[2,"06-01"],"end":[2,"06-20"],"routePlaces":["青悦城大酒楼宴会厅"],"entry":"最后一课与毕业散伙狂欢夜"}],"notice":"复习、报考与毕业手续并行。聚会、录取和去向分别等公开通知或本人确认。"},{"id":"已毕业","start":[2,"07-01"],"end":[99,"12-31"],"notice":"返校需要按访客安排登记。同学各有去向，熟悉的地点也会继续日常营业。","activities":[]}];
+const jyState = getvar('stat_data', { defaults: {} }) || {};
+const jyRoute = campusRoutes(jyPeriods, jyState);
+define('jyCampusEvents', jyRoute.phases);
+if (jyRoute.activate) await activewi(charLoreBook, jyRoute.activate, true);
+if (jyRoute.period) {
 _%>
-当前生活阶段：<%= jyPeriod.id %>
-本阶段唯一新增事件：<%= jyPeriod.event %>（<%= jyPeriod.window %>）
-<%= jyPeriod.detail %>
-窗口外仅按情境写筹备或已发生的余波。
-<%_ } _%>
+当前生活阶段：<%= jyRoute.period.id %>。<%= jyRoute.period.notice %>
+个人邀约、家长是否到场、信件、陪同与去向，以各自实际安排、已发生的事和双方选择为准。校园动态涉及既有剧情时，只引用已经公开的事实。
+<%_ } } _%>

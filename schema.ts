@@ -50,7 +50,7 @@ export const Schema = z.object({
     事件冷却: z.coerce.number().transform(v => _.clamp(v, 0, 5)).prefault(0),
     上次焦点角色: z.string().prefault(''),
     校园活动: z.string().prefault(''),
-    学期: z.string().prefault(''),       // 高二上 | 高二下 | 高三上 | 高三下 | 已毕业
+    学期: z.string().prefault(''),       // 高二上 | 高二下 | 暑假 | 高三上 | 高三下 | 已毕业
   }).prefault({}),
 
   校园: z.object({

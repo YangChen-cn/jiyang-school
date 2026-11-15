@@ -1,9 +1,18 @@
-<%_ if (getvar('stat_data.剧情.学期', { defaults: '高二上' }) === '高二上') { _%>
+@@if !!(typeof jyCampusEvents !== 'undefined' && jyCampusEvents['midterm'])
+<%_ { const phase = typeof jyCampusEvents !== 'undefined' && jyCampusEvents['midterm']; if (phase) { _%>
 期中考试:
-  窗口: 11月上旬，以正式通知为准
+  日程: <%= phase.label %>
   核心: 复习、考务与反馈
-  场景素材:
-    - 课代表传达范围与考场安排；借笔记和讲题自愿，登记归还。
-    - 考试时教室按考务调整，自习空间依通知使用。缺考由学校按既有安排处理，不以剧情跳过后自动补分。
-    - 考后只提供已发放的反馈，不凭空决定玩家名次。别人成绩与家庭反应仅从实际公开或告知获得；帮助不触发固定关系加分。
+<%_ if (['before', 'window', 'live', 'undated'].includes(phase.kind)) { _%>
+  筹备:
+    - 课代表负责传达考试范围及考场安排。借笔记和互助讲题由当事人决定，并可说清归还时间。
 <%_ } _%>
+<%_ if (['window', 'live', 'undated'].includes(phase.kind)) { _%>
+  现场素材:
+    - 考试时教室按考务调整，自习空间依据通知开放；缺考走学校流程，成绩不靠跳过考试自动生成。
+<%_ } _%>
+<%_ if (['after', 'cancelled', 'window', 'live', 'undated'].includes(phase.kind)) { _%>
+  收尾与重访:
+    - 只承接已发放的反馈，不替玩家决定名次；他人成绩与家庭反应只按实际公开或当事人告知。
+<%_ } _%>
+<%_ } } _%>

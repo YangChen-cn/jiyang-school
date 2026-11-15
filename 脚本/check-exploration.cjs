@@ -14,15 +14,9 @@ const periods = JSON.parse(read('数据/学期.json'));
 const template = read('世界书/时间线/学期生活.txt');
 const cases = [['2020-08-31','高二上'],['2021-02-20','高二上'],['2021-02-21','高二下'],['2021-06-30','高二下'],['2021-07-01','暑假'],['2021-08-31','暑假'],['2021-09-01','高三上'],['2022-02-20','高三上'],['2022-02-21','高三下'],['2022-06-30','高三下'],['2022-07-01','已毕业']];
 const pure = html.slice(html.indexOf('  // JY_PERIODS_BEGIN'), html.indexOf('  function bindSceneReadouts'));
-const sandbox = {}; vm.createContext(sandbox); vm.runInContext(pure + '\nthis.pick = jyPeriodFor;', sandbox);
+const sandbox = {}; vm.createContext(sandbox); vm.runInContext(pure + '\nthis.pick = (date, year) => campusPeriod(JY_PERIODS, date, year);', sandbox);
 for (const [date, id] of cases) {
   assert.equal(sandbox.pick(date, 2020)?.id, id);
-  const rendered = ejs.render(template, {getvar: key => key.endsWith('起始年份') ? '2020' : key.endsWith('日期') ? date.replaceAll('-','/') : ''});
-  if (id === '高二上') assert.equal(rendered.trim(), '');
-  else {
-    assert.ok(rendered.includes('当前生活阶段：' + id));
-    for (const p of periods.filter(p => p.id !== id && p.id !== '高二上')) assert.ok(!rendered.includes('本阶段唯一新增事件：' + p.event));
-  }
 }
 assert.equal(sandbox.pick('2031-07-04',2030).id, '暑假');
 assert.equal(sandbox.pick('2021-02-30',2020),null);
@@ -37,10 +31,11 @@ const manifest = JSON.parse(read('tavern-cards-state.json'));
 for (const alias of ['老鹰山','听风亭','旧值守屋','周伯','山路旧照']) assert.ok(manifest.entryManifest.事件.老鹰山仙人.strategy.keys.includes(alias));
 assert.ok(!manifest.entryManifest.事件.远足.strategy.keys.includes('老鹰山'));
 const eventEntries = Object.values(manifest.entryManifest.事件);
+assert.equal(eventEntries.length, 15);
 for (const period of periods) {
   for (const activity of period.activities || []) {
     assert.ok(read(activity.source).length > 0);
-    if (period.id === '高二上') assert.ok(eventEntries.some(entry => entry.path === activity.source && entry.enabled));
+    assert.ok(eventEntries.some(entry => entry.path === activity.source && entry.enabled && entry.strategy.scan_depth === 2));
   }
 }
 for (const [match, miss] of [['班级篮球对抗赛','路过篮球场'],['国庆返校','暑假返校'],['十佳歌手','在音乐教室上课']]) {
@@ -48,8 +43,86 @@ for (const [match, miss] of [['班级篮球对抗赛','路过篮球场'],['国�
   assert.equal(entries(match).length,1);
   assert.equal(entries(miss).length,0);
 }
+async function renderRoutes(state) {
+  const table = {};
+  const activations = [];
+  const text = await ejs.render(template.replace(/^@@generate_before\n/, ''), {
+    charLoreBook: '暨阳测试', world_info: {world: '暨阳测试'}, getvar: () => state,
+    define: (key, value) => {table[key] = value;}, activewi: async (book, entry) => {activations.push(entry);},
+  }, {async:true});
+  return {table, text, activations};
+}
+const examples = {
+  opening: ['2020-09-01','领课本','去教学楼'], national: ['2020-10-01','十一假期','去暨阳站'],
+  sports: ['2020-10-18','班级篮球赛','路过篮球场'], midterm: ['2020-11-03','期中复习','借复习资料'],
+  hike: ['2020-11-17','学校远足','周末我独自去老鹰山'], 'new-year': ['2021-01-01','新年联欢','写今天日期'],
+  winter: ['2021-02-01','寒假去哪','去城区'], 'spring-festival': ['2021-02-11','除夕放假','今晚吃饭'],
+  arts: ['2021-04-14','十佳歌手','在音乐教室上课'], 'study-trip': ['2021-05-14','去浙大参观','到紫金港办事'],
+  'summer-practice': ['2021-07-03','去奶茶店打工','点一杯奶茶'],
+  'coming-of-age': ['2021-10-24','首考动员','走过操场'], 'graduation-night': ['2022-06-09','毕业聚餐','在酒楼吃饭'],
+};
+async function runRoutes() {
+  const stateFor = (date, year = 2020) => ({世界:{日期:date,起始年份:String(year)},剧情:{学期:''}});
+  for (const [date, id] of cases) {
+    const result = await renderRoutes(stateFor(date));
+    assert.match(result.text, new RegExp('当前生活阶段：' + id));
+    assert.ok(!result.text.includes('本阶段唯一新增事件'));
+  }
+  const renderActivity = (entry, result, input, checkKeyword=true) => {
+    if (checkKeyword && !entry.strategy.keys.some(key=> input.includes(key))) return '';
+    const [gate, ...content] = read(entry.path).split('\n');
+    assert.match(gate, /^@@if /);
+    const allowed = vm.runInNewContext(gate.slice(5), result.table);
+    return allowed ? ejs.render(content.join('\n'), {...result.table,lastUserMessage:input}).trim() : '';
+  };
+  for (const activity of periods.flatMap(p => p.activities || [])) {
+    const [date, hit, miss] = examples[activity.id];
+    const entry = eventEntries.find(e => e.path === activity.source);
+    const result = await renderRoutes(stateFor(date));
+    assert.match(renderActivity(entry, result, hit), /现场素材/);
+    assert.equal(renderActivity(entry, result, miss), '');
+    assert.equal(renderActivity(entry, await renderRoutes(stateFor('2022-07-01')), hit), '');
+    assert.equal(renderActivity(entry, await renderRoutes(stateFor('2021-02-30')), hit), '');
+  }
+  const open = await renderRoutes({});
+  assert.match(renderActivity(manifest.entryManifest.事件.事件_开学周, open, '领课本'), /现场素材/);
+  const summer = manifest.entryManifest.事件.暑期工读与家教实践;
+  for (const year of [2020,2025]) {
+    for (const day of ['07-01','08-15','08-31']) {
+      const seed = stateFor((year+1)+'-'+day,year); seed.剧情.学期='高二下';
+      const routed = await renderRoutes(seed);
+      assert.match(routed.text,/当前生活阶段：暑假/);
+      const content = renderActivity(summer,routed,'暑假找家教');
+      if (day==='08-31') {
+        assert.match(content,/收尾与重访/);
+        assert.doesNotMatch(content,/现场素材|筹备:/);
+      } else assert.match(content,/现场素材/);
+    }
+  }
+  const sports = manifest.entryManifest.事件.体育周;
+  const preview = renderActivity(sports,await renderRoutes(stateFor('2020-10-02')),'篮球赛程');
+  assert.match(preview,/尚未开始|筹备/);
+  assert.doesNotMatch(preview,/现场素材/);
+  const site = stateFor('2020-10-18'); site.世界.当前位置='操场';
+  assert.deepEqual((await renderRoutes(site)).activations,[]);
+  site.校园={日程:{sports:{状态:'已确认',开始:'2020-10-18',结束:'2020-10-19'}}};
+  assert.deepEqual((await renderRoutes(site)).activations,['体育周']);
+  site.校园.日程.sports.开始='2020-10-21';site.校园.日程.sports.结束='2020-10-21';
+  assert.deepEqual((await renderRoutes(site)).activations,[]);
+  site.校园.日程.sports.状态='已撤销';site.剧情.校园活动='体育周';
+  const cancelled=await renderRoutes(site);
+  assert.deepEqual(cancelled.activations,[]);
+  assert.match(renderActivity(sports,cancelled,'体育周'),/正式通知已撤销/);
+  assert.doesNotMatch(renderActivity(sports,cancelled,'体育周'),/现场素材|筹备:/);
+  const hiking = stateFor('2020-11-18'); hiking.世界.当前位置='老鹰山';
+  hiking.校园={日程:{hike:{状态:'已确认',开始:'2020-11-18',结束:'2020-11-18'}}};
+  assert.deepEqual((await renderRoutes(hiking)).activations,[]);
+  hiking.世界.当前位置='老鹰山远足集合点';
+  assert.deepEqual((await renderRoutes(hiking)).activations,['远足']);
+}
 const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_message_variable::stat_data.世界.日期}}','2021/07/03').replaceAll('{{format_message_variable::stat_data.世界.起始年份}}','2020').replaceAll('{{format_message_variable::stat_data.世界.当前位置}}','我找到的小巷');
 (async () => {
+ await runRoutes();
  const errors=[]; const vc = new VirtualConsole(); vc.on('jsdomError',e=>errors.push(e.message));
  const reads=[];
  const stored={stat_data:{探索:{记录:[{日期:'2021/07/02',类别:'线索',内容:'<img src=x onerror="attack()">只是口述',来源:'周伯告知',状态:'待核实'}]}}};

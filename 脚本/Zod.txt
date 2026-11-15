@@ -54,7 +54,7 @@ export const Schema = z.object({
     事件冷却: z.coerce.number().transform(v => _.clamp(v, 0, 5)).prefault(0),
     上次焦点角色: z.string().prefault(''),
     校园活动: z.string().prefault(''),
-    学期: z.string().prefault(''),       // 高二上 | 高二下 | 高三上 | 高三下 | 已毕业
+    学期: z.string().prefault(''),       // 高二上 | 高二下 | 暑假 | 高三上 | 高三下 | 已毕业
   }).prefault({}),
 
   校园: z.object({
@@ -178,7 +178,7 @@ export const Schema = z.object({
     })).prefault([]),
   }).prefault({}),
 }).prefault({});
-// Shared by the message writeback and the read-only preview of old snapshots.
+// Shared by the prompt, calendar and MVU. Dates are in the story's local calendar.
 function campusDate(value) {
   const date = typeof value === 'string' ? value.replaceAll('/', '-') : '';
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return '';
@@ -186,6 +186,23 @@ function campusDate(value) {
   return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === date ? date : '';
 }
 
+function campusYear(value) {
+  const year = Number(value);
+  return Number.isInteger(year) && year >= 1000 && year <= 9900 ? year : 2020;
+}
+
+function campusAnchor(edge, year) {
+  return edge ? `${year + edge[0]}-${edge[1]}` : '';
+}
+
+function campusPeriod(periods, date, year, academic) {
+  if (academic === '已毕业') return periods.find(period => period.id === '已毕业');
+  date = campusDate(date);
+  if (!date) return null;
+  return periods.find(period => date >= campusAnchor(period.start, year) && date <= campusAnchor(period.end, year)) || null;
+}
+
+// Shared by the message writeback and the read-only preview of old snapshots.
 function normalizeCampus(value, today, activityIds) {
   const now = campusDate(today);
   const list = posts => Array.isArray(posts) ? posts.filter(post =>

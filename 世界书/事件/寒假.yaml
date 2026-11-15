@@ -1,10 +1,18 @@
-<%_ if (getvar('stat_data.剧情.学期', { defaults: '高二上' }) === '高二上') { _%>
+@@if !!(typeof jyCampusEvents !== 'undefined' && jyCampusEvents['winter'])
+<%_ { const phase = typeof jyCampusEvents !== 'undefined' && jyCampusEvents['winter'] && (typeof lastUserMessage === 'string' && /春节|除夕|正月/.test(lastUserMessage) ? jyCampusEvents['spring-festival'] : jyCampusEvents['winter']); if (phase) { _%>
 寒假:
-  窗口: 1月下旬至2月20日前后，以正式通知为准
-  核心: 寒假与春节
-  场景素材:
-    - 离校前清理课桌，带走借用资料并确认返校通知；校内开放由值班安排决定。
-    - 假期可留城、邀约、自习或休息；店铺和人物有各自安排，邀约须确认。
-    - 除夕、正月和年前采购按当年农历与叙事确认。私人与家庭信息须通过实际邀约、现场或告知获得。
-    - 返校准备可归还借物、交接班务或延续已发生的经历；未联系不自动扣关系。
+  日程: <%= phase.label %>
+  核心: 离校、春节与返校准备
+<%_ if (['before', 'window', 'live', 'undated'].includes(phase.kind)) { _%>
+  筹备:
+    - 清理课桌、登记借用资料、确认值班与返校通知；春节按当年农历或故事里确认的日期考虑。
 <%_ } _%>
+<%_ if (['window', 'live', 'undated'].includes(phase.kind)) { _%>
+  现场素材:
+    - 可留城、邀约、自习和探亲。营业、排班与家人安排以当前情况为准；除夕与正月的私事，须在实际接触或告知后才会知道。
+<%_ } _%>
+<%_ if (['after', 'cancelled', 'window', 'live', 'undated'].includes(phase.kind)) { _%>
+  收尾与重访:
+    - 返校可归还借物、交接班务。没联络不自动扣关系；经历仅由实际知情的人承接。
+<%_ } _%>
+<%_ } } _%>

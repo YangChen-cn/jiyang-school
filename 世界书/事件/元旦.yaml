@@ -1,9 +1,18 @@
-<%_ if (getvar('stat_data.剧情.学期', { defaults: '高二上' }) === '高二上') { _%>
+@@if !!(typeof jyCampusEvents !== 'undefined' && jyCampusEvents['new-year'])
+<%_ { const phase = typeof jyCampusEvents !== 'undefined' && jyCampusEvents['new-year']; if (phase) { _%>
 元旦:
-  窗口: 1月1日前后，以正式通知为准
-  核心: 班级联欢与短假
-  场景素材:
-    - 自愿分工布置教室、整理歌单；联欢不占用全校舞台。
-    - 可来看节目、帮收拾、回家或安排短假。新年消息来自实际联系人和公开渠道。
-    - 只承接已送出的卡片、借物和公开过的照片；不复制艺术周演出。
+  日程: <%= phase.label %>
+  核心: 班级小联欢与短假
+<%_ if (['before', 'window', 'live', 'undated'].includes(phase.kind)) { _%>
+  筹备:
+    - 按班级安排自愿布置教室、分工和挑歌，不临时占用全校礼堂。
 <%_ } _%>
+<%_ if (['window', 'live', 'undated'].includes(phase.kind)) { _%>
+  现场素材:
+    - 可看班级节目、帮忙或回家。新年问候来自已联系的人和可见的公开渠道。
+<%_ } _%>
+<%_ if (['after', 'cancelled', 'window', 'live', 'undated'].includes(phase.kind)) { _%>
+  收尾与重访:
+    - 只承接已送出的卡片、借物和已公开照片。
+<%_ } _%>
+<%_ } } _%>

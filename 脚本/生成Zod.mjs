@@ -40,7 +40,8 @@ if (!/^export const Schema\s*=\s*z\.object\(/m.test(src)) {
   process.exit(1);
 }
 
-const campusHelpers = fs.readFileSync(path.join(here, '校园消息.js'), 'utf8').trimEnd();
+const campusHelpers = ['校园时间.js', '校园消息.js']
+  .map(file => fs.readFileSync(path.join(here, file), 'utf8').trimEnd()).join('\n\n');
 const periods = JSON.parse(fs.readFileSync(path.join(root, '数据/学期.json'), 'utf8'));
 const activityIds = periods.flatMap(period => (period.activities || []).map(activity => activity.id));
 
