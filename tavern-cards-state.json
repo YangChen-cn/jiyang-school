@@ -1061,72 +1061,6 @@
           "order": 67
         }
       },
-      "凌知夏_基础信息": {
-        "scope": "specific",
-        "part": "basic",
-        "keywords": [
-          "凌知夏",
-          "知夏"
-        ],
-        "abstract": "凌知夏的基础档案：年级前三的学霸，竞赛组成员，理性克制到情感笨拙，通过细节而非语言关照他人",
-        "contents": [
-          {
-            "content": "---\n<character_basic character=\"凌知夏\">"
-          },
-          {
-            "file": "世界书/角色/凌知夏/基础信息.yaml"
-          },
-          {
-            "content": "</character_basic>"
-          }
-        ],
-        "uid": 12,
-        "enabled": true,
-        "strategy": {
-          "type": "selective",
-          "keys": [
-            "凌知夏",
-            "知夏"
-          ]
-        },
-        "position": {
-          "type": "after_character_definition",
-          "order": 68
-        }
-      },
-      "凌知夏_性格调色盘": {
-        "scope": "specific",
-        "part": "personality",
-        "keywords": [
-          "凌知夏",
-          "知夏"
-        ],
-        "abstract": "凌知夏的五阶段性格调色盘：底色理性，从克制高效→逻辑细致→逻辑崩坏的挫败→体贴笨拙→亲密恋人+NSFW，以解题精神贯穿包括亲密，90+解锁解题式亲密",
-        "contents": [
-          {
-            "content": "---\n<character_personality character=\"凌知夏\">"
-          },
-          {
-            "file": "世界书/角色/凌知夏/性格调色盘.yaml"
-          },
-          {
-            "content": "</character_personality>"
-          }
-        ],
-        "uid": 13,
-        "enabled": true,
-        "strategy": {
-          "type": "selective",
-          "keys": [
-            "凌知夏",
-            "知夏"
-          ]
-        },
-        "position": {
-          "type": "after_character_definition",
-          "order": 69
-        }
-      },
       "慕佳芊_基础信息": {
         "scope": "specific",
         "part": "basic",
@@ -1416,6 +1350,31 @@
           "type": "after_character_definition",
           "order": 90
         }
+      },
+      "凌知夏_基础信息": {
+        "keywords": [
+          "凌知夏",
+          "知夏"
+        ],
+        "abstract": "同班普通 NPC，年级前三，承担竞赛、自习与课堂日常。",
+        "contents": [
+          {
+            "file": "世界书/NPC/凌知夏/基础信息.yaml"
+          }
+        ],
+        "uid": 12,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "凌知夏",
+            "知夏"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 68
+        }
       }
     },
     "NSFW指导": {
@@ -1497,32 +1456,6 @@
         "position": {
           "type": "after_character_definition",
           "order": 102
-        }
-      },
-      "凌知夏_NSFW指导": {
-        "scope": "specific",
-        "keywords": [
-          "凌知夏",
-          "知夏"
-        ],
-        "abstract": "凌知夏的NSFW实战指导：体位偏好（传教士+面对面坐姿，后入经由利弊分析后加入轮换）、语料库、敏感点（脖子两侧/耳垂下方/肩胛骨间）、研究型行为速查与硬约束",
-        "contents": [
-          {
-            "file": "世界书/角色/凌知夏/NSFW指导.yaml"
-          }
-        ],
-        "uid": 26,
-        "enabled": true,
-        "strategy": {
-          "type": "selective",
-          "keys": [
-            "凌知夏",
-            "知夏"
-          ]
-        },
-        "position": {
-          "type": "after_character_definition",
-          "order": 103
         }
       },
       "慕佳芊_NSFW指导": {
@@ -2103,7 +2036,7 @@
       "时间线_校园作息": {
         "path": "世界书/时间线/校园作息.yaml",
         "keywords": [],
-        "abstract": "普通上课日与假期节奏，七位主要角色及班长的常见去向",
+        "abstract": "普通上课日与假期节奏，主要角色及同班配角的常见去向",
         "uid": 82,
         "enabled": true,
         "strategy": {

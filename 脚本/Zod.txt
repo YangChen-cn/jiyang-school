@@ -111,19 +111,6 @@ export const Schema = z.object({
     内心独白: z.string().prefault(''),
   }).prefault({}),
 
-  凌知夏: z.object({
-    是否在场: z.coerce.boolean().prefault(false),
-    好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
-    关系阶段: z.string().prefault(''),
-    NSFW: z.coerce.boolean().prefault(false),
-    当前上装: z.string().prefault(''),
-    当前下装: z.string().prefault(''),
-    所在位置: z.string().prefault(''),
-    动作: z.string().prefault(''),
-    心情: z.string().prefault(''),
-    内心独白: z.string().prefault(''),
-  }).prefault({}),
-
   慕佳芊: z.object({
     是否在场: z.coerce.boolean().prefault(false),
     好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
@@ -297,7 +284,6 @@ const relationshipLimits = [
   ['温书语', '好感度', 2, 3],
   ['沈幼楚', '好感度', 2, 3],
   ['沈幼楚', '信任度', 3, 4],
-  ['凌知夏', '好感度', 2, 3],
   ['陈芷汀', '好感度', 3, 4],
   ['慕佳芊', '好感度', 2, 2],
   ['虞淑婉', '好感度', 2, 2],
@@ -341,6 +327,9 @@ $(async () => {
   });
   eventOn(Mvu.events.BEFORE_MESSAGE_UPDATE, ({ variables }) => {
     const state = variables?.stat_data;
+    // MVU carries old fields forward. Retire this key on the newly written floor only.
+    delete state?.凌知夏;
+    delete state?.剧情?.当日关系增量?.已用?.['凌知夏.好感度'];
     const period = campusPeriod(periodDates, state?.世界?.日期, campusYear(state?.世界?.起始年份), state?.剧情?.学期);
     if (period && state.剧情) state.剧情.学期 = period.id;
     if (state?.主角) {

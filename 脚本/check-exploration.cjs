@@ -28,6 +28,59 @@ assert.equal(old.世界.当前位置,'我找到的小巷');assert.equal(old.苏�
 assert.equal(old.校园.有效公告.length,0);
 assert.equal(old.校园.动态流.length,0);
 const manifest = JSON.parse(read('tavern-cards-state.json'));
+const npc = manifest.entryManifest.NPC.凌知夏_基础信息;
+assert.equal(npc.uid,12);
+assert.ok(npc.strategy.keys.includes('凌知夏'));
+assert.ok(!Object.keys(manifest.entryManifest.角色).some(key=>key.startsWith('凌知夏')));
+assert.ok(!Object.keys(manifest.entryManifest.NSFW指导).some(key=>key.startsWith('凌知夏')));
+
+async function checkOpeningMappings() {
+ const greetingNames=['开学第一天','慕佳芊','苏晓樯','温书语','沈幼楚','陈芷汀','虞淑婉'];
+ const files=fs.readdirSync(path.join(root,'开场白')).filter(name=>/^\d-.*\.txt$/.test(name)).sort();
+ assert.equal(files.length,greetingNames.length);
+ const greetings=files.map(file=>read('开场白/'+file));
+ const exported=read('脚本/开局设定按钮绑定脚本.js').replace('  function stop() {',
+   '  globalThis.openings = {names: GREETING_NAMES, scenes: GREETING_SCENES, patches: buildMvuPatches, preview: greetingTextAt, infer: inferGreetingIndex}; return;\n  function stop() {');
+ const context={window:{getCharacter:()=>({first_messages:['<OpeningSetupUI/>',...greetings]})}};
+ vm.runInNewContext(exported,context);
+ const {names,scenes,patches,preview,infer}=context.openings;
+ assert.deepEqual(Array.from(names).slice(1),greetingNames);
+ const menu=read('正则/开局设定界面.html');
+ const buttons=Array.from(menu.matchAll(/data-greeting="(\d+)"[^>]*>.*?class="jy-opening-scene-name">([^<]+)</g));
+ assert.deepEqual(buttons.map(match=>match[2]),greetingNames);
+ for(const [index,name] of greetingNames.entries()){
+   assert.equal(Number(buttons[index][1]),index+1);
+   assert.ok(files[index].includes(name));
+   assert.equal(await preview(index+1),greetings[index].replace(/<OpeningSetupUI\s*\/>/gi,'').trim());
+   assert.equal(await infer(greetings[index]),index+1);
+   const state=Object.fromEntries(patches({'开始年份':'2020','重要物品':''},'preset',scenes[index+1]));
+   assert.ok(state['世界.当前位置']);
+   assert.ok(!Object.keys(state).some(key=>key.startsWith('凌知夏.')));
+   if(index>0) assert.equal(state[name+'.是否在场'],true);
+ }
+ assert.match(scenes[6].location,/咖啡馆/);
+ assert.match(scenes[7].location,/校长办公室/);
+}
+
+function checkRetiredCharacter(write) {
+ const history={世界:{日期:'2020-09-03'},剧情:{当日关系增量:{日期:'2020-09-03',已用:{'凌知夏.好感度':3}}},主角:{重要物品:[{名称:'竞赛笔记',描述:'借来查解法'}]},凌知夏:{好感度:97,关系阶段:'熟悉'},苏晓樯:{好感度:12}};
+ const exact=JSON.stringify(history);
+ const checked=schemaBox.schema.parse(history);
+ assert.equal(checked.凌知夏,undefined);
+ assert.equal(checked.苏晓樯.好感度,12);
+ const snapshot=ejs.render(read('世界书/变量/变量列表.txt'),{getvar:()=>history});
+ assert.doesNotMatch(snapshot,/凌知夏|当日关系增量/);
+ assert.match(snapshot,/竞赛笔记/);
+ const continued=structuredClone(history);
+ write({variables:{stat_data:continued}});
+ assert.equal(continued.凌知夏,undefined);
+ assert.equal(continued.剧情.当日关系增量.已用['凌知夏.好感度'],undefined);
+ assert.equal(continued.苏晓樯.好感度,12);
+ assert.equal(continued.主角.重要物品[0].名称,'竞赛笔记');
+ assert.equal(JSON.stringify(history),exact);
+ assert.doesNotMatch(html,/stat_data\.凌知夏|avatars\/zhixia/);
+ assert.doesNotMatch(read('脚本/正文对白.js'),/avatars\/zhixia/);
+}
 for (const alias of ['老鹰山','听风亭','旧值守屋','周伯','山路旧照']) assert.ok(manifest.entryManifest.事件.老鹰山仙人.strategy.keys.includes(alias));
 assert.ok(!manifest.entryManifest.事件.远足.strategy.keys.includes('老鹰山'));
 const eventEntries = Object.values(manifest.entryManifest.事件);
@@ -127,7 +180,7 @@ async function runRoutes() {
 }
 
 function checkRelationshipPace(update) {
- const people=['苏晓樯','温书语','沈幼楚','凌知夏','陈芷汀','慕佳芊','虞淑婉'];
+ const people=['苏晓樯','温书语','沈幼楚','陈芷汀','慕佳芊','虞淑婉'];
  const start=()=>({世界:{日期:'2020-09-01'},剧情:{},...Object.fromEntries(people.map(name=>[name,{好感度:0,关系阶段:name==='沈幼楚'?'戒备':name==='慕佳芊'||name==='虞淑婉'?'师生':'初识'}]))});
  let state=start();
  state.沈幼楚.信任度=0;
@@ -175,7 +228,7 @@ function checkRelationshipPace(update) {
    const date=new Date(Date.UTC(2020,8,1+day)).toISOString().slice(0,10);
    const group=[people[day%people.length],people[(day+2)%people.length]];
    const focus=group[0];
-   const event=day%6===0&&beat===2?'协作完成一项任务':day%3===0&&beat===1?'首次承担分工':'例行交流';
+   const event=day%7===0&&beat===2?'协作完成一项任务':day%5===0&&beat===1?'首次承担分工':'例行交流';
    legacy.世界.日期=date;
    for(const name of group) legacy[name].好感度=Math.min(100,legacy[name].好感度+2);
    updateState(s=>{
@@ -203,6 +256,7 @@ function checkRelationshipPace(update) {
 }
 const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_message_variable::stat_data.世界.日期}}','2021/07/03').replaceAll('{{format_message_variable::stat_data.世界.起始年份}}','2020').replaceAll('{{format_message_variable::stat_data.世界.当前位置}}','我找到的小巷').replaceAll('{{format_message_variable::stat_data.主角.出生日期}}','2000/07/03').replaceAll('{{format_message_variable::stat_data.主角.班级}}','返乡实习生');
 (async () => {
+ await checkOpeningMappings();
  await runRoutes();
  const errors=[]; const vc = new VirtualConsole(); vc.on('jsdomError',e=>errors.push(e.message));
  const reads=[];
@@ -222,6 +276,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const callbackBox={z,_,registerMvuSchema:()=>{},waitGlobalInitialized:async()=>{},Mvu:{events:{BEFORE_MESSAGE_UPDATE:'before',VARIABLE_UPDATE_ENDED:'ended'}},eventOn(name,callback){if(name==='before')callbackBox.write=callback;else if(name==='ended')callbackBox.pace=callback;},$:(fn)=>fn()};
  vm.createContext(callbackBox);
  await vm.runInContext(read('脚本/Zod.txt').replace(/^import .*$/m,'').replace('export const Schema','const Schema'),callbackBox);
+ checkRetiredCharacter(callbackBox.write);
  checkRelationshipPace(callbackBox.pace);
  const state={世界:{日期:'2021/07/03'},校园:structuredClone(stored.stat_data.校园)};
  const update=()=>callbackBox.write({variables:{stat_data:state}});

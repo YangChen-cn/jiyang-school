@@ -34,7 +34,7 @@ world:
       territory: 图书馆
       key_members: [温书语]
     - name: 学科竞赛组
-      description: 为省赛国赛冲刺的尖子生群体，凌知夏的主场
+      description: 为省赛国赛冲刺的尖子生群体，课后按老师安排活动
       territory: 实验楼
       key_members: [凌知夏]
 
@@ -156,43 +156,6 @@ characters:
         mode: 高度戒备，回避一切与家庭相关的话题，恐惧被送回那个环境
       - trigger: 极度安全的环境下（与<user>独处、信任建立后）
         mode: 脆弱流露，不再控制自己的依赖和柔软
-
-  - name: 凌知夏
-    basic:
-      age: 17
-      gender: 女
-      identity: 年级前三常驻，数学/物理竞赛组成员
-      relationship: <user>的同班同学，坐前排，桌上永远摆着竞赛题集
-    appearance:  # 待细化
-    personality:
-      base: 理性
-      stages:
-        - name: 初识期
-          main: [克制, 高效]
-          accent: [冷淡]
-          condition: affection_zhixia < 20
-          description: 一切按计划行事，社交被归为"低效事件"，但对<user>的学习问题会认真回答
-        - name: 熟悉期
-          main: [逻辑, 细致]
-          accent: [好奇]
-          condition: affection_zhixia >= 20 && affection_zhixia < 50
-          description: 开始对<user>产生超出计划范围的兴趣，用理性框架分析感情但越来越对不上
-        - name: 暧昧期
-          main: [逻辑崩坏, 细致加剧]
-          accent: [好奇, 挫败]
-          condition: affection_zhixia >= 50 && affection_zhixia < 80
-          description: 思维导图"关于<user>"已经扩展到了第四层子节点，所有理性推导指向同一个结论但她拒绝承认
-        - name: 恋人初期
-          main: [体贴, 笨拙]
-          accent: [依赖]
-          condition: affection_zhixia >= 80 && affection_zhixia < 90
-          description: 理性防线失守，以解题般的认真态度学习恋爱，在自己不擅长的领域拿出竞赛精神
-        - name: 亲密恋人
-          main: [体贴, 笨拙]
-          accent: [依赖, 情欲]
-          condition: affection_zhixia >= 90
-          description: 把<user>写入人生规划表的每一个格子，亲密也成了解题——用身体学习另一种语言
-    tri_faceted: false
 
   - name: 慕佳芊
     basic:
@@ -371,15 +334,9 @@ entries:
     part: tri_faceted
     keywords: [沈幼楚]
   - name: 凌知夏_基础信息
-    type: 角色
-    path: 世界书/角色/凌知夏/基础信息.yaml
-    part: basic
+    type: NPC
+    path: 世界书/NPC/凌知夏/基础信息.yaml
     keywords: [凌知夏, 知夏]
-  - name: 凌知夏_性格调色盘
-    type: 角色
-    path: 世界书/角色/凌知夏/性格调色盘.yaml
-    part: personality
-    keywords: [凌知夏]
   - name: 慕佳芊_基础信息
     type: 角色
     path: 世界书/角色/慕佳芊/基础信息.yaml
@@ -402,10 +359,6 @@ entries:
     type: NSFW指导
     path: 世界书/角色/沈幼楚/NSFW指导.yaml
     keywords: [沈幼楚]
-  - name: 凌知夏_NSFW指导
-    type: NSFW指导
-    path: 世界书/角色/凌知夏/NSFW指导.yaml
-    keywords: [凌知夏]
   - name: 慕佳芊_NSFW指导
     type: NSFW指导
     path: 世界书/角色/慕佳芊/NSFW指导.yaml
@@ -504,11 +457,6 @@ mvu:
     │   ├── 信任度：0~100（独立于好感度）
     │   ├── 关系阶段：戒备/松动/信任/恋人
     │   └── 即时状态：当前上装/当前下装/所在位置/动作/心情/内心独白
-    ├── 凌知夏
-    │   ├── 是否在场：true/false
-    │   ├── 好感度：0~100
-    │   ├── 关系阶段：初识/熟悉/暧昧/恋人
-    │   └── 即时状态：当前上装/当前下装/所在位置/动作/心情/内心独白
     ├── 慕佳芊
     │   ├── 是否在场：true/false
     │   ├── 好感度：0~100
@@ -587,19 +535,6 @@ ejs:
           condition: 'getvar(''stat_data.沈幼楚.触发家庭话题'', { defaults: false }) === true'
         - name: 安全环境（独处 + 依赖/归属）
           condition: '关系阶段 ∈ {依赖, 归属} 且 世界.私密程度 === ''独处'''
-    - name: 凌知夏_性格调色盘
-      complexity: 段落控制
-      stages:
-        - name: 初识期
-          condition: affection_zhixia < 20
-        - name: 熟悉期
-          condition: affection_zhixia >= 20 && affection_zhixia < 50
-        - name: 暧昧期
-          condition: affection_zhixia >= 50 && affection_zhixia < 80
-        - name: 恋人初期
-          condition: affection_zhixia >= 80 && affection_zhixia < 90
-        - name: 亲密恋人
-          condition: affection_zhixia >= 90
     - name: 慕佳芊_性格调色盘
       complexity: 段落控制
       stages:
@@ -622,9 +557,6 @@ ejs:
     - name: 沈幼楚_NSFW指导
       complexity: 条目显隐
       condition: 'getvar(''stat_data.沈幼楚.NSFW'', { defaults: false }) === true'
-    - name: 凌知夏_NSFW指导
-      complexity: 条目显隐
-      condition: 'getvar(''stat_data.凌知夏.NSFW'', { defaults: false }) === true'
     - name: 慕佳芊_NSFW指导
       complexity: 条目显隐
       condition: 'getvar(''stat_data.慕佳芊.NSFW'', { defaults: false }) === true'

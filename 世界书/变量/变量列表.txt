@@ -1,5 +1,14 @@
 ---
 （当前变量快照：仅供阅读；禁止在正文、规划或分析中复述，禁止把它转写成 YAML 列表输出。）
 <status_current_variable>
-{{format_message_variable::stat_data}}
+<%_ {
+const snapshot = {...getvar('stat_data', { defaults: {} })};
+delete snapshot.凌知夏;
+if (snapshot.剧情) {
+  snapshot.剧情 = {...snapshot.剧情};
+  delete snapshot.剧情.当日关系增量;
+}
+_%>
+<%- JSON.stringify(snapshot) %>
+<%_ } _%>
 </status_current_variable>

@@ -5,8 +5,8 @@
   var GLOBAL_KEY = '__jiyangOpeningSetupControllerV7';
   var LEGACY_ENTRY_NAME = '玩家开局设定';
   var WRITE_LEGACY_WORLDBOOK = false; // 旧版把档案写进世界书；新版改为写 MVU 变量，保留代码路径但默认关闭
-  var GREETING_NAMES = ['开局设定界面', '开学第一天', '慕佳芊', '苏晓樯', '温书语', '沈幼楚', '凌知夏', '陈芷汀', '虞淑婉'];
-  var CHARACTER_NAMES = ['苏晓樯', '温书语', '沈幼楚', '凌知夏', '慕佳芊', '陈芷汀', '虞淑婉'];
+  var GREETING_NAMES = ['开局设定界面', '开学第一天', '慕佳芊', '苏晓樯', '温书语', '沈幼楚', '陈芷汀', '虞淑婉'];
+  var CHARACTER_NAMES = ['苏晓樯', '温书语', '沈幼楚', '慕佳芊', '陈芷汀', '虞淑婉'];
   var DEFAULT_FIELDS = {
     '年龄': '17岁',
     '班级或身份': '暨阳中学高二重点班学生'
@@ -19,7 +19,7 @@
   var submitting = false;
   var bindTimer = null;
 
-  // 八条预写开场对应的场景补丁（按各自开场白正文事实填写，不统一套 9/1 早自习）。
+  // 预写开场对应的场景补丁（按各自开场白正文事实填写，不统一套 9/1 早自习）。
   var GREETING_SCENES = {
     1: {
       date: '2020/09/01', week: '星期二', time: '早自习', weather: '晴', location: '暨阳中学 教学楼四楼 高二（8）班教室',
@@ -27,7 +27,6 @@
       present: {
         '苏晓樯': { pos: '教室后排靠窗座位', top: '白色短袖校服衬衫', bottom: '深色校服百褶裙', action: '把零食塞进抽屉，回头打量新同学', mood: '好奇里带一点审视', inner: '新来的会坐哪儿？' },
         '温书语': { pos: '窗边第二排', top: '白色短袖校服衬衫', bottom: '深色校服长裤', action: '低头看一本卷了边的课外书', mood: '安静，不愿被打扰', inner: '希望今天不要有人来搭话。' },
-        '凌知夏': { pos: '前排正中', top: '白色短袖校服衬衫', bottom: '深色校服长裤', action: '把竞赛题集摊开，笔尖压在第一题上', mood: '专注里藏着好胜', inner: '这一题还有更快的解法。' },
         '沈幼楚': { pos: '最后一排靠墙角落', top: '洗得发白的校服短袖', bottom: '洗得发白的校服长裤', action: '把自己缩进墙角，低头避开视线', mood: '紧张，想消失', inner: '不要看我。' },
         '慕佳芊': { pos: '讲台上', top: '浅色衬衫', bottom: '及膝浅色半裙', action: '转身写板书，粉笔声清脆', mood: '从容而克制', inner: '这一届会比上一届更难带吗。' }
       }
@@ -61,20 +60,13 @@
       }
     },
     6: {
-      date: '2020/09/02', week: '星期三', time: '放学', weather: '晴', location: '实验楼三楼 竞赛自习室',
-      area: '校园', privacy: '半私密', pace: '日常铺垫', semester: '高二上', focus: '凌知夏', schoolEvent: '无',
-      present: {
-        '凌知夏': { pos: '自习室长桌另一侧', top: '白色短袖校服衬衫', bottom: '深色校服长裤', action: '低头批改竞赛题，红笔停在半空', mood: '遇到对手时的专注', inner: '这道题他居然做对了。' }
-      }
-    },
-    7: {
       date: '2020/09/12', week: '星期六', time: '下午', weather: '多云', location: '青悦城四楼 无招牌咖啡馆',
       area: '周边', privacy: '半私密', pace: '日常铺垫', semester: '高二上', focus: '陈芷汀', schoolEvent: '无',
       present: {
         '陈芷汀': { pos: '靠窗卡座', top: '黑色无袖连衣裙', bottom: '（连衣裙）', action: '托着腮看向门口，指尖轻轻敲杯壁', mood: '打量与试探的兴致', inner: '照片和本人差多少呢。' }
       }
     },
-    8: {
+    7: {
       date: '2020/09/02', week: '星期三', time: '上午课', weather: '晴', location: '行政楼 校长办公室门口',
       area: '校园', privacy: '半私密', pace: '事件触发', semester: '高二上', focus: '虞淑婉', schoolEvent: '无',
       present: {
@@ -173,7 +165,7 @@
 
   function getGreetingIndex(root) {
     var n = Number(root.getAttribute('data-greeting-index'));
-    return (Number.isFinite(n) && n >= 1 && n <= 8) ? Math.floor(n) : 1;
+    return (Number.isFinite(n) && n >= 1 && n < GREETING_NAMES.length) ? Math.floor(n) : 1;
   }
 
   function setGreetingIndex(root, index) {
@@ -275,7 +267,7 @@
     var normalized = normalizeText(messageZeroText);
     if (!normalized) return 0;
     var greetings = await readGreetings();
-    for (var i = 0; i < Math.min(8, greetings.length); i += 1) {
+    for (var i = 0; i < Math.min(GREETING_NAMES.length - 1, greetings.length); i += 1) {
       var greeting = normalizeText(greetings[i]);
       if (!greeting) continue;
       var head = greeting.slice(0, 80);

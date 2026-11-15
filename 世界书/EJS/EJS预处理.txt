@@ -12,7 +12,6 @@ define('campus_activity', getvar('stat_data.剧情.校园活动', { defaults: '�
 define('affection_xiaotian', getvar('stat_data.苏晓樯.好感度', { defaults: 0 }));
 define('affection_shuyu', getvar('stat_data.温书语.好感度', { defaults: 0 }));
 define('affection_youchu', getvar('stat_data.沈幼楚.好感度', { defaults: 0 }));
-define('affection_zhixia', getvar('stat_data.凌知夏.好感度', { defaults: 0 }));
 define('affection_jiaqian', getvar('stat_data.慕佳芊.好感度', { defaults: 0 }));
 define('affection_zhiting', getvar('stat_data.陈芷汀.好感度', { defaults: 0 }));
 define('affection_shuwan', getvar('stat_data.虞淑婉.好感度', { defaults: 0 }));

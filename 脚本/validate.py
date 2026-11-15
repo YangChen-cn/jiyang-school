@@ -16,7 +16,7 @@
   G Zod 覆盖   : schema.ts 字段集合 vs initvar.yaml（报告 initvar-only 字段）
   H YAML 合法  : 变量系统结构化 YAML + 创作规划（只 warn）
   I 规则覆盖   : 变量更新规则 顶层 路径.字段 是否都在 schema 声明内
-  J 开场白映射 : 开场白/*.txt 排序长度 == data.alternate_greetings 长度
+  J 开场白映射 : 开场白原文、顺序与 data.alternate_greetings 一致
   K 预算       : 正文字符/token 估算、always-on 条目
 """
 import base64
@@ -348,10 +348,12 @@ if yaml:
 gdir = REPO / '开场白'
 if gdir.exists():
     files = sorted([f for f in gdir.glob('*.txt') if re.match(r'^\d', f.name) and f.name != '0.txt'])
-    sizes = [len(f.read_text(encoding='utf-8')) for f in files]
-    alt = [len(g) for g in data.get('alternate_greetings', [])]
-    if sizes != alt:
-        err(f'J: alternate_greetings 映射漂移 files={sizes} card={alt}')
+    alt = data.get('alternate_greetings', [])
+    if len(files) != len(alt):
+        err(f'J: alternate_greetings 数量不一致 files={len(files)} card={len(alt)}')
+    for source, greeting in zip(files, alt):
+        if source.read_text(encoding='utf-8') != greeting:
+            err(f'J: alternate_greetings 正文或顺序不一致 {source.name}')
 
 # ---------- L. 常驻预算豁免 ----------
 # ST 只认 extensions.ignore_budget（snake_case）；at_depth(position=4) 的状态条目必须设置，
