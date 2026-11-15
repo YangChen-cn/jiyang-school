@@ -22,6 +22,7 @@
     '苏晓樯': 'v2/avatars/xiaoqiang.png',
     '温书语': 'v2/avatars/shuyu.png',
     '沈幼楚': 'v2/avatars/youchu.png',
+    '许念安': 'v2/avatars/nianan.png',
     '慕佳芊': 'v2/avatars/jiaqian.png',
     '陈芷汀': 'v2/avatars/zhiting.png',
     '虞淑婉': 'v1/avatars/shuwan.png',
@@ -31,6 +32,7 @@
   // 模型偶尔会用称呼写标签，映射回标准角色名，才能命中同名头像缓存。
   const nameAliases = {
     '小天女': '苏晓樯', '书语': '温书语', '幼楚': '沈幼楚',
+    '念安': '许念安', '安安': '许念安', '学习委员': '许念安',
     '吴班长': '吴臻臻',
     '佳芊': '慕佳芊', '慕老师': '慕佳芊', '英语老师': '慕佳芊',
     '芷汀': '陈芷汀', '虞校长': '虞淑婉', '校长': '虞淑婉', '淑婉': '虞淑婉',

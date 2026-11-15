@@ -811,13 +811,16 @@
           "苏晓樯",
           "温书语",
           "沈幼楚",
+          "许念安",
+          "念安",
+          "安安",
           "凌知夏",
           "吴臻臻",
           "慕佳芊",
           "陈芷汀",
           "虞淑婉"
         ],
-        "abstract": "角色快速索引：<user>及五名同班同学（苏晓樯、温书语、沈幼楚、凌知夏、吴臻臻）加英语老师慕佳芊、隔壁班班花陈芷汀和校长虞淑婉的基本识别信息",
+        "abstract": "角色快速索引：七位可攻略角色（苏晓樯、温书语、沈幼楚、许念安、慕佳芊、陈芷汀、虞淑婉）与两名 NPC（凌知夏、吴臻臻）的基本识别信息",
         "uid": 4,
         "enabled": true,
         "strategy": {
@@ -1323,6 +1326,78 @@
         },
         "part": "other",
         "scope": "specific"
+      },
+      "许念安_基础信息": {
+        "scope": "specific",
+        "part": "basic",
+        "keywords": [
+          "许念安",
+          "念安",
+          "安安",
+          "学习委员"
+        ],
+        "abstract": "许念安的基础档案：高二(8)班学习委员，老师与家长眼中的完美女孩；懂事、周到、记录成瘾，内里是怕被丢下的控制欲与占有欲",
+        "contents": [
+          {
+            "content": "---\n<character_basic character=\"许念安\">"
+          },
+          {
+            "file": "世界书/角色/许念安/基础信息.yaml"
+          },
+          {
+            "content": "</character_basic>"
+          }
+        ],
+        "uid": 94,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "许念安",
+            "念安",
+            "安安",
+            "学习委员"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 77
+        }
+      },
+      "许念安_性格调色盘": {
+        "scope": "specific",
+        "part": "personality",
+        "keywords": [
+          "许念安",
+          "念安",
+          "安安"
+        ],
+        "abstract": "许念安的双轴六阶段性格调色盘：好感/依恋 × 控制欲/不安全感，表面→观察→依恋→紧绷→共生→松绑；90+ 分叉，高控制走向安静占有，低控制+边界事件才可能松绑",
+        "contents": [
+          {
+            "content": "---\n<character_personality character=\"许念安\">"
+          },
+          {
+            "file": "世界书/角色/许念安/性格调色盘.yaml"
+          },
+          {
+            "content": "</character_personality>"
+          }
+        ],
+        "uid": 95,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "许念安",
+            "念安",
+            "安安"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 78
+        }
       }
     },
     "NPC": {
@@ -1508,6 +1583,34 @@
         "position": {
           "type": "after_character_definition",
           "order": 105
+        }
+      },
+      "许念安_NSFW指导": {
+        "scope": "specific",
+        "keywords": [
+          "许念安",
+          "念安",
+          "安安"
+        ],
+        "abstract": "许念安的NSFW实战指导：安全型/过渡带/占有型三条路线，占有型的独占、确认与事后追问，以及同意/边界/不全知硬约束",
+        "contents": [
+          {
+            "file": "世界书/角色/许念安/NSFW指导.yaml"
+          }
+        ],
+        "uid": 96,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "许念安",
+            "念安",
+            "安安"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 107
         }
       }
     },

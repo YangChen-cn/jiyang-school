@@ -146,6 +146,20 @@ export const Schema = z.object({
     内心独白: z.string().prefault(''),
   }).prefault({}),
 
+  许念安: z.object({
+    是否在场: z.coerce.boolean().prefault(false),
+    好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
+    控制欲: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
+    关系阶段: z.string().prefault(''),
+    NSFW: z.coerce.boolean().prefault(false),
+    当前上装: z.string().prefault(''),
+    当前下装: z.string().prefault(''),
+    所在位置: z.string().prefault(''),
+    动作: z.string().prefault(''),
+    心情: z.string().prefault(''),
+    内心独白: z.string().prefault(''),
+  }).prefault({}),
+
   主角: z.object({
     姓名: z.string().prefault(''),
     年龄: z.string().prefault(''),
