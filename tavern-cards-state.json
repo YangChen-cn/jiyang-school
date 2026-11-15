@@ -1,6 +1,6 @@
 {
-  "projectName": "暨阳中学v2.1",
-  "worldbookName": "暨阳中学v2.1",
+  "projectName": "暨阳中学v2.2",
+  "worldbookName": "暨阳中学v2.2",
   "form": "charactercard",
   "mvu": true,
   "entryManifest": {
@@ -2282,14 +2282,14 @@
     "role": "system",
     "depth": 0
   },
-  "avatar": "暨阳中学v2.1.png",
+  "avatar": "暨阳中学v2.2.png",
   "description": "",
   "first_messages": [
     "开场白/0.txt"
   ],
   "creator": "",
   "creator_notes": "",
-  "version": "v2.1",
+  "version": "v2.2",
   "create_date": "2026-06-24T15:20:28.960Z",
   "extensions": {
     "tavern_helper": {
