@@ -73,7 +73,7 @@ async function runRoutes() {
     const [gate, ...content] = read(entry.path).split('\n');
     assert.match(gate, /^@@if /);
     const allowed = vm.runInNewContext(gate.slice(5), result.table);
-    return allowed ? ejs.render(content.join('\n'), {...result.table,lastUserMessage:input}).trim() : '';
+    return allowed ? ejs.render(content.join('\n'), {...result.table,lastUserMessage:input,getvar:()=>''}).trim() : '';
   };
   for (const activity of periods.flatMap(p => p.activities || [])) {
     const [date, hit, miss] = examples[activity.id];
@@ -119,6 +119,11 @@ async function runRoutes() {
   assert.deepEqual((await renderRoutes(hiking)).activations,[]);
   hiking.世界.当前位置='老鹰山远足集合点';
   assert.deepEqual((await renderRoutes(hiking)).activations,['远足']);
+  const graduate = stateFor('2022-06-10'); graduate.剧情.学期='已毕业';
+  const graduation = await renderRoutes(graduate);
+  assert.match(graduation.text,/当前生活阶段：已毕业/);
+  assert.match(renderActivity(manifest.entryManifest.事件.最后一课与毕业散伙狂欢夜,graduation,'毕业聚餐'),/实际订位/);
+  assert.equal(renderActivity(sports,graduation,'体育周'), '');
 }
 
 function checkRelationshipPace(update) {
@@ -238,6 +243,10 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(state.校园.动态流[0].标识,'post-18');
  assert.equal(state.校园.动态流[0].确认开始,undefined);
  assert.equal(state.校园.日程.national.开始,'2022-01-01');
+ state.校园.有效公告.push({...schoolNotice('sports','2021-07-10'),渠道:'班群',来源:'同学闲聊'});
+ update();
+ assert.equal(state.校园.日程.sports.开始,'2020-10-20');
+ assert.ok(!state.校园.有效公告.some(post=>post.活动标识==='sports'));
  state.校园.有效公告.push({...summerNotice,标识:'summer-2',确认开始:'2021-07-05',点赞:['甲','甲','乙'],互动:[{用户:'甲',内容:'收到'}]});
  update();
  assert.equal(state.校园.有效公告.filter(post=>post.活动标识==='summer-practice').length,1);

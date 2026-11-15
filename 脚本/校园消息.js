@@ -4,7 +4,8 @@ function normalizeCampus(value, today, activityIds) {
   const list = posts => Array.isArray(posts) ? posts.filter(post =>
     post && typeof post.标识 === 'string' && post.标识 && typeof post.标题 === 'string' && typeof post.摘要 === 'string'
   ) : [];
-  const isNotice = post => post.渠道 === '公告' || post.渠道 === '班群';
+  const isNotice = post => post.渠道 === '公告' || (post.渠道 === '班群' &&
+    /老师|班主任|班长|班委|吴臻臻|慕佳芊|教务|教导处|年级组|体育组|校方|学生会|团委|学校|组织者|负责人/.test(post.来源 || ''));
   const knownActivity = post => isNotice(post) && activityIds.includes(post.活动标识);
   const dates = post => [campusDate(post.确认开始), campusDate(post.确认结束)];
   const scheduleRecord = (status, start, end) => {
@@ -28,12 +29,12 @@ function normalizeCampus(value, today, activityIds) {
   // may be promoted from the old mixed array.
   const legacyNotice = post => {
     const [start, end] = dates(post);
-    const trustedGroup = post.渠道 === '班群' && /老师|班主任|班长|吴臻臻|教务|年级组|校方/.test(post.来源 || '');
-    return (post.渠道 === '公告' || trustedGroup) && knownActivity(post) && (scheduleRecord('已确认', start, end) ||
+    return knownActivity(post) && (scheduleRecord('已确认', start, end) ||
       post.状态 === '已撤销' || (post.渠道 === '公告' && post.状态 === '已结束'));
   };
   const datedLegacy = legacy.filter(legacyNotice);
-  const notices = [...datedLegacy, ...list(value?.有效公告).filter(isNotice)];
+  const proposed = list(value?.有效公告);
+  const notices = [...datedLegacy, ...proposed.filter(isNotice)];
   const seenPosts = new Set();
   const seenActivities = new Set();
   const active = [];
@@ -59,7 +60,7 @@ function normalizeCampus(value, today, activityIds) {
   const announcements = active.sort((a, b) => Number(b.near) - Number(a.near) || b.i - a.i)
     .slice(0, 3).sort((a, b) => a.i - b.i).map(({post}) => post);
   const seenDynamics = new Set();
-  const feed = [...legacy.filter(post => !legacyNotice(post)), ...list(value?.动态流)]
+  const feed = [...legacy.filter(post => !legacyNotice(post)), ...proposed.filter(post => !isNotice(post)), ...list(value?.动态流)]
     .reverse().filter(post => {
       if (seenDynamics.has(post.标识) || seenPosts.has(post.标识)) return false;
       seenDynamics.add(post.标识);

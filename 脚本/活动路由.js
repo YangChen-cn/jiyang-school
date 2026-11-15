@@ -20,8 +20,11 @@ function campusRoutes(periods, state) {
   const hasDate = rawDate != null && rawDate !== '';
   const year = campusYear(state.世界?.起始年份);
   const date = hasDate ? campusDate(rawDate) : `${year}-09-01`;
-  const period = campusPeriod(periods, date, year, state.剧情?.学期);
-  const activities = period?.activities || [];
+  const calendarPeriod = campusPeriod(periods, date, year);
+  const period = state.剧情?.学期 === '已毕业' ? campusPeriod(periods, date, year, '已毕业') : calendarPeriod;
+  // The class can still hold its graduation gathering after a confirmed early ceremony.
+  const activities = period?.id === '已毕业' && calendarPeriod?.id === '高三下'
+    ? calendarPeriod.activities.filter(activity => activity.id === 'graduation-night') : period?.activities || [];
   const calendar = normalizeCampus(state.校园, date, periods.flatMap(p => (p.activities || []).map(a => a.id))).日程;
   const phases = Object.fromEntries(activities.map(a => [a.id, campusEventPhase(a, calendar, date, year)]));
   const location = state.世界?.当前位置;

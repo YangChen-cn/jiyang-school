@@ -1,5 +1,9 @@
 @@if !!(typeof jyCampusEvents !== 'undefined' && jyCampusEvents['winter'])
-<%_ { const phase = typeof jyCampusEvents !== 'undefined' && jyCampusEvents['winter'] && (typeof lastUserMessage === 'string' && /春节|除夕|正月/.test(lastUserMessage) ? jyCampusEvents['spring-festival'] : jyCampusEvents['winter']); if (phase) { _%>
+<%_ {
+const focus = getvar('stat_data.剧情.校园活动', { defaults: '' });
+const spring = ['春节', 'spring-festival'].includes(focus) || (typeof lastUserMessage === 'string' && /春节|除夕|正月/.test(lastUserMessage));
+const phase = typeof jyCampusEvents !== 'undefined' && jyCampusEvents[spring ? 'spring-festival' : 'winter'];
+if (phase) { _%>
 寒假:
   日程: <%= phase.label %>
   核心: 离校、春节与返校准备
