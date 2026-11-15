@@ -1238,6 +1238,8 @@
     background: #fffcf4;
   }
   .jy-status [data-campus-messages] { --jy-tab: #f1e5d9; --jy-tab-ink: #76482f; }
+  .jy-forum-announcements { padding: 0 0 0.6rem; border-bottom: 1px solid var(--jy-line, #cfdad4); }
+  .jy-forum-announcements .jy-page-note { margin: 0.4rem 0; }
   .jy-status .jy-calendar { --jy-tab: #e8ecdc; --jy-tab-ink: #3e593e; }
   .jy-status .jy-readout > summary {
     display: flex;
@@ -1511,8 +1513,13 @@
       <details class="jy-readout" data-campus-messages>
         <summary><span class="jy-tab-mark" aria-hidden="true">✎</span><span>校园论坛</span></summary>
         <div class="jy-calendar-body">
+          <section class="jy-forum-announcements" aria-label="有效公告">
+            <p class="jy-forum-edition"><span aria-hidden="true"></span>有效公告</p>
+            <p class="jy-page-note" data-campus-announcement-status role="status"></p>
+            <ul class="jy-feed" data-campus-announcements></ul>
+          </section>
           <div class="jy-page-toolbar jy-forum-toolbar">
-            <p class="jy-forum-edition"><span aria-hidden="true"></span>校园短讯</p>
+            <p class="jy-forum-edition"><span aria-hidden="true"></span>校园动态</p>
             <label>栏目 <select data-campus-channel><option>全部</option><option>趣事</option><option>八卦</option><option>余波</option><option>朋友圈</option><option>公告</option><option>班群</option><option>来信</option></select></label>
           </div>
           <p class="jy-page-note" data-campus-status role="status"></p>
@@ -2139,6 +2146,87 @@
   // JY_PERIODS_BEGIN
   const JY_PERIODS = [{"id":"高二上","start":[0,"08-01"],"end":[1,"02-20"],"event":"原有秋季活动","window":"9 月至寒假","activities":[{"id":"opening","name":"开学周","start":[0,"09-01"],"end":[0,"09-07"],"window":"9月1至7日","places":"教学楼","source":"世界书/事件/开学周.yaml"},{"id":"national","name":"国庆假期","start":[0,"10-01"],"end":[0,"10-07"],"window":"10月1至7日","places":"暨阳站、老城生活圈","source":"世界书/事件/国庆假期.yaml"},{"id":"sports","name":"体育周","start":[0,"10-11"],"end":[0,"10-31"],"window":"10月中下旬","places":"操场、操场器材室","source":"世界书/事件/体育周.yaml"},{"id":"midterm","name":"期中考试","start":[0,"11-01"],"end":[0,"11-10"],"window":"11月上旬","places":"教学楼、图书馆","source":"世界书/事件/期中考试.yaml"},{"id":"hike","name":"远足","start":[0,"11-11"],"end":[0,"11-30"],"window":"11月中下旬","places":"老鹰山","source":"世界书/事件/远足.yaml"},{"id":"new-year","name":"元旦","start":[1,"01-01"],"end":[1,"01-01"],"window":"1月1日前后","places":"教学楼","source":"世界书/事件/元旦.yaml"},{"id":"winter","name":"寒假","start":[1,"01-21"],"end":[1,"02-20"],"window":"1月下旬至2月20日前后","places":"城区与家庭","source":"世界书/事件/寒假.yaml"},{"id":"spring-festival","name":"春节","start":null,"end":null,"window":"农历正月初一","places":"城区与家庭","source":"世界书/事件/寒假.yaml"}]},{"id":"高二下","start":[1,"02-21"],"end":[1,"06-30"],"event":"高校研学实践","window":"5 月中旬","eventStart":[1,"05-10"],"eventEnd":[1,"05-20"],"activities":[{"id":"arts","name":"艺术周","start":[1,"04-01"],"end":[1,"04-30"],"window":"4月","places":"音乐教室、礼堂后台","source":"世界书/事件/艺术周.yaml"},{"id":"study-trip","name":"高校研学实践","start":[1,"05-10"],"end":[1,"05-20"],"window":"5月中旬","places":"暨阳站、高铁车厢、浙江大学校园","source":"世界书/事件/高校研学实践.yaml"}]},{"id":"暑假","start":[1,"07-01"],"end":[1,"08-31"],"event":"暑期工读与家教实践","window":"7 月至 8 月中旬","eventStart":[1,"07-01"],"eventEnd":[1,"08-15"],"activities":[{"id":"summer-practice","name":"暑期工读与家教实践","start":[1,"07-01"],"end":[1,"08-15"],"window":"7月至8月中旬","places":"遇见奶茶店、御江湾别墅区、老城居民楼、老鹰山、浣江步道","source":"世界书/事件/暑期工读与家教实践.yaml"}]},{"id":"高三上","start":[1,"09-01"],"end":[2,"02-20"],"event":"十八岁成人礼与首考誓师","window":"10 月下旬至 11 月上旬，以学校正式通知为准","eventStart":[1,"10-20"],"eventEnd":[1,"11-10"],"activities":[{"id":"coming-of-age","name":"十八岁成人礼与首考誓师","start":[1,"10-20"],"end":[1,"11-10"],"window":"10月下旬至11月上旬，以学校正式通知为准","places":"操场（成人门）、大礼堂、高三教室","source":"世界书/事件/十八岁成人礼与首考誓师.yaml"}]},{"id":"高三下","start":[2,"02-21"],"end":[2,"06-30"],"event":"最后一课与毕业散伙狂欢夜","window":"6 月上旬至中旬，高考后按班级组织","eventStart":[2,"06-01"],"eventEnd":[2,"06-20"],"activities":[{"id":"graduation-night","name":"最后一课与毕业散伙狂欢夜","start":[2,"06-01"],"end":[2,"06-20"],"window":"6月上旬至中旬，高考后按班级组织","places":"高三教室、青悦城大酒楼宴会厅、KTV、浣江步道","source":"世界书/事件/最后一课与毕业散伙狂欢夜.yaml"}]},{"id":"已毕业","start":[2,"07-01"],"end":[99,"12-31"],"event":"重访","window":"按玩家决定"}];
   // JY_PERIODS_END
+  // JY_CAMPUS_BEGIN
+  // Shared by the message writeback and the read-only preview of old snapshots.
+  function campusDate(value) {
+    const date = typeof value === 'string' ? value.replaceAll('/', '-') : '';
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return '';
+    const parsed = new Date(date + 'T12:00:00Z');
+    return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === date ? date : '';
+  }
+
+  function normalizeCampus(value, today, activityIds) {
+    const now = campusDate(today);
+    const list = posts => Array.isArray(posts) ? posts.filter(post =>
+      post && typeof post.标识 === 'string' && post.标识 && typeof post.标题 === 'string' && typeof post.摘要 === 'string'
+    ) : [];
+    const isNotice = post => post.渠道 === '公告' || post.渠道 === '班群';
+    const knownActivity = post => isNotice(post) && activityIds.includes(post.活动标识);
+    const dates = post => [campusDate(post.确认开始), campusDate(post.确认结束)];
+    const scheduleRecord = (status, start, end) => {
+      if (start && end && start <= end) return {状态: status, 开始: start, 结束: end};
+      if (status === '已撤销' || status === '已结束') return {状态: status};
+      return null;
+    };
+    const schedule = {};
+    for (const id of activityIds) {
+      const record = value?.日程?.[id];
+      if (!['已确认', '已结束', '已撤销'].includes(record?.状态)) continue;
+      const normalized = scheduleRecord(record.状态, campusDate(record.开始), campusDate(record.结束));
+      if (normalized) {
+        if (normalized.状态 === '已确认' && now && normalized.结束 < now) normalized.状态 = '已结束';
+        schedule[id] = normalized;
+      }
+    }
+
+    const legacy = list(value?.消息);
+    // Only dated official notices, or explicit withdrawals of those notices,
+    // may be promoted from the old mixed array.
+    const legacyNotice = post => {
+      const [start, end] = dates(post);
+      const trustedGroup = post.渠道 === '班群' && /老师|班主任|班长|吴臻臻|教务|年级组|校方/.test(post.来源 || '');
+      return (post.渠道 === '公告' || trustedGroup) && knownActivity(post) && (scheduleRecord('已确认', start, end) ||
+        post.状态 === '已撤销' || (post.渠道 === '公告' && post.状态 === '已结束'));
+    };
+    const datedLegacy = legacy.filter(legacyNotice);
+    const notices = [...datedLegacy, ...list(value?.有效公告).filter(isNotice)];
+    const seenPosts = new Set();
+    const seenActivities = new Set();
+    const active = [];
+    const soon = now ? Date.parse(now) + 7 * 86400000 : 0;
+    for (let i = notices.length - 1; i >= 0; i--) {
+      const post = notices[i];
+      const id = knownActivity(post) ? post.活动标识 : null;
+      if (seenPosts.has(post.标识) || (id && seenActivities.has(id))) continue;
+      seenPosts.add(post.标识);
+      if (id) seenActivities.add(id);
+      const [start, end] = dates(post);
+      const dated = start && end && start <= end;
+      const existing = id ? schedule[id] : null;
+      const result = post.状态 === '已撤销' ? '已撤销'
+        : post.状态 === '已结束' || (dated && now && end < now) ? '已结束' : '已确认';
+      if (result === '已确认' && !dated && ['已撤销', '已结束'].includes(existing?.状态)) continue;
+      if (id) {
+        const record = scheduleRecord(result, dated ? start : existing?.开始, dated ? end : existing?.结束);
+        if (record) schedule[id] = record;
+      }
+      if (result === '已确认') active.push({post, i, near: Boolean(id && now && dated && Date.parse(start) <= soon)});
+    }
+    const announcements = active.sort((a, b) => Number(b.near) - Number(a.near) || b.i - a.i)
+      .slice(0, 3).sort((a, b) => a.i - b.i).map(({post}) => post);
+    const seenDynamics = new Set();
+    const feed = [...legacy.filter(post => !legacyNotice(post)), ...list(value?.动态流)]
+      .reverse().filter(post => {
+        if (seenDynamics.has(post.标识) || seenPosts.has(post.标识)) return false;
+        seenDynamics.add(post.标识);
+        return true;
+      }).slice(0, 6).reverse().map(post => {
+        const {活动标识, 确认开始, 确认结束, ...dynamic} = post;
+        return dynamic;
+      });
+    return {有效公告: announcements, 动态流: feed, 日程: schedule};
+  }
+  // JY_CAMPUS_END
   function jyPeriodFor(date, year) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
     const parsed = new Date(date + "T12:00:00Z");
@@ -2171,13 +2259,8 @@
       select.append(option);
     }
     select.value = currentPeriod?.id || '高二上';
-    let messages = [];
-    const dateKey = value => {
-      const key = typeof value === 'string' ? value.replaceAll('/', '-') : '';
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(key)) return '';
-      const parsed = new Date(key + 'T12:00:00Z');
-      return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === key ? key : '';
-    };
+    const activityIds = JY_PERIODS.flatMap(period => (period.activities || []).map(activity => activity.id));
+    let campus = normalizeCampus(null, date, activityIds);
     const renderCalendar = () => {
       const period = JY_PERIODS.find(p => p.id === select.value);
       if (!period) return;
@@ -2186,18 +2269,18 @@
       const list = root.querySelector('[data-calendar-events]');
       list.replaceChildren();
       for (const activity of period.activities || []) {
-        const notice = messages.find(item => item.渠道 === '公告' && item.活动标识 === activity.id);
-        const confirmedStart = dateKey(notice?.确认开始);
-        const confirmedEnd = dateKey(notice?.确认结束);
-        const confirmed = confirmedStart && confirmedEnd && confirmedStart <= confirmedEnd;
-        const start = confirmed ? confirmedStart : anchor(activity.start);
-        const end = confirmed ? confirmedEnd : anchor(activity.end);
-        const days = start && dateKey(date) ? Math.round((Date.parse(start) - Date.parse(date)) / 86400000) : null;
-        const state = days === null ? '日期待确认' : date > end ? '已过' : days > 7 ? '尚未到期' : days > 0 ? '临近' : '窗口内';
-        const windowText = confirmed ? (start === end ? start : start + ' 至 ' + end) + '（正式通知）' : activity.window;
+        const schedule = campus.日程[activity.id];
+        const confirmed = Boolean(schedule?.开始);
+        const start = schedule?.开始 || anchor(activity.start);
+        const end = schedule?.结束 || anchor(activity.end);
+        const days = start && campusDate(date) ? Math.round((Date.parse(start) - Date.parse(date)) / 86400000) : null;
+        const cancelled = schedule?.状态 === '已撤销';
+        const ended = schedule?.状态 === '已结束';
+        const state = cancelled ? '已撤销' : ended ? '已过' : days === null ? '日期待确认' : date > end ? '已过' : days > 7 ? '尚未到期' : days > 0 ? '临近' : '窗口内';
+        const windowText = cancelled ? '正式通知已撤销' : confirmed ? (start === end ? start : start + ' 至 ' + end) + '（正式通知）' : activity.window;
         const li = document.createElement('li');
         li.className = 'jy-calendar-entry';
-        if (days !== null && date <= end && days <= 7) li.dataset.near = '';
+        if (!cancelled && !ended && days !== null && date <= end && days <= 7) li.dataset.near = '';
         const stamp = document.createElement('span');
         stamp.className = 'jy-month-stamp';
         stamp.textContent = start ? Number(start.slice(5, 7)) + '月' : '农历';
@@ -2223,10 +2306,16 @@
     const channel = panel.querySelector('[data-campus-channel]');
     const messageList = panel.querySelector('[data-campus-list]');
     const messageStatus = panel.querySelector('[data-campus-status]');
+    const announcementList = panel.querySelector('[data-campus-announcements]');
+    const announcementStatus = panel.querySelector('[data-campus-announcement-status]');
     let readState = '正在读取本层消息…';
     const renderMessages = () => {
       messageList.replaceChildren();
-      const visible = messages.filter(item => channel.value === '全部' || item.渠道 === channel.value);
+      announcementList.replaceChildren();
+      const announcements = campus.有效公告.slice().reverse();
+      const visible = campus.动态流.slice().reverse().filter(item => channel.value === '全部' || item.渠道 === channel.value);
+      announcementStatus.textContent = readState || (announcements.length ? '' : '暂无有效公告。');
+      announcementStatus.hidden = !announcementStatus.textContent;
       messageStatus.textContent = readState || (visible.length ? '' : '这个分类暂时没有动态。');
       messageStatus.hidden = !messageStatus.textContent;
 
@@ -2257,7 +2346,7 @@
         return { name: source || '暨阳校园简讯', initial: '讯', bg: '#475569' };
       };
 
-      for (const item of visible) {
+      const renderPost = (item, target) => {
         const li = document.createElement('li');
 
         const profile = getAuthorProfile(item);
@@ -2338,8 +2427,10 @@
         }
 
         li.append(avatar, box);
-        messageList.append(li);
-      }
+        target.append(li);
+      };
+      announcements.forEach(item => renderPost(item, announcementList));
+      visible.forEach(item => renderPost(item, messageList));
     };
     channel.addEventListener('change', renderMessages);
     renderMessages();
@@ -2352,18 +2443,12 @@
         if (!Number.isInteger(id) || id < 0 || typeof read !== 'function') throw new Error('message unavailable');
         const data = await read({ type: 'message', message_id: id });
         if (sequence !== campusRead) return;
-        const items = data?.stat_data?.校园?.消息;
-        if (!data?.stat_data || (items != null && !Array.isArray(items))) throw new Error('invalid snapshot');
-        const seen = new Set();
-        messages = (items || []).slice().reverse().filter(item => {
-          if (!item || typeof item.标识 !== 'string' || !item.标识 || seen.has(item.标识) || typeof item.标题 !== 'string' || typeof item.摘要 !== 'string') return false;
-          seen.add(item.标识);
-          return true;
-        }).slice(0, 8);
-        readState = messages.length ? '' : '这一页暂时没有校园动态。';
+        if (!data?.stat_data) throw new Error('invalid snapshot');
+        campus = normalizeCampus(data.stat_data.校园, date, activityIds);
+        readState = '';
       } catch (_) {
         if (sequence !== campusRead) return;
-        messages = [];
+        campus = normalizeCampus(null, date, activityIds);
         readState = '暂时无法读取本页动态。';
       }
       renderCalendar();

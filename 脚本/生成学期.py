@@ -43,4 +43,7 @@ _%>
 p=ROOT/'正则/状态栏界面.html';html=p.read_text()
 html,n=re.subn(r'// JY_PERIODS_BEGIN.*?// JY_PERIODS_END','// JY_PERIODS_BEGIN\n  const JY_PERIODS = '+ui_data+';\n  // JY_PERIODS_END',html,flags=re.S)
 assert n==1,'学期数据标记必须恰好出现一次'
+helpers = (ROOT/'脚本/校园消息.js').read_text().rstrip()
+html,n=re.subn(r'// JY_CAMPUS_BEGIN.*?// JY_CAMPUS_END', lambda _: '// JY_CAMPUS_BEGIN\n' + '\n'.join('  ' + line if line else '' for line in helpers.splitlines()) + '\n  // JY_CAMPUS_END', html, flags=re.S)
+assert n==1,'校园消息标记必须恰好出现一次'
 p.write_text(html)

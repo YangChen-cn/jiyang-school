@@ -15,6 +15,20 @@ const CampusInteractions = z.object({
   ),
 });
 
+const CampusPost = z.object({
+  标识: z.string().prefault(''),
+  日期: z.string().prefault(''),
+  渠道: z.enum(['公告', '班群', '来信', '趣事', '八卦', '余波', '朋友圈']).prefault('公告'),
+  来源: z.string().prefault(''),
+  标题: z.string().prefault(''),
+  摘要: z.string().prefault(''),
+  状态: z.enum(['有效', '已更正', '已结束', '已撤销']).prefault('有效'),
+  活动标识: z.string().optional(),
+  确认开始: z.string().optional(),
+  确认结束: z.string().optional(),
+  ...CampusInteractions.shape,
+});
+
 export const Schema = z.object({
   // 初始变量一律为空/0/false：不同开场白的时间、地点、在场角色不同，
   // 由第一轮 AI 依据开场白与玩家设定补齐，之后按 变量更新规则 推进。
@@ -40,19 +54,15 @@ export const Schema = z.object({
   }).prefault({}),
 
   校园: z.object({
-    消息: z.array(z.object({
-      标识: z.string().prefault(''),
-      日期: z.string().prefault(''),
-      渠道: z.enum(['公告', '班群', '来信', '趣事', '八卦', '余波', '朋友圈']).prefault('公告'),
-      来源: z.string().prefault(''),
-      标题: z.string().prefault(''),
-      摘要: z.string().prefault(''),
-      状态: z.enum(['有效', '已更正', '已结束']).prefault('有效'),
-      活动标识: z.string().optional(),
-      确认开始: z.string().optional(),
-      确认结束: z.string().optional(),
-      ...CampusInteractions.shape,
-    })).transform(items => items.slice(-8)).prefault([]),
+    有效公告: z.array(CampusPost).transform(posts => posts.slice(-3)).prefault([]),
+    动态流: z.array(CampusPost).transform(posts => posts.slice(-6)).prefault([]),
+    日程: z.record(z.string(), z.object({
+      状态: z.enum(['已确认', '已结束', '已撤销']),
+      开始: z.string().optional(),
+      结束: z.string().optional(),
+    })).prefault({}),
+    // Keep the field readable until the first MVU update migrates the snapshot.
+    消息: z.array(CampusPost).optional(),
   }).prefault({}),
 
   苏晓樯: z.object({

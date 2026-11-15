@@ -40,23 +40,29 @@ if (!/^export const Schema\s*=\s*z\.object\(/m.test(src)) {
   process.exit(1);
 }
 
+const campusHelpers = fs.readFileSync(path.join(here, '校园消息.js'), 'utf8').trimEnd();
+const periods = JSON.parse(fs.readFileSync(path.join(root, '数据/学期.json'), 'utf8'));
+const activityIds = periods.flatMap(period => (period.activities || []).map(activity => activity.id));
+
 const out = [
   IMPORT_LINE,
   '',
   '// 本文件由 脚本/生成Zod.mjs 从根目录 schema.ts 生成，请勿手工编辑。',
   '// 当前 Zod schema 只影响变量面板的类型提示/校验回写；registerMvuSchema 不会拦截 MVU 的写入。',
   src,
+  campusHelpers,
+  `const activityIds = ${JSON.stringify(activityIds)};`,
   '',
   '',
   '$(async () => {',
   '  registerMvuSchema(Schema);',
   "  await waitGlobalInitialized('Mvu');",
   '  eventOn(Mvu.events.BEFORE_MESSAGE_UPDATE, ({ variables }) => {',
-  '    const campus = variables?.stat_data?.校园;',
-  '    if (!Array.isArray(campus?.消息)) return;',
-  '    campus.消息 = campus.消息.slice(-8);',
-  '    for (const post of campus.消息) {',
-  '      if (post && (Array.isArray(post.点赞) || Array.isArray(post.互动))) {',
+  '    const state = variables?.stat_data;',
+  '    if (!state?.校园) return;',
+  '    state.校园 = normalizeCampus(state.校园, state.世界?.日期, activityIds);',
+  '    for (const post of [...state.校园.有效公告, ...state.校园.动态流]) {',
+  '      if (Array.isArray(post.点赞) || Array.isArray(post.互动)) {',
   '        Object.assign(post, CampusInteractions.parse(post));',
   '      }',
   '    }',

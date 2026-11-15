@@ -270,6 +270,7 @@ for entry in card_entries:
 
 # ---------- G. Zod ↔ initvar ----------
 containers = {}
+optional_fields = {}
 if yaml:
     init = yaml.safe_load((REPO / '世界书/变量/initvar.yaml').read_text(encoding='utf-8')) or {}
     src = (REPO / 'schema.ts').read_text(encoding='utf-8')
@@ -279,17 +280,20 @@ if yaml:
         if m:
             cur = m.group(1)
             containers[cur] = []
+            optional_fields[cur] = set()
         elif cur and re.match(r'^  \}\),?$', line):
             cur = None
         else:
             m2 = re.match(r'^    (\S+): z\.', line)
             if cur and m2:
                 containers[cur].append(m2.group(1))
+                if line.rstrip(',').endswith('.optional()'):
+                    optional_fields[cur].add(m2.group(1))
     for c, fields in containers.items():
         extra = sorted(set((init.get(c) or {}).keys()) - set(fields))
         if extra:
             err(f'G: initvar 有而 schema 无 {c}: {extra} → 会被 mvu_zod strip')
-        miss = sorted(set(fields) - set((init.get(c) or {}).keys()))
+        miss = sorted(set(fields) - set((init.get(c) or {}).keys()) - optional_fields[c])
         if miss:
             warn(f'G: schema 有而 initvar 无 {c}: {miss}')
 
