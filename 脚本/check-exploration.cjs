@@ -266,7 +266,7 @@ function checkRelationshipPace(update) {
  assert.equal(state.苏晓樯.关系阶段,'熟悉');
  for(const other of people.slice(1)) assert.equal(state[other].好感度,0);
 }
-const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_message_variable::stat_data.世界.日期}}','2021/07/03').replaceAll('{{format_message_variable::stat_data.世界.起始年份}}','2020').replaceAll('{{format_message_variable::stat_data.世界.当前位置}}','我找到的小巷').replaceAll('{{format_message_variable::stat_data.主角.出生日期}}','2000/07/03').replaceAll('{{format_message_variable::stat_data.主角.班级}}','返乡实习生');
+const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_message_variable::stat_data.世界.日期}}','2021/07/03').replaceAll('{{format_message_variable::stat_data.世界.起始年份}}','2020').replaceAll('{{format_message_variable::stat_data.世界.当前位置}}','我找到的小巷').replaceAll('{{format_message_variable::stat_data.主角.出生日期}}','2000/07/03').replaceAll('{{format_message_variable::stat_data.主角.班级}}','返乡实习生').replaceAll('{{format_message_variable::stat_data.许念安.是否在场}}','true').replaceAll('{{format_message_variable::stat_data.许念安.当前上装}}','蓝白色校服外套和柔软的浅色针织衫');
 (async () => {
  await checkOpeningMappings();
  await runRoutes();
@@ -425,6 +425,27 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  }
  d.querySelector('[data-action="close-map"]').click();
  assert.equal(d.querySelector('.jy-map-modal').dataset.open,'false');
+ const nianan=d.querySelector('.jy-person[data-tone="perfect"]');
+ const outfit=nianan.querySelector('.jy-detail span');
+ assert.equal(outfit.textContent,'蓝白色校服外套和柔软的浅色针织衫');
+ assert.equal(w.getComputedStyle(outfit).whiteSpace,'normal');
+ assert.equal(w.getComputedStyle(outfit).overflowWrap,'anywhere');
+ nianan.querySelector('[data-action="open-album"]').click();
+ const album=d.querySelector('.jy-album-modal');
+ assert.equal(album.dataset.open,'true');
+ const pictures=[...album.querySelectorAll('.jy-album-photo')];
+ assert.equal(pictures.length,4);
+ assert.ok(pictures.every(photo=>w.getComputedStyle(photo).objectFit==='contain'));
+ const home=pictures.find(photo=>photo.alt==='午后居家');
+ home.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
+ assert.equal(d.querySelector('.jy-photo-viewer').dataset.open,'true');
+ assert.equal(d.querySelector('.jy-photo-viewer-image').src,home.src);
+ d.querySelector('[data-action="close-photo-viewer"]').click();
+ home.closest('.jy-album-item').querySelector('[data-action="set-album-avatar"]').click();
+ assert.equal(w.localStorage.getItem('jy-avatar:许念安'),home.src);
+ assert.equal(nianan.querySelector('.jy-avatar').src,home.src);
+ d.querySelector('[data-action="close-album"]').click();
+ assert.equal(album.dataset.open,'false');
  assert.equal(d.querySelector('[data-memory-list]'),null);
  assert.ok(reads.length);assert.ok(reads.every(v=>v.message_id===7&&v.type==='message'));
  assert.equal(JSON.stringify(stored),snapshot);

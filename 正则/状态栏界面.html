@@ -491,6 +491,7 @@
 
   .jy-album-item {
     min-width: 0;
+    align-self: start;
     overflow: hidden;
     border: 1px solid var(--c-line);
     border-radius: 7px;
@@ -500,9 +501,10 @@
   .jy-album-photo {
     display: block;
     width: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-    object-position: center top;
+    height: auto;
+    max-height: min(56vh, 480px);
+    object-fit: contain;
+    object-position: center;
     background: rgba(38, 49, 47, 0.08);
     cursor: zoom-in;
   }
@@ -677,18 +679,14 @@
   }
 
   .jy-name {
-    overflow: hidden;
+    overflow-wrap: anywhere;
     font-weight: 750;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   .jy-stage {
-    overflow: hidden;
+    overflow-wrap: anywhere;
     color: var(--c-muted);
     font-size: 11px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   .jy-bar-row {
@@ -869,7 +867,7 @@
   .jy-detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px 10px; margin-top: 6px; }
   .jy-detail { display: flex; gap: 4px; align-items: baseline; min-width: 0; padding: 0; border-radius: 0; background: none; }
   .jy-detail b { display: inline; flex: 0 0 auto; color: #9aa8a2; font-size: 10px; font-weight: 600; }
-  .jy-detail span { display: inline; margin-top: 0; overflow: hidden; color: #5f716b; font-size: 10.5px; text-overflow: ellipsis; white-space: nowrap; }
+  .jy-detail span { display: inline; min-width: 0; margin-top: 0; color: #5f716b; font-size: 10.5px; white-space: normal; overflow-wrap: anywhere; }
   .jy-calendar-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 14px; }
   .jy-calendar-list li { padding: 3px 0; }
   .jy-calendar-list time { min-width: 0; margin-right: 6px; font-size: 11px; }
@@ -1076,6 +1074,7 @@
     color: #4a756b;
     font-size: 10.5px;
   }
+  .jy-card-row span { min-width: 0; overflow-wrap: anywhere; }
   .jy-card-id-num {
     font-size: 10.5px;
     color: #55756e;
@@ -1085,11 +1084,9 @@
   .jy-me-dot { margin: 0 4px; color: #a9b8b3; }
   .jy-me-look {
     margin-top: 2px;
-    overflow: hidden;
+    overflow-wrap: anywhere;
     color: #6a7c77;
     font-size: 10px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
   .jy-card-dossier {
     margin-top: 8px;
@@ -1186,7 +1183,7 @@
   .jy-avatar { width: 42px; height: 42px; }
   .jy-name { font-size: 13.5px; }
   .jy-stage { font-size: 10.5px; }
-  .jy-mood { display: inline-block; margin-top: 2px; padding: 0 7px; border-radius: 999px; background: rgba(242, 193, 78, 0.2); color: #8a6216; font-size: 10px; font-weight: 700; }
+  .jy-mood { display: inline-block; max-width: 100%; margin-top: 2px; padding: 0 7px; border-radius: 999px; background: rgba(242, 193, 78, 0.2); color: #8a6216; font-size: 10px; font-weight: 700; overflow-wrap: anywhere; }
   .jy-bar-row { margin-top: 6px; }
   .jy-bar { height: 5px; }
   .jy-bar-top { font-size: 10px; }
