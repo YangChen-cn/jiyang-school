@@ -520,7 +520,14 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const avatar=rows[0].querySelector('[data-jy-dialogue-avatar]');
  assert.equal(dw.getComputedStyle(avatar).width,'88px');
  assert.equal(dw.getComputedStyle(avatar).borderRadius,'0px');
- assert.equal(dw.getComputedStyle(avatar.querySelector('img')).objectFit,'contain');
+ assert.equal(dw.getComputedStyle(avatar).height,'auto');
+ assert.equal(dw.getComputedStyle(avatar.querySelector('img')).height,'auto');
+ assert.equal(dw.getComputedStyle(avatar.querySelector('img')).width,'100%');
+ assert.equal(avatar.querySelector('[data-jy-dialogue-fallback]').textContent,'苏');
+ assert.equal(dw.getComputedStyle(avatar.querySelector('[data-jy-dialogue-fallback]')).display,'none');
+ const playerAvatar=rows[1].querySelector('[data-jy-dialogue-avatar]');
+ assert.equal(playerAvatar.querySelector('img'),null);
+ assert.notEqual(dw.getComputedStyle(playerAvatar.querySelector('[data-jy-dialogue-fallback]')).display,'none');
  assert.equal(avatar.querySelector('img').getAttribute('src'),'data:image/png;base64,YWJj');
  assert.equal(dw.document.querySelector('#send_textarea').value,'未发送');
  dw.__jyDialogue.destroy();
