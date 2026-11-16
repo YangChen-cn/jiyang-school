@@ -1442,7 +1442,18 @@
   }
 
   /* 夜间笔记：仅改变界面外观，不触碰消息变量。 */
-  .jy-theme-button { min-height: 34px; padding: 5px 9px; border: 1px solid #b8c9c1; border-radius: 9px; background: #fffdf7; color: #35574f; font: inherit; cursor: pointer; }
+  .jy-theme-button { display:inline-flex; align-items:center; justify-content:center; width:66px; height:44px; padding:4px; border:0; border-radius:22px; background:transparent; cursor:pointer; }
+  .jy-theme-track { position:relative; display:flex; align-items:center; justify-content:space-between; width:58px; height:30px; padding:0 6px; border:1px solid #c5c9a9; border-radius:20px; background:#e9ead8; color:#7a8d7b; box-shadow:inset 0 1px 3px #4c5b4120; }
+  .jy-theme-track::before { content:""; position:absolute; z-index:0; top:3px; left:3px; width:22px; height:22px; border-radius:50%; background:#fffaf0; box-shadow:0 1px 4px #4c5b4140; transition:transform .2s ease, background .2s ease; }
+  .jy-theme-icon { position:relative; z-index:1; display:grid; place-items:center; width:16px; height:16px; }
+  .jy-theme-icon svg { display:block; width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .jy-theme-sun { color:#c38c3e; }
+  .jy-theme-moon { color:#768779; }
+  .jy-status[data-theme="dark"] .jy-theme-track { border-color:#65766c; background:#182820; color:#bdd7c4; }
+  .jy-status[data-theme="dark"] .jy-theme-track::before { transform:translateX(28px); background:#d5e4d5; }
+  .jy-status[data-theme="dark"] .jy-theme-sun { color:#a9b7a4; }
+  .jy-status[data-theme="dark"] .jy-theme-moon { color:#39594e; }
+  @media (prefers-reduced-motion:reduce) { .jy-theme-track::before { transition:none; } }
   .jy-status[data-theme="dark"] { --c-ink:#e2e9df; --c-muted:#aabcb2; --c-paper:#202a28; --c-panel:#293732; --c-line:#45594f; --c-primary:#9ed0bc; --c-accent:#f3aa87; --c-warm:#e3c77c; --c-cool:#a7c6ea; color-scheme:dark; color:var(--c-ink); }
   .jy-status[data-theme="dark"] :is(.jy-shell,.jy-readout,.jy-calendar-entry,.jy-feed li,.jy-person,.jy-album-card,.jy-avatar-card,.jy-photo-viewer-card,.jy-map-card,.jy-map-head) { background:#202d29; border-color:#45594f; color:#e2e9df; box-shadow:none; }
   .jy-status[data-theme="dark"] :is(.jy-head,.jy-scene-now,.jy-time,.jy-student-card.jy-me,.jy-moment-interactions,.jy-calendar-entry[data-near]) { background:#2b3933; background-image:none; border-color:#536458; color:#e2e9df; }
@@ -1451,6 +1462,7 @@
   .jy-status[data-theme="dark"] :is(.jy-moment-user,.jy-comment-user,.jy-moment-likes) { color:#a9c9e3; }
   .jy-status[data-theme="dark"] :is(.jy-month-stamp,.jy-event-state,.jy-mood,.jy-thought,.jy-card-badge,.jy-me-tag) { background:#394a3e; color:#e5d7b8; }
   .jy-status[data-theme="dark"] :is(button,input,select,textarea,.jy-avatar-button,.jy-album-action,.jy-map-button,.jy-inventory-button) { background:#35463e; border-color:#667c6e; color:#edf3eb; }
+  .jy-status[data-theme="dark"] .jy-theme-button { background:transparent; border:0; }
   .jy-status[data-theme="dark"] :is(button,input,select,textarea,summary):focus-visible { outline-color:#eed083; }
   .jy-status[data-theme="dark"] .jy-bar { background:#58675c; }
 </style>
@@ -1470,7 +1482,7 @@
         <span class="jy-period" data-scene-value>{{format_message_variable::stat_data.世界.时间段}}</span>
       </div>
       <div class="jy-scene-tools">
-        <button class="jy-theme-button" type="button" data-action="toggle-theme" aria-pressed="false">夜间</button>
+        <button class="jy-theme-button" type="button" data-action="toggle-theme" aria-label="夜间模式" aria-pressed="false" title="切换夜间模式"><span class="jy-theme-track" aria-hidden="true"><span class="jy-theme-icon jy-theme-sun"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M19.07 4.93l-1.42 1.42M6.35 17.65l-1.42 1.42"/></svg></span><span class="jy-theme-icon jy-theme-moon"><svg viewBox="0 0 24 24"><path d="M20 15.4A8 8 0 0 1 8.6 4a8 8 0 1 0 11.4 11.4Z"/></svg></span></span></button>
         <button class="jy-map-button" type="button" data-action="open-map">地图</button>
         <button class="jy-inventory-button" type="button" data-action="open-inventory" aria-label="打开物品栏" title="物品栏"><span class="jy-inventory-count" data-inventory-count>0</span></button>
       </div>
@@ -2030,8 +2042,7 @@
       const button = root.querySelector('[data-action="toggle-theme"]');
       if (button) {
         button.setAttribute("aria-pressed", String(dark));
-        const label = dark ? "日间" : "夜间";
-        if (button.textContent !== label) button.textContent = label;
+        button.title = dark ? "切换日间模式" : "切换夜间模式";
       }
     });
   }
