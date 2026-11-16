@@ -217,6 +217,32 @@ function checkRelationshipPace(update) {
  assert.equal(state.陈芷汀.好感度,92);
  assert.equal(state.陈芷汀.关系阶段,'交付');
 
+ // Major events are attached to a concrete passage and settled per person/metric.
+ const event=(事件,角色,指标)=>({事件,角色,指标,事实原文:'洪水冲进教室',知情原文:角色+'亲眼看见救援'});
+ update.message='洪水冲进教室，沈幼楚亲眼看见救援，苏晓樯亲眼看见救援。<UpdateVariable>隐藏的变量</UpdateVariable>';
+ updateState(s=>{s.剧情.重大情感申请=[event('洪水救援','沈幼楚','信任度'),event('洪水救援','沈幼楚','好感度')];s.沈幼楚.信任度+=40;s.沈幼楚.好感度+=25;});
+ assert.equal(state.沈幼楚.信任度,43);assert.equal(state.沈幼楚.好感度,25);
+ assert.equal(state.沈幼楚.关系阶段,'戒备');
+ assert.equal(state.剧情.重大情感申请.length,0);assert.equal(state.剧情.已结算重大情感事件.length,2);
+ updateState(s=>{s.世界.日期='2020-10-10';s.剧情.重大情感申请=[event('洪水救援','沈幼楚','信任度')];s.沈幼楚.信任度+=30;});
+ assert.equal(state.沈幼楚.信任度,43);
+ updateState(s=>{s.剧情.重大情感申请=[event('换个名字的洪水','沈幼楚','信任度')];s.沈幼楚.信任度+=20;});
+ assert.equal(state.沈幼楚.信任度,43);
+ update.message='桥边再次落水，沈幼楚亲眼看见救援。';
+ updateState(s=>{s.剧情.重大情感申请=[{...event('独立的新救援','沈幼楚','信任度'),事实原文:'桥边再次落水'}];s.沈幼楚.信任度+=50;});
+ assert.equal(state.沈幼楚.信任度,93);
+ update.message='洪水冲进教室，苏晓樯亲眼看见救援。';
+ updateState(s=>{s.剧情.重大情感申请=[event('洪水救援','苏晓樯','好感度')];s.苏晓樯.好感度+=50;});
+ assert.equal(state.苏晓樯.好感度,55);
+ // An invalid witness quote is not sufficient to bypass ordinary throttling.
+ update.message='洪水冲进教室，沈幼楚亲眼看见救援。';
+ updateState(s=>{s.剧情.重大情感申请=[{...event('未知情','苏晓樯','好感度'),知情原文:'沈幼楚亲眼看见救援'}];s.苏晓樯.好感度+=30;});
+ assert.equal(state.苏晓樯.好感度,58);
+ update.message='只有普通闲聊。<UpdateVariable>洪水冲进教室，沈幼楚亲眼看见救援</UpdateVariable>';
+ updateState(s=>{s.剧情.重大情感申请=[event('未发生','沈幼楚','好感度')];s.沈幼楚.好感度+=30;});
+ assert.equal(state.沈幼楚.好感度,27);
+ update.message='';
+
  for(const person of people){
    const source=read(`世界书/角色/${person}/性格调色盘.yaml`);
    assert.doesNotThrow(()=>ejs.compile(source));
@@ -285,7 +311,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const summerNotice={标识:'summer-1',渠道:'班群',来源:'老师',标题:'夏季值班',摘要:'<img src=x>只是一条通知',活动标识:'summer-practice',确认开始:'2021-07-01',确认结束:'2021-08-15',状态:'有效'};
  stored.stat_data.校园.消息.push(summerNotice);
  const activityIds=periods.flatMap(p=>(p.activities || []).map(a=>a.id));
- const callbackBox={z,_,registerMvuSchema:()=>{},waitGlobalInitialized:async()=>{},Mvu:{events:{BEFORE_MESSAGE_UPDATE:'before',VARIABLE_UPDATE_ENDED:'ended',VARIABLE_UPDATE_STARTED:'started'}},eventOn(name,callback){if(name==='before')callbackBox.write=callback;else if(name==='ended')callbackBox.pace=callback;else if(name==='started')callbackBox.start=callback;},$:(fn)=>fn()};
+ const callbackBox={z,_,registerMvuSchema:()=>{},waitGlobalInitialized:async()=>{},getChatMessages:()=>[{role:'assistant',message:callbackBox.pace?.message||''}],Mvu:{events:{BEFORE_MESSAGE_UPDATE:'before',VARIABLE_UPDATE_ENDED:'ended',VARIABLE_UPDATE_STARTED:'started'}},eventOn(name,callback){if(name==='before')callbackBox.write=callback;else if(name==='ended')callbackBox.pace=callback;else if(name==='started')callbackBox.start=callback;},$:(fn)=>fn()};
  vm.createContext(callbackBox);
  await vm.runInContext(read('脚本/Zod.txt').replace(/^import .*$/m,'').replace('export const Schema','const Schema'),callbackBox);
  checkRetiredCharacter(callbackBox.write);
