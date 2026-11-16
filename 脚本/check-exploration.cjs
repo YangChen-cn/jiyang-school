@@ -76,17 +76,21 @@ async function checkOpeningMappings() {
 
 function checkRetiredCharacter(write) {
  const history={世界:{日期:'2020-09-03'},剧情:{当日关系增量:{日期:'2020-09-03',已用:{'凌知夏.好感度':3}}},主角:{重要物品:[{名称:'竞赛笔记',描述:'借来查解法'}]},凌知夏:{好感度:97,关系阶段:'熟悉'},苏晓樯:{好感度:12}};
+ history.剧情.重大情感申请=[{事件:'旧申请'}];
+ history.剧情.已结算重大情感事件=[{事件:'旧记录'}];
  const exact=JSON.stringify(history);
  const checked=schemaBox.schema.parse(history);
  assert.equal(checked.凌知夏,undefined);
  assert.equal(checked.苏晓樯.好感度,12);
  const snapshot=ejs.render(read('世界书/变量/变量列表.txt'),{getvar:()=>history});
- assert.doesNotMatch(snapshot,/凌知夏|当日关系增量/);
+ assert.doesNotMatch(snapshot,/凌知夏|当日关系增量|重大情感申请|已结算重大情感事件/);
  assert.match(snapshot,/竞赛笔记/);
  const continued=structuredClone(history);
  write({variables:{stat_data:continued}});
  assert.equal(continued.凌知夏,undefined);
  assert.equal(continued.剧情.当日关系增量,undefined);
+ assert.equal(continued.剧情.重大情感申请,undefined);
+ assert.equal(continued.剧情.已结算重大情感事件,undefined);
  assert.equal(continued.苏晓樯.好感度,12);
  assert.equal(continued.主角.重要物品[0].名称,'竞赛笔记');
  assert.equal(JSON.stringify(history),exact);
@@ -239,13 +243,20 @@ function checkRelationshipPace(update) {
  for(const person of people){
    const source=read(`世界书/角色/${person}/性格调色盘.yaml`);
    assert.doesNotThrow(()=>ejs.compile(source));
-   if(person==='沈幼楚') continue;
+   if(person==='沈幼楚') {
+     const render=score=>ejs.render(source,{getvar:key=>key.endsWith('关系阶段')?'戒备':key.endsWith('好感度')||key.endsWith('信任度')?score:false});
+     assert.equal(render(100),render(0));
+     continue;
+   }
    const start=source.indexOf('<%_ {');
    const end=source.indexOf('_%>',start)+3;
    const scoreFor=stage=>Number(ejs.render(source.slice(start,end)+'<%= relationshipScore %><%_ } _%>',{
      getvar: key=>key.endsWith('关系阶段')?stage:95,
    }));
    assert.ok(scoreFor('')<40);
+   const nextStageCaps={苏晓樯:['熟悉',49],温书语:['熟悉',49],陈芷汀:['松动',59],慕佳芊:['熟悉',49],虞淑婉:['留意',54]};
+   const [stage,cap]=nextStageCaps[person];
+   assert.equal(scoreFor(stage),cap); // 高分也只加载已确认阶段的表现。
    if(person==='苏晓樯') assert.equal(scoreFor('亲密恋人'),95);
  }
 
