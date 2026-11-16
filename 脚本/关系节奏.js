@@ -25,5 +25,8 @@ function limitRelationshipGains(state) {
     delete state.剧情.当日关系增量;
     delete state.剧情.重大情感申请;
     delete state.剧情.已结算重大情感事件;
+    delete state.剧情.推进节奏;
+    delete state.剧情.事件冷却;
+    delete state.剧情.上次焦点角色;
   }
 }

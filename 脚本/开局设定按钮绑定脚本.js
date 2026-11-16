@@ -381,15 +381,12 @@
       patches.push(['世界.当前位置', scene.location]);
       patches.push(['世界.所在区域', scene.area]);
       patches.push(['世界.私密程度', scene.privacy]);
-      patches.push(['剧情.推进节奏', scene.pace]);
       patches.push(['剧情.当前事件', '']);
       patches.push(['剧情.校园活动', scene.schoolEvent || '无']);
       patches.push(['剧情.学期', scene.semester]);
-      patches.push(['剧情.上次焦点角色', scene.focus]);
       patches.push(['主角.当前位置', scene.location]);
     }
     patches.push(['剧情.当前nsfw', false]);
-    patches.push(['剧情.事件冷却', 0]);
     if (mode !== 'preset' || !scene) patches.push(['剧情.学期', '高二上']);
 
     patches.push(['主角.姓名', formData['姓名'] === '未设定' ? '' : formData['姓名']]);

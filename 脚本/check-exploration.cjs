@@ -78,12 +78,15 @@ function checkRetiredCharacter(write) {
  const history={世界:{日期:'2020-09-03'},剧情:{当日关系增量:{日期:'2020-09-03',已用:{'凌知夏.好感度':3}}},主角:{重要物品:[{名称:'竞赛笔记',描述:'借来查解法'}]},凌知夏:{好感度:97,关系阶段:'熟悉'},苏晓樯:{好感度:12}};
  history.剧情.重大情感申请=[{事件:'旧申请'}];
  history.剧情.已结算重大情感事件=[{事件:'旧记录'}];
+ history.剧情.推进节奏 = '日常铺垫';
+ history.剧情.事件冷却 = 2;
+ history.剧情.上次焦点角色 = '苏晓樯';
  const exact=JSON.stringify(history);
  const checked=schemaBox.schema.parse(history);
  assert.equal(checked.凌知夏,undefined);
  assert.equal(checked.苏晓樯.好感度,12);
  const snapshot=ejs.render(read('世界书/变量/变量列表.txt'),{getvar:()=>history});
- assert.doesNotMatch(snapshot,/凌知夏|当日关系增量|重大情感申请|已结算重大情感事件/);
+ assert.doesNotMatch(snapshot,/凌知夏|当日关系增量|重大情感申请|已结算重大情感事件|推进节奏|事件冷却|上次焦点角色/);
  assert.match(snapshot,/竞赛笔记/);
  const continued=structuredClone(history);
  write({variables:{stat_data:continued}});
@@ -91,6 +94,9 @@ function checkRetiredCharacter(write) {
  assert.equal(continued.剧情.当日关系增量,undefined);
  assert.equal(continued.剧情.重大情感申请,undefined);
  assert.equal(continued.剧情.已结算重大情感事件,undefined);
+ assert.equal(continued.剧情.推进节奏,undefined);
+ assert.equal(continued.剧情.事件冷却,undefined);
+ assert.equal(continued.剧情.上次焦点角色,undefined);
  assert.equal(continued.苏晓樯.好感度,12);
  assert.equal(continued.主角.重要物品[0].名称,'竞赛笔记');
  assert.equal(JSON.stringify(history),exact);
@@ -230,10 +236,16 @@ function checkRelationshipPace(update) {
  state.剧情.当日关系增量 = {日期: '2020-09-01', 已用: {'苏晓樯.好感度': 3}};
  state.剧情.重大情感申请 = [{事件: '测试', 角色: '苏晓樯', 指标: '好感度'}];
  state.剧情.已结算重大情感事件 = [{事件: '测试', 角色: '苏晓樯', 指标: '好感度'}];
+ state.剧情.推进节奏 = '日常铺垫';
+ state.剧情.事件冷却 = 1;
+ state.剧情.上次焦点角色 = '温书语';
  updateState(()=>{});
  assert.equal(state.剧情.当日关系增量, undefined);
  assert.equal(state.剧情.重大情感申请, undefined);
  assert.equal(state.剧情.已结算重大情感事件, undefined);
+ assert.equal(state.剧情.推进节奏, undefined);
+ assert.equal(state.剧情.事件冷却, undefined);
+ assert.equal(state.剧情.上次焦点角色, undefined);
 
  state.陈芷汀={好感度:92,关系阶段:'交付'};
  updateState(()=>{});
