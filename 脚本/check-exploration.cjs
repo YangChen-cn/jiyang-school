@@ -202,14 +202,14 @@ function checkRelationshipPace(update) {
    update({stat_data:state},{stat_data:prior});
  };
  for(let i=0;i<24;i++) updateState(s=>{s.苏晓樯.好感度+=2;});
- assert.equal(state.苏晓樯.好感度,4);
+ assert.equal(state.苏晓樯.好感度,8);
  assert.equal(state.苏晓樯.关系阶段,'初识');
  assert.equal(state.温书语.好感度,0);
  updateState(s=>{s.苏晓樯.好感度-=2;});
  updateState(s=>{s.苏晓樯.好感度+=2;});
- assert.equal(state.苏晓樯.好感度,2);
+ assert.equal(state.苏晓樯.好感度,6);
  updateState(s=>{s.世界.日期='2020-09-02';s.苏晓樯.好感度+=5;s.沈幼楚.信任度+=4;});
- assert.equal(state.苏晓樯.好感度,5);
+ assert.equal(state.苏晓樯.好感度,9);
  assert.equal(state.沈幼楚.好感度,0);
  assert.equal(state.沈幼楚.信任度,3);
  state.陈芷汀={好感度:92,关系阶段:'交付'};
@@ -233,15 +233,26 @@ function checkRelationshipPace(update) {
  assert.equal(state.沈幼楚.信任度,93);
  update.message='洪水冲进教室，苏晓樯亲眼看见救援。';
  updateState(s=>{s.剧情.重大情感申请=[event('洪水救援','苏晓樯','好感度')];s.苏晓樯.好感度+=50;});
- assert.equal(state.苏晓樯.好感度,55);
+ assert.equal(state.苏晓樯.好感度,59);
  // An invalid witness quote is not sufficient to bypass ordinary throttling.
  update.message='洪水冲进教室，沈幼楚亲眼看见救援。';
  updateState(s=>{s.剧情.重大情感申请=[{...event('未知情','苏晓樯','好感度'),知情原文:'沈幼楚亲眼看见救援'}];s.苏晓樯.好感度+=30;});
- assert.equal(state.苏晓樯.好感度,58);
+ assert.equal(state.苏晓樯.好感度,62);
  update.message='只有普通闲聊。<UpdateVariable>洪水冲进教室，沈幼楚亲眼看见救援</UpdateVariable>';
  updateState(s=>{s.剧情.重大情感申请=[event('未发生','沈幼楚','好感度')];s.沈幼楚.好感度+=30;});
  assert.equal(state.沈幼楚.好感度,27);
  update.message='';
+
+ // Every person's ordinary daily cap applies independently and resets next day.
+ for (const [name,cap,perTurn] of [['苏晓樯',8,3],['温书语',7,2],['沈幼楚',7,2],['许念安',7,2],['陈芷汀',8,3],['慕佳芊',6,2],['虞淑婉',6,2]]) {
+   state=start(); state[name] ??= {好感度:0};
+   updateState(s=>{s[name].好感度+=50;});
+   assert.equal(state[name].好感度,perTurn);
+   for(let i=0;i<10;i++) updateState(s=>{s[name].好感度+=50;});
+   assert.equal(state[name].好感度,cap);
+   updateState(s=>{s.世界.日期='2020-09-02';s[name].好感度+=50;});
+   assert.equal(state[name].好感度,cap+perTurn);
+ }
 
  for(const person of people){
    const source=read(`世界书/角色/${person}/性格调色盘.yaml`);
