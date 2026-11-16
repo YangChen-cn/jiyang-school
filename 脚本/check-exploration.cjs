@@ -86,7 +86,7 @@ function checkRetiredCharacter(write) {
  const continued=structuredClone(history);
  write({variables:{stat_data:continued}});
  assert.equal(continued.凌知夏,undefined);
- assert.equal(continued.剧情.当日关系增量.已用['凌知夏.好感度'],undefined);
+ assert.equal(continued.剧情.当日关系增量,undefined);
  assert.equal(continued.苏晓樯.好感度,12);
  assert.equal(continued.主角.重要物品[0].名称,'竞赛笔记');
  assert.equal(JSON.stringify(history),exact);
@@ -201,58 +201,40 @@ function checkRelationshipPace(update) {
    fn(state);
    update({stat_data:state},{stat_data:prior});
  };
- for(let i=0;i<24;i++) updateState(s=>{s.苏晓樯.好感度+=2;});
- assert.equal(state.苏晓樯.好感度,8);
- assert.equal(state.苏晓樯.关系阶段,'初识');
+ // 1. 自然情感变化不再受单轮或每日上限拦截（方案三）
+ for(let i=0;i<10;i++) updateState(s=>{s.苏晓樯.好感度+=2;});
+ assert.equal(state.苏晓樯.好感度,20);
+ assert.equal(state.苏晓樯.关系阶段,'初识'); // 阶段解耦：不随好感度达标自动晋级（方案一）
  assert.equal(state.温书语.好感度,0);
+
  updateState(s=>{s.苏晓樯.好感度-=2;});
- updateState(s=>{s.苏晓樯.好感度+=2;});
- assert.equal(state.苏晓樯.好感度,6);
- updateState(s=>{s.世界.日期='2020-09-02';s.苏晓樯.好感度+=5;s.沈幼楚.信任度+=4;});
- assert.equal(state.苏晓樯.好感度,9);
- assert.equal(state.沈幼楚.好感度,0);
- assert.equal(state.沈幼楚.信任度,3);
+ updateState(s=>{s.苏晓樯.好感度+=5;});
+ assert.equal(state.苏晓樯.好感度,23);
+
+ // 2. 重大事件与深度经历可直接大幅变动，无需审批表格与正文摘录匹配
+ updateState(s=>{s.沈幼楚.信任度+=35; s.沈幼楚.好感度+=30;});
+ assert.equal(state.沈幼楚.信任度,35);
+ assert.equal(state.沈幼楚.好感度,30);
+ assert.equal(state.沈幼楚.关系阶段,'戒备'); // 阶段保持，直至剧情中明确突破
+
+ // 3. JS 严格负责数据合法性校验（clamp 0~100）
+ updateState(s=>{s.苏晓樯.好感度=150; s.沈幼楚.信任度=-20;});
+ assert.equal(state.苏晓樯.好感度,100);
+ assert.equal(state.沈幼楚.信任度,0);
+
+ // 4. 旧版双轨制遗留字段在运行时被静默清理
+ state.剧情.当日关系增量 = {日期: '2020-09-01', 已用: {'苏晓樯.好感度': 3}};
+ state.剧情.重大情感申请 = [{事件: '测试', 角色: '苏晓樯', 指标: '好感度'}];
+ state.剧情.已结算重大情感事件 = [{事件: '测试', 角色: '苏晓樯', 指标: '好感度'}];
+ updateState(()=>{});
+ assert.equal(state.剧情.当日关系增量, undefined);
+ assert.equal(state.剧情.重大情感申请, undefined);
+ assert.equal(state.剧情.已结算重大情感事件, undefined);
+
  state.陈芷汀={好感度:92,关系阶段:'交付'};
  updateState(()=>{});
  assert.equal(state.陈芷汀.好感度,92);
  assert.equal(state.陈芷汀.关系阶段,'交付');
-
- // Major events are attached to a concrete passage and settled per person/metric.
- const event=(事件,角色,指标)=>({事件,角色,指标,事实原文:'洪水冲进教室',知情原文:角色+'亲眼看见救援'});
- update.message='洪水冲进教室，沈幼楚亲眼看见救援，苏晓樯亲眼看见救援。<UpdateVariable>隐藏的变量</UpdateVariable>';
- updateState(s=>{s.剧情.重大情感申请=[event('洪水救援','沈幼楚','信任度'),event('洪水救援','沈幼楚','好感度')];s.沈幼楚.信任度+=40;s.沈幼楚.好感度+=25;});
- assert.equal(state.沈幼楚.信任度,43);assert.equal(state.沈幼楚.好感度,25);
- assert.equal(state.沈幼楚.关系阶段,'戒备');
- assert.equal(state.剧情.重大情感申请.length,0);assert.equal(state.剧情.已结算重大情感事件.length,2);
- updateState(s=>{s.世界.日期='2020-10-10';s.剧情.重大情感申请=[event('洪水救援','沈幼楚','信任度')];s.沈幼楚.信任度+=30;});
- assert.equal(state.沈幼楚.信任度,43);
- updateState(s=>{s.剧情.重大情感申请=[event('换个名字的洪水','沈幼楚','信任度')];s.沈幼楚.信任度+=20;});
- assert.equal(state.沈幼楚.信任度,43);
- update.message='桥边再次落水，沈幼楚亲眼看见救援。';
- updateState(s=>{s.剧情.重大情感申请=[{...event('独立的新救援','沈幼楚','信任度'),事实原文:'桥边再次落水'}];s.沈幼楚.信任度+=50;});
- assert.equal(state.沈幼楚.信任度,93);
- update.message='洪水冲进教室，苏晓樯亲眼看见救援。';
- updateState(s=>{s.剧情.重大情感申请=[event('洪水救援','苏晓樯','好感度')];s.苏晓樯.好感度+=50;});
- assert.equal(state.苏晓樯.好感度,59);
- // An invalid witness quote is not sufficient to bypass ordinary throttling.
- update.message='洪水冲进教室，沈幼楚亲眼看见救援。';
- updateState(s=>{s.剧情.重大情感申请=[{...event('未知情','苏晓樯','好感度'),知情原文:'沈幼楚亲眼看见救援'}];s.苏晓樯.好感度+=30;});
- assert.equal(state.苏晓樯.好感度,62);
- update.message='只有普通闲聊。<UpdateVariable>洪水冲进教室，沈幼楚亲眼看见救援</UpdateVariable>';
- updateState(s=>{s.剧情.重大情感申请=[event('未发生','沈幼楚','好感度')];s.沈幼楚.好感度+=30;});
- assert.equal(state.沈幼楚.好感度,27);
- update.message='';
-
- // Every person's ordinary daily cap applies independently and resets next day.
- for (const [name,cap,perTurn] of [['苏晓樯',8,3],['温书语',7,2],['沈幼楚',7,2],['许念安',7,2],['陈芷汀',8,3],['慕佳芊',6,2],['虞淑婉',6,2]]) {
-   state=start(); state[name] ??= {好感度:0};
-   updateState(s=>{s[name].好感度+=50;});
-   assert.equal(state[name].好感度,perTurn);
-   for(let i=0;i<10;i++) updateState(s=>{s[name].好感度+=50;});
-   assert.equal(state[name].好感度,cap);
-   updateState(s=>{s.世界.日期='2020-09-02';s[name].好感度+=50;});
-   assert.equal(state[name].好感度,cap+perTurn);
- }
 
  for(const person of people){
    const source=read(`世界书/角色/${person}/性格调色盘.yaml`);
@@ -341,7 +323,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  migrated.许念安.控制欲=160;
  callbackBox.pace({stat_data:migrated},{stat_data:legacy});
  callbackBox.write({variables:{stat_data:migrated}});
- assert.equal(migrated.许念安.好感度,2);
+ assert.equal(migrated.许念安.好感度,40);
  assert.equal(migrated.许念安.控制欲,100);
  assert.equal(legacy.许念安,undefined);
  const state={世界:{日期:'2021/07/03'},校园:structuredClone(stored.stat_data.校园)};
