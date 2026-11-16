@@ -1440,6 +1440,19 @@
     .jy-status .jy-readouts, .jy-status .jy-calendar-body { padding: 8px; }
     .jy-status .jy-calendar-entry { grid-template-columns: 35px minmax(0, 1fr) auto; gap: 5px; padding: 6px; }
   }
+
+  /* 夜间笔记：仅改变界面外观，不触碰消息变量。 */
+  .jy-theme-button { min-height: 34px; padding: 5px 9px; border: 1px solid #b8c9c1; border-radius: 9px; background: #fffdf7; color: #35574f; font: inherit; cursor: pointer; }
+  .jy-status[data-theme="dark"] { --c-ink:#e2e9df; --c-muted:#aabcb2; --c-paper:#202a28; --c-panel:#293732; --c-line:#45594f; --c-primary:#9ed0bc; --c-accent:#f3aa87; --c-warm:#e3c77c; --c-cool:#a7c6ea; color-scheme:dark; color:var(--c-ink); }
+  .jy-status[data-theme="dark"] :is(.jy-shell,.jy-readout,.jy-calendar-entry,.jy-feed li,.jy-person,.jy-album-card,.jy-avatar-card,.jy-photo-viewer-card,.jy-map-card,.jy-map-head) { background:#202d29; border-color:#45594f; color:#e2e9df; box-shadow:none; }
+  .jy-status[data-theme="dark"] :is(.jy-head,.jy-scene-now,.jy-time,.jy-student-card.jy-me,.jy-moment-interactions,.jy-calendar-entry[data-near]) { background:#2b3933; background-image:none; border-color:#536458; color:#e2e9df; }
+  .jy-status[data-theme="dark"] :is(.jy-readout,[data-campus-messages],.jy-calendar) { --jy-tab:#34463b; --jy-tab-ink:#d8e9d8; }
+  .jy-status[data-theme="dark"] :is(.jy-location,.jy-kicker,.jy-date,.jy-scene-now b,.jy-card-school-cn,.jy-card-school-en,.jy-card-name-val,.jy-card-row,.jy-card-row b,.jy-card-row span,.jy-card-id-num,.jy-me-look,.jy-card-dossier summary,.jy-card-dossier-grid b,.jy-card-dossier-grid span,.jy-calendar-body,.jy-calendar-body .jy-page-note,[data-schedule],.jy-event-window,.jy-calendar-body .jy-forum-edition,.jy-feed strong,.jy-moment-title,.jy-feed p,.jy-moment-body,.jy-moment-comment,.jy-comment-text,.jy-detail span,.jy-detail b,.jy-inventory-name,.jy-inventory-description) { color:#d8e3d9; }
+  .jy-status[data-theme="dark"] :is(.jy-moment-user,.jy-comment-user,.jy-moment-likes) { color:#a9c9e3; }
+  .jy-status[data-theme="dark"] :is(.jy-month-stamp,.jy-event-state,.jy-mood,.jy-thought,.jy-card-badge,.jy-me-tag) { background:#394a3e; color:#e5d7b8; }
+  .jy-status[data-theme="dark"] :is(button,input,select,textarea,.jy-avatar-button,.jy-album-action,.jy-map-button,.jy-inventory-button) { background:#35463e; border-color:#667c6e; color:#edf3eb; }
+  .jy-status[data-theme="dark"] :is(button,input,select,textarea,summary):focus-visible { outline-color:#eed083; }
+  .jy-status[data-theme="dark"] .jy-bar { background:#58675c; }
 </style>
 <body>
 
@@ -1457,6 +1470,7 @@
         <span class="jy-period" data-scene-value>{{format_message_variable::stat_data.世界.时间段}}</span>
       </div>
       <div class="jy-scene-tools">
+        <button class="jy-theme-button" type="button" data-action="toggle-theme" aria-pressed="false">夜间</button>
         <button class="jy-map-button" type="button" data-action="open-map">地图</button>
         <button class="jy-inventory-button" type="button" data-action="open-inventory" aria-label="打开物品栏" title="物品栏"><span class="jy-inventory-count" data-inventory-count>0</span></button>
       </div>
@@ -2002,6 +2016,31 @@
   let avatarHost = window;
   try { if (window.top.document) avatarHost = window.top; } catch (_) {}
   const AVATAR_EVENT = "jy-avatar-changed";
+  const THEME_KEY = "jy-status-theme";
+  const THEME_EVENT = "jy-status-theme-changed";
+  let localTheme = "light";
+  function readTheme() {
+    try { return avatarHost.localStorage.getItem(THEME_KEY) || localTheme; }
+    catch (_) { return localTheme; }
+  }
+  function syncTheme() {
+    const dark = readTheme() === "dark";
+    document.querySelectorAll(".jy-status").forEach(root => {
+      root.dataset.theme = dark ? "dark" : "light";
+      const button = root.querySelector('[data-action="toggle-theme"]');
+      if (button) {
+        button.setAttribute("aria-pressed", String(dark));
+        const label = dark ? "日间" : "夜间";
+        if (button.textContent !== label) button.textContent = label;
+      }
+    });
+  }
+  avatarHost.addEventListener(THEME_EVENT, syncTheme);
+  window.addEventListener("storage", syncTheme);
+  window.addEventListener("pagehide", () => {
+    avatarHost.removeEventListener(THEME_EVENT, syncTheme);
+    window.removeEventListener("storage", syncTheme);
+  }, { once: true });
 
   function getStoredAvatar(name) {
     try { return avatarHost.localStorage.getItem(STORAGE_PREFIX + name); }
@@ -2550,6 +2589,7 @@
 
   function bindStatus(root) {
     if (!root) return;
+    syncTheme();
     if (root.dataset.avatarBoundVersion === "11") {
       applyStoredAvatars(root);
       root.querySelectorAll("img").forEach(guardImage);
@@ -2837,6 +2877,13 @@
     }
 
     root.addEventListener("click", (event) => {
+      if (event.target.closest('[data-action="toggle-theme"]')) {
+        localTheme = root.dataset.theme === "dark" ? "light" : "dark";
+        try { avatarHost.localStorage.setItem(THEME_KEY, localTheme); } catch (_) {}
+        syncTheme();
+        try { avatarHost.dispatchEvent(new avatarHost.CustomEvent(THEME_EVENT)); } catch (_) {}
+        return;
+      }
       if (event.target.closest('[data-action="open-map"]')) {
         openMap();
         return;

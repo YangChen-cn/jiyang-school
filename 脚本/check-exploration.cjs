@@ -405,6 +405,14 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const dom=new JSDOM('<textarea id="send_textarea">尚未发送的草稿</textarea>'+neutral,{runScripts:'dangerously',url:'http://localhost:18967',pretendToBeVisual:true,virtualConsole:vc,beforeParse(w){w.HTMLElement.prototype.scrollIntoView=function(){};w.scrollTo=()=>{};w.getCurrentMessageId=()=>7;w.getVariables=opts=>{reads.push(opts);return stored;};}});
  const w=dom.window,d=w.document;
  await new Promise(r=>w.setTimeout(r,220));
+ const themeButton=d.querySelector('[data-action="toggle-theme"]');
+ assert.equal(themeButton.getAttribute('aria-pressed'),'false');
+ themeButton.click();
+ assert.equal(d.querySelector('.jy-status').dataset.theme,'dark');
+ assert.equal(themeButton.getAttribute('aria-pressed'),'true');
+ assert.equal(w.localStorage.getItem('jy-status-theme'),'dark');
+ themeButton.click();
+ assert.equal(d.querySelector('.jy-status').dataset.theme,'light');
  assert.equal(d.querySelector('[data-period-select]').value,'暑假');
  assert.equal(d.querySelector('[data-player-age]').textContent,'21岁');
  assert.equal(d.querySelector('[data-player-class]').textContent,'返乡实习生');
