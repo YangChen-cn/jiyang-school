@@ -88,6 +88,79 @@ async function checkOpeningMappings() {
  assert.equal(other['许念安.是否在场'],false);
 }
 
+async function checkOpeningArchives() {
+ const openingHtml = read('正则/开局设定界面.html');
+ const dom = new JSDOM('<main>' + openingHtml + '</main><textarea id="send_textarea">原有聊天草稿</textarea>', {
+   runScripts:'outside-only', url:'http://localhost:8000'
+ });
+ const w = dom.window;
+ const d = w.document;
+ try {
+   if (d.readyState === 'loading') await new Promise(resolve => d.addEventListener('DOMContentLoaded', resolve, {once:true}));
+   const messages = [{message:'<OpeningSetupUI/>'}];
+   w.getChatMessages = () => messages;
+   let writes = 0;
+   w.setChatMessages = () => { writes++; };
+   w.eval(read('脚本/开局设定按钮绑定脚本.js'));
+   const get = selector => d.querySelector(selector);
+   const click = action => get('[data-action="' + action + '"]').click();
+   const field = name => get('[data-field="' + name + '"]');
+   click('show-archives');
+   assert.equal(get('[data-opening-archives]').open, true);
+   assert.equal(get('[data-opening-archives] summary').textContent, '学籍档案');
+   field('姓名').value = '陈默';
+   field('开场日期').value = '2020-11-06';
+   field('开场地点').value = '桥下旧书摊';
+   field('性格').value = '说话直\n喜欢旧书';
+   field('年龄').value = '';
+   get('[data-mode="custom"]').click();
+   get('[data-custom-opening]').value = ' 雨停了。\n有人把书摞到木箱上。';
+   get('[data-opening-action]').value = '把伞收起来。';
+   click('save-archive');
+   const first = get('[data-archive-select]').value;
+   assert.ok(first);
+   get('[data-archive-name]').value = '<b>另一个开局</b>';
+   field('姓名').value = '陈小桥';
+   click('save-archive');
+   const second = get('[data-archive-select]').value;
+   assert.notEqual(second, first);
+   assert.match(get('[data-archive-select] option:checked').textContent, /<b>另一个开局<\/b>/);
+   click('clear');
+   assert.equal(w.localStorage.length, 2);
+
+   // Remount the actual opening in a new chat. The archive belongs to the site, independent of either form.
+   get('main').innerHTML = openingHtml;
+   w.__jiyangOpeningSetupControllerV7.bind();
+   const panel = get('[data-opening-archives]');
+   panel.open = true;
+   panel.dispatchEvent(new w.Event('toggle'));
+   assert.equal(get('[data-archive-select]').options.length, 2);
+   get('[data-archive-select]').value = first;
+   click('load-archive');
+   assert.equal(field('姓名').value, '陈默');
+   assert.equal(field('年龄').value, '');
+   assert.equal(field('性格').value, '说话直\n喜欢旧书');
+   assert.equal(field('开场日期').value, '2020-11-06');
+   assert.equal(field('开场地点').value, '桥下旧书摊');
+   assert.equal(get('[data-jy-opening]').dataset.openingMode, 'custom');
+   assert.equal(get('[data-custom-opening]').value, ' 雨停了。\n有人把书摞到木箱上。');
+   assert.equal(get('[data-opening-action]').value, '把伞收起来。');
+   assert.equal(get('#send_textarea').value, '原有聊天草稿');
+   assert.equal(writes, 0);
+
+   w.confirm = () => false;
+   click('delete-archive');
+   assert.ok(w.localStorage.getItem(first));
+   w.confirm = () => true;
+   click('delete-archive');
+   assert.equal(w.localStorage.getItem(first), null);
+   assert.ok(w.localStorage.getItem(second));
+ } finally {
+   w.__jiyangOpeningSetupControllerV7?.stop();
+   w.close();
+ }
+}
+
 function checkRetiredCharacter(write) {
  const history={世界:{日期:'2020-09-03'},剧情:{当日关系增量:{日期:'2020-09-03',已用:{'凌知夏.好感度':3}}},主角:{重要物品:[{名称:'竞赛笔记',描述:'借来查解法'}]},凌知夏:{好感度:97,关系阶段:'熟悉'},苏晓樯:{好感度:12}};
  history.剧情.重大情感申请=[{事件:'旧申请'}];
@@ -325,6 +398,7 @@ function checkRelationshipPace(update) {
 const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_message_variable::stat_data.世界.日期}}','2021/07/03').replaceAll('{{format_message_variable::stat_data.世界.起始年份}}','2020').replaceAll('{{format_message_variable::stat_data.世界.当前位置}}','我找到的小巷').replaceAll('{{format_message_variable::stat_data.主角.出生日期}}','2000/07/03').replaceAll('{{format_message_variable::stat_data.主角.班级}}','返乡实习生').replaceAll('{{format_message_variable::stat_data.许念安.是否在场}}','true').replaceAll('{{format_message_variable::stat_data.许念安.当前上装}}','蓝白色校服外套和柔软的浅色针织衫');
 (async () => {
  await checkOpeningMappings();
+ await checkOpeningArchives();
  await runRoutes();
  const errors=[]; const vc = new VirtualConsole(); vc.on('jsdomError',e=>errors.push(e.message));
  const reads=[];

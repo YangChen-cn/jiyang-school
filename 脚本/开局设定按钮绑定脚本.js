@@ -3,6 +3,7 @@
 
   var ROOT_SELECTOR = '[data-jy-opening]';
   var GLOBAL_KEY = '__jiyangOpeningSetupControllerV7';
+  var ARCHIVE_PREFIX = 'jy-opening-archive:v1:';
   var LEGACY_ENTRY_NAME = '玩家开局设定';
   var WRITE_LEGACY_WORLDBOOK = false; // 旧版把档案写进世界书；新版改为写 MVU 变量，保留代码路径但默认关闭
   var GREETING_NAMES = ['开局设定界面', '开学第一天', '慕佳芊', '苏晓樯', '温书语', '沈幼楚', '许念安', '陈芷汀', '虞淑婉'];
@@ -226,6 +227,111 @@
       btn.setAttribute('data-selected', selected ? 'true' : 'false');
       btn.setAttribute('aria-selected', selected ? 'true' : 'false');
     });
+  }
+
+  // ---------- 学籍档案（当前酒馆地址的浏览器收藏，可跨聊天复用） ----------
+  function readArchive(storage, key) {
+    if (!key.startsWith(ARCHIVE_PREFIX)) return null;
+    var raw = storage.getItem(key);
+    if (!raw) return null;
+    try {
+      var record = JSON.parse(raw);
+      if (!record || typeof record.name !== 'string' || !Number.isFinite(record.savedAt) ||
+          Math.abs(record.savedAt) > 8640000000000000 || !record.fields ||
+          typeof record.fields !== 'object' || Array.isArray(record.fields)) return null;
+      return record;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function renderArchiveList(panel, storage, selectedKey) {
+    var select = panel.querySelector('[data-archive-select]');
+    var entries = Object.keys(storage).map(function (key) {
+      return [key, readArchive(storage, key)];
+    }).filter(function (entry) { return entry[1]; });
+    entries.sort(function (a, b) { return b[1].savedAt - a[1].savedAt; });
+    var options = entries.map(function ([key, record]) {
+      var option = panel.ownerDocument.createElement('option');
+      option.value = key;
+      option.textContent = record.name + ' · ' + new Date(record.savedAt).toLocaleString('zh-CN', {
+        dateStyle: 'short', timeStyle: 'short'
+      });
+      return option;
+    });
+    if (!options.length) {
+      var empty = panel.ownerDocument.createElement('option');
+      empty.value = '';
+      empty.textContent = '暂无本地档案';
+      options.push(empty);
+    }
+    select.replaceChildren(...options);
+    if (entries.some(function (entry) { return entry[0] === selectedKey; })) select.value = selectedKey;
+    select.disabled = !entries.length;
+    panel.querySelector('[data-action="load-archive"]').disabled = !entries.length;
+    panel.querySelector('[data-action="delete-archive"]').disabled = !entries.length;
+  }
+
+  function archiveAction(root, panel, action) {
+    var status = panel.querySelector('[data-archive-status]');
+    var select = panel.querySelector('[data-archive-select]');
+    if (action !== 'list' || status.hasAttribute('data-error')) {
+      status.textContent = '';
+      status.removeAttribute('data-error');
+    }
+    var key = select.value;
+    try {
+      var storage = window.top.localStorage;
+      if (action === 'save-archive') {
+        var nameInput = panel.querySelector('[data-archive-name]');
+        var name = elementValue(nameInput) || readField(root, '姓名');
+        if (!name) {
+          status.textContent = '请填写档案名或人物姓名。';
+          status.dataset.error = 'true';
+          return;
+        }
+        var fields = Object.fromEntries(fieldElements(root).map(function (field) {
+          return [field.dataset.field, field.value];
+        }));
+        var savedAt = Date.now();
+        var record = {
+          name: name.slice(0, 60), savedAt: savedAt, fields: fields,
+          mode: getMode(root), greeting: getGreetingIndex(root),
+          story: root.querySelector('[data-custom-opening]').value,
+          action: root.querySelector('[data-opening-action]').value
+        };
+        key = ARCHIVE_PREFIX + savedAt + '-' + window.crypto.getRandomValues(new Uint32Array(2)).join('-');
+        storage.setItem(key, JSON.stringify(record));
+        nameInput.value = '';
+        status.textContent = '已保存「' + record.name + '」。';
+      } else if (action === 'load-archive' || action === 'delete-archive') {
+        var selected = readArchive(storage, key);
+        if (!selected) {
+          status.textContent = '这份档案已不可用。';
+          status.dataset.error = 'true';
+        } else if (action === 'load-archive') {
+          root.__jyUserEditing = true;
+          closePreview(root);
+          fieldElements(root).forEach(function (field) {
+            var value = selected.fields[field.dataset.field];
+            field.value = typeof value === 'string' ? value : (DEFAULT_FIELDS[field.dataset.field] || '');
+          });
+          setMode(root, selected.mode === 'custom' ? 'custom' : 'preset');
+          var greeting = selected.greeting;
+          setGreetingIndex(root, Number.isInteger(greeting) && greeting >= 1 && greeting < GREETING_NAMES.length ? greeting : 1);
+          root.querySelector('[data-custom-opening]').value = typeof selected.story === 'string' ? selected.story : '';
+          root.querySelector('[data-opening-action]').value = typeof selected.action === 'string' ? selected.action : '';
+          status.textContent = '已填入「' + selected.name + '」，可继续编辑。';
+        } else if (window.top.confirm('删除本地档案「' + selected.name + '」？')) {
+          storage.removeItem(key);
+          status.textContent = '已删除「' + selected.name + '」。';
+        }
+      }
+      renderArchiveList(panel, storage, key);
+    } catch (error) {
+      status.textContent = error.name === 'QuotaExceededError' ? '浏览器存储空间不足，可删除旧档案后再保存。' : '浏览器本地存储不可用。';
+      status.dataset.error = 'true';
+    }
   }
 
   function setState(root, state) {
@@ -882,7 +988,13 @@
     if (submitting) { event.preventDefault(); return; }
     var request = (root.__jyPreviewRequest || 0) + 1;
     root.__jyPreviewRequest = request;
-    if (action === 'select-mode') {
+    if (action === 'show-archives') {
+      var archives = root.querySelector('[data-opening-archives]');
+      archives.open = true;
+      archives.querySelector('[data-archive-name]').focus();
+    } else if (action === 'save-archive' || action === 'load-archive' || action === 'delete-archive') {
+      archiveAction(root, target.closest('[data-opening-archives]'), action);
+    } else if (action === 'select-mode') {
       event.preventDefault();
       root.__jyUserEditing = true;
       closePreview(root);
@@ -963,12 +1075,19 @@
       event.preventDefault();
       close.click();
     };
-    var markEditing = function () { root.__jyUserEditing = true; };
+    var archives = root.querySelector('[data-opening-archives]');
+    var refreshArchives = function () {
+      if (archives.open) archiveAction(root, archives, 'list');
+    };
+    archives?.addEventListener('toggle', refreshArchives);
+    var markEditing = function (event) {
+      if (!event.target.closest('[data-opening-archives]')) root.__jyUserEditing = true;
+    };
     root.addEventListener('input', markEditing);
     root.addEventListener('click', onClick);
     root.addEventListener('submit', onSubmit);
     root.addEventListener('keydown', onKeydown);
-    cleanups.push(function () { root.removeEventListener('input', markEditing); root.removeEventListener('click', onClick); root.removeEventListener('submit', onSubmit); root.removeEventListener('keydown', onKeydown); root.__jyOpeningBoundV7 = false; });
+    cleanups.push(function () { archives?.removeEventListener('toggle', refreshArchives); root.removeEventListener('input', markEditing); root.removeEventListener('click', onClick); root.removeEventListener('submit', onSubmit); root.removeEventListener('keydown', onKeydown); root.__jyOpeningBoundV7 = false; });
     syncRoot(root);
   }
 
