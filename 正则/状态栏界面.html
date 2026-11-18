@@ -1323,6 +1323,7 @@
     user-select: none;
     flex-shrink: 0;
   }
+  .jy-moment-avatar img { width: 100%; height: 100%; border-radius: inherit; object-fit: cover; }
   .jy-moment-box {
     display: flex;
     flex-direction: column;
@@ -2422,6 +2423,9 @@
 
       const getAuthorProfile = (item) => {
         const source = String(item.来源 || '');
+        if (source.trim() === '俞嘉豪' || source.trim() === '嘉豪') {
+          return { name: '俞嘉豪', initial: '俞', bg: '#455368', portrait: 'yujiahao.webp' };
+        }
         for (const [key, prof] of Object.entries(PROFILES)) {
           if (source.includes(key)) return prof;
         }
@@ -2445,6 +2449,15 @@
         avatar.style.background = profile.bg;
         avatar.textContent = profile.initial;
         avatar.setAttribute('aria-hidden', 'true');
+        if (profile.portrait) {
+          const image = document.createElement('img');
+          image.alt = profile.name;
+          image.loading = 'lazy';
+          image.dataset.fallbackSrc = 'https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/' + profile.portrait;
+          guardImage(image);
+          image.src = 'https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/' + profile.portrait;
+          avatar.replaceChildren(image);
+        }
 
         const box = document.createElement('div');
         box.className = 'jy-moment-box';
