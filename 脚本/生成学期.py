@@ -77,20 +77,25 @@ _%>
 (ROOT / '世界书/时间线/学期生活.txt').write_text(text)
 
 p = ROOT / '正则/状态栏界面.html'
-html = p.read_text()
 
 
-def replace_block(key, body):
-    global html
+def replace_block(text, key, body):
     content = '\n'.join('  ' + line if line else '' for line in body.splitlines())
-    html, count = re.subn(
+    text, count = re.subn(
         f'// JY_{key}_BEGIN.*?// JY_{key}_END',
         lambda _: f'// JY_{key}_BEGIN\n{content}\n  // JY_{key}_END',
-        html, flags=re.S,
+        text, flags=re.S,
     )
     assert count == 1, f'JY_{key} 标记必须恰好出现一次'
+    return text
 
 
-replace_block('PERIODS', 'const JY_PERIODS = ' + ui_data + ';')
-replace_block('CAMPUS', timeline)
+html = replace_block(p.read_text(), 'PERIODS', 'const JY_PERIODS = ' + ui_data + ';')
+html = replace_block(html, 'CAMPUS', timeline)
 p.write_text(html)
+
+# 开局只需要各学期的日期范围，不携带事件正文。
+p = ROOT / '脚本/开局设定按钮绑定脚本.js'
+bounds = [{key: period[key] for key in ('id', 'start', 'end')} for period in periods]
+script = replace_block(p.read_text(), 'OPENING_CALENDAR', 'const openingPeriods = ' + compact(bounds) + ';\n' + js_source('校园时间.js'))
+p.write_text(script)

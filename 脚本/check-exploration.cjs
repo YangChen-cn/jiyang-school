@@ -66,6 +66,20 @@ async function checkOpeningMappings() {
  assert.match(scenes[6].location,/高二（8）班教室/);
  assert.match(scenes[7].location,/咖啡馆/);
  assert.match(scenes[8].location,/校长办公室/);
+ const custom = Object.fromEntries(patches({
+   '开始年份':'2023', '开场日期':'2024-09-01', '开场地点':'桥下旧书摊', '开场时段':'傍晚',
+   '班级或身份':'暨阳中学高二重点班学生'
+ }, 'custom'));
+ assert.equal(custom['世界.当前位置'], '桥下旧书摊');
+ assert.equal(custom['主角.当前位置'], '桥下旧书摊');
+ assert.equal(custom['世界.日期'], '2024/09/01');
+ assert.equal(custom['世界.星期'], '星期日');
+ assert.equal(custom['剧情.学期'], '高三上');
+ assert.equal(custom['主角.班级'], '暨阳中学高三重点班学生');
+ assert.equal(custom['温书语.是否在场'], false);
+ const free = Object.fromEntries(patches({'开始年份':'2020'}, 'custom'));
+ assert.equal(free['世界.当前位置'], '');
+ assert.equal(free['剧情.学期'], '');
  const first = Object.fromEntries(patches({'开始年份':'2020'}, 'preset', scenes[1]));
  const other = Object.fromEntries(patches({'开始年份':'2020'}, 'preset', scenes[2]));
  assert.equal(first['许念安.是否在场'],true);

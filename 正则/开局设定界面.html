@@ -21,7 +21,7 @@
 
   .jy-opening-head {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr;
     gap: 16px;
     align-items: start;
     padding: 20px 22px 16px;
@@ -40,7 +40,7 @@
   .jy-opening-hint { display:block; margin-top:4px; color:#8a7a6a; font-size:11px; line-height:1.5; letter-spacing:.2px; }
   .jy-opening-section-title { margin-bottom: 10px; color: var(--green); font-size: 12px; font-weight: 800; }
   .jy-opening-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; }
-  .jy-opening-field { min-width: 0; }
+  .jy-opening-field { min-width: 0; display: block; }
   .jy-opening-field.wide { grid-column: 1 / -1; }
   .jy-opening-label { display: block; margin-bottom: 5px; color: var(--muted); font-size: 12px; font-weight: 700; }
   .jy-opening-input, .jy-opening-textarea {
@@ -58,6 +58,13 @@
   .jy-opening-panel { display: none; margin-top: 12px; }
   .jy-opening[data-opening-mode="preset"] .jy-opening-panel[data-mode-panel="preset"],
   .jy-opening[data-opening-mode="custom"] .jy-opening-panel[data-mode-panel="custom"] { display: block; }
+  .jy-opening-profile { margin: 12px 0; border-block: 1px solid var(--line); }
+  .jy-opening-profile summary { padding: 10px 2px; cursor: pointer; font-weight: 700; color: var(--green); }
+  .jy-opening-profile[open] { padding-bottom: 12px; }
+  .jy-opening-panel[data-mode-panel="custom"] { padding: 14px; border-left: 3px solid var(--green); background: #edf4ef; }
+  .jy-opening-panel [data-custom-opening] { min-height: 9em; line-height: 1.8; background: repeating-linear-gradient(#fffdf6 0 calc(1.8em - 1px), #e8ebe1 calc(1.8em - 1px) 1.8em); background-origin: content-box; }
+  .jy-opening [data-custom-action-note] { display: none; }
+  .jy-opening[data-opening-mode="custom"] [data-custom-action-note] { display: inline; }
   .jy-opening-scenes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; }
   .jy-opening-scene { min-height: 74px; border: 1px solid var(--line); border-radius: 5px; padding: 8px; text-align: left; color: var(--ink); background: #fff; font: inherit; cursor: pointer; }
   .jy-opening-scene:hover { border-color: var(--green); background: #f0f7f3; }
@@ -75,7 +82,7 @@
   .jy-opening-preview-title { font-size: 14px; font-weight: 800; }
   .jy-opening-preview-close { width: 30px; height: 30px; border: 0; color: var(--muted); background: transparent; font-size: 22px; line-height: 1; cursor: pointer; }
   .jy-opening-preview-content { min-height: 0; margin: 0; padding: 16px; max-height: min(42vh, 360px); overflow: auto; overscroll-behavior: contain; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--ink); font: 13px/1.72 "Noto Serif SC", "Songti SC", serif; }
-  .jy-opening-preview-actions { display: flex; justify-content: flex-end; gap: 8px; margin-left: auto; }
+  .jy-opening-preview-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-left: auto; }
   .jy-opening-preview-actions .jy-opening-button { min-height: 31px; padding: 6px 9px; font-size: 12px; }
   .jy-opening-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
   .jy-opening-note { flex: 1 1 280px; color: var(--muted); font-size: 12px; line-height: 1.5; }
@@ -122,11 +129,11 @@
 <section class="jy-opening" data-jy-opening data-opening-state="editing" data-opening-mode="preset" data-greeting-index="1">
   <header class="jy-opening-head">
     <div>
-      <div class="jy-opening-kicker">暨阳中学 · 高二新生档案</div>
+      <div class="jy-opening-kicker">暨阳中学 · 故事档案</div>
       <div class="jy-opening-title">先写下你是谁</div>
-      <p class="jy-opening-copy">这份档案会成为本次故事里所有人认识你的起点。</p>
+      <p class="jy-opening-copy">选一篇开场，或从你自己写下的那一刻开始。</p>
     </div>
-    <div class="jy-opening-stamp">已备案</div>
+
   </header>
 
   <form class="jy-opening-form" autocomplete="off">
@@ -137,10 +144,11 @@
         <label class="jy-opening-field"><span class="jy-opening-label">年龄</span><input class="jy-opening-input" data-field="年龄" value="17岁" placeholder="例如：17岁"></label>
         <label class="jy-opening-field"><span class="jy-opening-label">性别 / 称谓</span><input class="jy-opening-input" data-field="性别或称谓" placeholder="可留空"></label>
         <label class="jy-opening-field"><span class="jy-opening-label">班级 / 身份</span><input class="jy-opening-input" data-field="班级或身份" value="暨阳中学高二重点班学生" placeholder="例如：转学生、走读生"></label>
-        <label class="jy-opening-field"><span class="jy-opening-label">开始年份</span><input class="jy-opening-input" data-field="开始年份" value="2020" inputmode="numeric" placeholder="例如：2020"><small class="jy-opening-hint">剧情从这一年 9 月、高二上开学开始。</small></label>
+        <label class="jy-opening-field"><span class="jy-opening-label">开始年份</span><input class="jy-opening-input" data-field="开始年份" value="2020" inputmode="numeric" placeholder="例如：2020"><small class="jy-opening-hint">高二入学的年份，用来推算校历。</small></label>
       </div>
     </div>
 
+    <details class="jy-opening-profile"><summary>补充人物档案（选填）</summary>
     <div class="jy-opening-section">
       <div class="jy-opening-section-title">人物底色</div>
       <div class="jy-opening-grid">
@@ -159,11 +167,12 @@
       </div>
     </div>
 
+    </details>
     <div class="jy-opening-section">
       <div class="jy-opening-section-title">选择开场</div>
-      <div class="jy-opening-mode-switch" role="tablist" aria-label="开场方式">
-        <button class="jy-opening-mode" type="button" data-action="select-mode" data-mode="preset" aria-selected="true">预写开场</button>
-        <button class="jy-opening-mode" type="button" data-action="select-mode" data-mode="custom" aria-selected="false">自定义开局</button>
+      <div class="jy-opening-mode-switch" role="group" aria-label="开场方式">
+        <button class="jy-opening-mode" type="button" data-action="select-mode" data-mode="preset" aria-pressed="true">预写开场</button>
+        <button class="jy-opening-mode" type="button" data-action="select-mode" data-mode="custom" aria-pressed="false">自定义开局</button>
       </div>
 
       <div class="jy-opening-panel" data-mode-panel="preset">
@@ -172,6 +181,7 @@
             <div class="jy-opening-preview-head">
               <div class="jy-opening-preview-title" data-preview-title>开场白预览</div>
               <div class="jy-opening-preview-actions">
+                <button class="jy-opening-button" type="button" data-action="rewrite-preview">改写这一幕</button>
                 <button class="jy-opening-button primary" type="button" data-action="use-preview">使用此开场</button>
               </div>
               <button class="jy-opening-preview-close" type="button" data-action="close-preview" aria-label="关闭预览">×</button>
@@ -192,10 +202,15 @@
       </div>
 
       <div class="jy-opening-panel" data-mode-panel="custom">
-        <label class="jy-opening-field"><span class="jy-opening-label">自定义开局</span><textarea class="jy-opening-textarea tall" data-custom-opening placeholder="写下此刻的地点、人物、发生过的事，或你希望 AI 接住的开场画面。"></textarea></label>
+        <div class="jy-opening-grid">
+          <label class="jy-opening-field wide"><span class="jy-opening-label">从哪里开始</span><input class="jy-opening-input" data-field="开场地点" placeholder="校内、城区，或自己起名的地方"></label>
+          <label class="jy-opening-field"><span class="jy-opening-label">日期（选填）</span><input class="jy-opening-input" type="date" data-field="开场日期"></label>
+          <label class="jy-opening-field"><span class="jy-opening-label">时段（选填）</span><input class="jy-opening-input" data-field="开场时段" placeholder="例如：晚自习前"></label>
+          <label class="jy-opening-field wide"><span class="jy-opening-label">第一幕</span><textarea class="jy-opening-textarea" data-custom-opening placeholder="晚班车刚走，站牌下还搁着一把滴水的伞。"></textarea><small class="jy-opening-hint">可以只写一段开场，也可以只填地点，让故事从那里展开。</small></label>
+        </div>
       </div>
 
-      <label class="jy-opening-field wide" style="display:block; margin-top:12px;"><span class="jy-opening-label">你的开局动作</span><textarea class="jy-opening-textarea" data-opening-action placeholder="例如：我把书包放到最后一排，抬头看向讲台。"></textarea></label>
+      <label class="jy-opening-field wide" style="display:block; margin-top:12px;"><span class="jy-opening-label">你的开局动作<small data-custom-action-note>（选填）</small></span><textarea class="jy-opening-textarea" data-opening-action placeholder="例如：我把书包放到最后一排，抬头看向讲台。"></textarea></label>
     </div>
 
     <div class="jy-opening-actions">

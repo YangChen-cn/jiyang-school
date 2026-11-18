@@ -1,19 +1,17 @@
 <section class="jy-admission-letter">
-  <div class="jy-admission-ribbon">暨阳中学 · 新生档案接收中...</div>
+  <div class="jy-admission-ribbon">暨阳中学 · 开局档案</div>
   <div class="jy-admission-topline">
     <span>暨阳中学教务处</span>
-    <span>2020 学年 · 入学存档</span>
+    <span>故事起点</span>
   </div>
   <header class="jy-admission-heading">
     <div class="jy-admission-emblem" aria-hidden="true">暨阳</div>
     <div>
-      <h2>新生录取通知书</h2>
-      <p>ADMISSION NOTICE · JIYANG HIGH SCHOOL</p>
+      <h2>开场存档</h2>
     </div>
   </header>
   <div class="jy-admission-rule"></div>
-  <p class="jy-admission-address">致 <strong>$1</strong> 同学：</p>
-  <p class="jy-admission-copy">经核验，你已被录取进入暨阳中学。请携带这份档案，走进属于你的新学期。</p>
+  <p class="jy-admission-address">致 <strong>$1</strong>：</p>
 
   <div class="jy-admission-facts">
     <div><span>姓名</span><b>$1</b></div>
@@ -31,12 +29,12 @@
   </div>
 
   <div class="jy-admission-opening">
-    <span>报到时的心事</span>
+    <span>开场时的心事</span>
     <p>$10</p>
   </div>
   <div class="jy-admission-foot">
     <span>起始场景：$11</span>
-    <span class="jy-admission-seal">教务处 · 已录取</span>
+    <span class="jy-admission-seal">已存档</span>
   </div>
 </section>
 
@@ -70,7 +68,7 @@
   .jy-admission-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; margin: 0 16px; }
   .jy-admission-facts > div { min-width: 0; border: 1px solid #d2e0da; border-radius: 5px; background: rgba(255, 255, 255, 0.68); padding: 8px 9px; }
   .jy-admission-facts span, .jy-admission-row > span, .jy-admission-opening > span { display: block; color: #698077; font-size: 10px; font-weight: 800; }
-  .jy-admission-facts b { display: block; margin-top: 3px; overflow: hidden; color: #2e3e39; font-size: 12px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+  .jy-admission-facts b { display: block; margin-top: 3px; overflow-wrap: anywhere; color: #2e3e39; font-size: 12px; font-weight: 800; }
   .jy-admission-fact-wide { grid-column: 1 / -1; }
   .jy-admission-profile { display: grid; gap: 7px; margin: 11px 16px 0; }
   .jy-admission-row { display: grid; grid-template-columns: 82px minmax(0, 1fr); gap: 10px; align-items: start; border-left: 3px solid rgba(35, 123, 108, 0.5); background: rgba(35, 123, 108, 0.045); padding: 8px 10px; }

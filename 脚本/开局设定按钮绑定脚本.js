@@ -8,6 +8,7 @@
   var GREETING_NAMES = ['开局设定界面', '开学第一天', '慕佳芊', '苏晓樯', '温书语', '沈幼楚', '许念安', '陈芷汀', '虞淑婉'];
   var CHARACTER_NAMES = ['苏晓樯', '温书语', '沈幼楚', '许念安', '慕佳芊', '陈芷汀', '虞淑婉'];
   var DEFAULT_FIELDS = {
+    '开始年份': '2020',
     '年龄': '17岁',
     '班级或身份': '暨阳中学高二重点班学生'
   };
@@ -82,6 +83,48 @@
       }
     }
   };
+
+  // JY_OPENING_CALENDAR_BEGIN
+  const openingPeriods = [{"id":"高二上","start":[0,"08-01"],"end":[1,"02-20"]},{"id":"高二下","start":[1,"02-21"],"end":[1,"06-30"]},{"id":"暑假","start":[1,"07-01"],"end":[1,"08-31"]},{"id":"高三上","start":[1,"09-01"],"end":[2,"02-20"]},{"id":"高三下","start":[2,"02-21"],"end":[2,"06-30"]},{"id":"已毕业","start":[2,"07-01"],"end":[99,"12-31"]}];
+  // Shared by the prompt, calendar and MVU. Dates are in the story's local calendar.
+  function campusDate(value) {
+    const date = typeof value === 'string' ? value.replaceAll('/', '-') : '';
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return '';
+    const parsed = new Date(date + 'T12:00:00Z');
+    return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === date ? date : '';
+  }
+
+  function campusYear(value) {
+    const year = Number(value);
+    return Number.isInteger(year) && year >= 1000 && year <= 9900 ? year : 2020;
+  }
+
+  function campusAnchor(edge, year) {
+    return edge ? `${year + edge[0]}-${edge[1]}` : '';
+  }
+
+  function campusPeriod(periods, date, year, academic) {
+    if (academic === '已毕业') return periods.find(period => period.id === '已毕业');
+    date = campusDate(date);
+    if (!date) return null;
+    return periods.find(period => date >= campusAnchor(period.start, year) && date <= campusAnchor(period.end, year)) || null;
+  }
+
+  function campusAgeAt(birthday, date) {
+    const birth = campusDate(birthday);
+    const now = campusDate(date);
+    if (!birth || !now || birth > now) return null;
+    return Number(now.slice(0, 4)) - Number(birth.slice(0, 4)) - Number(now.slice(5) < birth.slice(5));
+  }
+
+  function campusPlayerClass(identity, academic) {
+    // Keep custom identities, transfers and class changes from the story.
+    if (identity !== '暨阳中学高二重点班学生' && identity !== '暨阳中学高三重点班学生') return identity;
+    if (academic === '已毕业') return '暨阳中学毕业生';
+    if (academic === '高三上' || academic === '高三下') return '暨阳中学高三重点班学生';
+    return identity;
+  }
+  // JY_OPENING_CALENDAR_END
 
   function stop() {
     cleanups.forEach(function (fn) { try { fn(); } catch (e) { /* noop */ } });
@@ -167,7 +210,7 @@
   function setMode(root, mode) {
     root.setAttribute('data-opening-mode', mode === 'custom' ? 'custom' : 'preset');
     root.querySelectorAll('[data-action="select-mode"]').forEach(function (btn) {
-      btn.setAttribute('aria-selected', btn.getAttribute('data-mode') === mode ? 'true' : 'false');
+      btn.setAttribute('aria-pressed', btn.getAttribute('data-mode') === mode ? 'true' : 'false');
     });
   }
 
@@ -212,7 +255,7 @@
       node.setAttribute('data-type', type || 'info');
       if (message) {
         var timer = setTimeout(function () {
-          if (node.getAttribute('data-toast') === message) node.setAttribute('data-show', 'false');
+          if (node.textContent === message) node.setAttribute('data-show', 'false');
         }, 4200);
         timers.push(timer);
       }
@@ -298,11 +341,11 @@
 
   function parseLetter(text) {
     var data = {};
-    var labels = ['姓名', '年龄', '性别或称谓', '班级或身份', '外貌', '性格', '擅长与学业', '家庭背景', '重要物品', '开局心事', '当前开场', '自定义开局', '开局行动'];
+    var labels = ['姓名', '年龄', '性别或称谓', '班级或身份', '外貌', '性格', '擅长与学业', '家庭背景', '重要物品', '开局心事', '当前开场', '开始年份', '开场日期', '开场地点', '开场时段', '自定义开局', '开局行动'];
     var stop = labels.concat(['连续性优先级']).join('|');
     var source = String(text || '');
     labels.forEach(function (label) {
-      var re = new RegExp('(?:^|\\n)' + label + '[:：]\\s*([\\s\\S]*?)(?=\\r?\\n(?:' + stop + ')[:：]|\\r?\\n<\\/initial_setup>|$)');
+      var re = new RegExp('(?:^|\\n)' + label + '[:：][ \t]*([\\s\\S]*?)(?=\\r?\\n(?:' + stop + ')[:：]|\\r?\\n<\\/initial_setup>|$)');
       var match = source.match(re);
       if (match) data[label] = match[1].replace(/\s+$/, '').trim();
     });
@@ -367,39 +410,52 @@
     return items.filter(function (item) { return item.名称; });
   }
 
+  function customScene(data) {
+    function optional(key) { return data[key] && data[key] !== '未设定' ? data[key] : ''; }
+    return { date: optional('开场日期'), time: optional('开场时段'), location: optional('开场地点') };
+  }
+
+  function sceneHeading(data) {
+    var scene = customScene(data);
+    return [scene.date, scene.time, scene.location].filter(Boolean).join(' · ');
+  }
+
   function buildMvuPatches(formData, mode, scene) {
     var patches = [];
     var startYear = parseInt(formData['开始年份'], 10);
     if (!(startYear >= 1900 && startYear <= 2100)) startYear = 2020;
     patches.push(['世界.起始年份', String(startYear)]);
-    if (mode === 'preset' && scene) {
-      var sceneDate = String(scene.date || '').replace(/^\d{4}/, String(startYear));
-      patches.push(['世界.日期', sceneDate]);
-      patches.push(['世界.星期', scene.week]);
+    var custom = mode === 'custom';
+    scene = custom ? customScene(formData) : scene;
+    if (scene) {
+      var sceneDate = custom ? scene.date : scene.date.replace(/^\d{4}/, String(startYear));
+      var date = campusDate(sceneDate);
+      var semester = campusPeriod(openingPeriods, date, startYear)?.id || '';
+      patches.push(['世界.日期', date.replaceAll('-', '/')]);
+      patches.push(['世界.星期', date ? '星期' + '日一二三四五六'[new Date(date + 'T12:00:00Z').getUTCDay()] : '']);
       patches.push(['世界.时间段', scene.time]);
-      patches.push(['世界.天气', scene.weather]);
+      patches.push(['世界.天气', scene.weather || '']);
       patches.push(['世界.当前位置', scene.location]);
-      patches.push(['世界.所在区域', scene.area]);
-      patches.push(['世界.私密程度', scene.privacy]);
+      patches.push(['世界.所在区域', scene.area || '']);
+      patches.push(['世界.私密程度', scene.privacy || '']);
       patches.push(['剧情.当前事件', '']);
-      patches.push(['剧情.校园活动', scene.schoolEvent || '无']);
-      patches.push(['剧情.学期', scene.semester]);
+      patches.push(['剧情.校园活动', scene.schoolEvent || (custom ? '' : '无')]);
+      patches.push(['剧情.学期', semester]);
       patches.push(['主角.当前位置', scene.location]);
     }
     patches.push(['剧情.当前nsfw', false]);
-    if (mode !== 'preset' || !scene) patches.push(['剧情.学期', '高二上']);
 
     patches.push(['主角.姓名', formData['姓名'] === '未设定' ? '' : formData['姓名']]);
     patches.push(['主角.年龄', formData['年龄'] === '未设定' ? '' : formData['年龄']]);
     patches.push(['主角.性别', formData['性别或称谓'] === '未设定' ? '' : formData['性别或称谓']]);
-    patches.push(['主角.班级', formData['班级或身份'] === '未设定' ? '' : formData['班级或身份']]);
+    patches.push(['主角.班级', campusPlayerClass(formData['班级或身份'] === '未设定' ? '' : formData['班级或身份'], semester)]);
     patches.push(['主角.外貌', formData['外貌'] === '未设定' ? '' : formData['外貌']]);
     patches.push(['主角.性格', formData['性格'] === '未设定' ? '' : formData['性格']]);
     patches.push(['主角.擅长与学业', formData['擅长与学业'] === '未设定' ? '' : formData['擅长与学业']]);
     patches.push(['主角.家庭背景', formData['家庭背景'] === '未设定' ? '' : formData['家庭背景']]);
     patches.push(['主角.重要物品', parseOpeningItems(formData['重要物品'])]);
 
-    if (mode === 'preset' && scene) {
+    if (scene) {
       CHARACTER_NAMES.forEach(function (name) {
         var present = scene.present ? scene.present[name] : null;
         patches.push([name + '.是否在场', !!present]);
@@ -573,12 +629,21 @@
     lines.push('开局心事: ' + data['开局心事']);
     lines.push('');
     lines.push('当前开场: ' + selectedGreeting);
-    if (customOpening) lines.push('自定义开局: ' + customOpening);
-    lines.push('开局行动: ' + action);
+    lines.push('开始年份: ' + data['开始年份']);
+    if (selectedGreeting === '自定义开局') {
+      ['开场日期', '开场时段', '开场地点'].forEach(function (key) {
+        if (data[key] && data[key] !== '未设定') lines.push(key + ': ' + data[key]);
+      });
+    }
+    if (action) lines.push('开局行动: ' + action);
     lines.push('');
     lines.push('连续性优先级:');
     lines.push('- 如果初始变量中的日期、时间、地点、在场人物、衣着、关系或事件进度与所选开场白冲突，一律以开场白的描写为当前起点。');
-    lines.push('- 在开场白之后承接本条消息，不要回退或重写已经发生的场景。');
+    if (selectedGreeting === '自定义开局' && !customOpening) {
+      lines.push('- 从首楼指定的场景写出第一幕，留给玩家决定下一步。');
+    } else {
+      lines.push('- 从首楼最后一刻续写，留给玩家决定下一步。');
+    }
     lines.push('</initial_setup>');
     return ['<letter>', lines.join('\n'), '</letter>'].join('\n');
   }
@@ -591,6 +656,8 @@
     var content = preview.querySelector('[data-preview-content]');
     if (title) title.textContent = index + ' · ' + GREETING_NAMES[index] + ' · 开场白预览';
     if (content) content.textContent = text;
+    var rewrite = preview.querySelector('[data-action="rewrite-preview"]');
+    if (rewrite) rewrite.textContent = readText(root, '[data-custom-opening]') || sceneHeading(readForm(root)) ? '继续自定义草稿' : '改写这一幕';
     preview.setAttribute('data-open', 'true');
     preview.setAttribute('aria-hidden', 'false');
     if (content) {
@@ -611,7 +678,7 @@
     var year = parseInt(data['开始年份'], 10);
     if (!(year >= 1900 && year <= 2100)) year = 2020;
     if (mode === 'custom') {
-      return '姓名：' + data['姓名'] + '\n开局方式：自定义开局\n开始年份：' + year + ' 年\n开局行动：' + action;
+      return '姓名：' + data['姓名'] + '\n开局方式：自定义开局\n开始年份：' + year + ' 年' + (sceneHeading(data) ? '\n第一幕：' + sceneHeading(data) : '') + (action ? '\n开局行动：' + action : '');
     }
     var scene = GREETING_SCENES[index];
     return '姓名：' + data['姓名'] + '\n开局：' + GREETING_NAMES[index] + '（' + (scene ? scene.location : '') + '）\n开始年份：' + year + ' 年\n开局行动：' + action;
@@ -631,8 +698,9 @@
     var letter = findLetterMessage(messages);
     var letterText = messageText(letter);
     if (root.__jySyncedMessage === messageZero && root.__jySyncedLetter === letterText) return;
+    var parsed = parseLetter(letterText);
     var index = 0;
-    if (normalizeText(messageZero)) {
+    if (parsed['当前开场'] !== '自定义开局' && normalizeText(messageZero)) {
       root.__jySyncPending = true;
       try { index = await inferGreetingIndex(messageZero); } catch (error) { return; }
       finally { root.__jySyncPending = false; }
@@ -643,20 +711,20 @@
     root.__jySyncedLetter = letterText;
     if (index) setGreetingIndex(root, index);
     if (letter) {
-      var parsed = parseLetter(letterText);
       fillForm(root, parsed);
-      if (index) setMode(root, 'preset');
-      else if (normalizeText(messageZero)) {
+      if (parsed['当前开场'] !== '自定义开局' && index) setMode(root, 'preset');
+      else {
         setMode(root, 'custom');
         var customBox = root.querySelector('[data-custom-opening]');
-        if (customBox) customBox.value = parsed['自定义开局'] || messageZero.replace(/<OpeningSetupUI\s*\/>/gi, '').trim();
+        var story = messageZero.replace(/<OpeningSetupUI\s*\/>/gi, '').trim();
+        var heading = sceneHeading(parsed);
+        if (heading && (story === heading || story.startsWith(heading + '\n\n'))) story = story.slice(heading.length).trimStart();
+        if (customBox) customBox.value = parsed['自定义开局'] || story;
       }
-      if (parsed['开局行动']) {
-        var actionBox = root.querySelector('[data-opening-action]');
-        if (actionBox) actionBox.value = parsed['开局行动'];
-      }
+      var actionBox = root.querySelector('[data-opening-action]');
+      if (actionBox) actionBox.value = parsed['开局行动'] || '';
       root.setAttribute('data-opening-state', 'complete');
-      renderSummary(root, parsed, getMode(root), getGreetingIndex(root), parsed['开局行动'] || '（未记录）');
+      renderSummary(root, parsed, getMode(root), getGreetingIndex(root), parsed['开局行动'] || '');
       var confirmBtn = root.querySelector('[data-action="confirm"]');
       if (confirmBtn) confirmBtn.disabled = false;
       closePreview(root);
@@ -694,12 +762,13 @@
     }
 
     if (!formData['姓名'] || formData['姓名'] === '未设定') return fail('请先填写姓名。');
-    if (!action) return fail('请先填写「你的开局动作」。');
-    if (mode === 'custom' && !custom) return fail('选择自定义开局时，请填写开场正文。');
+    if (formData['开始年份'] === '未设定') formData['开始年份'] = DEFAULT_FIELDS['开始年份'];
+    if (!/^\d{4}$/.test(formData['开始年份']) || Number(formData['开始年份']) < 1900 || Number(formData['开始年份']) > 2100) return fail('高二入学年份请填写 1900 至 2100 之间的年份。');
+    if (mode === 'preset' && !action) return fail('请先填写「你的开局动作」。');
+    if (mode === 'custom' && !custom && !customScene(formData).location) return fail('写下一段第一幕，或填一个开场地点。');
     root.__jyPreviewRequest = (root.__jyPreviewRequest || 0) + 1;
 
-    var bookName = '';
-    try { bookName = checkPrimaryWorldbook(); } catch (error) { return fail(error.message); }
+    try { checkPrimaryWorldbook(); } catch (error) { return fail(error.message); }
 
     var greeting = '';
     if (mode === 'preset') {
@@ -710,7 +779,7 @@
       if (!root.isConnected) { submitting = false; return; }
       if (!greeting) return fail('未找到编号 ' + index + ' 的开场白，请重新导入完整角色卡后再试。');
     }
-    var seedText = (mode === 'custom' ? custom : greeting) + '\n\n' + PLACEHOLDER;
+    var seedText = (mode === 'custom' ? [sceneHeading(formData), custom].filter(Boolean).join('\n\n') : greeting) + '\n\n' + PLACEHOLDER;
 
     var input = findInput();
     var sendButton = findSendButton();
@@ -730,7 +799,7 @@
     var variables;
     var staged = false;
     var usedInput = false;
-    var letter = openingMessage(formData, action, custom, mode === 'custom' ? '自定义开局' : GREETING_NAMES[index]);
+    var letter;
 
     submitting = true;
     setState(root, 'submitting');
@@ -744,6 +813,9 @@
       }
       if (!root.isConnected || !stillInChat()) return;
 
+      var identity = variables.next.stat_data.主角?.班级;
+      var profile = identity ? Object.assign({}, formData, { '班级或身份': identity }) : formData;
+      letter = openingMessage(profile, action, custom, mode === 'custom' ? '自定义开局' : GREETING_NAMES[index]);
       // 正文和 MVU 数据在同一次首楼更新中提交，完成刷新后再发送。
       staged = true;
       var updates = [{ message_id: 0, message: seedText, data: variables.next }];
@@ -765,6 +837,7 @@
         try { await legacySaveWorldbook(worldbookProfile(formData)); } catch (error) { console.warn('[暨阳开局] 旧版世界书写入失败', error); }
       }
 
+      if (usedInput && draft.value && !elementValue(input)) restoreDraft(input, draft);
       bindAll();
       var visibleRoot = root.isConnected ? root : activeRoot;
       if (!visibleRoot?.isConnected) return;
@@ -772,7 +845,7 @@
       setState(visibleRoot, 'complete');
       renderSummary(visibleRoot, formData, mode, index, action);
       closePreview(visibleRoot);
-      toast(root, '档案已写入' + (bookName ? '「' + bookName + '」' : '') + '，故事开始。', 'info');
+      toast(visibleRoot, '开场已保存到本次聊天。', 'info');
     } catch (error) {
       if (!stillInChat()) return;
       var errorMessage = error.message || '开局提交失败，请重试。';
@@ -818,6 +891,7 @@
       event.preventDefault();
       root.__jyUserEditing = true;
       var index = Number(target.getAttribute('data-greeting')) || 1;
+      closePreview(root);
       setGreetingIndex(root, index);
       var text;
       try { text = await greetingTextAt(index); }
@@ -828,6 +902,23 @@
       if (submitting || !root.isConnected || root.__jyPreviewRequest !== request) return;
       if (text) openPreview(root, index, text);
       else toast(root, '未找到该开场白文本，请重新导入完整角色卡。', 'error');
+    } else if (action === 'rewrite-preview') {
+      event.preventDefault();
+      var editor = root.querySelector('[data-custom-opening]');
+      var data = readForm(root);
+      if (!editor.value.trim() && !sceneHeading(data)) {
+        var scene = GREETING_SCENES[getGreetingIndex(root)];
+        editor.value = readText(root, '[data-preview-content]');
+        fillForm(root, {
+          '开场日期': scene.date.replace(/^2020/, /^\d{4}$/.test(data['开始年份']) ? data['开始年份'] : '2020').replaceAll('/', '-'),
+          '开场时段': scene.time,
+          '开场地点': scene.location
+        });
+      }
+      root.__jyUserEditing = true;
+      closePreview(root);
+      setMode(root, 'custom');
+      editor.focus();
     } else if (action === 'clear') {
       event.preventDefault();
       root.__jyUserEditing = true;
@@ -872,10 +963,12 @@
       event.preventDefault();
       close.click();
     };
+    var markEditing = function () { root.__jyUserEditing = true; };
+    root.addEventListener('input', markEditing);
     root.addEventListener('click', onClick);
     root.addEventListener('submit', onSubmit);
     root.addEventListener('keydown', onKeydown);
-    cleanups.push(function () { root.removeEventListener('click', onClick); root.removeEventListener('submit', onSubmit); root.removeEventListener('keydown', onKeydown); root.__jyOpeningBoundV7 = false; });
+    cleanups.push(function () { root.removeEventListener('input', markEditing); root.removeEventListener('click', onClick); root.removeEventListener('submit', onSubmit); root.removeEventListener('keydown', onKeydown); root.__jyOpeningBoundV7 = false; });
     syncRoot(root);
   }
 
