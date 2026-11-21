@@ -2,32 +2,37 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 
-// Some responses print the tool invocation as assistant text.
-// The malformed variant observed in SillyTavern left JSONPatch quotes unescaped.
-const decoder = String.raw`    function unwrapPrintedToolCall(text, toolName) {
-        if (!toolName || typeof text !== 'string') return null;
-        const envelope = /^\s*<tool_calls>([\s\S]*)<\/tool_calls>\s*$/.exec(text);
-        if (!envelope) return null;
+// Decode one printed invocation of the plugin's own tool. Some providers mix
+// escaped and raw line breaks and leave quotes in the JSONPatch unescaped.
+export function unwrapPrintedToolCall(text, toolName) {
+    if (!toolName || typeof text !== 'string') return null;
+    const envelope = /^\s*<tool_calls>([\s\S]*)<\/tool_calls>\s*$/.exec(text);
+    if (!envelope) return null;
+
+    let calls;
+    try {
+        calls = JSON.parse(envelope[1]);
+    } catch {
+        const single = /^\s*\[\s*\{\s*"name"\s*:\s*"([\w-]+)"\s*,\s*"arguments"\s*:\s*\{\s*"content"\s*:\s*"([\s\S]*)"\s*\}\s*\}\s*\]\s*$/.exec(envelope[1]);
+        if (!single || single[1] !== toolName || /"\s*\}\s*\}\s*,\s*\{/.test(single[2])) return null;
         try {
-            const calls = JSON.parse(envelope[1]);
-            const call = Array.isArray(calls) && calls.length === 1 ? calls[0] : null;
-            return call?.name === toolName && typeof call.arguments?.content === 'string'
-                ? call.arguments.content : null;
+            const escaped = single[2].replace(/\\[\s\S]|["\x00-\x1f]/g,
+                token => token.length === 1 ? JSON.stringify(token).slice(1, -1) : token);
+            const content = JSON.parse('"' + escaped + '"');
+            const update = /<UpdateVariable\s*>([\s\S]*?)<\/UpdateVariable\s*>/i.exec(content);
+            const patch = update && /<JSONPatch\s*>([\s\S]*?)<\/JSONPatch\s*>/i.exec(update[1]);
+            return patch && Array.isArray(JSON.parse(patch[1])) ? content : null;
         } catch {
-            const single = /^\s*\[\s*\{\s*"name"\s*:\s*"([\w-]+)"\s*,\s*"arguments"\s*:\s*\{\s*"content"\s*:\s*"([\s\S]*)"\s*\}\s*\}\s*\]\s*$/.exec(envelope[1]);
-            if (!single || single[1] !== toolName || /"\s*\}\s*\}\s*,\s*\{/.test(single[2])) return null;
-            try {
-                const content = JSON.parse('"' + single[2].replace(/\\[\s\S]|"/g, token => token === '"' ? '\\"' : token) + '"');
-                const update = /<UpdateVariable\s*>([\s\S]*?)<\/UpdateVariable\s*>/i.exec(content);
-                const patch = update && /<JSONPatch\s*>([\s\S]*?)<\/JSONPatch\s*>/i.exec(update[1]);
-                return patch && Array.isArray(JSON.parse(patch[1])) ? content : null;
-            } catch {
-                return null;
-            }
+            return null;
         }
     }
 
-`;
+    const call = Array.isArray(calls) && calls.length === 1 ? calls[0] : null;
+    return call?.name === toolName && typeof call.arguments?.content === 'string'
+        ? call.arguments.content : null;
+}
+
+const decoder = unwrapPrintedToolCall.toString().split('\n').map(line => line ? `    ${line}` : '').join('\n') + '\n\n';
 
 const streamMethods = String.raw`        readOpenAiText(state, text, finished = false) {
             if (!this.toolName || state.printedCall === null) return text;
@@ -55,13 +60,18 @@ const streamMethods = String.raw`        readOpenAiText(state, text, finished = 
 `;
 
 export function repairToolResponse(source) {
-    if (source.includes('    function unwrapPrintedToolCall(')) return source;
+    const normalizer = '    function normalizeOpenAiResponse(parsed, toolName) {';
+    const existingDecoder = source.indexOf('    function unwrapPrintedToolCall(');
+    if (existingDecoder >= 0) {
+        const end = source.indexOf(normalizer, existingDecoder);
+        if (end < 0) throw new Error('无法找到现有换行补丁的结束位置');
+        return source.slice(0, existingDecoder) + decoder + source.slice(end);
+    }
     const replace = (before, after) => {
         if (source.split(before).length !== 2) throw new Error('插件结构已变化，无法应用换行补丁：' + before.trim().split('\n')[0]);
         source = source.replace(before, () => after);
     };
 
-    const normalizer = '    function normalizeOpenAiResponse(parsed, toolName) {';
     replace(normalizer, decoder + normalizer);
     replace('                if (!owned) continue;', `                if (!owned) {
                     const decoded = unwrapPrintedToolCall(message.content, toolName);
