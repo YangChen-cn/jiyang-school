@@ -10,7 +10,7 @@
   var CHARACTER_NAMES = ['苏晓樯', '温书语', '沈幼楚', '许念安', '慕佳芊', '陈芷汀', '虞淑婉'];
   var DEFAULT_FIELDS = {
     '开始年份': '2020',
-    '年龄': '17岁',
+    '年龄': '18岁',
     '班级或身份': '暨阳中学高二重点班学生'
   };
   var PLACEHOLDER = '<OpeningSetupUI/>';
