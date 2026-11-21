@@ -38,7 +38,7 @@ def period_data(exclude):
 timeline = js_source('校园时间.js', '校园消息.js')
 routes = js_source('活动路由.js')
 prompt_periods = compact(period_data({'source', 'window', 'places'}))
-ui_data = compact(period_data({'entry', 'routePlaces'}))
+ui_data = compact(period_data({'entry', 'routePlaces', 'aliases'}))
 calendar = '''<%_ const _Y = Number(getvar('stat_data.世界.起始年份', { defaults: '2020' })) || 2020; _%>
 校历:
   依据: 校园.日程中正式确认、撤销与结束的记录优先；以下为预计窗口，不据此自动参与、转场、跳时或赴约。

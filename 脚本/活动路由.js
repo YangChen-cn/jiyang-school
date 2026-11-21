@@ -30,7 +30,7 @@ function campusRoutes(periods, state) {
   const location = state.世界?.当前位置;
   const focus = state.剧情?.校园活动;
   const active = hasDate ? activities.filter(a => ['window', 'live'].includes(phases[a.id].kind)) : [];
-  const named = focus && active.find(a => (a.name === focus || a.id === focus));
+  const named = focus && active.find(a => a.name === focus || a.id === focus || a.aliases?.includes(focus));
   const onSite = active.filter(a => phases[a.id].kind === 'live' && a.routePlaces?.includes(location));
   return {period, phases, activate: named?.entry || (onSite.length === 1 ? onSite[0].entry : '')};
 }

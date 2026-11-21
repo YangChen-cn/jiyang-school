@@ -1,6 +1,6 @@
 @@if !!(typeof jyCampusEvents !== 'undefined' && jyCampusEvents['coming-of-age'])
 <%_ { const phase = typeof jyCampusEvents !== 'undefined' && jyCampusEvents['coming-of-age']; if (phase) { _%>
-十八岁成人礼与首考誓师:
+高三成人礼与首考誓师:
   日程: <%= phase.label %>
   核心: 高三成年仪式与一月首考备考动员
 <%_ if (['before', 'window', 'live', 'undated'].includes(phase.kind)) { _%>

@@ -248,6 +248,12 @@ async function runRoutes() {
   }
   const open = await renderRoutes({});
   assert.match(renderActivity(manifest.entryManifest.事件.事件_开学周, open, '领课本'), /现场素材/);
+  const ceremonyName = '高三成人礼与首考誓师';
+  for (const focus of [ceremonyName, '十八岁成人礼与首考誓师', 'coming-of-age']) {
+    const ceremony = stateFor('2021-10-24');
+    ceremony.剧情.校园活动 = focus;
+    assert.deepEqual((await renderRoutes(ceremony)).activations, [ceremonyName]);
+  }
   const summer = manifest.entryManifest.事件.暑期工读与家教实践;
   for (const year of [2020,2025]) {
     for (const day of ['07-01','08-15','08-31']) {
