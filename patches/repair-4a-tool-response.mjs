@@ -13,7 +13,8 @@ export function unwrapPrintedToolCall(text, toolName) {
     try {
         calls = JSON.parse(envelope[1]);
     } catch {
-        const single = /^\s*\[\s*\{\s*"name"\s*:\s*"([\w-]+)"\s*,\s*"arguments"\s*:\s*\{\s*"content"\s*:\s*"([\s\S]*)"\s*\}\s*\}\s*\]\s*$/.exec(envelope[1]);
+        // The final array bracket may be omitted even though the call and tag are closed.
+        const single = /^\s*\[\s*\{\s*"name"\s*:\s*"([\w-]+)"\s*,\s*"arguments"\s*:\s*\{\s*"content"\s*:\s*"([\s\S]*)"\s*\}\s*\}\s*\]?\s*$/.exec(envelope[1]);
         if (!single || single[1] !== toolName || /"\s*\}\s*\}\s*,\s*\{/.test(single[2])) return null;
         try {
             const escaped = single[2].replace(/\\[\s\S]|["\x00-\x1f]/g,
