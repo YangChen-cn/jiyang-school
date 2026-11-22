@@ -304,25 +304,46 @@ function checkRelationshipPace(update) {
    fn(state);
    update({stat_data:state},{stat_data:prior});
  };
- // 1. 自然情感变化不再受单轮或每日上限拦截（方案三）
+ // Positive gains are capped per character and date. Penalties don't refund the budget.
  for(let i=0;i<10;i++) updateState(s=>{s.苏晓樯.好感度+=2;});
- assert.equal(state.苏晓樯.好感度,20);
+ assert.equal(state.苏晓樯.好感度,10);
  assert.equal(state.苏晓樯.关系阶段,'初识'); // 阶段解耦：不随好感度达标自动晋级（方案一）
  assert.equal(state.温书语.好感度,0);
 
  updateState(s=>{s.苏晓樯.好感度-=2;});
- updateState(s=>{s.苏晓樯.好感度+=5;});
- assert.equal(state.苏晓樯.好感度,23);
+ updateState(s=>{s.世界.日期='2020/09/01'; s.苏晓樯.好感度+=5;});
+ assert.equal(state.苏晓樯.好感度,8);
 
- // 2. 重大事件与深度经历可直接大幅变动，无需审批表格与正文摘录匹配
+ // Trust stays independent. A new date restores only the new day's affection budget.
  updateState(s=>{s.沈幼楚.信任度+=35; s.沈幼楚.好感度+=30;});
  assert.equal(state.沈幼楚.信任度,35);
- assert.equal(state.沈幼楚.好感度,30);
+ assert.equal(state.沈幼楚.好感度,10);
  assert.equal(state.沈幼楚.关系阶段,'戒备'); // 阶段保持，直至剧情中明确突破
+ updateState(s=>{s.世界.日期='2020-09-02';s.苏晓樯.好感度+=6;s.沈幼楚.好感度+=20;});
+ updateState(s=>{s.世界.日期='';s.苏晓樯.好感度+=9;});
+ assert.equal(state.苏晓樯.好感度,18);
+ assert.equal(state.沈幼楚.好感度,20);
+ assert.equal(schemaBox.schema.parse(state).剧情.当日好感增量.已用.苏晓樯,10);
+ const currentSnapshot = ejs.render(read('世界书/变量/变量列表.txt'),{getvar:()=>state});
+ assert.doesNotMatch(currentSnapshot,/当日好感增量/);
 
- // 3. JS 严格负责数据合法性校验（clamp 0~100）
+ state=start();
+ state.世界.日期='';
+ updateState(s=>{s.许念安={好感度:8};});
+ const branchPoint=structuredClone(state);
+ updateState(s=>{s.世界.日期='2020-09-01';s.许念安.好感度+=9;});
+ assert.equal(state.许念安.好感度,10);
+ state=structuredClone(branchPoint);
+ updateState(s=>{s.许念安.好感度+=1;});
+ assert.equal(state.许念安.好感度,9);
+ assert.equal(branchPoint.剧情.当日好感增量.已用.许念安,8);
+
+ // Old saves keep existing scores. Only the points that fit before 100 are counted.
+ state=start();
+ state.苏晓樯.好感度=98;
  updateState(s=>{s.苏晓樯.好感度=150; s.沈幼楚.信任度=-20;});
  assert.equal(state.苏晓樯.好感度,100);
+ assert.equal(state.剧情.当日好感增量.已用.苏晓樯,2);
  assert.equal(state.沈幼楚.信任度,0);
 
  // 4. 旧版双轨制遗留字段在运行时被静默清理
@@ -440,7 +461,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  migrated.许念安.控制欲=160;
  callbackBox.pace({stat_data:migrated},{stat_data:legacy});
  callbackBox.write({variables:{stat_data:migrated}});
- assert.equal(migrated.许念安.好感度,40);
+ assert.equal(migrated.许念安.好感度,10);
  assert.equal(migrated.许念安.控制欲,100);
  assert.equal(legacy.许念安,undefined);
  const state={世界:{日期:'2021/07/03'},校园:structuredClone(stored.stat_data.校园)};

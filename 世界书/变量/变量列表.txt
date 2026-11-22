@@ -10,6 +10,7 @@ if (snapshot.剧情) {
   delete snapshot.剧情.事件冷却;
   delete snapshot.剧情.上次焦点角色;
   delete snapshot.剧情.当日关系增量;
+  delete snapshot.剧情.当日好感增量;
   delete snapshot.剧情.重大情感申请;
   delete snapshot.剧情.已结算重大情感事件;
 }
