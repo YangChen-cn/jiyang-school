@@ -9,10 +9,17 @@ const options = { enabled: true, task, limit: 30, indexText: index([oneRow]), us
 
 test('uses eligible index entries and follows the time grouping of the preset', () => {
     assert.equal(makeDirectRecall(options), '<recall>\nnow =\nAM0001 | 120m\n</recall>');
-    assert.equal(makeDirectRecall({ ...options, userMessage: '2024-09-16 00:00' }), '<recall>\ndays =\nAM0001 | 0d23h50m\n</recall>');
+    assert.equal(makeDirectRecall({ ...options, userMessage: '当前时间是 2024-09-16 00:00' }), '<recall>\ndays =\nAM0001 | 0d23h50m\n</recall>');
     const fallback = '## 表格: 纪要索引\nColumns: 概要, 编码索引\n- [0] 概要: 测试 | 编码索引: AM0001\n';
     const tableData = { sheet: { name: '纪要表', content: [['编码索引', '时间跨度'], ['AM0001', '2024-09-15 00:10']] } };
     assert.equal(makeDirectRecall({ ...options, indexText: fallback, tableData }), makeDirectRecall(options));
+});
+
+test('leaves the interval blank when the current story time is unknown', () => {
+    const withoutTime = '<recall>\nunknown =\nAM0001\n</recall>';
+    assert.equal(makeDirectRecall({ ...options, userMessage: '提到 2024-09-15 02:10 的旧事' }), withoutTime);
+    assert.equal(makeDirectRecall({ ...options, userMessage: '' }), withoutTime);
+    assert.equal(makeDirectRecall({ ...options, userMessage: '现在是 2024-09-14 20:00' }), withoutTime);
 });
 
 test('short-circuits at the configured maximum and returns an empty recall for a confirmed empty index', () => {

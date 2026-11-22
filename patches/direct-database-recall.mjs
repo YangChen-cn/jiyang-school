@@ -44,7 +44,7 @@ function directRecallCandidates(indexText, tableData) {
 }
 
 function describeRecallTime(current, event) {
-    if (!current?.timed || !event?.timed || current.minutes < event.minutes) return ['unknown', '记不清时间'];
+    if (!current?.timed || !event?.timed || current.minutes < event.minutes) return ['unknown', ''];
     const delta = current.minutes - event.minutes;
     const sameDay = Math.floor(current.minutes / 1440) === Math.floor(event.minutes / 1440);
     const display = `${Math.floor(delta / 60) % 24}h${delta % 60}m`;
@@ -54,7 +54,7 @@ function describeRecallTime(current, event) {
     return [group, `${Math.floor(delta / 1440)}d${display}`];
 }
 
-export function makeDirectRecall({ enabled, task, limit, indexText, tableData, userMessage, lastPlotContent }) {
+export function makeDirectRecall({ enabled, task, limit, indexText, tableData, userMessage }) {
     const max = Number(limit);
     if (!enabled || !Number.isSafeInteger(max) || max < 1) return null;
     const tags = [task.extractTags, task.extractInjectTags].join(',').toLowerCase().split(',').map(tag => tag.trim()).filter(Boolean);
@@ -69,14 +69,14 @@ export function makeDirectRecall({ enabled, task, limit, indexText, tableData, u
     if (rows.size > max) return null;
 
     const events = [...rows].map(([id, time]) => [id, recallRangeEnd(time)]);
-    const clock = recallTimestamps(userMessage).find(x => x.timed)
-        ?? recallTimestamps(lastPlotContent).filter(x => x.timed).at(-1)
-        ?? events.reduce((latest, [, event]) => event?.timed && (!latest || event.minutes > latest.minutes) ? event : latest, undefined);
+    const input = String(userMessage || '');
+    const currentStamp = /(?:现在|当前|此刻)(?:剧情)?(?:时间)?\s*(?:是|为|[:：])?\s*(\d{4}[-/]\d{1,2}[-/]\d{1,2}[ T]+\d{1,2}:\d{2})(?!\d)/.exec(input)?.[1];
+    const clock = recallTimestamps(currentStamp)[0];
     const groups = new Map();
     for (const [id, event] of events) {
         const [group, display] = describeRecallTime(clock, event);
         if (!groups.has(group)) groups.set(group, []);
-        groups.get(group).push(`${id} | ${display}`);
+        groups.get(group).push(display ? `${id} | ${display}` : id);
     }
     const body = ['now', 'today', 'days', 'weeks', 'months', 'seasons', 'years', 'old', 'unknown']
         .filter(group => groups.has(group)).map(group => `${group} =\n${groups.get(group).join('\n')}`).join('\n');
@@ -115,7 +115,6 @@ ${taskFunction}`);
                 indexText: sharedContext.directRecallIndex,
                 tableData: sharedContext.allTablesJson,
                 userMessage: sharedContext.userMessage,
-                lastPlotContent: sharedContext.lastPlotContent,
             });
             const messages = localRecall === null ? await renderPlotTaskMessages_ACU(normalizedTask, taskSharedContext, runtimeOptions) : [];
             checkPlotAbortRequested_ACU();
