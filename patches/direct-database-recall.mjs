@@ -152,6 +152,14 @@ ${taskFunction}`);
     return source;
 }
 
+export function patchRecallPanel(html) {
+    const original = String.raw`var itemMatch=line.match(/^(AM\d+)\s*\|\s*(.+)$/i);`;
+    const updated = String.raw`var itemMatch=line.match(/^(AM\d+)(?:\s*\|\s*.*)?$/i);`;
+    if (html.includes(updated)) return html;
+    if (html.split(original).length !== 2) throw new Error('找不到唯一的召回面板条目解析规则');
+    return html.replace(original, () => updated);
+}
+
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
     const [input, output] = process.argv.slice(2);
     if (!input || !output) throw new Error('用法：node direct-database-recall.mjs 原版数据库.js 修复版数据库.js');
