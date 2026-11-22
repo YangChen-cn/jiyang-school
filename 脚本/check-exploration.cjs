@@ -306,24 +306,24 @@ function checkRelationshipPace(update) {
  };
  // Positive gains are capped per character and date. Penalties don't refund the budget.
  for(let i=0;i<10;i++) updateState(s=>{s.苏晓樯.好感度+=2;});
- assert.equal(state.苏晓樯.好感度,10);
+ assert.equal(state.苏晓樯.好感度,12);
  assert.equal(state.苏晓樯.关系阶段,'初识'); // 阶段解耦：不随好感度达标自动晋级（方案一）
  assert.equal(state.温书语.好感度,0);
 
  updateState(s=>{s.苏晓樯.好感度-=2;});
  updateState(s=>{s.世界.日期='2020/09/01'; s.苏晓樯.好感度+=5;});
- assert.equal(state.苏晓樯.好感度,8);
+ assert.equal(state.苏晓樯.好感度,10);
 
  // Trust stays independent. A new date restores only the new day's affection budget.
  updateState(s=>{s.沈幼楚.信任度+=35; s.沈幼楚.好感度+=30;});
  assert.equal(state.沈幼楚.信任度,35);
- assert.equal(state.沈幼楚.好感度,10);
+ assert.equal(state.沈幼楚.好感度,12);
  assert.equal(state.沈幼楚.关系阶段,'戒备'); // 阶段保持，直至剧情中明确突破
  updateState(s=>{s.世界.日期='2020-09-02';s.苏晓樯.好感度+=6;s.沈幼楚.好感度+=20;});
  updateState(s=>{s.世界.日期='';s.苏晓樯.好感度+=9;});
- assert.equal(state.苏晓樯.好感度,18);
- assert.equal(state.沈幼楚.好感度,20);
- assert.equal(schemaBox.schema.parse(state).剧情.当日好感增量.已用.苏晓樯,10);
+ assert.equal(state.苏晓樯.好感度,22);
+ assert.equal(state.沈幼楚.好感度,24);
+ assert.equal(schemaBox.schema.parse(state).剧情.当日好感增量.已用.苏晓樯,12);
  const currentSnapshot = ejs.render(read('世界书/变量/变量列表.txt'),{getvar:()=>state});
  assert.doesNotMatch(currentSnapshot,/当日好感增量/);
 
@@ -332,7 +332,7 @@ function checkRelationshipPace(update) {
  updateState(s=>{s.许念安={好感度:8};});
  const branchPoint=structuredClone(state);
  updateState(s=>{s.世界.日期='2020-09-01';s.许念安.好感度+=9;});
- assert.equal(state.许念安.好感度,10);
+ assert.equal(state.许念安.好感度,12);
  state=structuredClone(branchPoint);
  updateState(s=>{s.许念安.好感度+=1;});
  assert.equal(state.许念安.好感度,9);
@@ -461,7 +461,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  migrated.许念安.控制欲=160;
  callbackBox.pace({stat_data:migrated},{stat_data:legacy});
  callbackBox.write({variables:{stat_data:migrated}});
- assert.equal(migrated.许念安.好感度,10);
+ assert.equal(migrated.许念安.好感度,12);
  assert.equal(migrated.许念安.控制欲,100);
  assert.equal(legacy.许念安,undefined);
  const state={世界:{日期:'2021/07/03'},校园:structuredClone(stored.stat_data.校园)};
@@ -533,17 +533,40 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const w=dom.window,d=w.document;
  await new Promise(r=>w.setTimeout(r,220));
  const themeButton=d.querySelector('[data-action="toggle-theme"]');
+ const status=d.querySelector('.jy-status');
+ const intimateNote=status.querySelector('.jy-intimate-note');
+ const unlocked=status.querySelector('.jy-person[data-tone="perfect"]');
+ const heart=unlocked.querySelector('.jy-unlock-heart');
+ const unconfirmedHeart=status.querySelector('.jy-person[data-tone="quiet"] .jy-unlock-heart');
+ assert.match(status.dataset.intimateScene,/stat_data\.剧情\.当前nsfw/);
+ assert.match(unlocked.dataset.intimacyUnlocked,/stat_data\.许念安\.NSFW/);
+ assert.equal(w.getComputedStyle(intimateNote).display,'none');
+ assert.equal(w.getComputedStyle(heart).display,'none');
+ status.dataset.intimateScene='true';
+ unlocked.dataset.intimacyUnlocked='true';
+ assert.equal(w.getComputedStyle(intimateNote).display,'inline-flex');
+ assert.equal(w.getComputedStyle(heart).display,'inline-grid');
+ assert.equal(w.getComputedStyle(unconfirmedHeart).display,'none');
+ assert.equal(w.getComputedStyle(status).getPropertyValue('--scene-paper').trim(),'#fff5f8');
  assert.equal(themeButton.getAttribute('aria-label'),'夜间模式');
  assert.equal(themeButton.querySelectorAll('svg').length,2);
  assert.equal(themeButton.getAttribute('aria-pressed'),'false');
  themeButton.click();
  assert.equal(d.querySelector('.jy-status').dataset.theme,'dark');
+ assert.equal(w.getComputedStyle(status).getPropertyValue('--scene-paper').trim(),'#281c27');
+ assert.equal(w.getComputedStyle(intimateNote).display,'inline-flex');
+ assert.equal(w.getComputedStyle(heart).display,'inline-grid');
  assert.equal(themeButton.getAttribute('aria-pressed'),'true');
  assert.equal(themeButton.title,'切换日间模式');
  assert.equal(themeButton.querySelectorAll('svg').length,2);
  assert.equal(w.localStorage.getItem('jy-status-theme'),'dark');
  themeButton.click();
  assert.equal(d.querySelector('.jy-status').dataset.theme,'light');
+ status.dataset.intimateScene='false';
+ assert.equal(w.getComputedStyle(intimateNote).display,'none');
+ assert.equal(w.getComputedStyle(heart).display,'inline-grid');
+ unlocked.dataset.intimacyUnlocked='false';
+ assert.equal(w.getComputedStyle(heart).display,'none');
  assert.equal(themeButton.title,'切换夜间模式');
  assert.equal(themeButton.querySelectorAll('svg').length,2);
  assert.equal(d.querySelector('[data-period-select]').value,'暑假');

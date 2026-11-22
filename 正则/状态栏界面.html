@@ -1466,10 +1466,87 @@
   .jy-status[data-theme="dark"] .jy-theme-button { background:transparent; border:0; }
   .jy-status[data-theme="dark"] :is(button,input,select,textarea,summary):focus-visible { outline-color:#eed083; }
   .jy-status[data-theme="dark"] .jy-bar { background:#58675c; }
+
+  /* 亲密场景沿用日夜偏好。爱心独立显示角色的解锁状态。 */
+  .jy-status {
+    --rose-ink: #95385f;
+    --rose-wash: #f9e2eb;
+    --rose-line: #e8bdd0;
+  }
+  .jy-status[data-theme="dark"] {
+    --rose-ink: #ffb9d4;
+    --rose-wash: #512e42;
+    --rose-line: #80526b;
+  }
+  .jy-status[data-intimate-scene="true" i] {
+    --c-ink: #4b2b3a;
+    --c-muted: #745565;
+    --c-primary: var(--rose-ink);
+    --scene-paper: #fff5f8;
+    --scene-panel: #fffbfc;
+    --scene-head: linear-gradient(115deg, #f6d7e4, #ffefee);
+    --scene-shadow: 0 4px 0 -1px #f5d8e3, 0 9px 22px #6f2a4b21;
+  }
+  .jy-status[data-theme="dark"][data-intimate-scene="true" i] {
+    --c-ink: #f8e5ee;
+    --c-muted: #d1adbf;
+    --scene-paper: #281c27;
+    --scene-panel: #322330;
+    --scene-head: linear-gradient(115deg, #49263c, #322436);
+    --scene-shadow: 0 0 0 1px #d886ad1f, 0 9px 22px #120b1599;
+  }
+  .jy-status[data-intimate-scene="true" i] .jy-shell {
+    background: var(--scene-paper);
+    border-color: var(--rose-line);
+    box-shadow: var(--scene-shadow);
+    color: var(--c-ink);
+  }
+  .jy-status[data-intimate-scene="true" i] .jy-head {
+    background: var(--scene-head);
+    border-color: var(--rose-line);
+  }
+  .jy-status[data-intimate-scene="true" i] :is(.jy-location, .jy-kicker, .jy-date, .jy-scene-now b) { color: var(--rose-ink); }
+  .jy-status[data-intimate-scene="true" i] .jy-badge {
+    background: #8a3c62;
+    border-color: #a6577d;
+    box-shadow: 2px 2px 0 var(--rose-line);
+  }
+  .jy-status[data-intimate-scene="true" i] :is(.jy-time, .jy-student-card.jy-me, .jy-readout, .jy-person) {
+    background: var(--scene-panel);
+    border-color: var(--rose-line);
+    color: var(--c-ink);
+  }
+  .jy-status[data-intimate-scene="true" i] .jy-person { border-left-color: var(--tone); }
+  .jy-status[data-intimate-scene="true" i] .jy-readout { --jy-tab: var(--rose-wash); --jy-tab-ink: var(--rose-ink); }
+  .jy-status[data-intimate-scene="true" i] .jy-scene-now {
+    background: var(--rose-wash);
+    border-color: var(--rose-line);
+    color: var(--c-ink);
+  }
+  .jy-status :is(.jy-intimate-note, .jy-unlock-heart) { display: none; }
+  .jy-status[data-intimate-scene="true" i] .jy-intimate-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--rose-ink);
+    font-weight: 750;
+  }
+  .jy-name-line { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 6px; }
+  .jy-person[data-intimacy-unlocked="true" i] .jy-unlock-heart {
+    display: inline-grid;
+    place-items: center;
+    width: 19px;
+    height: 19px;
+    border: 1px solid var(--rose-line);
+    border-radius: 50%;
+    background: var(--rose-wash);
+    color: var(--rose-ink);
+    font: 12px/1 system-ui, sans-serif;
+  }
 </style>
 <body>
 
-<div class="jy-status">
+<div class="jy-status" data-intimate-scene="{{format_message_variable::stat_data.剧情.当前nsfw}}">
   <div class="jy-shell" aria-label="暨阳中学状态栏">
     <header class="jy-head">
       <div class="jy-badge" aria-hidden="true">暨<br>阳</div>
@@ -1536,6 +1613,7 @@
       </div>
     </div>
     <div class="jy-scene-now">
+      <span class="jy-intimate-note"><span aria-hidden="true">♥</span>亲密场景</span>
       <span><b>阶段</b> <span data-stage-display>待确定</span></span>
       <span class="jy-weather" data-weather><b>天气</b> <span data-scene-value>{{format_message_variable::stat_data.世界.天气}}</span></span>
       <span><b>在场</b> <span data-present-names>待确定</span></span>
@@ -1575,11 +1653,11 @@
       <details class="jy-readout">
         <summary><span class="jy-tab-mark" aria-hidden="true">♧</span><span>人物关系</span></summary>
     <div class="jy-people">
-      <div class="jy-person" data-tone="warm" data-present="{{format_message_variable::stat_data.苏晓樯.是否在场}}">
+      <div class="jy-person" data-tone="warm" data-present="{{format_message_variable::stat_data.苏晓樯.是否在场}}" data-intimacy-unlocked="{{format_message_variable::stat_data.苏晓樯.NSFW}}">
         <div class="jy-person-head">
           <img class="jy-avatar" alt="苏晓樯" data-avatar-key="苏晓樯" src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/xiaoqiang.png" data-fallback-src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/xiaoqiang.png">
           <div class="jy-name-wrap">
-            <div class="jy-name">苏晓樯</div>
+            <div class="jy-name-line"><div class="jy-name">苏晓樯</div><span class="jy-unlock-heart" role="img" aria-label="亲密已解锁" title="亲密已解锁">♥</span></div>
             <div class="jy-stage">{{format_message_variable::stat_data.苏晓樯.关系阶段}}</div>
             <div class="jy-mood" data-scene-value>{{format_message_variable::stat_data.苏晓樯.心情}}</div>
           </div>
@@ -1598,11 +1676,11 @@
         <div class="jy-thought" data-scene-value>{{format_message_variable::stat_data.苏晓樯.内心独白}}</div>
       </div>
 
-      <div class="jy-person" data-tone="quiet" data-present="{{format_message_variable::stat_data.温书语.是否在场}}">
+      <div class="jy-person" data-tone="quiet" data-present="{{format_message_variable::stat_data.温书语.是否在场}}" data-intimacy-unlocked="{{format_message_variable::stat_data.温书语.NSFW}}">
         <div class="jy-person-head">
           <img class="jy-avatar" alt="温书语" data-avatar-key="温书语" src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/shuyu.png" data-fallback-src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/shuyu.png">
           <div class="jy-name-wrap">
-            <div class="jy-name">温书语</div>
+            <div class="jy-name-line"><div class="jy-name">温书语</div><span class="jy-unlock-heart" role="img" aria-label="亲密已解锁" title="亲密已解锁">♥</span></div>
             <div class="jy-stage">{{format_message_variable::stat_data.温书语.关系阶段}}</div>
             <div class="jy-mood" data-scene-value>{{format_message_variable::stat_data.温书语.心情}}</div>
           </div>
@@ -1621,11 +1699,11 @@
         <div class="jy-thought" data-scene-value>{{format_message_variable::stat_data.温书语.内心独白}}</div>
       </div>
 
-      <div class="jy-person" data-tone="guard" data-present="{{format_message_variable::stat_data.沈幼楚.是否在场}}">
+      <div class="jy-person" data-tone="guard" data-present="{{format_message_variable::stat_data.沈幼楚.是否在场}}" data-intimacy-unlocked="{{format_message_variable::stat_data.沈幼楚.NSFW}}">
         <div class="jy-person-head">
           <img class="jy-avatar" alt="沈幼楚" data-avatar-key="沈幼楚" src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/youchu.png" data-fallback-src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/youchu.png">
           <div class="jy-name-wrap">
-            <div class="jy-name">沈幼楚</div>
+            <div class="jy-name-line"><div class="jy-name">沈幼楚</div><span class="jy-unlock-heart" role="img" aria-label="亲密已解锁" title="亲密已解锁">♥</span></div>
             <div class="jy-stage">{{format_message_variable::stat_data.沈幼楚.关系阶段}}</div>
             <div class="jy-mood" data-scene-value>{{format_message_variable::stat_data.沈幼楚.心情}}</div>
           </div>
@@ -1648,11 +1726,11 @@
         <div class="jy-thought" data-scene-value>{{format_message_variable::stat_data.沈幼楚.内心独白}}</div>
       </div>
 
-      <div class="jy-person" data-tone="perfect" data-present="{{format_message_variable::stat_data.许念安.是否在场}}">
+      <div class="jy-person" data-tone="perfect" data-present="{{format_message_variable::stat_data.许念安.是否在场}}" data-intimacy-unlocked="{{format_message_variable::stat_data.许念安.NSFW}}">
         <div class="jy-person-head">
           <img class="jy-avatar" alt="许念安" data-avatar-key="许念安" src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/nianan.png" data-fallback-src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/nianan.png">
           <div class="jy-name-wrap">
-            <div class="jy-name">许念安</div>
+            <div class="jy-name-line"><div class="jy-name">许念安</div><span class="jy-unlock-heart" role="img" aria-label="亲密已解锁" title="亲密已解锁">♥</span></div>
             <div class="jy-stage">{{format_message_variable::stat_data.许念安.关系阶段}}</div>
             <div class="jy-mood" data-scene-value>{{format_message_variable::stat_data.许念安.心情}}</div>
           </div>
@@ -1675,11 +1753,11 @@
         <div class="jy-thought" data-scene-value>{{format_message_variable::stat_data.许念安.内心独白}}</div>
       </div>
 
-      <div class="jy-person" data-tone="bright" data-present="{{format_message_variable::stat_data.慕佳芊.是否在场}}">
+      <div class="jy-person" data-tone="bright" data-present="{{format_message_variable::stat_data.慕佳芊.是否在场}}" data-intimacy-unlocked="{{format_message_variable::stat_data.慕佳芊.NSFW}}">
         <div class="jy-person-head">
           <img class="jy-avatar" alt="慕佳芊" data-avatar-key="慕佳芊" src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/jiaqian.png" data-fallback-src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/jiaqian.png">
           <div class="jy-name-wrap">
-            <div class="jy-name">慕佳芊</div>
+            <div class="jy-name-line"><div class="jy-name">慕佳芊</div><span class="jy-unlock-heart" role="img" aria-label="亲密已解锁" title="亲密已解锁">♥</span></div>
             <div class="jy-stage">{{format_message_variable::stat_data.慕佳芊.关系阶段}}</div>
             <div class="jy-mood" data-scene-value>{{format_message_variable::stat_data.慕佳芊.心情}}</div>
           </div>
@@ -1698,11 +1776,11 @@
         <div class="jy-thought" data-scene-value>{{format_message_variable::stat_data.慕佳芊.内心独白}}</div>
       </div>
 
-      <div class="jy-person" data-tone="silk" data-present="{{format_message_variable::stat_data.陈芷汀.是否在场}}">
+      <div class="jy-person" data-tone="silk" data-present="{{format_message_variable::stat_data.陈芷汀.是否在场}}" data-intimacy-unlocked="{{format_message_variable::stat_data.陈芷汀.NSFW}}">
         <div class="jy-person-head">
           <img class="jy-avatar" alt="陈芷汀" data-avatar-key="陈芷汀" src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/zhiting.png" data-fallback-src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/zhiting.png">
           <div class="jy-name-wrap">
-            <div class="jy-name">陈芷汀</div>
+            <div class="jy-name-line"><div class="jy-name">陈芷汀</div><span class="jy-unlock-heart" role="img" aria-label="亲密已解锁" title="亲密已解锁">♥</span></div>
             <div class="jy-stage">{{format_message_variable::stat_data.陈芷汀.关系阶段}}</div>
             <div class="jy-mood" data-scene-value>{{format_message_variable::stat_data.陈芷汀.心情}}</div>
           </div>
@@ -1721,11 +1799,11 @@
         <div class="jy-thought" data-scene-value>{{format_message_variable::stat_data.陈芷汀.内心独白}}</div>
       </div>
 
-      <div class="jy-person" data-tone="principal" data-present="{{format_message_variable::stat_data.虞淑婉.是否在场}}">
+      <div class="jy-person" data-tone="principal" data-present="{{format_message_variable::stat_data.虞淑婉.是否在场}}" data-intimacy-unlocked="{{format_message_variable::stat_data.虞淑婉.NSFW}}">
         <div class="jy-person-head">
           <img class="jy-avatar" alt="虞淑婉" data-avatar-key="虞淑婉" src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v1/avatars/shuwan.png" data-fallback-src="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v1/avatars/shuwan.png">
           <div class="jy-name-wrap">
-            <div class="jy-name">虞淑婉</div>
+            <div class="jy-name-line"><div class="jy-name">虞淑婉</div><span class="jy-unlock-heart" role="img" aria-label="亲密已解锁" title="亲密已解锁">♥</span></div>
             <div class="jy-stage">{{format_message_variable::stat_data.虞淑婉.关系阶段}}</div>
             <div class="jy-mood" data-scene-value>{{format_message_variable::stat_data.虞淑婉.心情}}</div>
           </div>

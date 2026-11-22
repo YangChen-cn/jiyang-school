@@ -10,7 +10,7 @@ const relationshipMetrics = [
   ['许念安', '控制欲'],
 ];
 
-const dailyAffectionLimit = 10;
+const dailyAffectionLimit = 12;
 
 function normalizeRelationshipScore(value) {
   const score = Number(value);
