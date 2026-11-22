@@ -72,11 +72,16 @@ export function makeDirectRecall({ enabled, task, limit, indexText, tableData, u
     const input = String(userMessage || '');
     const currentStamp = /(?:现在|当前|此刻)(?:剧情)?(?:时间)?\s*(?:是|为|[:：])?\s*(\d{4}[-/]\d{1,2}[-/]\d{1,2}[ T]+\d{1,2}:\d{2})(?!\d)/.exec(input)?.[1];
     const clock = recallTimestamps(currentStamp)[0];
+    const latestEvent = events.reduce((latest, [, event]) =>
+        event?.timed && (!latest || event.minutes > latest.minutes) ? event : latest, undefined);
     const groups = new Map();
     for (const [id, event] of events) {
-        const [group, display] = describeRecallTime(clock, event);
+        const elapsed = latestEvent && event?.timed ? latestEvent.minutes - event.minutes : 0;
+        const estimated = !clock && elapsed >= 1440;
+        const [group, display] = describeRecallTime(clock ?? (estimated ? latestEvent : undefined), event);
+        const interval = estimated ? `约 ${Math.floor(elapsed / 1440)}d` : display;
         if (!groups.has(group)) groups.set(group, []);
-        groups.get(group).push(display ? `${id} | ${display}` : id);
+        groups.get(group).push(interval ? `${id} | ${interval}` : id);
     }
     const body = ['now', 'today', 'days', 'weeks', 'months', 'seasons', 'years', 'old', 'unknown']
         .filter(group => groups.has(group)).map(group => `${group} =\n${groups.get(group).join('\n')}`).join('\n');

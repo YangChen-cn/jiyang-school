@@ -22,6 +22,17 @@ test('leaves the interval blank when the current story time is unknown', () => {
     assert.equal(makeDirectRecall({ ...options, userMessage: '现在是 2024-09-14 20:00' }), withoutTime);
 });
 
+test('estimates only whole days from the latest event when no current clock is given', () => {
+    const rows = [
+        '| AM0001 | 2024-09-14 00:09 | 较早 |',
+        '| AM0002 | 2024-09-14 00:10 | 恰好 24 小时 |',
+        '| AM0003 | 2024-09-14 00:11 | 不到 24 小时 |',
+        '| AM0004 | 2024-09-15 00:10 | 最新 |',
+    ];
+    const result = makeDirectRecall({ ...options, userMessage: '', indexText: index(rows) });
+    assert.equal(result, '<recall>\ndays =\nAM0001 | 约 1d\nAM0002 | 约 1d\nunknown =\nAM0003\nAM0004\n</recall>');
+});
+
 test('short-circuits at the configured maximum and returns an empty recall for a confirmed empty index', () => {
     const rows = Array.from({ length: 31 }, (_, i) => `| AM${1000 + i} | 2024-09-15 09:30 | 概览 |`);
     const atLimit = makeDirectRecall({ ...options, indexText: index(rows.slice(0, 30)) });
