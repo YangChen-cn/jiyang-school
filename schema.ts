@@ -159,6 +159,7 @@ export const Schema = z.object({
   }).prefault({}),
 
   云清晏: z.object({
+    已入班: z.boolean().optional(),
     是否在场: z.coerce.boolean().optional(),
     好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).optional(),
     关系阶段: z.string().optional(),

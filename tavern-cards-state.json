@@ -25,15 +25,8 @@
       },
       "[DLC]灵气复苏总纲与异象日程": {
         "path": "世界书/世界观/DLC_灵气复苏总纲与异象日程.yaml",
-        "keywords": [
-          "灵气复苏",
-          "修仙",
-          "华夏龙脉",
-          "云岫宗",
-          "境界",
-          "仙凡两隔"
-        ],
-        "abstract": "都市修仙DLC总纲：暨阳越中潜龙脉与太微云岫古宗百年兴衰、无上限修仙/古武体系、仙凡两隔哲学命题与60+天四阶段逐步灵气复苏异象",
+        "keywords": [],
+        "abstract": "聊天内常驻：当前灵潮阶段、校园推进及知情边界",
         "uid": 100,
         "enabled": false,
         "strategy": {
@@ -42,6 +35,98 @@
         "position": {
           "type": "before_character_definition",
           "order": 22
+        }
+      },
+      "[DLC]修行阶梯与仙凡抉择": {
+        "path": "世界书/世界观/DLC_修行阶梯与仙凡抉择.yaml",
+        "keywords": [
+          "引气感灵",
+          "真灵根",
+          "炼气",
+          "筑基",
+          "金丹",
+          "元婴",
+          "破境",
+          "先天通玄",
+          "问道",
+          "长生",
+          "仙凡两隔",
+          "道侣"
+        ],
+        "abstract": "修行阶梯与仙凡抉择",
+        "uid": 105,
+        "enabled": false,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "引气感灵",
+            "真灵根",
+            "炼气",
+            "筑基",
+            "金丹",
+            "元婴",
+            "破境",
+            "先天通玄",
+            "问道",
+            "长生",
+            "仙凡两隔",
+            "道侣"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 23
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
+      },
+      "[DLC]灵潮异象与隐秘特调": {
+        "path": "世界书/世界观/DLC_灵潮异象与隐秘特调.yaml",
+        "keywords": [
+          "灵潮异象",
+          "灵潮",
+          "灵气异象",
+          "负氧离子",
+          "地磁跳变",
+          "青白微晕",
+          "特种气象",
+          "特调组",
+          "特调",
+          "异常样本调查",
+          "外地散修"
+        ],
+        "abstract": "灵潮异象与隐秘特调",
+        "uid": 106,
+        "enabled": false,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "灵潮异象",
+            "灵潮",
+            "灵气异象",
+            "负氧离子",
+            "地磁跳变",
+            "青白微晕",
+            "特种气象",
+            "特调组",
+            "特调",
+            "异常样本调查",
+            "外地散修"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 24
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       }
     },
@@ -2243,16 +2328,11 @@
           "周守山",
           "镇风铎",
           "枯井",
-          "石碑",
           "云岫宗",
           "太微云岫宗",
-          "古宗",
-          "山门",
-          "龙脉",
-          "潜龙",
-          "灵气",
-          "吐纳",
-          "古武"
+          "越中潜龙",
+          "归元眼",
+          "暨阳风物补遗"
         ],
         "abstract": "DLC老鹰山灵脉深线：太微云岫宗沉封山门、镇风铎与听风残阵、守灯执事周守山真身、药园残殿及宗门遗藏",
         "uid": 101,
@@ -2267,16 +2347,11 @@
             "周守山",
             "镇风铎",
             "枯井",
-            "石碑",
             "云岫宗",
             "太微云岫宗",
-            "古宗",
-            "山门",
-            "龙脉",
-            "潜龙",
-            "灵气",
-            "吐纳",
-            "古武"
+            "越中潜龙",
+            "归元眼",
+            "暨阳风物补遗"
           ],
           "scan_depth": 2
         },
@@ -2284,7 +2359,12 @@
           "type": "after_character_definition",
           "order": 125
         },
-        "part": "event"
+        "part": "event",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       }
     },
     "MVU": {

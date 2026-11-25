@@ -9,7 +9,6 @@
   const AVATAR_EVENT = 'jy-avatar-changed';
   const THEME_EVENT = 'jy-status-theme-changed';
   const DLC_EVENT = 'jy-aura-dlc-changed';
-  const DLC_STORAGE_KEY = 'jy-aura-dlc:暨阳中学:v1';
   const READY_EVENT = 'jy-status-engine-ready';
   const ASSET_BASE = 'https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/albums/v1';
   const ASSET_BASE_CDN = 'https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/albums/v1';
@@ -1602,45 +1601,32 @@
     const ori = parseMs(originRaw);
     const cur = parseMs(currentRaw) ?? ori;
     const elapsed = (ori !== null && cur !== null) ? Math.max(0, Math.floor((cur - ori) / 86400000)) : 0;
-    const stage = elapsed <= 10 ? '微兆潜龙期' : elapsed <= 25 ? '古武抬头期' : elapsed <= 45 ? '龙眼破禁期' : '潜龙秘序期';
-    return { elapsed, dayNumber: elapsed + 1, stage };
+    const dayNumber = elapsed + 1;
+    const stage = dayNumber <= 10 ? '微兆潜龙期' : dayNumber <= 25 ? '古武抬头期' : dayNumber <= 45 ? '龙眼破禁期' : '潜龙秘序期';
+    return { dayNumber, stage };
   }
 
-  function syncDlcUiInFrame(root, opts = {}) {
-    if (!root) return;
+  function statusFloorId(win) {
+    try {
+      return win?.getCurrentMessageId?.() ?? hostWin.getCurrentMessageId?.();
+    } catch (_) {}
+  }
+
+  function readStatusFloor(win, id) {
+    const read = win?.getVariables || win?.parent?.TavernHelper?.getVariables || hostWin.TavernHelper?.getVariables;
+    if (!Number.isInteger(id) || id < 0 || typeof read !== 'function') throw new Error('message unavailable');
+    return read({ type: 'message', message_id: id });
+  }
+
+  function syncDlcUiInFrame(root, stat) {
     const doc = root.ownerDocument;
-    const dlcSource = parseJsonVar(root.querySelector('[data-dlc-source]'));
-    const cultSource = parseJsonVar(root.querySelector('[data-cultivation-source]'));
-    const stat = opts.fromStat || null;
-    const statDlc = stat?.剧情?.灵气复苏;
-    const statCult = stat?.主角?.修行;
+    const dlc = stat ? stat.剧情?.灵气复苏 : parseJsonVar(root.querySelector('[data-dlc-source]'));
+    const cult = stat ? stat.主角?.修行 : parseJsonVar(root.querySelector('[data-cultivation-source]'));
+    const active = dlc?.已开启 === true;
+    root.dataset.dlcActive = String(active);
 
-    let enabled = null;
-    if (typeof opts.enabled === 'boolean') {
-      enabled = opts.enabled;
-      root.dataset.dlcOverride = enabled ? 'true' : 'false';
-    } else if (root.dataset.dlcOverride === 'true' || root.dataset.dlcOverride === 'false') {
-      enabled = root.dataset.dlcOverride === 'true';
-    } else if (stat && typeof stat === 'object') {
-      enabled = Boolean(statDlc && statDlc.已开启);
-    } else if (dlcSource && typeof dlcSource.已开启 === 'boolean') {
-      enabled = Boolean(dlcSource.已开启);
-    } else {
-      try {
-        const cached = JSON.parse(hostWin.localStorage.getItem(DLC_STORAGE_KEY) || '{}');
-        if (typeof cached.enabled === 'boolean') enabled = cached.enabled;
-      } catch (_) {}
-    }
-    const active = Boolean(enabled);
-    root.dataset.dlcActive = active ? 'true' : 'false';
-
-    const curDate = opts.currentDate || stat?.世界?.日期 || sceneValue(root.querySelector('.jy-date')) || '';
-    const originDate = opts.originDate || (statDlc && statDlc.开启日期) || (dlcSource && dlcSource.开启日期) || curDate || '2020-09-01';
-    const calc = dlcDayProgress(originDate, curDate);
-    const dayNum = (typeof opts.dayNumber === 'number' && Number.isFinite(opts.dayNumber)) ? opts.dayNumber : calc.dayNumber;
-    const stageText = opts.stageName || (statDlc && statDlc.阶段) || (dlcSource && dlcSource.阶段) || calc.stage;
-
-    const cult = statCult || cultSource || null;
+    const curDate = stat?.世界?.日期 || sceneValue(root.querySelector('.jy-date'));
+    const { dayNumber: dayNum, stage: stageText } = dlcDayProgress(dlc?.开启日期, curDate);
     const realmText = cult?.境界 && !String(cult.境界).startsWith('{{') ? String(cult.境界) : '未引气（凡躯）';
     const qiVal = cult && cult.灵气感应 !== undefined ? String(cult.灵气感应) : '0';
     const artsList = Array.isArray(cult?.功法与秘术) && cult.功法与秘术.length ? cult.功法与秘术.join('、') : '暂无';
@@ -2033,14 +2019,11 @@
     const readCampus = async () => {
       const sequence = ++campusRead;
       try {
-        const id = win.getCurrentMessageId?.() ?? hostWin.getCurrentMessageId?.();
-        const read = win.getVariables || win.parent?.TavernHelper?.getVariables || hostWin.TavernHelper?.getVariables;
-        if (!Number.isInteger(id) || id < 0 || typeof read !== 'function') throw new Error('message unavailable');
-        const data = await read({ type: 'message', message_id: id });
+        const data = await readStatusFloor(win, statusFloorId(win));
         if (sequence !== campusRead) return;
         if (!data?.stat_data) throw new Error('invalid snapshot');
         campus = normalizeCampus(data.stat_data.校园, date, activityIds);
-        syncDlcUiInFrame(root, { fromStat: data.stat_data });
+        syncDlcUiInFrame(root, data.stat_data);
         readState = '';
       } catch (_) {
         if (sequence !== campusRead) return;
@@ -2157,9 +2140,20 @@
   const onAvatarChanged = () => {
     mountedFrames.forEach(root => { if (root.isConnected) applyStoredAvatarsInFrame(root); });
   };
+  const getChatId = () => hostWin.SillyTavern?.getContext?.()?.getCurrentChatId?.();
   const onDlcChanged = event => {
-    const detail = event?.detail || {};
-    mountedFrames.forEach(root => { if (root.isConnected) syncDlcUiInFrame(root, detail); });
+    const { chatId, messageId } = event.detail || {};
+    if (!Number.isInteger(messageId) || chatId !== getChatId()) return;
+    mountedFrames.forEach(async root => {
+      const win = root.ownerDocument.defaultView;
+      if (!root.isConnected || statusFloorId(win) !== messageId) return;
+      try {
+        const data = await readStatusFloor(win, messageId);
+        if (data?.stat_data && root.isConnected && chatId === getChatId() && statusFloorId(win) === messageId) {
+          syncDlcUiInFrame(root, data.stat_data);
+        }
+      } catch (_) {}
+    });
   };
   const onThemeStorage = () => {
     mountedFrames.forEach(root => { if (root.isConnected) syncThemeInFrame(root); });
@@ -2171,7 +2165,6 @@
   hostWin.addEventListener('storage', event => {
     if (event.key === null || event.key?.startsWith(STORAGE_PREFIX)) onAvatarChanged();
     if (event.key === null || event.key === THEME_KEY) onThemeStorage();
-    if (event.key === null || event.key === DLC_STORAGE_KEY) onDlcChanged();
   });
 
   function destroy() {

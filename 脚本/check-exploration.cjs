@@ -741,126 +741,140 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.match(dw.document.querySelector('.mes_text').textContent,/\{苏晓樯\}「今天真热闹。」/);
  dw.close();
 
- // Verify Cultivation DLC worldbook entries, EJS 4-stage timeline, Yun Qingyan Day-2 & presence gates, Schema & Multi-Function Console
+ // Verify packed DLC entries, their per-chat gate, and the places each detail can surface.
  const dlcNames=[
    '[DLC]灵气复苏总纲与异象日程',
+   '[DLC]修行阶梯与仙凡抉择',
+   '[DLC]灵潮异象与隐秘特调',
    '[DLC]老鹰山灵脉与古宗秘藏',
    '云清晏_基础信息',
    '云清晏_性格调色盘',
    '云清晏_NSFW指导',
  ];
- for (const comment of dlcNames) {
-   const entry=cardEntries.find(e=>e.comment===comment);
-   assert.ok(entry, `卡内缺 DLC 条目: ${comment}`);
-   assert.equal(entry.enabled, false, `DLC 条目默认应禁用: ${comment}`);
-   if (entry.content.includes('<%')) {
-     assert.doesNotThrow(()=>ejs.compile(entry.content,{async:true}), `DLC EJS 编译失败: ${comment}`);
-   }
+ const dlcEntries=new Map(dlcNames.map(name=>[name,cardEntries.find(entry=>entry.comment===name)]));
+ const render=(template,vars={})=>ejs.render(template,{getvar:(key,options)=>vars[key]??options?.defaults});
+ const enabled={'stat_data.剧情.灵气复苏.已开启':true};
+ for (const [name,entry] of dlcEntries) {
+   assert.ok(entry, '卡内缺 DLC 条目 ' + name);
+   assert.equal(entry.enabled,false);
+   assert.equal(render(entry.content).trim(),'',name + ' 在无 DLC 的聊天应为空');
+   assert.equal(render(entry.content,{'stat_data.剧情.灵气复苏.已开启':false}).trim(),'',name + ' 在封缄的聊天应为空');
  }
- assert.ok(!cardEntries.some(e=>e.comment.includes('古武与隐秘异闻') || e.comment==='[mvu_update]修仙变量契约' || e.comment==='[DLC]红尘灵根与渡凡引途'),'不应包含已移除条目');
+ for (const [name,key] of [[dlcNames[1],'破境'],[dlcNames[2],'特调'],[dlcNames[3],'老鹰山']]) {
+   const entry=dlcEntries.get(name);
+   assert.equal(entry.constant,false);
+   assert.ok(entry.keys.includes(key));
+   assert.equal(entry.extensions.scan_depth,2);
+   assert.equal(entry.extensions.exclude_recursion,true);
+   assert.equal(entry.extensions.prevent_recursion,true);
+   assert.ok(render(entry.content,enabled).trim());
+ }
+ assert.ok(!cardEntries.some(e=>e.comment.includes('古武与隐秘异闻') || e.comment==='[mvu_update]修仙变量契约' || e.comment==='[DLC]红尘灵根与渡凡引途'));
  const initRaw=read('世界书/变量/initvar.yaml');
  assert.doesNotMatch(initRaw,/云清晏|灵气复苏|修行/);
 
- // Verify 变量更新规则.yaml hides 云清晏/修仙规则 when DLC is OFF and reveals custom Saintess rules when DLC is ON
  const updateRulesTpl=read('世界书/变量/变量更新规则.yaml');
- const rulesOff=ejs.render(updateRulesTpl,{getvar:()=>false});
- const rulesOn=ejs.render(updateRulesTpl,{getvar:k=>k==='stat_data.剧情.灵气复苏.已开启'});
+ const rulesOff=render(updateRulesTpl);
+ const rulesOn=render(updateRulesTpl,enabled);
  assert.doesNotMatch(rulesOff,/云清晏|灵气复苏|主角\.修行|观澜|道侣/);
  assert.match(rulesOn,/云清晏\.好感度[\s\S]*观澜[\s\S]*问道[\s\S]*动念[\s\S]*同参[\s\S]*道侣/);
- assert.match(rulesOn,/常规校园献殷勤\/请客炫富\/嘴花花撩拨完全\+0/);
+ assert.match(rulesOn,/云清晏\.已入班:[\s\S]*同轮写 true/);
 
- // Validate Schemas for non-DLC vs DLC modes + Zod BEFORE_MESSAGE_UPDATE phase sync + 关系节奏
  const plainParsed=schemaBox.schema.parse({世界:{日期:'2020-09-01'},苏晓樯:{好感度:5}});
- assert.equal(plainParsed.云清晏,undefined,'普通日常档不应自动生成云清晏字段');
+ assert.equal(plainParsed.云清晏,undefined);
  assert.equal(plainParsed.主角.修行,undefined);
  assert.equal(plainParsed.剧情.灵气复苏,undefined);
-
- const dlcSave={世界:{日期:'2020-09-20'},剧情:{灵气复苏:{已开启:true,开启日期:'2020-09-03',阶段:'旧值'}},主角:{修行:{境界:'筑基初期',灵气感应:35,功法与秘术:['太微引气篇']}},云清晏:{是否在场:true,好感度:22,关系阶段:'问道',当前境界:'金丹跌境'}};
+ const dlcSave={世界:{日期:'2020-09-13'},剧情:{灵气复苏:{已开启:true,开启日期:'2020-09-03',阶段:'旧值'}},主角:{修行:{境界:'筑基初期',灵气感应:35,功法与秘术:['太微引气篇']}},云清晏:{已入班:true,是否在场:true,好感度:22,关系阶段:'问道',当前境界:'金丹跌境'}};
  const dlcParsed=schemaBox.schema.parse(dlcSave);
  assert.equal(dlcParsed.云清晏.好感度,22);
+ assert.equal(dlcParsed.云清晏.已入班,true);
  assert.equal(dlcParsed.主角.修行.境界,'筑基初期');
  await callbackBox.write({variables:{stat_data:dlcSave}});
  assert.equal(dlcSave.剧情.灵气复苏.阶段,'古武抬头期');
  const dlcPrior=structuredClone(dlcSave);
  dlcSave.云清晏.好感度+=30;
+ dlcSave.云清晏.已入班=false;
  callbackBox.pace({stat_data:dlcSave},{stat_data:dlcPrior});
- assert.equal(dlcSave.云清晏.好感度,34,'云清晏单日好感增量同样受+12上限约束');
+ assert.equal(dlcSave.云清晏.好感度,34);
+ assert.equal(dlcSave.云清晏.已入班,true);
 
- // Verify 4-stage progressive anomalies & philosophical/dragon-vein core + Yun Qingyan Day-1 block vs Day-2 entry
- const dlcMaster=read('世界书/世界观/DLC_灵气复苏总纲与异象日程.yaml');
- const renderDlcMaster=(origin, cur)=>{
-   const vars={'stat_data.剧情.灵气复苏.开启日期':origin,'stat_data.世界.日期':cur,'stat_data.主角.班级':'高二(8)班','stat_data.主角.修行.境界':'引气感灵'};
-   return ejs.render(dlcMaster,{getvar:k=>vars[k]??''});
- };
- const d0=renderDlcMaster('2020-09-03','2020-09-03');
- assert.match(d0,/第 1 日（微兆潜龙期）/);
- assert.match(d0,/越中潜龙·归元眼/);
- assert.match(d0,/太微云岫宗/);
- assert.match(d0,/仙凡两隔/);
- assert.match(d0,/不设僵化时间或境界封顶/);
- assert.match(d0,/明日（第2天）起正式转入高二\(8\)班/);
- assert.doesNotMatch(d0,/第二阶段·古武抬头/);
+ const dlcMaster=dlcEntries.get(dlcNames[0]).content;
+ const origin={'stat_data.剧情.灵气复苏.开启日期':'2020-09-03'};
+ const timeline=(date)=>render(dlcMaster,{...enabled,...origin,'stat_data.世界.日期':date});
+ for (const [date,day,stage] of [
+   ['2020-09-03',1,'微兆潜龙期'], ['2020/09/12',10,'微兆潜龙期'],
+   ['2020-09-13',11,'古武抬头期'], ['2020-09-27',25,'古武抬头期'],
+   ['2020-09-28',26,'龙眼破禁期'], ['2020-10-17',45,'龙眼破禁期'],
+   ['2020-10-18',46,'潜龙秘序期'],
+ ]) {
+   assert.ok(timeline(date).includes('第 '+day+' 日（'+stage+'）'));
+ }
+ assert.ok(timeline('2020-09-04').trim().length<300);
+ assert.doesNotMatch(timeline('2020-09-04'),/云清晏|插班|真器|上古宗门|丹室药园/);
 
- const d1=renderDlcMaster('2020-09-03','2020/09/04');
- assert.match(d1,/第 2 日（微兆潜龙期）/);
- assert.match(d1,/已于今日抵达暨阳并作为转校生插入高二\(8\)班/);
-
- const d15=renderDlcMaster('2020-09-03','2020-09-18');
- assert.match(d15,/第 16 日（古武抬头期）/);
- assert.doesNotMatch(d15,/微兆潜龙期（第1～10天）|龙眼破禁期（第26～45天）/);
-
- const d35=renderDlcMaster('2020-09-03','2020-10-08');
- assert.match(d35,/第 36 日（龙眼破禁期）/);
-
- const d55=renderDlcMaster('2020-09-03','2020-10-28');
- assert.match(d55,/第 56 日（潜龙秘序期）/);
- assert.match(d55,/不事先卡死/);
- assert.doesNotMatch(d55,/水木清灵根|玄阴寒魄|太微渡凡引/);
- assert.match(d55,/严禁向校方|永远不向普通民众与校园公布灵气真相/);
- assert.doesNotMatch(d55,/特招通道/);
-
- const yunBase=read('世界书/角色/云清晏/基础信息.yaml');
- const yunPalette=read('世界书/角色/云清晏/性格调色盘.yaml');
- const yunNsfw=read('世界书/角色/云清晏/NSFW指导.yaml');
- const renderYun=(tpl,overrides={})=>{
-   const vals={'stat_data.剧情.灵气复苏.开启日期':'2020-09-03','stat_data.世界.日期':'2020-09-04','stat_data.云清晏.是否在场':false,'stat_data.云清晏.关系阶段':'观澜','stat_data.云清晏.好感度':0,'stat_data.云清晏.NSFW':false,'stat_data.剧情.当前nsfw':false,'stat_data.主角.班级':'高二(8)班',...overrides};
-   return ejs.render(tpl,{getvar:k=>vals[k]??''});
- };
- assert.match(renderYun(yunBase,{'stat_data.世界.日期':'2020-09-03'}),/启封首日未入校伏笔/);
- assert.match(renderYun(yunBase,{'stat_data.云清晏.是否在场':false}),/\[不在场｜云清晏.*今天|今日为DLC开启第2天/);
- const yunPresent=renderYun(yunBase,{'stat_data.云清晏.是否在场':true});
- assert.match(yunPresent,/金丹巅峰/);
- assert.match(yunPresent,/元婴大劫/);
- assert.match(yunPresent,/仙凡两隔/);
- assert.match(renderYun(yunPalette,{'stat_data.云清晏.是否在场':true,'stat_data.云清晏.好感度':45,'stat_data.云清晏.关系阶段':'观澜'}),/观澜·尘外冷眸/);
- assert.match(renderYun(yunPalette,{'stat_data.云清晏.是否在场':true,'stat_data.云清晏.好感度':95,'stat_data.云清晏.关系阶段':'道侣'}),/仙凡重量/);
- assert.equal(renderYun(yunNsfw,{'stat_data.云清晏.是否在场':true,'stat_data.云清晏.NSFW':false,'stat_data.剧情.当前nsfw':true}).trim(),'');
- assert.match(renderYun(yunNsfw,{'stat_data.云清晏.是否在场':true,'stat_data.云清晏.NSFW':true,'stat_data.剧情.当前nsfw':true}),/NSFW实战指导：云清晏/);
+ const [yunBase,yunPalette,yunNsfw]=dlcNames.slice(4).map(name=>dlcEntries.get(name).content);
+ const scene={...enabled,...origin,'stat_data.世界.日期':'2020-09-04','stat_data.世界.当前位置':'高二重点班教室','stat_data.世界.时间段':'上午','stat_data.剧情.学期':'高二上','stat_data.主角.班级':'高二(8)班','stat_data.云清晏.已入班':false};
+ const yun=(tpl,overrides={})=>render(tpl,{...scene,...overrides}).trim();
+ assert.match(yun(yunBase),/初次入班[\s\S]*高二\(8\)班/);
+ assert.match(yun(yunBase,{'stat_data.世界.日期':'2020-09-10'}),/初次入班/);
+ for (const overrides of [
+   {'stat_data.世界.日期':'2020-09-03'}, {'stat_data.世界.当前位置':'奶茶店'},
+   {'stat_data.世界.当前位置':'音乐教室'}, {'stat_data.剧情.学期':'暑假'},
+   {'stat_data.剧情.学期':'寒假'}, {'stat_data.剧情.学期':'已毕业'},
+   {'stat_data.世界.时间段':'深夜'}, {'stat_data.云清晏.已入班':true},
+   {'stat_data.云清晏.已入班':undefined},
+ ]) assert.equal(yun(yunBase,overrides),'');
+ const present={'stat_data.云清晏.已入班':true,'stat_data.云清晏.是否在场':true};
+ assert.match(yun(yunBase,present),/金丹巅峰[\s\S]*元婴大劫[\s\S]*仙凡两隔/);
+ assert.doesNotMatch(yun(yunBase,present),/初次入班|今日刚刚/);
+ assert.equal(yun(yunPalette),'');
+ assert.match(yun(yunPalette,{...present,'stat_data.云清晏.好感度':45,'stat_data.云清晏.关系阶段':'观澜'}),/观澜·尘外冷眸/);
+ assert.match(yun(yunPalette,{...present,'stat_data.云清晏.好感度':95,'stat_data.云清晏.关系阶段':'道侣'}),/仙凡重量/);
+ assert.equal(yun(yunNsfw,{...present,'stat_data.剧情.当前nsfw':true}),'');
+ assert.match(yun(yunNsfw,{...present,'stat_data.云清晏.NSFW':true,'stat_data.剧情.当前nsfw':true}),/NSFW实战指导：云清晏/);
 
  // JSDOM End-to-End: Multi-function floating console + worldbook injection + antique seal overlay + Status Bar 7->8 transition
  const musicDom=new JSDOM('<!doctype html><body><div id="mount"></div></body>',{runScripts:'dangerously',url:'http://localhost:18970',pretendToBeVisual:true});
  const mw=musicDom.window,md=mw.document;
  try {
- let mockBook=[{name:'世界设定',enabled:true,content:'base'}];
- let mockVars={stat_data:{世界:{日期:'2021/07/03',起始年份:'2020'},剧情:{},主角:{姓名:'杨辰'}}};
- const updatedLogs=[];
- mw.getLastMessageId=()=>3;
+ let mockBook=[{name:'世界设定',enabled:true,content:'base'},{name:dlcNames[0],uid:100,enabled:false,content:'旧版总纲'}];
+ const mockChats={
+   A:{stat_data:{世界:{日期:'2021/07/03',起始年份:'2020'},剧情:{},主角:{姓名:'测试生'}}},
+   B:{stat_data:{世界:{日期:'2021/08/09',起始年份:'2020'},剧情:{},主角:{姓名:'测试生'}}},
+ };
+ const oldFloor={stat_data:{世界:{日期:'2021/07/02'},剧情:{},主角:{}}};
+ let chatId='A';
+ let onChatChanged;
+ let bookWrites=0;
+ mw.SillyTavern={getContext:()=>({getCurrentChatId:()=>chatId})};
+ mw.tavern_events={CHAT_CHANGED:'chat_changed'};
+ mw.eventOn=(name,fn)=>{if(name==='chat_changed') onChatChanged=fn;return {stop(){}};};
+ mw.getLastMessageId=()=>4;
+ mw.getCurrentMessageId=()=>3;
  mw.getCharWorldbookNames=()=>({primary:'暨阳测试书'});
  mw.getWorldbookNames=()=>['暨阳测试书'];
- mw.getWorldbook=name=>name==='暨阳测试书'?mockBook:[];
- mw.updateWorldbookWith=async(name,fn)=>{assert.equal(name,'暨阳测试书');mockBook=fn(mockBook);updatedLogs.push(mockBook.length);return mockBook;};
- mw.getVariables=()=>structuredClone(mockVars);
- mw.updateVariablesWith=async(fn)=>{mockVars=fn(structuredClone(mockVars));return mockVars;};
+ mw.getWorldbook=async()=>mockBook;
+ mw.updateWorldbookWith=async(name,fn)=>{assert.equal(name,'暨阳测试书');mockBook=fn(mockBook);bookWrites++;return mockBook;};
+ mw.getVariables=({message_id}={})=>structuredClone(message_id===3 ? mockChats[chatId] : message_id===2 ? oldFloor : {});
+ mw.updateVariablesWith=async(fn,options)=>{
+   assert.equal(options.type,'message');
+   assert.equal(options.message_id,3,'最新用户楼层无 MVU 时应写最近有状态的楼层');
+   mockChats[chatId]=fn(structuredClone(mockChats[chatId]));
+   return mockChats[chatId];
+ };
  const statusWrap=md.getElementById('mount');
  statusWrap.innerHTML=neutral;
+ const history=md.createElement('iframe');
+ md.body.append(history);
+ history.contentDocument.body.innerHTML=neutral;
+ history.contentWindow.getCurrentMessageId=()=>2;
+ history.contentWindow.getVariables=mw.getVariables;
+ history.contentDocument.querySelector('.jy-date').textContent='2021/07/02';
  mw.eval(engineCode);
- assert.equal(fs.existsSync(path.join(root,'世界书/事件/DLC_红尘灵根与渡凡引途.yaml')),false);
- for (const f of ['世界书/世界观/DLC_灵气复苏总纲与异象日程.yaml','世界书/事件/DLC_老鹰山灵脉与古宗秘藏.yaml']) {
-   assert.doesNotMatch(read(f),/澹珠|万风/,`修仙DLC条目 ${f} 不应强行绑定现代卖珠品牌或商场地库`);
- }
-
  mw.eval(read('脚本/多功能悬浮球.js'));
- await new Promise(r=>mw.setTimeout(r,60));
+ const settle=()=>new Promise(r=>mw.setTimeout(r,60));
+ const dismissSeal=()=>md.getElementById('jy-aura-seal-overlay')?.click();
+ await settle();
 
  const mp=md.getElementById('jy-floating-music-player');
  assert.ok(mp);
@@ -871,48 +885,74 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const savedMusic=JSON.parse(mw.localStorage.getItem('jy-music-player:暨阳中学:v2'));
  assert.equal(savedMusic.defaultTracksVersion,5);
  assert.match(savedMusic.playlist[0].sources[0],/^https:\/\/testingcf\.jsdelivr\.net\//);
-
+ assert.equal(bookWrites,0);
  assert.equal(md.querySelector('[data-aura-badge]').hidden,true);
  assert.equal(md.querySelector('[data-dlc-heroine="云清晏"]').hidden,true);
- assert.equal(md.querySelector('[data-people-all-btn]').textContent,'全部角色 (7)');
 
  mp.querySelector('[data-console-tab="codex"]').click();
  assert.equal(mp.querySelector('[data-panel="codex"]').hidden,false);
  mp.querySelector('[data-console-tab="dlc"]').click();
- assert.equal(mp.querySelector('[data-panel="dlc"]').hidden,false);
- mp.querySelector('[data-action="dlc-toggle"]').click();
- await new Promise(r=>mw.setTimeout(r,80));
-
+ const toggle=()=>mp.querySelector('[data-action="dlc-toggle"]').click();
+ toggle();
+ await settle();
  assert.equal(mp.dataset.dlcActive,'true');
- assert.equal(mockBook.length, 6);
- const injectedMaster=mockBook.find(e=>e.name==='[DLC]灵气复苏总纲与异象日程');
- assert.ok(injectedMaster && injectedMaster.enabled===true);
- assert.match(injectedMaster.content,/const dlcOriginDate = "2021-07-03";/);
- assert.equal(mockVars.stat_data.剧情.灵气复苏.已开启,true);
- assert.equal(mockVars.stat_data.剧情.灵气复苏.开启日期,'2021-07-03');
- assert.equal(mockVars.stat_data.云清晏.关系阶段,'观澜');
-
- const sealOv=md.getElementById('jy-aura-seal-overlay');
- assert.ok(sealOv,'应渲染全屏古风阵法特效 #jy-aura-seal-overlay');
- assert.match(sealOv.textContent,/太虚启封[\s\S]*2021-07-03/);
- sealOv.click();
- assert.equal(md.getElementById('jy-aura-seal-overlay'),null);
-
+ assert.equal(mockBook.length,dlcNames.length+1);
+ assert.equal(mockBook.find(entry=>entry.name===dlcNames[0]).uid,100);
+ assert.equal(mockChats.A.stat_data.剧情.灵气复苏.开启日期,'2021-07-03');
+ assert.equal(mockChats.A.stat_data.云清晏.已入班,false);
+ assert.match(md.getElementById('jy-aura-seal-overlay').textContent,/太虚启封[\s\S]*2021-07-03/);
+ dismissSeal();
  assert.equal(md.querySelector('[data-aura-badge]').hidden,false);
  assert.match(md.querySelector('[data-aura-badge-text]').textContent,/第1日 · 微兆潜龙期/);
- const yunCard=md.querySelector('[data-dlc-heroine="云清晏"]');
- assert.equal(yunCard.hidden,false);
- assert.match(yunCard.querySelector('.jy-avatar').src,/^data:image\/svg\+xml/);
+ assert.equal(history.contentDocument.querySelector('[data-aura-badge]').hidden,true,'历史楼层不接受当前启封');
  assert.equal(md.querySelector('[data-people-all-btn]').textContent,'全部角色 (8)');
  assert.equal(md.querySelector('[data-cultivation-panel]').hidden,false);
+ assert.match(md.querySelector('[data-dlc-heroine="云清晏"] .jy-avatar').src,/^data:image\/svg\+xml/);
 
- mp.querySelector('[data-action="dlc-toggle"]').click();
- await new Promise(r=>mw.setTimeout(r,80));
+ chatId='B';
+ await onChatChanged();
  assert.equal(mp.dataset.dlcActive,'false');
- assert.ok(mockBook.filter(e=>dlcNames.includes(e.name)).every(e=>e.enabled===false));
- assert.equal(md.querySelector('[data-dlc-heroine="云清晏"]').hidden,true);
+ assert.equal(mockChats.B.stat_data.剧情.灵气复苏,undefined);
+ assert.equal(mockBook.filter(e=>dlcNames.includes(e.name)).every(e=>e.enabled),true);
+ for (const entry of mockBook.filter(e=>dlcNames.includes(e.name))) assert.equal(render(entry.content).trim(),'');
+ toggle();
+ await settle();
+ dismissSeal();
+ assert.equal(mockChats.B.stat_data.剧情.灵气复苏.开启日期,'2021-08-09');
+ assert.equal(bookWrites,1,'第二个聊天复用已同步的条目');
+ assert.equal(mockChats.A.stat_data.剧情.灵气复苏.开启日期,'2021-07-03');
+
+ chatId='A';
+ await onChatChanged();
+ mockChats.A.stat_data.云清晏.已入班=true;
+ mockChats.A.stat_data.主角.修行.境界='筑基';
+ toggle();
+ await settle();
+ dismissSeal();
+ assert.equal(mockChats.A.stat_data.剧情.灵气复苏.已开启,false);
+ assert.equal(mockChats.B.stat_data.剧情.灵气复苏.已开启,true);
+ assert.equal(bookWrites,1,'封缄只写当前聊天 MVU');
  assert.equal(md.querySelector('[data-people-all-btn]').textContent,'全部角色 (7)');
- md.getElementById('jy-aura-seal-overlay')?.click();
+ mockChats.A.stat_data.世界.日期='2021/07/22';
+ toggle();
+ await settle();
+ dismissSeal();
+ assert.equal(mockChats.A.stat_data.剧情.灵气复苏.开启日期,'2021-07-03');
+ assert.equal(mockChats.A.stat_data.云清晏.已入班,true);
+ assert.equal(mockChats.A.stat_data.主角.修行.境界,'筑基');
+ assert.match(md.querySelector('[data-aura-badge-text]').textContent,/第20日 · 古武抬头期 · 筑基/);
+ assert.match(mp.querySelector('[data-role="dlc-saintess"]').textContent,/已登记入班/);
+ assert.equal(history.contentDocument.querySelector('[data-aura-badge]').hidden,true);
+
+ // An already-enabled worldbook from the previous build must be gated even when the open chat is off.
+ mockBook.find(entry=>entry.name===dlcNames[0]).content='旧版未门控正文';
+ mockChats.B.stat_data.剧情.灵气复苏.已开启=false;
+ chatId='B';
+ await onChatChanged();
+ assert.equal(bookWrites,2);
+ assert.equal(render(mockBook.find(entry=>entry.name===dlcNames[0]).content).trim(),'');
+ assert.equal(mockChats.A.stat_data.剧情.灵气复苏.已开启,true);
+ assert.equal(mockChats.B.stat_data.剧情.灵气复苏.已开启,false);
 
  mw.__jiyangFloatingMusicPlayerV2.destroy();
  mw.__jyStatusEngineV1.destroy();
