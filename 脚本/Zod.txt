@@ -177,6 +177,20 @@ export const Schema = z.object({
     内心独白: z.string().optional(),
   }).optional(),
 
+  谢昭宁: z.object({
+    是否在场: z.coerce.boolean().optional(),
+    好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).optional(),
+    关系阶段: z.string().optional(),
+    NSFW: z.coerce.boolean().optional(),
+    当前境界: z.string().optional(),
+    当前上装: z.string().optional(),
+    当前下装: z.string().optional(),
+    所在位置: z.string().optional(),
+    动作: z.string().optional(),
+    心情: z.string().optional(),
+    内心独白: z.string().optional(),
+  }).optional(),
+
   主角: z.object({
     姓名: z.string().prefault(''),
     年龄: z.string().prefault(''),
@@ -318,6 +332,7 @@ const relationshipMetrics = [
   ['许念安', '好感度'],
   ['许念安', '控制欲'],
   ['云清晏', '好感度'],
+  ['谢昭宁', '好感度'],
 ];
 
 const dailyAffectionLimit = 12;
@@ -407,7 +422,7 @@ $(async () => {
       const cur = toMs(state?.世界?.日期) ?? ori;
       if (ori !== null && cur !== null) {
         const d = Math.max(0, Math.floor((cur - ori) / 86400000));
-        state.剧情.灵气复苏.阶段 = d < 10 ? '微兆潜龙期' : d < 25 ? '古武抬头期' : d < 45 ? '龙眼破禁期' : '潜龙秘序期';
+        state.剧情.灵气复苏.阶段 = d < 10 ? '微兆潜龙期' : d < 25 ? '古武抬头期' : d < 45 ? '龙眼破禁期' : d < 90 ? '潜龙秘序期' : '百宗出山期';
       }
     }
     if (state?.主角) {

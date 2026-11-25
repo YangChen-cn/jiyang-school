@@ -1568,7 +1568,7 @@
           "陈芷汀",
           "虞淑婉"
         ],
-        "abstract": "角色快速索引：七位可攻略角色（苏晓樯、温书语、沈幼楚、许念安、慕佳芊、陈芷汀、虞淑婉）与三名 NPC（凌知夏、吴臻臻、俞嘉豪）的基本识别信息；修仙 DLC 开启时加入云清晏",
+        "abstract": "角色快速索引：七位可攻略角色（苏晓樯、温书语、沈幼楚、许念安、慕佳芊、陈芷汀、虞淑婉）与三名 NPC（凌知夏、吴臻臻、俞嘉豪）的基本识别信息；修仙 DLC 开启时加入云清晏、谢昭宁",
         "uid": 4,
         "enabled": true,
         "strategy": {
@@ -2195,6 +2195,48 @@
           "type": "after_character_definition",
           "order": 80
         }
+      },
+      "谢昭宁_基础信息": {
+        "path": "世界书/角色/谢昭宁/基础信息.yaml",
+        "scope": "specific",
+        "part": "basic",
+        "keywords": [
+          "谢昭宁",
+          "昭宁",
+          "谢大小姐",
+          "剑庐小公主",
+          "钱塘谢氏"
+        ],
+        "abstract": "DLC可攻略角色谢昭宁基础档案：浙江大学工商管理专业本科生，里世界为钱塘谢氏剑庐嫡系小公主（筑基中期），执掌族产与潮汐秘市",
+        "uid": 125,
+        "enabled": false,
+        "strategy": {
+          "type": "constant"
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 81
+        }
+      },
+      "谢昭宁_性格调色盘": {
+        "path": "世界书/角色/谢昭宁/性格调色盘.yaml",
+        "scope": "specific",
+        "part": "personality",
+        "keywords": [
+          "谢昭宁",
+          "昭宁",
+          "剑庐小公主"
+        ],
+        "abstract": "谢昭宁五阶段性格调色盘：名门骄矜×浙大商院干练×儒修剑骨的一诺千金，观风/试锋/折腰/同袍/执剑五阶段及在场EJS门控",
+        "uid": 126,
+        "enabled": false,
+        "strategy": {
+          "type": "constant"
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 82
+        }
       }
     },
     "NPC": {
@@ -2463,6 +2505,33 @@
         "position": {
           "type": "after_character_definition",
           "order": 108
+        }
+      },
+      "谢昭宁_NSFW指导": {
+        "path": "世界书/角色/谢昭宁/NSFW指导.yaml",
+        "scope": "specific",
+        "keywords": [
+          "谢昭宁",
+          "昭宁",
+          "谢大小姐",
+          "剑庐小公主"
+        ],
+        "abstract": "谢昭宁NSFW指导：浙大管院学姐兼钱塘剑庐小公主反差与执剑立诺亲密门控",
+        "uid": 127,
+        "enabled": false,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "谢昭宁",
+            "昭宁",
+            "谢大小姐",
+            "剑庐小公主"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 109
         }
       }
     },

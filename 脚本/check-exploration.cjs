@@ -762,15 +762,16 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(ctrlWarn.textContent,'高压共生');
  aw.close();
 
- const dialogue=new JSDOM('<div id="chat"><div class="mes" is_user="false" mesid="1"><div class="mes_text"><p>{苏晓樯}「今天真热闹。」</p><p>{杨辰}「走吧。」</p><p>{清晏}「那就走吧。」</p></div></div></div><textarea id="send_textarea">未发送</textarea>',{runScripts:'dangerously',url:'http://localhost:18968',pretendToBeVisual:true});
+ const dialogue=new JSDOM('<div id="chat"><div class="mes" is_user="false" mesid="1"><div class="mes_text"><p>{苏晓樯}「今天真热闹。」</p><p>{杨辰}「走吧。」</p><p>{清晏}「那就走吧。」</p><p>{昭宁}「财报模型拿给我。」</p></div></div></div><textarea id="send_textarea">未发送</textarea>',{runScripts:'dangerously',url:'http://localhost:18968',pretendToBeVisual:true});
  const dw=dialogue.window;
  dw.getVariables=()=>({stat_data:{主角:{姓名:'杨辰'}}});
  dw.localStorage.setItem('jy-avatar:苏晓樯','data:image/png;base64,YWJj');
  dw.eval(read('脚本/正文对白.js'));
  const rows=dw.document.querySelectorAll('[data-jy-dialogue-row]');
- assert.equal(rows.length,3);
+ assert.equal(rows.length,4);
  assert.equal(rows[0].dataset.speakerCanon,'苏晓樯');
  assert.equal(rows[1].dataset.player,'true');
+ assert.equal(rows[3].dataset.speakerCanon,'谢昭宁');
  const avatar=rows[0].querySelector('[data-jy-dialogue-avatar]');
  assert.equal(dw.getComputedStyle(avatar).width,'88px');
  assert.equal(dw.getComputedStyle(avatar).borderRadius,'10px');
@@ -825,6 +826,9 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    '[DLC]仙宗_武当山紫霄宫',
    '[DLC]仙宗_东海蓬莱与崇明归墟',
    '[DLC]仙宗_西域昆仑祖脉',
+   '谢昭宁_基础信息',
+   '谢昭宁_性格调色盘',
+   '谢昭宁_NSFW指导',
  ];
  const retiredDlcNames=['[DLC]修行阶梯与仙凡抉择','[DLC]灵潮异象与隐秘特调','[DLC]华夏修行界与隐世宗门世家'];
  assert.ok(!cardEntries.some(entry=>retiredDlcNames.includes(entry.comment)));
@@ -843,6 +847,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.doesNotMatch(render(catalog.content,{'stat_data.剧情.灵气复苏.已开启':false}),/云清晏/);
  const catalogOn=render(catalog.content,enabled);
  assert.match(catalogOn,/姓名: 云清晏[\s\S]*校内身份: 外省借读生/);
+ assert.match(catalogOn,/姓名: 谢昭宁[\s\S]*浙江大学工商管理专业学生[\s\S]*钱塘谢氏剑庐」嫡系小公主/);
  assert.equal((catalogOn.match(/姓名: 云清晏/g)??[]).length,1);
  for (const [name,entry] of dlcEntries) {
    assert.ok(entry, '卡内缺 DLC 条目 ' + name);
@@ -879,15 +884,22 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    assert.equal(entry.extensions.prevent_recursion,true);
    assert.ok(render(entry.content,enabled).trim());
  }
+ {
+   const xieNsfwEntry=dlcEntries.get('谢昭宁_NSFW指导');
+   assert.equal(xieNsfwEntry.constant,false);
+   assert.ok(xieNsfwEntry.keys.includes('剑庐小公主'));
+   assert.equal(xieNsfwEntry.extensions.scan_depth,2);
+ }
  assert.ok(!cardEntries.some(e=>e.comment.includes('古武与隐秘异闻') || e.comment==='[mvu_update]修仙变量契约' || e.comment==='[DLC]红尘灵根与渡凡引途'));
  const initRaw=read('世界书/变量/initvar.yaml');
- assert.doesNotMatch(initRaw,/云清晏|灵气复苏|修行/);
+ assert.doesNotMatch(initRaw,/云清晏|谢昭宁|灵气复苏|修行/);
 
  const updateRulesTpl=read('世界书/变量/变量更新规则.yaml');
  const rulesOff=render(updateRulesTpl);
  const rulesOn=render(updateRulesTpl,enabled);
- assert.doesNotMatch(rulesOff,/云清晏|灵气复苏|主角\.修行|观澜|道侣/);
+ assert.doesNotMatch(rulesOff,/云清晏|谢昭宁|灵气复苏|主角\.修行|观澜|道侣|观风|执剑/);
  assert.match(rulesOn,/云清晏\.好感度[\s\S]*观澜[\s\S]*问道[\s\S]*动念[\s\S]*同参[\s\S]*道侣/);
+ assert.match(rulesOn,/谢昭宁\.好感度[\s\S]*观风[\s\S]*试锋[\s\S]*折腰[\s\S]*同袍[\s\S]*执剑/);
  assert.match(rulesOn,/云清晏\.是否在场:\s+type: boolean\s+check:\s+- 初始 false；按实际同场情形更新。/);
  assert.doesNotMatch(rulesOn,/已入班/);
  assert.doesNotMatch(rulesOff,/修士风闻/);
@@ -905,11 +917,13 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
 
  const plainParsed=schemaBox.schema.parse({世界:{日期:'2020-09-01'},苏晓樯:{好感度:5}});
  assert.equal(plainParsed.云清晏,undefined);
+ assert.equal(plainParsed.谢昭宁,undefined);
  assert.equal(plainParsed.主角.修行,undefined);
  assert.equal(plainParsed.剧情.灵气复苏,undefined);
- const dlcSave={世界:{日期:'2020-09-13'},剧情:{灵气复苏:{已开启:true,开启日期:'2020-09-03',阶段:'旧值'}},主角:{修行:{境界:'筑基初期',灵气感应:35,功法与秘术:['太微引气篇']}},云清晏:{已入班:true,是否在场:true,好感度:22,关系阶段:'问道',当前境界:'金丹跌境'}};
+ const dlcSave={世界:{日期:'2020-09-13'},剧情:{灵气复苏:{已开启:true,开启日期:'2020-09-03',阶段:'旧值'}},主角:{修行:{境界:'筑基初期',灵气感应:35,功法与秘术:['太微引气篇']}},云清晏:{已入班:true,是否在场:true,好感度:22,关系阶段:'问道',当前境界:'金丹跌境'},谢昭宁:{是否在场:true,好感度:18,关系阶段:'观风',当前境界:'筑基中期'}};
  const dlcParsed=schemaBox.schema.parse(dlcSave);
  assert.equal(dlcParsed.云清晏.好感度,22);
+ assert.equal(dlcParsed.谢昭宁.好感度,18);
  assert.equal(dlcParsed.云清晏.已入班,undefined);
  assert.equal(dlcParsed.主角.修行.境界,'筑基初期');
  await callbackBox.write({variables:{stat_data:dlcSave}});
@@ -917,8 +931,13 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(dlcSave.云清晏.已入班,undefined,'旧版字段从新楼层清理');
  const dlcPrior=structuredClone(dlcSave);
  dlcSave.云清晏.好感度+=30;
+ dlcSave.谢昭宁.好感度+=30;
  callbackBox.pace({stat_data:dlcSave},{stat_data:dlcPrior});
  assert.equal(dlcSave.云清晏.好感度,34);
+ assert.equal(dlcSave.谢昭宁.好感度,30);
+ const lateDlcSave={世界:{日期:'2020-12-03'},剧情:{灵气复苏:{已开启:true,开启日期:'2020-09-03',阶段:'旧值'}}};
+ await callbackBox.write({variables:{stat_data:lateDlcSave}});
+ assert.equal(lateDlcSave.剧情.灵气复苏.阶段,'百宗出山期');
 
  const dlcMaster=dlcEntries.get(dlcNames[0]).content;
  const origin={'stat_data.剧情.灵气复苏.开启日期':'2020-09-03'};
@@ -927,12 +946,14 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    ['2020-09-03',1,'微兆潜龙期'], ['2020/09/12',10,'微兆潜龙期'],
    ['2020-09-13',11,'古武抬头期'], ['2020-09-27',25,'古武抬头期'],
    ['2020-09-28',26,'龙眼破禁期'], ['2020-10-17',45,'龙眼破禁期'],
-   ['2020-10-18',46,'潜龙秘序期'],
+   ['2020-10-18',46,'潜龙秘序期'], ['2020-12-01',90,'潜龙秘序期'],
+   ['2020-12-02',91,'百宗出山期'],
  ]) {
    assert.ok(timeline(date).includes('第 '+day+' 日（'+stage+'）'));
  }
  assert.equal(dlcEntries.get(dlcNames[0]).constant,true);
- assert.match(timeline('2020-09-04'),/华夏龙脉与暨阳暗局[\s\S]*修行契约与无上限阶梯[\s\S]*红尘、长生[\s\S]*旧调频收音机/);
+ assert.match(timeline('2020-09-04'),/华夏龙脉与暨阳暗局[\s\S]*阵内避世与老怪出山铁律[\s\S]*修行契约与无上限阶梯[\s\S]*红尘、长生[\s\S]*旧调频收音机/);
+ assert.match(timeline('2020-12-02'),/第五阶段·百宗出山期[\s\S]*出阵不损道基[\s\S]*陆续突破瓶口或解封出山/);
  assert.match(timeline('2020-09-13'),/脱敏归档/);
  assert.match(timeline('2020-09-28'),/特种气象与非典型样本调查组/);
  assert.match(timeline('2020-10-18'),/外地散修与隐门/);
@@ -984,6 +1005,20 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.match(yun(yunPalette,{...present,'stat_data.云清晏.好感度':95,'stat_data.云清晏.关系阶段':'道侣'}),/仙凡重量/);
  assert.equal(yun(yunNsfw,{...present,'stat_data.剧情.当前nsfw':true}),'');
  assert.match(yun(yunNsfw,{...present,'stat_data.云清晏.NSFW':true,'stat_data.剧情.当前nsfw':true}),/NSFW实战指导：云清晏/);
+
+ const [xieBase,xiePalette,xieNsfw]=['谢昭宁_基础信息','谢昭宁_性格调色盘','谢昭宁_NSFW指导'].map(name=>dlcEntries.get(name).content);
+ const xie=(tpl,overrides={},floors=[])=>render(tpl,{...scene,...overrides},floors).trim();
+ assert.match(xie(xieBase),/跨城相逢入口[\s\S]*浙江大学管理学院工商管理专业[\s\S]*谢昭宁\.是否在场=true/);
+ assert.doesNotMatch(xie(xieBase),/角色档案：谢昭宁/);
+ const xiePresent={'stat_data.谢昭宁.是否在场':true};
+ const xieAbsent={'stat_data.谢昭宁.是否在场':false};
+ assert.equal(xie(xieBase,xieAbsent,[{},xiePresent,xieAbsent,{}]),'');
+ assert.match(xie(xieBase,xiePresent),/角色档案：谢昭宁[\s\S]*浙江大学管理学院·工商管理专业本科生[\s\S]*钱塘谢氏剑庐/);
+ assert.equal(xie(xiePalette),'');
+ assert.match(xie(xiePalette,{...xiePresent,'stat_data.谢昭宁.好感度':12,'stat_data.谢昭宁.关系阶段':'观风'}),/观风·紫金港学姐与剑庐明珠/);
+ assert.match(xie(xiePalette,{...xiePresent,'stat_data.谢昭宁.好感度':95,'stat_data.谢昭宁.关系阶段':'执剑'}),/执剑·一诺共生死/);
+ assert.equal(xie(xieNsfw,{...xiePresent,'stat_data.剧情.当前nsfw':true}),'');
+ assert.match(xie(xieNsfw,{...xiePresent,'stat_data.谢昭宁.NSFW':true,'stat_data.剧情.当前nsfw':true}),/NSFW实战指导：谢昭宁/);
 
  // JSDOM End-to-End: Multi-function floating console + worldbook injection + antique seal overlay + Status Bar 7->8 transition
  const musicDom=new JSDOM('<!doctype html><body><div id="mount"></div></body>',{runScripts:'dangerously',url:'http://localhost:18970',pretendToBeVisual:true});
@@ -1047,10 +1082,11 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.match(forumFeed.textContent,/暑假自习/);
  assert.equal(md.querySelector('[data-aura-badge]').hidden,true);
  assert.equal(md.querySelector('[data-dlc-heroine="云清晏"]').hidden,true);
+ assert.equal(md.querySelector('[data-dlc-heroine="谢昭宁"]').hidden,true);
 
  mp.querySelector('[data-console-tab="codex"]').click();
  assert.equal(mp.querySelector('[data-panel="codex"]').hidden,false);
- assert.match(mp.querySelector('[data-panel="codex"]').textContent,/三教隐世巨室[\s\S]*苏氏沧溟水府[\s\S]*名山仙宗/);
+ assert.match(mp.querySelector('[data-panel="codex"]').textContent,/三教隐世巨室[\s\S]*谢昭宁[\s\S]*苏氏沧溟水府[\s\S]*数月后百宗出山/);
  mp.querySelector('[data-console-tab="dlc"]').click();
  const toggle=()=>mp.querySelector('[data-action="dlc-toggle"]').click();
  toggle();
@@ -1060,13 +1096,16 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(mockBook.find(entry=>entry.name===dlcNames[0]).uid,100);
  assert.equal(mockChats.A.stat_data.剧情.灵气复苏.开启日期,'2021-07-03');
  assert.equal(mockChats.A.stat_data.云清晏.是否在场,false);
+ assert.equal(mockChats.A.stat_data.谢昭宁.是否在场,false);
+ assert.equal(mockChats.A.stat_data.谢昭宁.关系阶段,'观风');
  assert.equal(mockChats.A.stat_data.云清晏.已入班,undefined);
  assert.match(md.getElementById('jy-aura-seal-overlay').textContent,/太虚启封[\s\S]*2021-07-03/);
  dismissSeal();
  assert.equal(md.querySelector('[data-aura-badge]').hidden,false);
  assert.match(md.querySelector('[data-aura-badge-text]').textContent,/第1日 · 微兆潜龙期/);
  assert.equal(history.contentDocument.querySelector('[data-aura-badge]').hidden,true,'历史楼层不接受当前启封');
- assert.equal(md.querySelector('[data-people-all-btn]').textContent,'全部角色 (8)');
+ assert.equal(md.querySelector('[data-people-all-btn]').textContent,'全部角色 (9)');
+ assert.equal(md.querySelector('[data-dlc-heroine="谢昭宁"]').hidden,false);
  assert.equal(md.querySelector('[data-cultivation-panel]').hidden,false);
  assert.equal(rumorOption.hidden,false);
  assert.equal(rumorOption.disabled,false);

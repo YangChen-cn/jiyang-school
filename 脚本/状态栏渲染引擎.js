@@ -239,7 +239,8 @@
       ['yu/campus.png', '校长室'], ['yu/outdoor.png', '书店傍晚'],
       ['yu/pic-2.png', '生活照片 02'], ['yu/pic-3.png', '生活照片 03'], ['yu/pic-4.png', '生活照片 04'], ['yu/pic-6.jpg', '生活照片 06']
     ],
-    '云清晏': [['yunqingyan/campus.webp', '校服 · 初入暨阳'], ['yunqingyan/teahouse.webp', '便装 · 雨后茶铺'], ['yunqingyan/mountain.webp', '宗门服 · 老鹰山']]
+    '云清晏': [['yunqingyan/campus.webp', '校服 · 初入暨阳'], ['yunqingyan/teahouse.webp', '便装 · 雨后茶铺'], ['yunqingyan/mountain.webp', '宗门服 · 老鹰山']],
+    '谢昭宁': []
   };
 
   const CHAR_THRESHOLDS = {
@@ -250,7 +251,8 @@
     '慕佳芊': [20, 50, 80, 90],
     '陈芷汀': [40, 60, 80, 90],
     '虞淑婉': [25, 55, 80, 90],
-    '云清晏': [20, 50, 80, 90]
+    '云清晏': [20, 50, 80, 90],
+    '谢昭宁': [20, 50, 80, 90]
   };
 
   const PROFILES = {
@@ -262,6 +264,7 @@
     '慕佳芊': { name: 'Mumu慕老师', initial: '芊', bg: '#c9882c' },
     '虞淑婉': { name: '虞淑婉', initial: '婉', bg: '#2e5950' },
     '云清晏': { name: '云清晏', initial: '云', bg: '#1d6b61' },
+    '谢昭宁': { name: '谢昭宁', initial: '谢', bg: '#2b5f75' },
     '吴臻臻': { name: 'Zhen_23⚡', initial: 'Z', bg: '#1c1c1e' },
     'Zhen': { name: 'Zhen_23⚡', initial: 'Z', bg: '#1c1c1e' }
   };
@@ -553,6 +556,7 @@
     .jy-person[data-tone="silk"] { --tone: #b4456c; }
     .jy-person[data-tone="principal"] { --tone: #2e5950; }
     .jy-person[data-tone="immortal"] { --tone: #1d6b61; border-top-color: rgba(201, 146, 56, 0.36); }
+    .jy-person[data-tone="azure-sword"] { --tone: #2b5f75; border-top-color: rgba(91, 164, 194, 0.38); }
     .jy-immortal-pill {
       padding: 0 5px; border: 1px solid rgba(201, 146, 56, 0.45); border-radius: 4px;
       background: linear-gradient(120deg, rgba(29, 107, 97, 0.14), rgba(201, 146, 56, 0.14));
@@ -1603,7 +1607,7 @@
     const cur = parseMs(currentRaw) ?? ori;
     const elapsed = (ori !== null && cur !== null) ? Math.max(0, Math.floor((cur - ori) / 86400000)) : 0;
     const dayNumber = elapsed + 1;
-    const stage = dayNumber <= 10 ? '微兆潜龙期' : dayNumber <= 25 ? '古武抬头期' : dayNumber <= 45 ? '龙眼破禁期' : '潜龙秘序期';
+    const stage = dayNumber <= 10 ? '微兆潜龙期' : dayNumber <= 25 ? '古武抬头期' : dayNumber <= 45 ? '龙眼破禁期' : dayNumber <= 90 ? '潜龙秘序期' : '百宗出山期';
     return { dayNumber, stage };
   }
 
@@ -1638,18 +1642,21 @@
     if (badgeText) badgeText.textContent = `第${dayNum}日 · ${stageText}${realmText && realmText !== '未引气（凡躯）' ? ' · ' + realmText : ''}`;
 
     const allBtn = root.querySelector('[data-people-all-btn]');
-    if (allBtn) allBtn.textContent = active ? '全部角色 (8)' : '全部角色 (7)';
+    if (allBtn) allBtn.textContent = active ? '全部角色 (9)' : '全部角色 (7)';
 
+    const dlcRealmDefaults = { '云清晏': '金丹跌境·封蛰', '谢昭宁': '筑基中期' };
     root.querySelectorAll('.jy-person[data-dlc-heroine]').forEach(card => {
       card.hidden = !active;
-      const yunRealm = card.querySelector('[data-yun-realm]');
-      if (yunRealm) {
-        const liveRealm = stat?.云清晏?.当前境界;
-        const txt = liveRealm || sceneValue(yunRealm) || '金丹跌境·封蛰';
-        yunRealm.textContent = txt;
+      const roleName = card.dataset.dlcHeroine || '';
+      const roleStat = roleName ? stat?.[roleName] : null;
+      const realmPill = card.querySelector('[data-yun-realm], [data-dlc-realm]');
+      if (realmPill) {
+        const liveRealm = roleStat?.当前境界;
+        const txt = liveRealm || sceneValue(realmPill) || dlcRealmDefaults[roleName] || '修行中';
+        realmPill.textContent = txt;
       }
-      if (stat?.云清晏 && typeof stat.云清晏.是否在场 === 'boolean') {
-        card.dataset.present = String(stat.云清晏.是否在场);
+      if (roleStat && typeof roleStat.是否在场 === 'boolean') {
+        card.dataset.present = String(roleStat.是否在场);
       } else if (active && !/^(?:true|false|1|0|是|否|在场|不在场)$/i.test((card.dataset.present || '').trim())) {
         card.dataset.present = 'false';
       }

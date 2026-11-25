@@ -173,6 +173,20 @@ export const Schema = z.object({
     内心独白: z.string().optional(),
   }).optional(),
 
+  谢昭宁: z.object({
+    是否在场: z.coerce.boolean().optional(),
+    好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).optional(),
+    关系阶段: z.string().optional(),
+    NSFW: z.coerce.boolean().optional(),
+    当前境界: z.string().optional(),
+    当前上装: z.string().optional(),
+    当前下装: z.string().optional(),
+    所在位置: z.string().optional(),
+    动作: z.string().optional(),
+    心情: z.string().optional(),
+    内心独白: z.string().optional(),
+  }).optional(),
+
   主角: z.object({
     姓名: z.string().prefault(''),
     年龄: z.string().prefault(''),

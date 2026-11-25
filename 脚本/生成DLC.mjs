@@ -36,6 +36,9 @@ const DLC_KEYS = [
   ['角色', '云清晏_基础信息'],
   ['角色', '云清晏_性格调色盘'],
   ['NSFW指导', '云清晏_NSFW指导'],
+  ['角色', '谢昭宁_基础信息'],
+  ['角色', '谢昭宁_性格调色盘'],
+  ['NSFW指导', '谢昭宁_NSFW指导'],
 ];
 
 const state = JSON.parse(fs.readFileSync(statePath, 'utf8'));

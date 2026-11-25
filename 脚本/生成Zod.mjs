@@ -95,7 +95,7 @@ const out = [
   '      const cur = toMs(state?.世界?.日期) ?? ori;',
   '      if (ori !== null && cur !== null) {',
   '        const d = Math.max(0, Math.floor((cur - ori) / 86400000));',
-  "        state.剧情.灵气复苏.阶段 = d < 10 ? '微兆潜龙期' : d < 25 ? '古武抬头期' : d < 45 ? '龙眼破禁期' : '潜龙秘序期';",
+  "        state.剧情.灵气复苏.阶段 = d < 10 ? '微兆潜龙期' : d < 25 ? '古武抬头期' : d < 45 ? '龙眼破禁期' : d < 90 ? '潜龙秘序期' : '百宗出山期';",
   '      }',
   '    }',
   '    if (state?.主角) {',
