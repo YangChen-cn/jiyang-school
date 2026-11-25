@@ -1,5 +1,3 @@
-底色：懂事
-
 <%_ {
 const stage = getvar('stat_data.许念安.关系阶段', { defaults: '' });
 const bounded = value => Math.max(0, Math.min(100, Number(value) || 0));
@@ -12,7 +10,13 @@ else if (stage === '共生' && affection >= 80 && control >= 85) mode = '共生'
 else if (['紧绷', '共生', '松绑'].includes(stage) && affection >= 50 && control >= 70) mode = '紧绷';
 else if (progressed && affection >= 50) mode = '依恋';
 else if ((stage === '观察' || progressed) && (affection >= 20 || control >= 40)) mode = '观察';
+const _p = getvar('stat_data.许念安.是否在场', { defaults: false });
+const isPresent = _p === true || _p === 'true' || _p === 1;
 _%>
+<%_ if (!isPresent) { _%>
+[不在场｜当前阶段：<%= mode %>。跨场景寻访或消息往来按此阶段衔接。]
+<%_ } else { _%>
+底色：懂事
 
 <%_ if (mode === '表面') { _%>
 ——表面：所有人眼里的完美同窗——
@@ -125,4 +129,5 @@ _%>
 - 不跳过事后；事后是她最诚实、最脆弱、也最危险的窗口。
 <%_ } _%>
 
+<%_ } _%>
 <%_ } _%>

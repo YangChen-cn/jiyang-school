@@ -64,6 +64,7 @@ async function checkOpeningMappings() {
    assert.ok(!Object.keys(state).some(key=>key.startsWith('凌知夏.')));
    if(index>0) assert.equal(state[name+'.是否在场'],true);
  }
+ assert.match(scenes[2].location,/高二教师办公室/);
  assert.match(scenes[6].location,/高二（8）班教室/);
  assert.match(scenes[7].location,/咖啡馆/);
  assert.match(scenes[8].location,/校长办公室/);
@@ -202,7 +203,14 @@ function checkRetiredCharacter(write) {
 for (const alias of ['老鹰山','听风亭','旧值守屋','周伯','山路旧照']) assert.ok(manifest.entryManifest.事件.老鹰山仙人.strategy.keys.includes(alias));
 assert.ok(!manifest.entryManifest.事件.远足.strategy.keys.includes('老鹰山'));
 const eventEntries = Object.values(manifest.entryManifest.事件);
-assert.equal(eventEntries.length, 15);
+assert.equal(eventEntries.length, 17);
+for (const side of ['万风地库', '珍珠局']) {
+  const entry = manifest.entryManifest.事件[side];
+  assert.ok(entry && entry.enabled && entry.strategy.scan_depth === 2);
+  assert.ok(read(entry.path).length > 0);
+}
+assert.ok(manifest.entryManifest.事件.万风地库.strategy.keys.includes('万风地库'));
+assert.ok(manifest.entryManifest.事件.珍珠局.strategy.keys.includes('澹珠记'));
 for (const period of periods) {
   for (const activity of period.activities || []) {
     assert.ok(read(activity.source).length > 0);
@@ -394,6 +402,22 @@ function checkRelationshipPace(update) {
    assert.equal(scoreFor(stage),cap); // 高分也只加载已确认阶段的表现。
    if(person==='苏晓樯') assert.equal(scoreFor('亲密恋人'),95);
  }
+ for(const h of ['苏晓樯','温书语','沈幼楚','许念安','慕佳芊','陈芷汀','虞淑婉']) {
+   const pal=read(`世界书/角色/${h}/性格调色盘.yaml`);
+   assert.doesNotThrow(()=>ejs.compile(pal));
+   const off=ejs.render(pal,{getvar:k=>k.endsWith('关系阶段')?'':(k.endsWith('是否在场')?false:95)}).trim();
+   const on=ejs.render(pal,{getvar:k=>k.endsWith('关系阶段')?'':(k.endsWith('是否在场')?true:95)}).trim();
+   assert.match(off,/^\[不在场｜当前阶段：/);
+   assert.ok(on.includes('底色：'));
+   const nsfw=read(`世界书/角色/${h}/NSFW指导.yaml`);
+   assert.doesNotThrow(()=>ejs.compile(nsfw));
+   assert.equal(ejs.render(nsfw,{getvar:k=>k.endsWith('是否在场')?false:(k.endsWith('好感度')?95:true)}).trim(),'');
+   assert.ok(ejs.render(nsfw,{getvar:k=>k.endsWith('好感度')?95:true}).trim().length>50);
+ }
+ const tri=read('世界书/角色/沈幼楚/三面性.yaml');
+ assert.doesNotThrow(()=>ejs.compile(tri));
+ assert.equal(ejs.render(tri,{getvar:k=>k.endsWith('是否在场')?false:''}).trim(),'');
+ assert.ok(ejs.render(tri,{getvar:k=>k.endsWith('是否在场')?true:'校园'}).trim().includes('第一面'));
 
  // Keep the story dates and selected participants fixed when simulating the old
  // routine bonuses and the new policy. No model output is assumed by this fixture.

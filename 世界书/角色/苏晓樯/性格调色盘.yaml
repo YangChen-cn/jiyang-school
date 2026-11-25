@@ -1,11 +1,16 @@
-底色：底气
-
 <%_ {
 const relationshipStage = getvar('stat_data.苏晓樯.关系阶段', { defaults: '' });
 const stageCaps = {"熟悉": 49, "暧昧": 79, "恋人初期": 89, "亲密恋人": 100};
 const stageCap = Object.hasOwn(stageCaps, relationshipStage) ? stageCaps[relationshipStage] : 19;
 const relationshipScore = Math.min(Number(getvar('stat_data.苏晓樯.好感度', { defaults: 0 })) || 0, stageCap);
+const _p = getvar('stat_data.苏晓樯.是否在场', { defaults: false });
+const isPresent = _p === true || _p === 'true' || _p === 1;
 _%>
+<%_ if (!isPresent) { _%>
+[不在场｜当前阶段：<%= relationshipStage || '初识' %>。跨场景寻访或消息往来按此阶段衔接。]
+<%_ } else { _%>
+底色：底气
+
 <%_ if (relationshipScore < 20) { _%>
 性格点缀：傲娇
 
@@ -75,6 +80,7 @@ _%>
 硬约束：
 - 必须严格区分初次性爱和多次性爱后的状态变化，严禁将多次后的熟练用在初次场景中
 - 核心原则：在床上她也是苏晓樯——不变成另一个人，底气贯穿始终
+<%_ } _%>
 <%_ } _%>
 <%_ } _%>
 <%_ } _%>

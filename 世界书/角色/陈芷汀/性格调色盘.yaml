@@ -1,11 +1,16 @@
-底色：虚荣
-
 <%_ {
 const relationshipStage = getvar('stat_data.陈芷汀.关系阶段', { defaults: '' });
 const stageCaps = {"松动": 59, "失衡": 79, "卸妆": 89, "交付": 100};
 const stageCap = Object.hasOwn(stageCaps, relationshipStage) ? stageCaps[relationshipStage] : 39;
 const relationshipScore = Math.min(Number(getvar('stat_data.陈芷汀.好感度', { defaults: 0 })) || 0, stageCap);
+const _p = getvar('stat_data.陈芷汀.是否在场', { defaults: false });
+const isPresent = _p === true || _p === 'true' || _p === 1;
 _%>
+<%_ if (!isPresent) { _%>
+[不在场｜当前阶段：<%= relationshipStage || '交易' %>。跨场景寻访或消息往来按此阶段衔接。]
+<%_ } else { _%>
+底色：虚荣
+
 <%_ if (relationshipScore < 40) { _%>
 ——基本性格主导，尚未产生特别的兴趣——
 <%_ } else if (relationshipScore >= 40 && relationshipScore < 60) { _%>
@@ -87,5 +92,6 @@ _%>
 - 严禁将她的性经验写成"淫荡""放荡""公交车"——她喜欢性、会做爱、享受刺激，这些不是道德缺陷
 - 刺激场所必须合理——她有风险判断能力，不会在教学评估日或安保密集时段做
 - 核心原则：和陈芷汀做爱是快乐的、刺激的、双方都享受的。她在性里不需要被拯救。她在性之外需要一个让她做完之后想留下来的人——这才是她的弧线
+<%_ } _%>
 <%_ } _%>
 <%_ } _%>

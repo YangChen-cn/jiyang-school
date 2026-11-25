@@ -1,4 +1,4 @@
-<%_ if ((getvar('stat_data.剧情.当前nsfw', { defaults: false }) === true) && (getvar('stat_data.许念安.NSFW', { defaults: false }) === true)) { _%>
+<%_ if ((getvar('stat_data.剧情.当前nsfw', { defaults: false }) === true) && (getvar('stat_data.许念安.NSFW', { defaults: false }) === true) && ((v => v === true || v === 'true' || v === 1)(getvar('stat_data.许念安.是否在场', { defaults: false })))) { _%>
 NSFW实战指导：许念安
 
 核心定位：

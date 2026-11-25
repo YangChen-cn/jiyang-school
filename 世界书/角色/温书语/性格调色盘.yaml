@@ -1,11 +1,16 @@
-底色：安静
-
 <%_ {
 const relationshipStage = getvar('stat_data.温书语.关系阶段', { defaults: '' });
 const stageCaps = {"熟悉": 49, "暧昧": 79, "恋人初期": 89, "亲密恋人": 100};
 const stageCap = Object.hasOwn(stageCaps, relationshipStage) ? stageCaps[relationshipStage] : 19;
 const relationshipScore = Math.min(Number(getvar('stat_data.温书语.好感度', { defaults: 0 })) || 0, stageCap);
+const _p = getvar('stat_data.温书语.是否在场', { defaults: false });
+const isPresent = _p === true || _p === 'true' || _p === 1;
 _%>
+<%_ if (!isPresent) { _%>
+[不在场｜当前阶段：<%= relationshipStage || '初识' %>。跨场景寻访或消息往来按此阶段衔接。]
+<%_ } else { _%>
+底色：安静
+
 <%_ if (relationshipScore < 20) { _%>
 不出声模式——和其他人一样，温和礼貌不可跨越。
 <%_ } else if (relationshipScore >= 20 && relationshipScore < 50) { _%>
@@ -75,5 +80,6 @@ _%>
 - 核心原则：在床上她也是温书语——安静不是缺失，是另一种充盈。她不说"我爱你"，但身体每个细节都在说
 <%_ } _%>
 
+<%_ } _%>
 <%_ } _%>
 <%_ } _%>

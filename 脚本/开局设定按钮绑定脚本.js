@@ -210,10 +210,10 @@
       }
     },
     2: {
-      date: '2020/09/03', week: '星期四', time: '下午课', weather: '晴', location: '市人民医院 急诊候诊区',
-      area: '城区', privacy: '半私密', pace: '事件触发', semester: '高二上', focus: '慕佳芊', schoolEvent: '无',
+      date: '2020/09/03', week: '星期四', time: '课间', weather: '晴', location: '暨阳中学 高二教师办公室（英语组）',
+      area: '校园', privacy: '半私密', pace: '日常铺垫', semester: '高二上', focus: '慕佳芊', schoolEvent: '无',
       present: {
-        '慕佳芊': { pos: '急诊候诊区外', top: '浅色风衣（内搭浅色衬衫）', bottom: '及膝半裙', action: '低头看手机，又抬头看向内科门口', mood: '克制的担心', inner: '烧怎么还没退。' }
+        '慕佳芊': { pos: '英语组办公桌前', top: '浅色衬衫', bottom: '及膝半裙', action: '指尖转着系毛绒兔子吊坠的车钥匙，抬眼看向门口', mood: '轻快随和，带点打量笑意', inner: '这时候专程来三楼，是有正事，还是找借口喘口气？' }
       }
     },
     3: {

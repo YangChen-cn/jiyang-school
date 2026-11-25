@@ -2,7 +2,7 @@
     "projects": {
         "暨阳中学": {
             "state_file": "tavern-cards-state.json",
-            "artifact": "暨阳中学v2.2.png"
+            "artifact": "暨阳中学v2.3.png"
         }
     },
     "default_part_order": {

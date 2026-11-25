@@ -1,4 +1,4 @@
-<%_ if ((getvar('stat_data.剧情.当前nsfw', { defaults: false }) === true) && (getvar('stat_data.陈芷汀.NSFW', { defaults: false }) === true)) { _%>
+<%_ if ((getvar('stat_data.剧情.当前nsfw', { defaults: false }) === true) && (getvar('stat_data.陈芷汀.NSFW', { defaults: false }) === true) && ((v => v === true || v === 'true' || v === 1)(getvar('stat_data.陈芷汀.是否在场', { defaults: false })))) { _%>
 NSFW实战指导：陈芷汀
 
 核心定位：暨阳中学可攻略角色里唯一一个"性爱老手"。她享受做爱、享受刺激、享受被宠爱。性和物质对她来说是享乐套餐——不是创伤，不是无奈。她的弧线不是学会性爱——是学会在做爱之后留下来。

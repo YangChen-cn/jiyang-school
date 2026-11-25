@@ -1,6 +1,6 @@
 {
-  "projectName": "暨阳中学v2.2",
-  "worldbookName": "暨阳中学v2.2",
+  "projectName": "暨阳中学v2.3",
+  "worldbookName": "暨阳中学v2.3",
   "form": "charactercard",
   "mvu": true,
   "entryManifest": {
@@ -1940,6 +1940,76 @@
           "order": 57
         }
       },
+      "万风地库": {
+        "path": "世界书/事件/万风地库.yaml",
+        "keywords": [
+          "万风地库",
+          "万风车库",
+          "地下车库",
+          "B2车库",
+          "万风B2",
+          "万风健身房",
+          "万风新天地",
+          "城东万风新天地"
+        ],
+        "abstract": "万风新天地地下空间暗线，可自由观察、核实或略过",
+        "uid": 98,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "万风地库",
+            "万风车库",
+            "地下车库",
+            "B2车库",
+            "万风B2",
+            "万风健身房",
+            "万风新天地",
+            "城东万风新天地"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 58
+        }
+      },
+      "珍珠局": {
+        "path": "世界书/事件/珍珠局.yaml",
+        "keywords": [
+          "珍珠局",
+          "澹珠记",
+          "山下湖",
+          "珍珠市场",
+          "国际珠宝城",
+          "原珠",
+          "开蚌",
+          "淡水珍珠",
+          "珠场"
+        ],
+        "abstract": "山下湖珍珠产业见闻与商务茶叙支线，多身份兼容可自由切入",
+        "uid": 99,
+        "enabled": true,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "珍珠局",
+            "澹珠记",
+            "山下湖",
+            "珍珠市场",
+            "国际珠宝城",
+            "原珠",
+            "开蚌",
+            "淡水珍珠",
+            "珠场"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 59
+        }
+      },
       "高校研学实践": {
         "path": "世界书/事件/高校研学实践.yaml",
         "keywords": [
@@ -2313,14 +2383,14 @@
     "role": "system",
     "depth": 0
   },
-  "avatar": "暨阳中学v2.2.png",
+  "avatar": "暨阳中学v2.3.png",
   "description": "",
   "first_messages": [
     "开场白/0.txt"
   ],
   "creator": "",
   "creator_notes": "",
-  "version": "v2.2",
+  "version": "v2.3",
   "create_date": "2026-06-24T15:20:28.960Z",
   "extensions": {
     "tavern_helper": {
