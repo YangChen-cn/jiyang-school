@@ -9,7 +9,7 @@
 | 依赖 | 必需性 | 说明 |
 |---|---|---|
 | SillyTavern ≥ 1.12（支持 character card v3） | 必需 | 卡的 spec 为 `chara_card_v3` |
-| Tavern Helper / JS-Slash-Runner 扩展 | 必需 | 卡内 4 个 TH 脚本（MVU、Zod、开局设定、悬浮音乐播放器）由它执行 |
+| Tavern Helper / JS-Slash-Runner 扩展 | 必需 | 卡内 TH 脚本（MVU、Zod、开局设定、正文对白、状态栏引擎、多功能悬浮球）由它执行 |
 | MagVarUpdate（MVU） | 必需 | `脚本/MVU.txt` 从 CDN 引入 `bundle.js`；负责变量初始化、每轮追加状态栏占位符、变量更新 |
 | mvu_zod 桥接 | 必需 | `脚本/Zod.txt` 从 CDN 引入 `mvu_zod.js`；负责 schema 校验回写 |
 | Tavern Helper「宏」功能开启 | 必需 | 状态栏使用 `{{format_message_variable::stat_data...}}`，关闭宏会导致 AI 看到字面文本、状态失忆 |
@@ -42,7 +42,7 @@ schema.ts                    变量 schema 的【唯一事实源】（TS 对象�
 脚本/MVU.txt                 MVU bundle 引入语句
 脚本/validate.py             构建一致性校验器（构建末尾自动执行；0 error 才算成功）
 脚本/开局设定按钮绑定脚本.js   <OpeningSetupUI/> 开局页的交互 binder
-脚本/悬浮音乐播放器.js        悬浮 BGM 播放器
+脚本/多功能悬浮球.js          多功能悬浮球（随身广播 + 灵气复苏DLC开关）
 正则/                        regex 脚本源文件（replaceString 在构建时注入）
 开场白/                       0.txt=first_mes 挂载标记；0-*.txt 起为 alternate greetings
 世界书/                       世界书条目正文（多数是给 AI 的 prompt 文本，不是严格 YAML）

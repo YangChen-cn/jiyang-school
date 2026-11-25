@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * 将 DLC 世界书源条目（世界书内容与 tavern-cards-state.json 元数据）同步嵌入
- * 脚本/悬浮音乐播放器.js 的 JY_DLC_MANIFEST_BEGIN/END 区间，保证打包卡与实时注入单源一致。
+ * 脚本/多功能悬浮球.js 的 JY_DLC_MANIFEST_BEGIN/END 区间，保证打包卡与实时注入单源一致。
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -10,11 +10,12 @@ import { fileURLToPath } from 'node:url';
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, '..');
 const statePath = path.join(root, 'tavern-cards-state.json');
-const playerPath = path.join(here, '悬浮音乐播放器.js');
+const playerPath = path.join(here, '多功能悬浮球.js');
 
 const DLC_KEYS = [
   ['世界观', '[DLC]灵气复苏总纲与异象日程'],
   ['事件', '[DLC]老鹰山灵脉与古宗秘藏'],
+  ['事件', '[DLC]红尘灵根与渡凡引途'],
   ['角色', '云清晏_基础信息'],
   ['角色', '云清晏_性格调色盘'],
   ['NSFW指导', '云清晏_NSFW指导'],
@@ -45,11 +46,11 @@ const manifestEntries = DLC_KEYS.map(([group, comment]) => {
 const playerSrc = fs.readFileSync(playerPath, 'utf8');
 const pattern = /(\/\*\s*JY_DLC_MANIFEST_BEGIN\s*\*\/\s*)[\s\S]*?(\s*\/\*\s*JY_DLC_MANIFEST_END\s*\*\/)/;
 if (!pattern.test(playerSrc)) {
-  console.warn('[生成DLC] 悬浮音乐播放器.js 尚未包含 JY_DLC_MANIFEST_BEGIN/END 锚点，跳过写入');
+  console.warn('[生成DLC] 多功能悬浮球.js 尚未包含 JY_DLC_MANIFEST_BEGIN/END 锚点，跳过写入');
   process.exit(0);
 }
 
 const payload = `const DLC_ENTRIES = ${JSON.stringify(manifestEntries)};`;
 const nextSrc = playerSrc.replace(pattern, (_, head, tail) => `${head}\n  ${payload}\n  ${tail.trimStart()}`);
 fs.writeFileSync(playerPath, nextSrc, 'utf8');
-console.log(`[生成DLC] 已同步 ${manifestEntries.length} 条 DLC 世界书条目到 脚本/悬浮音乐播放器.js`);
+console.log(`[生成DLC] 已同步 ${manifestEntries.length} 条 DLC 世界书条目到 脚本/多功能悬浮球.js`);
