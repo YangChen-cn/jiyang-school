@@ -227,6 +227,10 @@ for (const [name, misses, hits] of [
   ['[DLC]境界描述', ['他说这首诗的境界很高'], ['我现在是什么境界', '开始炼气']],
   ['虞淑婉_日常接触', ['去英语老师办公室交作业', '到行政楼一楼交表'], ['去校长办公室找虞校长']],
   ['俞嘉豪_基础信息', ['他们在聊电视剧里的联姻'], ['问问苏俞联姻是怎么回事', '去见俞嘉豪']],
+  ['慕佳芊_基础信息', [], ['慕老师，作业交给你']],
+  ['慕佳芊_性格调色盘', [], ['慕老师，作业交给你']],
+  ['许念安_基础信息', [], ['学委，我来交作业']],
+  ['许念安_性格调色盘', [], ['学委，我来交作业']],
 ]) {
   for (const line of misses) assert.equal(matchesWorldbookKey(name, line), false, name + ' 误触发：' + line);
   for (const line of hits) assert.equal(matchesWorldbookKey(name, line), true, name + ' 漏触发：' + line);
@@ -806,6 +810,13 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    },
  });
  const enabled={'stat_data.剧情.灵气复苏.已开启':true};
+ const catalog=worldbookByName.get('角色速览');
+ assert.equal(catalog.constant,true);
+ assert.doesNotMatch(render(catalog.content),/云清晏/);
+ assert.doesNotMatch(render(catalog.content,{'stat_data.剧情.灵气复苏.已开启':false}),/云清晏/);
+ const catalogOn=render(catalog.content,enabled);
+ assert.match(catalogOn,/姓名: 云清晏[\s\S]*校内身份: 外省借读生/);
+ assert.equal((catalogOn.match(/姓名: 云清晏/g)??[]).length,1);
  for (const [name,entry] of dlcEntries) {
    assert.ok(entry, '卡内缺 DLC 条目 ' + name);
    assert.equal(entry.enabled,false);
@@ -830,7 +841,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const rulesOn=render(updateRulesTpl,enabled);
  assert.doesNotMatch(rulesOff,/云清晏|灵气复苏|主角\.修行|观澜|道侣/);
  assert.match(rulesOn,/云清晏\.好感度[\s\S]*观澜[\s\S]*问道[\s\S]*动念[\s\S]*同参[\s\S]*道侣/);
- assert.match(rulesOn,/云清晏\.是否在场:[\s\S]*班主任完成入班引荐时置 true/);
+ assert.match(rulesOn,/云清晏\.是否在场:\s+type: boolean\s+check:\s+- 初始 false；按实际同场情形更新。/);
  assert.doesNotMatch(rulesOn,/已入班/);
  assert.doesNotMatch(rulesOff,/修士风闻/);
  assert.match(rulesOn,/渠道也可用「修士风闻」/);
