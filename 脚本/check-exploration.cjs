@@ -809,6 +809,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    '云清晏_NSFW指导',
    '[DLC]境界描述',
    '[DLC]破境判定',
+   '[DLC]华夏修行界与隐世宗门世家',
  ];
  const retiredDlcNames=['[DLC]修行阶梯与仙凡抉择','[DLC]灵潮异象与隐秘特调'];
  assert.ok(!cardEntries.some(entry=>retiredDlcNames.includes(entry.comment)));
@@ -834,7 +835,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    assert.equal(render(entry.content).trim(),'',name + ' 在无 DLC 的聊天应为空');
    assert.equal(render(entry.content,{'stat_data.剧情.灵气复苏.已开启':false}).trim(),'',name + ' 在封缄的聊天应为空');
  }
- for (const [name,key] of [[dlcNames[1],'镇风铎'],['[DLC]境界描述','暗劲'],['[DLC]破境判定','冲关']]) {
+ for (const [name,key] of [[dlcNames[1],'镇风铎'],['[DLC]境界描述','暗劲'],['[DLC]破境判定','冲关'],['[DLC]华夏修行界与隐世宗门世家','杭城']]) {
    const entry=dlcEntries.get(name);
    assert.equal(entry.constant,false);
    assert.ok(entry.keys.includes(key));
@@ -910,6 +911,12 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.match(render(realm.content,enabled),/炼气[\s\S]*筑基[\s\S]*金丹[\s\S]*元婴[\s\S]*化神[\s\S]*古武/);
  const breakthrough=dlcEntries.get('[DLC]破境判定');
  assert.match(render(breakthrough.content,enabled),/实际冲关[\s\S]*暂稳[\s\S]*失败保留原境/);
+ const jianghu=dlcEntries.get('[DLC]华夏修行界与隐世宗门世家');
+ const jianghuRendered=render(jianghu.content,enabled);
+ assert.match(jianghuRendered,/杭城·钱塘隐世世家[\s\S]*钱塘顾氏[\s\S]*龙井隐市/);
+ assert.match(jianghuRendered,/魔都·沪上隐世世家[\s\S]*静安古钟阁[\s\S]*崇明归墟坛/);
+ assert.match(jianghuRendered,/天台国清[\s\S]*茅山[\s\S]*龙虎山[\s\S]*武当/);
+ assert.doesNotMatch(jianghuRendered,/澹珠|万风/);
 
  const [yunBase,yunPalette,yunNsfw]=dlcNames.slice(2,5).map(name=>dlcEntries.get(name).content);
  const scene={...enabled,...origin,'stat_data.世界.日期':'2020-09-04','stat_data.世界.当前位置':'高二重点班教室','stat_data.世界.时间段':'上午','stat_data.剧情.学期':'高二上','stat_data.主角.班级':'高二(8)班'};
@@ -998,6 +1005,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
 
  mp.querySelector('[data-console-tab="codex"]').click();
  assert.equal(mp.querySelector('[data-panel="codex"]').hidden,false);
+ assert.match(mp.querySelector('[data-panel="codex"]').textContent,/杭城与魔都[\s\S]*名山仙宗/);
  mp.querySelector('[data-console-tab="dlc"]').click();
  const toggle=()=>mp.querySelector('[data-action="dlc-toggle"]').click();
  toggle();
