@@ -1,44 +1,22 @@
 <%_ if (getvar('stat_data.剧情.灵气复苏.已开启', { defaults: false }) === true) { _%>
-<%_ {
-const toIsoDay = (raw) => {
-  const m = String(raw || '').trim().match(/^(\d{4})[-/年.](\d{1,2})[-/月.](\d{1,2})/);
-  if (!m) return null;
-  const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);
-  if (mo < 1 || mo > 12 || d < 1 || d > 31) return null;
-  return Date.UTC(y, mo - 1, d);
-};
-const originStr = String(getvar('stat_data.剧情.灵气复苏.开启日期', { defaults: '' }) || '2020-09-01');
-const curStr = String(getvar('stat_data.世界.日期', { defaults: '' }) || originStr);
-const startMs = toIsoDay(originStr) ?? Date.UTC(2020, 8, 1);
-const curMs = toIsoDay(curStr) ?? startMs;
-const elapsedDays = Math.max(0, Math.floor((curMs - startMs) / 86400000));
+<%_
 const presencePath = 'stat_data.云清晏.是否在场';
 const present = value => value === true || value === 'true' || value === 1;
 const isPresent = present(getvar(presencePath, { defaults: false }));
-const stage = getvar('stat_data.云清晏.关系阶段', { defaults: '观澜' });
-const realmState = getvar('stat_data.云清晏.当前境界', { defaults: '金丹跌境（重创封蛰）' });
-const wound = getvar('stat_data.云清晏.伤势余韵', { defaults: '元婴劫伤未愈·阴雨畏寒' });
-const cls = String(getvar('stat_data.主角.班级', { defaults: '' }) || '高二重点班');
-const location = String(getvar('stat_data.世界.当前位置', { defaults: '' }));
-const schoolStage = getvar('stat_data.剧情.学期', { defaults: '' });
-const schoolTime = getvar('stat_data.世界.时间段', { defaults: '' });
-const classScene = /教室/.test(location) && !/音乐|美术|闲置|空置/.test(location);
-let canEnroll = elapsedDays >= 1 && !isPresent && classScene && /早自习|上午|下午|上课|课间|晚自习/.test(schoolTime)
-  && !/暑假|寒假|已毕业/.test(schoolStage) && !/毕业/.test(cls);
-if (canEnroll) {
-  // Query the selected swipes in this chat only. The first on-scene encounter closes the introduction.
-  for (let id = lastMessageId; id >= 0; id--) {
-    if (present(getvar(presencePath, { scope: 'message', withMsg: { id }, defaults: false }))) {
-      canEnroll = false;
-      break;
-    }
-  }
+let hasAppeared = isPresent;
+for (let id = lastMessageId; id >= 0 && !hasAppeared; id--) {
+  hasAppeared = present(getvar(presencePath, { scope: 'message', withMsg: { id }, defaults: false }));
 }
 _%>
-<%_ if (canEnroll) { _%>
-[云清晏｜初次入班] 本场若顺接教室日常，可由班主任引荐借读生云清晏进入<%= cls %>。班主任完成引荐后，云清晏在场。
+<%_ if (!hasAppeared) {
+const cls = getvar('stat_data.主角.班级', { defaults: '' }) || '高二重点班';
+_%>
+[云清晏｜初次入班] 当前剧情照常推进。下次自然衔接班级日常时，由班主任向<%= cls %>引荐外省借读生云清晏。她体弱寡言，以檀木簪挽发。引荐当轮写入「云清晏.是否在场=true」。
 <%_ } _%>
-<%_ if (elapsedDays >= 1 && (isPresent || canEnroll)) { _%>
+<%_ if (isPresent) {
+const realmState = getvar('stat_data.云清晏.当前境界', { defaults: '金丹跌境（重创封蛰）' });
+const wound = getvar('stat_data.云清晏.伤势余韵', { defaults: '元婴劫伤未愈·阴雨畏寒' });
+_%>
 角色档案：云清晏
   核心身份: 老鹰山「太微云岫宗」直系嫡传末代圣女；以本名在暨阳低调养伤。在校以体弱外省借读生为公开身份。
   真实来历与修为境况:
@@ -54,6 +32,5 @@ _%>
     - 她当年恰是以近乎「太上忘情」的孤高道心冲关元婴，结果在天道问心劫中瞬间溃败——天劫拷问她「不曾真正活过凡尘一朝一夕、不识冷暖牵挂，凭何窥长生至境？」
     - 跌落暨阳中学后，看着教室窗外夕阳与苏晓樯、温书语、沈幼楚等少女鲜活炽热、为几十年凡俗悲喜哭笑动容的模样，她第一次真正触到「人间」二字的分量。
     - 然而代价同样冷冽：**她终究有重铸元婴、再登仙路之望。若主人公渐渐靠近她、乃至走上「道侣共修」一途，灵气洗礼将拉长主角的寿元与时空尺度，把主角与仍留在凡俗时间流里各自生长的红尘故人渐渐推向「仙凡两隔」——她既贪恋这凡间一缕暖意，又不忍看着主角日后独自面对故人迟暮与青灯古山之痛。**
-<%_ } _%>
 <%_ } _%>
 <%_ } _%>

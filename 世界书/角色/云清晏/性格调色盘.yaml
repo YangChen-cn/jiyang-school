@@ -1,17 +1,5 @@
 <%_ if (getvar('stat_data.剧情.灵气复苏.已开启', { defaults: false }) === true) { _%>
 <%_ {
-const toIsoDay = (raw) => {
-  const m = String(raw || '').trim().match(/^(\d{4})[-/年.](\d{1,2})[-/月.](\d{1,2})/);
-  if (!m) return null;
-  const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);
-  if (mo < 1 || mo > 12 || d < 1 || d > 31) return null;
-  return Date.UTC(y, mo - 1, d);
-};
-const originStr = String(getvar('stat_data.剧情.灵气复苏.开启日期', { defaults: '' }) || '2020-09-01');
-const curStr = String(getvar('stat_data.世界.日期', { defaults: '' }) || originStr);
-const startMs = toIsoDay(originStr) ?? Date.UTC(2020, 8, 1);
-const curMs = toIsoDay(curStr) ?? startMs;
-const elapsedDays = Math.max(0, Math.floor((curMs - startMs) / 86400000));
 const relationshipStage = getvar('stat_data.云清晏.关系阶段', { defaults: '观澜' });
 const stageCaps = { "问道": 49, "动念": 79, "同参": 89, "道侣": 100 };
 const stageCap = Object.hasOwn(stageCaps, relationshipStage) ? stageCaps[relationshipStage] : 19;
@@ -19,7 +7,7 @@ const relationshipScore = Math.min(Number(getvar('stat_data.云清晏.好感度'
 const _p = getvar('stat_data.云清晏.是否在场', { defaults: false });
 const isPresent = _p === true || _p === 'true' || _p === 1;
 _%>
-<%_ if (elapsedDays >= 1 && isPresent) { _%>
+<%_ if (isPresent) { _%>
 底色：古宗孤清 × 劫后微寒 × 初涉红尘的庄重好奇
 
 <%_ if (relationshipScore < 20) { _%>

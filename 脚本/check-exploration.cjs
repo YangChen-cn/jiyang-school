@@ -786,6 +786,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const rulesOn=render(updateRulesTpl,enabled);
  assert.doesNotMatch(rulesOff,/云清晏|灵气复苏|主角\.修行|观澜|道侣/);
  assert.match(rulesOn,/云清晏\.好感度[\s\S]*观澜[\s\S]*问道[\s\S]*动念[\s\S]*同参[\s\S]*道侣/);
+ assert.match(rulesOn,/云清晏\.是否在场:[\s\S]*班主任完成入班引荐时置 true/);
  assert.doesNotMatch(rulesOn,/已入班/);
  assert.doesNotMatch(rulesOff,/修士风闻/);
  assert.match(rulesOn,/渠道也可用「修士风闻」/);
@@ -833,7 +834,8 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.match(timeline('2020-09-13'),/脱敏归档/);
  assert.match(timeline('2020-09-28'),/特种气象与非典型样本调查组/);
  assert.match(timeline('2020-10-18'),/外地散修与隐门/);
- assert.doesNotMatch(timeline('2020-09-04'),/今日抵达|初次入班/);
+ assert.match(timeline('2020-09-03'),/云清晏入世动向[\s\S]*借读手续/);
+ assert.doesNotMatch(timeline('2020-09-03'),/今日尚在途中|第2天起|初次入班/);
  assert.match(timeline('2020-09-04'),/公开所见与私下所知[\s\S]*证据不足时只说观察与推测/);
  const plot=cardEntries.find(entry=>entry.comment==='[mvu_plot]剧情推动器').content;
  assert.doesNotMatch(render(plot),/修仙暗线/);
@@ -846,22 +848,21 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const [yunBase,yunPalette,yunNsfw]=dlcNames.slice(2,5).map(name=>dlcEntries.get(name).content);
  const scene={...enabled,...origin,'stat_data.世界.日期':'2020-09-04','stat_data.世界.当前位置':'高二重点班教室','stat_data.世界.时间段':'上午','stat_data.剧情.学期':'高二上','stat_data.主角.班级':'高二(8)班'};
  const yun=(tpl,overrides={},floors=[])=>render(tpl,{...scene,...overrides},floors).trim();
- assert.match(yun(yunBase),/初次入班[\s\S]*高二\(8\)班/);
- assert.match(yun(yunBase,{'stat_data.世界.日期':'2020-09-10'}),/初次入班/);
- for (const overrides of [
-   {'stat_data.世界.日期':'2020-09-03'}, {'stat_data.世界.当前位置':'奶茶店'},
-   {'stat_data.世界.当前位置':'音乐教室'}, {'stat_data.剧情.学期':'暑假'},
-   {'stat_data.剧情.学期':'寒假'}, {'stat_data.剧情.学期':'已毕业'},
-   {'stat_data.世界.时间段':'深夜'},
- ]) assert.equal(yun(yunBase,overrides),'');
+ const launchDay={'stat_data.世界.日期':'2020-09-03'};
+ const intro=yun(yunBase,launchDay);
+ assert.match(intro,/初次入班[\s\S]*自然衔接班级日常[\s\S]*高二\(8\)班[\s\S]*云清晏\.是否在场=true/);
+ assert.doesNotMatch(intro,/角色档案：云清晏/);
+ assert.equal(yun(yunBase,{'stat_data.世界.当前位置':'行政楼一楼校长室','stat_data.世界.时间段':'午休'}),intro);
+ assert.match(render(yunBase,enabled),/初次入班/,'缺少日期和场景的旧存档也注入入班提醒');
  const present={'stat_data.云清晏.是否在场':true};
  const absent={'stat_data.云清晏.是否在场':false};
  assert.equal(yun(yunBase,absent,[{},present,absent,{}]),'','离场后仍用过往在场记录关闭入班');
  assert.match(yun(yunBase,absent,[{},absent,{}]),/初次入班/);
- assert.match(yun(yunBase,present),/金丹巅峰[\s\S]*元婴大劫[\s\S]*仙凡两隔/);
- assert.doesNotMatch(yun(yunBase,present),/初次入班|今日刚刚/);
+ const firstAppearance={...launchDay,...present};
+ assert.match(yun(yunBase,firstAppearance),/金丹巅峰[\s\S]*元婴大劫[\s\S]*仙凡两隔/);
+ assert.doesNotMatch(yun(yunBase,firstAppearance),/初次入班/);
  assert.equal(yun(yunPalette),'');
- assert.match(yun(yunPalette,{...present,'stat_data.云清晏.好感度':45,'stat_data.云清晏.关系阶段':'观澜'}),/观澜·尘外冷眸/);
+ assert.match(yun(yunPalette,{...firstAppearance,'stat_data.云清晏.好感度':45,'stat_data.云清晏.关系阶段':'观澜'}),/观澜·尘外冷眸/);
  assert.match(yun(yunPalette,{...present,'stat_data.云清晏.好感度':95,'stat_data.云清晏.关系阶段':'道侣'}),/仙凡重量/);
  assert.equal(yun(yunNsfw,{...present,'stat_data.剧情.当前nsfw':true}),'');
  assert.match(yun(yunNsfw,{...present,'stat_data.云清晏.NSFW':true,'stat_data.剧情.当前nsfw':true}),/NSFW实战指导：云清晏/);
