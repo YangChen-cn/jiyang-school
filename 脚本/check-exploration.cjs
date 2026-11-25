@@ -932,7 +932,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.doesNotMatch(rulesOff,/云清晏|谢昭宁|灵气复苏|主角\.修行|观澜|道侣|观风|执剑/);
  assert.match(rulesOn,/云清晏\.好感度[\s\S]*观澜[\s\S]*问道[\s\S]*动念[\s\S]*同参[\s\S]*道侣/);
  assert.match(rulesOn,/谢昭宁\.好感度[\s\S]*观风[\s\S]*试锋[\s\S]*折腰[\s\S]*同袍[\s\S]*执剑/);
- assert.match(rulesOn,/云清晏\.是否在场:\s+type: boolean\s+check:\s+- 初始 false；按实际同场情形更新。/);
+ assert.match(rulesOn,/\$\{云清晏\|谢昭宁\}\.是否在场:\s+type: boolean\s+check:\s+- 初始 false；同场可见闻翻 true/);
  assert.doesNotMatch(rulesOn,/已入班/);
  assert.doesNotMatch(rulesOff,/修士风闻/);
  assert.match(rulesOn,/渠道也可用「修士风闻」/);
@@ -984,23 +984,28 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    assert.ok(timeline(date).includes('第 '+day+' 日（'+stage+'）'));
  }
  assert.equal(dlcEntries.get(dlcNames[0]).constant,true);
- assert.match(timeline('2020-09-04'),/华夏龙脉与暨阳暗局[\s\S]*阵内避世与老怪出山铁律[\s\S]*修行契约与无上限阶梯[\s\S]*红尘、长生[\s\S]*旧调频收音机/);
+ assert.match(timeline('2020-09-04'),/华夏龙脉与暨阳暗局[\s\S]*阵内避世与老怪出山铁律[\s\S]*修行总纲与保密准则[\s\S]*灵根与保密铁律[\s\S]*旧调频收音机/);
+ assert.doesNotMatch(timeline('2020-09-04'),/云清晏|谢昭宁|仙凡两隔|极尽升华/);
  assert.match(timeline('2020-12-02'),/第五阶段·百宗出山期[\s\S]*出阵不损道基[\s\S]*陆续突破瓶口或解封出山/);
  assert.match(timeline('2020-09-13'),/脱敏归档/);
  assert.match(timeline('2020-09-28'),/特种气象与非典型样本调查组/);
  assert.match(timeline('2020-10-18'),/外地散修与隐门/);
- assert.match(timeline('2020-09-03'),/云清晏入世动向[\s\S]*借读手续/);
  assert.doesNotMatch(timeline('2020-09-03'),/今日尚在途中|第2天起|初次入班/);
- assert.match(timeline('2020-09-04'),/公开所见与私下所知[\s\S]*证据不足时只说观察与推测/);
+ assert.match(timeline('2020-09-04'),/公开所见与私下所知[\s\S]*证据不足时只作观察与推测/);
  const plot=cardEntries.find(entry=>entry.comment==='[mvu_plot]剧情推动器').content;
  assert.doesNotMatch(render(plot),/修仙暗线/);
  assert.match(render(plot,enabled),/当前校园事件或余波先收束/);
  const realm=dlcEntries.get('[DLC]境界描述');
- assert.match(render(realm.content,enabled),/炼气[\s\S]*筑基[\s\S]*金丹[\s\S]*元婴[\s\S]*化神[\s\S]*古武/);
+ const realmText=render(realm.content,enabled);
+ assert.match(realmText,/炼气[\s\S]*筑基[\s\S]*金丹[\s\S]*元婴[\s\S]*化神[\s\S]*古武/);
+ assert.doesNotMatch(realmText,/云清晏|跌境|极尽升华|炼气大圆满/);
  const breakthrough=dlcEntries.get('[DLC]破境判定');
- assert.match(render(breakthrough.content,enabled),/实际冲关[\s\S]*暂稳[\s\S]*失败保留原境/);
+ const breakthroughText=render(breakthrough.content,enabled);
+ assert.match(breakthroughText,/实际冲关[\s\S]*暂稳[\s\S]*失败保留原境/);
+ assert.doesNotMatch(breakthroughText,/云清晏|玉女轮回经|极尽升华|跌落/);
  const overview=render(dlcEntries.get('[DLC]华夏修行界与三教总览').content,enabled);
  assert.match(overview,/道、佛、儒[\s\S]*钱塘谢氏剑庐[\s\S]*魔都苏氏水府[\s\S]*天台赤城洞天/);
+ assert.doesNotMatch(overview,/云清晏/);
  const suClan=render(dlcEntries.get('[DLC]世家_魔都苏氏水府').content,enabled);
  assert.match(suClan,/沧溟水府[\s\S]*金丹巅峰[\s\S]*元婴期[\s\S]*暨阳苏家同源之秘[\s\S]*保有先天仙缘[\s\S]*先天太阴水脉仙缘/);
  const xieClan=render(dlcEntries.get('[DLC]世家_钱塘谢氏剑庐').content,enabled);
@@ -1019,7 +1024,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  for (const fName of dlcNames.slice(7)) {
    assert.doesNotMatch(render(dlcEntries.get(fName).content,enabled),/万风/);
  }
- assert.match(render(dlcMaster,{...enabled,...origin,'stat_data.世界.日期':'2020-09-04'}),/暨阳苏家（苏晓樯父祖一脉）实与魔都苏氏同源/);
+ assert.match(render(dlcMaster,{...enabled,...origin,'stat_data.世界.日期':'2020-09-04'}),/暨阳苏家（苏晓樯父祖一脉）实与魔都「苏氏沧溟水府」百年前同源/);
 
  const [yunBase,yunPalette,yunNsfw]=dlcNames.slice(2,5).map(name=>dlcEntries.get(name).content);
  const scene={...enabled,...origin,'stat_data.世界.日期':'2020-09-04','stat_data.世界.当前位置':'高二重点班教室','stat_data.世界.时间段':'上午','stat_data.剧情.学期':'高二上','stat_data.主角.班级':'高二(8)班'};
