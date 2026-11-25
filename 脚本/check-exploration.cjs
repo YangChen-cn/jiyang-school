@@ -913,9 +913,12 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.match(render(breakthrough.content,enabled),/实际冲关[\s\S]*暂稳[\s\S]*失败保留原境/);
  const jianghu=dlcEntries.get('[DLC]华夏修行界与隐世宗门世家');
  const jianghuRendered=render(jianghu.content,enabled);
- assert.match(jianghuRendered,/杭城·钱塘隐世世家[\s\S]*钱塘顾氏[\s\S]*龙井隐市/);
- assert.match(jianghuRendered,/魔都·沪上隐世世家[\s\S]*静安古钟阁[\s\S]*崇明归墟坛/);
- assert.match(jianghuRendered,/天台国清[\s\S]*茅山[\s\S]*龙虎山[\s\S]*武当/);
+ assert.match(jianghuRendered,/道、佛、儒/);
+ assert.match(jianghuRendered,/杭城·钱塘真修大族[\s\S]*钱塘谢氏[\s\S]*西溪葛氏[\s\S]*潮汐秘市/);
+ assert.match(jianghuRendered,/魔都·沪上巨室[\s\S]*魔都苏氏[\s\S]*沧溟水府[\s\S]*暨阳苏家同源之秘[\s\S]*保有那一缕先天水脉仙缘/);
+ assert.match(jianghuRendered,/赤城洞天[\s\S]*赤水剑宗[\s\S]*茅山[\s\S]*龙虎山[\s\S]*武当/);
+ assert.match(jianghuRendered,/金丹巅峰[\s\S]*元婴真君/);
+ assert.match(render(dlcMaster,{...enabled,...origin,'stat_data.世界.日期':'2020-09-04'}),/暨阳苏家（苏晓樯父祖一脉）实与魔都苏氏同源/);
  assert.doesNotMatch(jianghuRendered,/澹珠|万风/);
 
  const [yunBase,yunPalette,yunNsfw]=dlcNames.slice(2,5).map(name=>dlcEntries.get(name).content);
@@ -1005,7 +1008,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
 
  mp.querySelector('[data-console-tab="codex"]').click();
  assert.equal(mp.querySelector('[data-panel="codex"]').hidden,false);
- assert.match(mp.querySelector('[data-panel="codex"]').textContent,/杭城与魔都[\s\S]*名山仙宗/);
+ assert.match(mp.querySelector('[data-panel="codex"]').textContent,/三教隐世巨室[\s\S]*苏氏沧溟水府[\s\S]*名山仙宗/);
  mp.querySelector('[data-console-tab="dlc"]').click();
  const toggle=()=>mp.querySelector('[data-action="dlc-toggle"]').click();
  toggle();
