@@ -200,7 +200,7 @@ function checkRetiredCharacter(write) {
  assert.doesNotMatch(html,/stat_data\.凌知夏|avatars\/zhixia/);
  assert.doesNotMatch(read('脚本/正文对白.js'),/avatars\/zhixia/);
 }
-for (const alias of ['老鹰山','听风亭','旧值守屋','周伯','山路旧照']) assert.ok(manifest.entryManifest.事件.老鹰山仙人.strategy.keys.includes(alias));
+for (const alias of ['老鹰山仙人','听风亭','旧值守屋','周伯','山路旧照']) assert.ok(manifest.entryManifest.事件.老鹰山仙人.strategy.keys.includes(alias));
 assert.ok(!manifest.entryManifest.事件.远足.strategy.keys.includes('老鹰山'));
 const eventEntries = Object.values(manifest.entryManifest.事件);
 assert.equal(eventEntries.length, 18);
@@ -211,6 +211,31 @@ for (const side of ['万风地库', '珍珠局']) {
 }
 assert.ok(manifest.entryManifest.事件.万风地库.strategy.keys.includes('万风地库'));
 assert.ok(manifest.entryManifest.事件.珍珠局.strategy.keys.includes('澹珠记'));
+const worldbookByName = new Map(cardEntries.map(entry => [entry.comment, entry]));
+const matchesWorldbookKey = (entryName, ...messages) => {
+  const entry = worldbookByName.get(entryName);
+  const buffer = '\x01' + messages.slice(0, entry.extensions.scan_depth ?? 2).join('\n\x01');
+  return entry.keys.some(key => {
+    const pattern = key.match(/^\/(.+)\/([gimsuy]*)$/);
+    return pattern ? new RegExp(pattern[1], pattern[2]).test(buffer) : buffer.includes(key);
+  });
+};
+for (const [name, misses, hits] of [
+  ['万风地库', ['课间聊周末去万风新天地看电影', '我去万风健身房', '到小区地下车库取车', '学校的B2车库有空位', '万风旁边酒店的地下车库'], ['我去万风地库找人', '来到万风新天地的地下停车场', '到了万风 b2 层']],
+  ['老鹰山仙人', ['周末去老鹰山步道跑步'], ['问周伯那张山路旧照', '在听风亭歇一会']],
+  ['[DLC]老鹰山灵脉与古宗秘藏', ['走到听风亭和周伯打个招呼', '老家的院子有口枯井', '云清晏说自己来自太微云岫宗'], ['找镇风铎', '查一下云岫宗山门', '去老鹰山灵脉看看']],
+  ['珍珠局', ['我家在山下湖，手链用的是淡水珍珠'], ['去澹珠记看看', '去山下湖珍珠市场挑珠']],
+  ['[DLC]境界描述', ['他说这首诗的境界很高'], ['请介绍修炼境界', '开始炼气']],
+  ['虞淑婉_日常接触', ['去英语老师办公室交作业', '到行政楼一楼交表'], ['去校长办公室找虞校长']],
+  ['俞嘉豪_基础信息', ['他们在聊电视剧里的联姻'], ['问问苏俞联姻是怎么回事', '去见俞嘉豪']],
+]) {
+  for (const line of misses) assert.equal(matchesWorldbookKey(name, line), false, name + ' 误触发：' + line);
+  for (const line of hits) assert.equal(matchesWorldbookKey(name, line), true, name + ' 漏触发：' + line);
+}
+assert.equal(matchesWorldbookKey('万风地库', '去小区地下车库', '昨天去万风'), false);
+assert.equal(matchesWorldbookKey('万风地库', '继续过去', '我在万风新天地地库'), true);
+assert.equal(matchesWorldbookKey('地点_城东万风新天地', '周末去万风吃饭'), true);
+assert.equal(matchesWorldbookKey('地点_老鹰山', '周末去老鹰山步道跑步'), true);
 for (const period of periods) {
   for (const activity of period.activities || []) {
     assert.ok(read(activity.source).length > 0);
@@ -768,7 +793,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    assert.equal(render(entry.content).trim(),'',name + ' 在无 DLC 的聊天应为空');
    assert.equal(render(entry.content,{'stat_data.剧情.灵气复苏.已开启':false}).trim(),'',name + ' 在封缄的聊天应为空');
  }
- for (const [name,key] of [[dlcNames[1],'老鹰山'],['[DLC]境界描述','暗劲'],['[DLC]破境判定','冲关']]) {
+ for (const [name,key] of [[dlcNames[1],'镇风铎'],['[DLC]境界描述','暗劲'],['[DLC]破境判定','冲关']]) {
    const entry=dlcEntries.get(name);
    assert.equal(entry.constant,false);
    assert.ok(entry.keys.includes(key));
