@@ -858,6 +858,9 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.match(rootsEntry,/温书语[\s\S]*水木清灵根/);
  assert.match(rootsEntry,/沈幼楚[\s\S]*玄阴寒魄微苗/);
  assert.match(rootsEntry,/太微渡凡引[\s\S]*筑基后期[\s\S]*跌落/);
+ for (const f of ['世界书/世界观/DLC_灵气复苏总纲与异象日程.yaml','世界书/事件/DLC_老鹰山灵脉与古宗秘藏.yaml','世界书/事件/DLC_红尘灵根与渡凡引途.yaml']) {
+   assert.doesNotMatch(read(f),/澹珠|万风/,`修仙DLC条目 ${f} 不应强行绑定现代卖珠品牌或商场地库`);
+ }
 
  mw.eval(read('脚本/多功能悬浮球.js'));
  await new Promise(r=>mw.setTimeout(r,60));
