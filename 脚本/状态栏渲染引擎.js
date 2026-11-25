@@ -1602,7 +1602,7 @@
     const ori = parseMs(originRaw);
     const cur = parseMs(currentRaw) ?? ori;
     const elapsed = (ori !== null && cur !== null) ? Math.max(0, Math.floor((cur - ori) / 86400000)) : 0;
-    const stage = elapsed <= 10 ? '微兆潜龙期' : elapsed <= 25 ? '古武抬头期' : elapsed <= 45 ? '龙眼破禁期' : '两界并序期';
+    const stage = elapsed <= 10 ? '微兆潜龙期' : elapsed <= 25 ? '古武抬头期' : elapsed <= 45 ? '龙眼破禁期' : '潜龙秘序期';
     return { elapsed, dayNumber: elapsed + 1, stage };
   }
 

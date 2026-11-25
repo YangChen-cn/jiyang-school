@@ -797,7 +797,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.match(d0,/越中潜龙·归元眼/);
  assert.match(d0,/太微云岫宗/);
  assert.match(d0,/仙凡两隔/);
- assert.match(d0,/不设僵化天数或阶段天花板/);
+ assert.match(d0,/不设僵化时间或境界封顶/);
  assert.match(d0,/明日（第2天）起正式转入高二\(8\)班/);
  assert.doesNotMatch(d0,/第二阶段·古武抬头/);
 
@@ -813,7 +813,10 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.match(d35,/第 36 日（龙眼破禁期）/);
 
  const d55=renderDlcMaster('2020-09-03','2020-10-28');
- assert.match(d55,/第 56 日（两界并序期）/);
+ assert.match(d55,/第 56 日（潜龙秘序期）/);
+ assert.match(d55,/万里无一/);
+ assert.match(d55,/严禁向校方|永远不向普通民众与校园公布灵气真相/);
+ assert.doesNotMatch(d55,/特招通道/);
 
  const yunBase=read('世界书/角色/云清晏/基础信息.yaml');
  const yunPalette=read('世界书/角色/云清晏/性格调色盘.yaml');
