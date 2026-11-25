@@ -203,7 +203,7 @@ function checkRetiredCharacter(write) {
 for (const alias of ['老鹰山','听风亭','旧值守屋','周伯','山路旧照']) assert.ok(manifest.entryManifest.事件.老鹰山仙人.strategy.keys.includes(alias));
 assert.ok(!manifest.entryManifest.事件.远足.strategy.keys.includes('老鹰山'));
 const eventEntries = Object.values(manifest.entryManifest.事件);
-assert.equal(eventEntries.length, 19);
+assert.equal(eventEntries.length, 18);
 for (const side of ['万风地库', '珍珠局']) {
   const entry = manifest.entryManifest.事件[side];
   assert.ok(entry && entry.enabled && entry.strategy.scan_depth === 2);
@@ -745,7 +745,6 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const dlcNames=[
    '[DLC]灵气复苏总纲与异象日程',
    '[DLC]老鹰山灵脉与古宗秘藏',
-   '[DLC]红尘灵根与渡凡引途',
    '云清晏_基础信息',
    '云清晏_性格调色盘',
    '云清晏_NSFW指导',
@@ -758,7 +757,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
      assert.doesNotThrow(()=>ejs.compile(entry.content,{async:true}), `DLC EJS 编译失败: ${comment}`);
    }
  }
- assert.ok(!cardEntries.some(e=>e.comment.includes('古武与隐秘异闻') || e.comment==='[mvu_update]修仙变量契约'),'不应包含已移除条目');
+ assert.ok(!cardEntries.some(e=>e.comment.includes('古武与隐秘异闻') || e.comment==='[mvu_update]修仙变量契约' || e.comment==='[DLC]红尘灵根与渡凡引途'),'不应包含已移除条目');
  const initRaw=read('世界书/变量/initvar.yaml');
  assert.doesNotMatch(initRaw,/云清晏|灵气复苏|修行/);
 
@@ -815,7 +814,8 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
 
  const d55=renderDlcMaster('2020-09-03','2020-10-28');
  assert.match(d55,/第 56 日（潜龙秘序期）/);
- assert.match(d55,/万里无一/);
+ assert.match(d55,/不事先卡死/);
+ assert.doesNotMatch(d55,/水木清灵根|玄阴寒魄|太微渡凡引/);
  assert.match(d55,/严禁向校方|永远不向普通民众与校园公布灵气真相/);
  assert.doesNotMatch(d55,/特招通道/);
 
@@ -854,11 +854,8 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const statusWrap=md.getElementById('mount');
  statusWrap.innerHTML=neutral;
  mw.eval(engineCode);
- const rootsEntry=read('世界书/事件/DLC_红尘灵根与渡凡引途.yaml');
- assert.match(rootsEntry,/温书语[\s\S]*水木清灵根/);
- assert.match(rootsEntry,/沈幼楚[\s\S]*玄阴寒魄微苗/);
- assert.match(rootsEntry,/太微渡凡引[\s\S]*筑基后期[\s\S]*跌落/);
- for (const f of ['世界书/世界观/DLC_灵气复苏总纲与异象日程.yaml','世界书/事件/DLC_老鹰山灵脉与古宗秘藏.yaml','世界书/事件/DLC_红尘灵根与渡凡引途.yaml']) {
+ assert.equal(fs.existsSync(path.join(root,'世界书/事件/DLC_红尘灵根与渡凡引途.yaml')),false);
+ for (const f of ['世界书/世界观/DLC_灵气复苏总纲与异象日程.yaml','世界书/事件/DLC_老鹰山灵脉与古宗秘藏.yaml']) {
    assert.doesNotMatch(read(f),/澹珠|万风/,`修仙DLC条目 ${f} 不应强行绑定现代卖珠品牌或商场地库`);
  }
 
@@ -887,7 +884,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  await new Promise(r=>mw.setTimeout(r,80));
 
  assert.equal(mp.dataset.dlcActive,'true');
- assert.equal(mockBook.length, 7);
+ assert.equal(mockBook.length, 6);
  const injectedMaster=mockBook.find(e=>e.name==='[DLC]灵气复苏总纲与异象日程');
  assert.ok(injectedMaster && injectedMaster.enabled===true);
  assert.match(injectedMaster.content,/const dlcOriginDate = "2021-07-03";/);
