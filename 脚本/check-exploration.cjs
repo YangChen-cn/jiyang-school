@@ -1009,7 +1009,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(yun(yunBase,absent,[{},present,absent,{}]),'','离场后仍用过往在场记录关闭入班');
  assert.match(yun(yunBase,absent,[{},absent,{}]),/初次入班/);
  const firstAppearance={...launchDay,...present};
- assert.match(yun(yunBase,firstAppearance),/金丹巅峰[\s\S]*元婴大劫[\s\S]*仙凡两隔/);
+ assert.match(yun(yunBase,firstAppearance),/筑基大圆满[\s\S]*金丹结丹劫[\s\S]*仙凡两隔/);
  assert.doesNotMatch(yun(yunBase,firstAppearance),/初次入班/);
  assert.equal(yun(yunPalette),'');
  assert.match(yun(yunPalette,{...firstAppearance,'stat_data.云清晏.好感度':45,'stat_data.云清晏.关系阶段':'观澜'}),/观澜·尘外冷眸/);
@@ -1109,6 +1109,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(mockBook.find(entry=>entry.name===dlcNames[0]).uid,100);
  assert.equal(mockChats.A.stat_data.剧情.灵气复苏.开启日期,'2021-07-03');
  assert.equal(mockChats.A.stat_data.云清晏.是否在场,false);
+ assert.equal(mockChats.A.stat_data.云清晏.当前境界,'炼气圆满（道伤封蛰）');
  assert.equal(mockChats.A.stat_data.谢昭宁.是否在场,false);
  assert.equal(mockChats.A.stat_data.谢昭宁.关系阶段,'观风');
  assert.equal(mockChats.A.stat_data.云清晏.已入班,undefined);
