@@ -762,13 +762,13 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(ctrlWarn.textContent,'高压共生');
  aw.close();
 
- const dialogue=new JSDOM('<div id="chat"><div class="mes" is_user="false" mesid="1"><div class="mes_text"><p>{苏晓樯}「今天真热闹。」</p><p>{杨辰}「走吧。」</p></div></div></div><textarea id="send_textarea">未发送</textarea>',{runScripts:'dangerously',url:'http://localhost:18968',pretendToBeVisual:true});
+ const dialogue=new JSDOM('<div id="chat"><div class="mes" is_user="false" mesid="1"><div class="mes_text"><p>{苏晓樯}「今天真热闹。」</p><p>{杨辰}「走吧。」</p><p>{清晏}「那就走吧。」</p></div></div></div><textarea id="send_textarea">未发送</textarea>',{runScripts:'dangerously',url:'http://localhost:18968',pretendToBeVisual:true});
  const dw=dialogue.window;
  dw.getVariables=()=>({stat_data:{主角:{姓名:'杨辰'}}});
  dw.localStorage.setItem('jy-avatar:苏晓樯','data:image/png;base64,YWJj');
  dw.eval(read('脚本/正文对白.js'));
  const rows=dw.document.querySelectorAll('[data-jy-dialogue-row]');
- assert.equal(rows.length,2);
+ assert.equal(rows.length,3);
  assert.equal(rows[0].dataset.speakerCanon,'苏晓樯');
  assert.equal(rows[1].dataset.player,'true');
  const avatar=rows[0].querySelector('[data-jy-dialogue-avatar]');
@@ -783,6 +783,17 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(playerAvatar.querySelector('img'),null);
  assert.notEqual(dw.getComputedStyle(playerAvatar.querySelector('[data-jy-dialogue-fallback]')).display,'none');
  assert.equal(avatar.querySelector('img').getAttribute('src'),'data:image/png;base64,YWJj');
+ assert.equal(rows[2].dataset.speakerCanon,'云清晏');
+ const yunAvatar=rows[2].querySelector('[data-jy-dialogue-avatar] img');
+ const yunAvatarSrc=yunAvatar.src;
+ assert.match(yunAvatarSrc,/\/albums\/v1\/yunqingyan\/campus\.webp$/);
+ yunAvatar.dispatchEvent(new dw.Event('error'));
+ assert.match(yunAvatar.src,/^https:\/\/cdn\.jsdelivr\.net\//);
+ const yunSelectedSrc=yunAvatarSrc.replace(/campus\.webp$/,'teahouse.webp');
+ dw.localStorage.setItem('jy-avatar:云清晏',yunSelectedSrc);
+ dw.dispatchEvent(new dw.CustomEvent('jy-avatar-changed'));
+ await new Promise(resolve=>dw.setTimeout(resolve,100));
+ assert.equal(rows[2].querySelector('[data-jy-dialogue-avatar] img').src,yunSelectedSrc);
  assert.equal(dw.document.querySelector('#send_textarea').value,'未发送');
  dw.__jyDialogue.destroy();
  assert.equal(dw.document.querySelector('[data-jy-dialogue-row]'),null);
@@ -1013,7 +1024,18 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.doesNotMatch(forumFeed.textContent,/暑假自习/);
  assert.equal(history.contentDocument.querySelector('[data-cultivation-channel]').hidden,true);
  assert.doesNotMatch(history.contentDocument.querySelector('[data-campus-list]').textContent,/山顶青光/);
- assert.match(md.querySelector('[data-dlc-heroine="云清晏"] .jy-avatar').src,/^data:image\/svg\+xml/);
+ const yunStatus=md.querySelector('[data-dlc-heroine="云清晏"]');
+ const yunStatusAvatar=yunStatus.querySelector('.jy-avatar');
+ assert.equal(yunStatusAvatar.src,yunAvatarSrc);
+ yunStatus.querySelector('[data-action="open-album"]').click();
+ const yunPhotos=[...md.querySelectorAll('.jy-album-photo')];
+ assert.deepEqual(yunPhotos.map(photo=>photo.src.split('/').at(-1)),['campus.webp','teahouse.webp','mountain.webp']);
+ assert.ok(yunPhotos.every(photo=>photo.src.includes('/albums/v1/yunqingyan/')));
+ assert.equal(yunPhotos[0].src,yunAvatarSrc);
+ yunPhotos[1].closest('.jy-album-item').querySelector('[data-action="set-album-avatar"]').click();
+ assert.equal(mw.localStorage.getItem('jy-avatar:云清晏'),yunSelectedSrc);
+ assert.equal(yunStatusAvatar.src,yunSelectedSrc);
+ md.querySelector('[data-action="close-album"]').click();
 
  chatId='B';
  await onChatChanged();

@@ -239,7 +239,7 @@
       ['yu/campus.png', '校长室'], ['yu/outdoor.png', '书店傍晚'],
       ['yu/pic-2.png', '生活照片 02'], ['yu/pic-3.png', '生活照片 03'], ['yu/pic-4.png', '生活照片 04'], ['yu/pic-6.jpg', '生活照片 06']
     ],
-    '云清晏': []
+    '云清晏': [['yunqingyan/campus.webp', '校服 · 初入暨阳'], ['yunqingyan/teahouse.webp', '便装 · 雨后茶铺'], ['yunqingyan/mountain.webp', '宗门服 · 老鹰山']]
   };
 
   const CHAR_THRESHOLDS = {

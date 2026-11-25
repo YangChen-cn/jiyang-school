@@ -19,15 +19,16 @@
   const failedScenes = new WeakMap();
   const subscriptions = [];
   const defaults = {
-    '苏晓樯': 'v2/avatars/xiaoqiang.png',
-    '温书语': 'v2/avatars/shuyu.png',
-    '沈幼楚': 'v2/avatars/youchu.png',
-    '许念安': 'v2/avatars/nianan.png',
-    '慕佳芊': 'v2/avatars/jiaqian.png',
-    '陈芷汀': 'v2/avatars/zhiting.png',
-    '虞淑婉': 'v1/avatars/shuwan.png',
-    '吴臻臻': 'v2/avatars/wuzhenzhen.webp',
-    '俞嘉豪': 'v2/avatars/yujiahao.webp',
+    '苏晓樯': 'statusbar/v2/avatars/xiaoqiang.png',
+    '温书语': 'statusbar/v2/avatars/shuyu.png',
+    '沈幼楚': 'statusbar/v2/avatars/youchu.png',
+    '许念安': 'statusbar/v2/avatars/nianan.png',
+    '慕佳芊': 'statusbar/v2/avatars/jiaqian.png',
+    '陈芷汀': 'statusbar/v2/avatars/zhiting.png',
+    '虞淑婉': 'statusbar/v1/avatars/shuwan.png',
+    '云清晏': 'albums/v1/yunqingyan/campus.webp',
+    '吴臻臻': 'statusbar/v2/avatars/wuzhenzhen.webp',
+    '俞嘉豪': 'statusbar/v2/avatars/yujiahao.webp',
   };
   const reserved = new Set(['旁白', '系统', '状态', '状态栏', '选项', '规则', '内心独白']);
   // 模型偶尔会用称呼写标签，映射回标准角色名，才能命中同名头像缓存。
@@ -103,9 +104,9 @@
       if (safeSource(cached)) sources.push(cached);
     } catch (_) {}
     if (Object.hasOwn(defaults, name)) {
-      sources.push('https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/' + defaults[name]);
-      sources.push('https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/' + defaults[name]);
-      sources.push('https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/' + defaults[name]);
+      sources.push('https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/' + defaults[name]);
+      sources.push('https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/' + defaults[name]);
+      sources.push('https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/' + defaults[name]);
     }
     return sources;
   }
