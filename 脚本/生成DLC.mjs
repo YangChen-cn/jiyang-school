@@ -18,7 +18,6 @@ const DLC_KEYS = [
   ['角色', '云清晏_基础信息'],
   ['角色', '云清晏_性格调色盘'],
   ['NSFW指导', '云清晏_NSFW指导'],
-  ['MVU', '[mvu_update]修仙变量契约'],
 ];
 
 const state = JSON.parse(fs.readFileSync(statePath, 'utf8'));

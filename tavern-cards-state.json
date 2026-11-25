@@ -2356,23 +2356,6 @@
           "depth": 0,
           "order": 150
         }
-      },
-      "[mvu_update]修仙变量契约": {
-        "path": "世界书/MVU/DLC_修仙变量契约.yaml",
-        "part": "update_rules",
-        "keywords": [],
-        "abstract": "都市修仙DLC专属MVU变量更新契约（未开启DLC时禁用零开销）",
-        "uid": 105,
-        "enabled": false,
-        "strategy": {
-          "type": "constant"
-        },
-        "position": {
-          "type": "at_depth",
-          "role": "system",
-          "depth": 0,
-          "order": 145
-        }
       }
     },
     "时间线": {

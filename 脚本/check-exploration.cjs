@@ -748,7 +748,6 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    '云清晏_基础信息',
    '云清晏_性格调色盘',
    '云清晏_NSFW指导',
-   '[mvu_update]修仙变量契约',
  ];
  for (const comment of dlcNames) {
    const entry=cardEntries.find(e=>e.comment===comment);
@@ -758,9 +757,17 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
      assert.doesNotThrow(()=>ejs.compile(entry.content,{async:true}), `DLC EJS 编译失败: ${comment}`);
    }
  }
- assert.ok(!cardEntries.some(e=>e.comment.includes('古武与隐秘异闻')),'不应包含已取消的古武条目');
+ assert.ok(!cardEntries.some(e=>e.comment.includes('古武与隐秘异闻') || e.comment==='[mvu_update]修仙变量契约'),'不应包含已移除条目');
  const initRaw=read('世界书/变量/initvar.yaml');
  assert.doesNotMatch(initRaw,/云清晏|灵气复苏|修行/);
+
+ // Verify 变量更新规则.yaml hides 云清晏/修仙规则 when DLC is OFF and reveals custom Saintess rules when DLC is ON
+ const updateRulesTpl=read('世界书/变量/变量更新规则.yaml');
+ const rulesOff=ejs.render(updateRulesTpl,{getvar:()=>false});
+ const rulesOn=ejs.render(updateRulesTpl,{getvar:k=>k==='stat_data.剧情.灵气复苏.已开启'});
+ assert.doesNotMatch(rulesOff,/云清晏|灵气复苏|主角\.修行|观澜|道侣/);
+ assert.match(rulesOn,/云清晏\.好感度[\s\S]*观澜[\s\S]*问道[\s\S]*动念[\s\S]*同参[\s\S]*道侣/);
+ assert.match(rulesOn,/常规校园献殷勤\/请客炫富\/嘴花花撩拨完全\+0/);
 
  // Validate Schemas for non-DLC vs DLC modes + Zod BEFORE_MESSAGE_UPDATE phase sync + 关系节奏
  const plainParsed=schemaBox.schema.parse({世界:{日期:'2020-09-01'},苏晓樯:{好感度:5}});
@@ -768,7 +775,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(plainParsed.主角.修行,undefined);
  assert.equal(plainParsed.剧情.灵气复苏,undefined);
 
- const dlcSave={世界:{日期:'2020-09-20'},剧情:{灵气复苏:{已开启:true,开启日期:'2020-09-03',阶段:'旧值'}},主角:{修行:{境界:'筑基初期',灵气感应:35,功法与秘术:['太微引气篇']}},云清晏:{是否在场:true,好感度:22,关系阶段:'熟悉',当前境界:'金丹跌境'}};
+ const dlcSave={世界:{日期:'2020-09-20'},剧情:{灵气复苏:{已开启:true,开启日期:'2020-09-03',阶段:'旧值'}},主角:{修行:{境界:'筑基初期',灵气感应:35,功法与秘术:['太微引气篇']}},云清晏:{是否在场:true,好感度:22,关系阶段:'问道',当前境界:'金丹跌境'}};
  const dlcParsed=schemaBox.schema.parse(dlcSave);
  assert.equal(dlcParsed.云清晏.好感度,22);
  assert.equal(dlcParsed.主角.修行.境界,'筑基初期');
@@ -812,7 +819,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const yunPalette=read('世界书/角色/云清晏/性格调色盘.yaml');
  const yunNsfw=read('世界书/角色/云清晏/NSFW指导.yaml');
  const renderYun=(tpl,overrides={})=>{
-   const vals={'stat_data.剧情.灵气复苏.开启日期':'2020-09-03','stat_data.世界.日期':'2020-09-04','stat_data.云清晏.是否在场':false,'stat_data.云清晏.关系阶段':'初识','stat_data.云清晏.好感度':0,'stat_data.云清晏.NSFW':false,'stat_data.剧情.当前nsfw':false,'stat_data.主角.班级':'高二(8)班',...overrides};
+   const vals={'stat_data.剧情.灵气复苏.开启日期':'2020-09-03','stat_data.世界.日期':'2020-09-04','stat_data.云清晏.是否在场':false,'stat_data.云清晏.关系阶段':'观澜','stat_data.云清晏.好感度':0,'stat_data.云清晏.NSFW':false,'stat_data.剧情.当前nsfw':false,'stat_data.主角.班级':'高二(8)班',...overrides};
    return ejs.render(tpl,{getvar:k=>vals[k]??''});
  };
  assert.match(renderYun(yunBase,{'stat_data.世界.日期':'2020-09-03'}),/启封首日未入校伏笔/);
@@ -821,7 +828,8 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.match(yunPresent,/金丹巅峰/);
  assert.match(yunPresent,/元婴大劫/);
  assert.match(yunPresent,/仙凡两隔/);
- assert.match(renderYun(yunPalette,{'stat_data.云清晏.是否在场':true,'stat_data.云清晏.好感度':95,'stat_data.云清晏.关系阶段':'亲密恋人'}),/仙凡重量/);
+ assert.match(renderYun(yunPalette,{'stat_data.云清晏.是否在场':true,'stat_data.云清晏.好感度':45,'stat_data.云清晏.关系阶段':'观澜'}),/观澜·尘外冷眸/);
+ assert.match(renderYun(yunPalette,{'stat_data.云清晏.是否在场':true,'stat_data.云清晏.好感度':95,'stat_data.云清晏.关系阶段':'道侣'}),/仙凡重量/);
  assert.equal(renderYun(yunNsfw,{'stat_data.云清晏.是否在场':true,'stat_data.云清晏.NSFW':false,'stat_data.剧情.当前nsfw':true}).trim(),'');
  assert.match(renderYun(yunNsfw,{'stat_data.云清晏.是否在场':true,'stat_data.云清晏.NSFW':true,'stat_data.剧情.当前nsfw':true}),/NSFW实战指导：云清晏/);
 
@@ -867,13 +875,13 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  await new Promise(r=>mw.setTimeout(r,80));
 
  assert.equal(mp.dataset.dlcActive,'true');
- assert.equal(mockBook.length, 7);
+ assert.equal(mockBook.length, 6);
  const injectedMaster=mockBook.find(e=>e.name==='[DLC]灵气复苏总纲与异象日程');
  assert.ok(injectedMaster && injectedMaster.enabled===true);
  assert.match(injectedMaster.content,/const dlcOriginDate = "2021-07-03";/);
  assert.equal(mockVars.stat_data.剧情.灵气复苏.已开启,true);
  assert.equal(mockVars.stat_data.剧情.灵气复苏.开启日期,'2021-07-03');
- assert.equal(mockVars.stat_data.云清晏.关系阶段,'初识');
+ assert.equal(mockVars.stat_data.云清晏.关系阶段,'观澜');
 
  const sealOv=md.getElementById('jy-aura-seal-overlay');
  assert.ok(sealOv,'应渲染全屏古风阵法特效 #jy-aura-seal-overlay');

@@ -13,7 +13,7 @@ const curMs = toIsoDay(curStr) ?? startMs;
 const elapsedDays = Math.max(0, Math.floor((curMs - startMs) / 86400000));
 const _p = getvar('stat_data.云清晏.是否在场', { defaults: false });
 const isPresent = _p === true || _p === 'true' || _p === 1;
-const stage = getvar('stat_data.云清晏.关系阶段', { defaults: '初识' });
+const stage = getvar('stat_data.云清晏.关系阶段', { defaults: '观澜' });
 const realmState = getvar('stat_data.云清晏.当前境界', { defaults: '金丹跌境（重创封蛰）' });
 const wound = getvar('stat_data.云清晏.伤势余韵', { defaults: '元婴劫伤未愈·阴雨畏寒' });
 const cls = String(getvar('stat_data.主角.班级', { defaults: '' }) || '高二重点班');

@@ -298,11 +298,35 @@ if yaml:
             warn(f'G: schema 有而 initvar 无 {c}: {miss}')
 
 # ---------- H. YAML 合法性 ----------
+def strip_ejs_branches(raw_text, include_dlc=True):
+    """Strip EJS tags cleanly so both DLC-OFF and DLC-ON views validate as strict YAML."""
+    out_lines = []
+    skipping = False
+    for ln in raw_text.splitlines():
+        st = ln.strip()
+        if st.startswith('<%_') and '已开启' in st:
+            skipping = not include_dlc
+            continue
+        if skipping and st == '<%_ } _%>':
+            skipping = False
+            continue
+        if st.startswith('<%') and st.endswith('%>'):
+            continue
+        if not skipping:
+            out_lines.append(ln)
+    return '\n'.join(out_lines)
+
+
 if yaml:
-    for p in [REPO / '世界书/变量/initvar.yaml', REPO / '世界书/变量/变量更新规则.yaml', REPO / '世界书/MVU/DLC_修仙变量契约.yaml']:
+    for p in [REPO / '世界书/变量/initvar.yaml', REPO / '世界书/变量/变量更新规则.yaml']:
         if p.exists():
             try:
-                yaml.safe_load(p.read_text(encoding='utf-8'))
+                raw_txt = p.read_text(encoding='utf-8')
+                if p.name == '变量更新规则.yaml' and '<%_' in raw_txt:
+                    yaml.safe_load(strip_ejs_branches(raw_txt, include_dlc=False))
+                    yaml.safe_load(strip_ejs_branches(raw_txt, include_dlc=True))
+                else:
+                    yaml.safe_load(raw_txt)
             except Exception as ex:
                 err(f'H: 结构化 YAML 解析失败 {p.relative_to(REPO)}: {str(ex).splitlines()[0]}')
     p = REPO / '创作规划.yaml'
@@ -314,10 +338,8 @@ if yaml:
 
     # ---------- I. 规则路径覆盖 ----------
     try:
-        rules = dict(yaml.safe_load((REPO / '世界书/变量/变量更新规则.yaml').read_text(encoding='utf-8'))['变量更新规则'])
-        dlc_rules_path = REPO / '世界书/MVU/DLC_修仙变量契约.yaml'
-        if dlc_rules_path.exists():
-            rules.update((yaml.safe_load(dlc_rules_path.read_text(encoding='utf-8')) or {}).get('变量更新规则') or {})
+        rules_raw = (REPO / '世界书/变量/变量更新规则.yaml').read_text(encoding='utf-8')
+        rules = yaml.safe_load(strip_ejs_branches(rules_raw, include_dlc=True))['变量更新规则']
         known = set(containers)
         covered = {}
         for k, v in rules.items():
