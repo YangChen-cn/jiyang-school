@@ -689,10 +689,20 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  campus.open=false;
  assert.equal(d.querySelector('[data-map-location]').textContent,'当前位置：我找到的小巷');
  d.querySelector('[data-action="open-map"]').click();
+ const atlases=d.querySelector('.jy-map-picture');
+ const atlasImage=atlases.querySelector('.jy-map-image');
+ assert.equal(atlasImage.hasAttribute('src'),false);
+ atlases.open=true;
+ atlases.dispatchEvent(new w.Event('toggle'));
+ assert.match(atlasImage.src,/\/statusbar\/maps\/v1\/jiyang-before\.webp$/);
+ assert.equal(d.querySelectorAll('.jy-place-group[data-dlc-only="true"]:not([hidden])').length,0);
  const search=d.querySelector('#jy-place-search');search.value='听风亭';search.dispatchEvent(new w.Event('input'));
  assert.equal([...d.querySelectorAll('.jy-place')].filter(p=>!p.hidden).length,1);
  assert.equal(d.querySelector('.jy-place:not([hidden])').dataset.place,'老鹰山');
- d.querySelector('.jy-map-image').dispatchEvent(new w.Event('error'));
+ atlasImage.dispatchEvent(new w.Event('error'));
+ assert.match(atlasImage.src,/^https:\/\/cdn\.jsdelivr\.net\//);
+ atlasImage.dispatchEvent(new w.Event('error'));
+ assert.match(atlasImage.src,/^https:\/\/raw\.githubusercontent\.com\//);
  for (const key of ['mountain','sports','arts','copyshop']) {
    const place=d.querySelector(`[data-scene="${key}"]`);
    const photo=place.querySelector('img');
@@ -797,6 +807,17 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  dw.dispatchEvent(new dw.CustomEvent('jy-avatar-changed'));
  await new Promise(resolve=>dw.setTimeout(resolve,100));
  assert.equal(rows[2].querySelector('[data-jy-dialogue-avatar] img').src,yunSelectedSrc);
+ const mockDialogueState=dw.getVariables;
+ dw.getVariables=({message_id})=>message_id===1 ? mockDialogueState() : ({
+   stat_data:{世界:{当前位置:'镇江古眼'},剧情:{灵气复苏:{已开启:message_id===3}}}
+ });
+ dw.document.querySelector('#chat').insertAdjacentHTML('beforeend',
+   '<div class="mes" is_user="false" mesid="2"><div class="mes_text"><p>江潮已起。</p></div></div>'+
+   '<div class="mes" is_user="false" mesid="3"><div class="mes_text"><p>{昭宁}「江潮已起。」</p></div></div>');
+ await new Promise(resolve=>dw.setTimeout(resolve,110));
+ assert.equal(dw.document.querySelector('[mesid="2"] [data-jy-scene]'),null);
+ assert.equal(dw.document.querySelector('[mesid="3"] [data-jy-scene]').dataset.jyScene,'qtxie');
+ assert.match(dw.document.querySelector('[mesid="3"] [data-jy-dialogue-avatar] img').src,/\/xiezhaoning\/campus\.webp$/);
  assert.equal(dw.document.querySelector('#send_textarea').value,'未发送');
  dw.__jyDialogue.destroy();
  assert.equal(dw.document.querySelector('[data-jy-dialogue-row]'),null);
@@ -1118,6 +1139,29 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(md.querySelector('[data-aura-badge]').hidden,false);
  assert.match(md.querySelector('[data-aura-badge-text]').textContent,/第1日 · 微兆潜龙期/);
  assert.equal(history.contentDocument.querySelector('[data-aura-badge]').hidden,true,'历史楼层不接受当前启封');
+ md.querySelector('[data-action="open-map"]').click();
+ const atlasesDlc=md.querySelector('.jy-map-picture');
+ atlasesDlc.open=true;
+ atlasesDlc.dispatchEvent(new mw.Event('toggle'));
+ assert.match(atlasesDlc.querySelector('.jy-map-image').src,/\/huaxia-after\.webp$/);
+ const newPlaces=[...md.querySelectorAll('.jy-place-group[data-dlc-only="true"] .jy-place')];
+ assert.equal(newPlaces.length,17);
+ for (const place of newPlaces) {
+   place.open=true;
+   place.dispatchEvent(new mw.Event('toggle'));
+ }
+ const photos=newPlaces.map(place=>place.querySelector('img').src);
+ assert.equal(new Set(photos).size,17);
+ assert.ok(photos.every(src=>src.includes('/statusbar/scenes/cultivation/')));
+ const dlcSearch=md.querySelector('#jy-place-search');
+ dlcSearch.value='钱塘秘市';
+ dlcSearch.dispatchEvent(new mw.Event('input'));
+ assert.equal(md.querySelector('.jy-place:not([hidden])').dataset.place,'钱塘谢氏剑庐');
+ md.querySelector('[data-action="close-map"]').click();
+ history.contentDocument.querySelector('[data-action="open-map"]').click();
+ assert.match(atlasesDlc.querySelector('.jy-map-image').src,/\/jiyang-before\.webp$/);
+ assert.ok(newPlaces.every(place=>place.hidden));
+ md.querySelector('[data-action="close-map"]').click();
  assert.equal(md.querySelector('[data-people-all-btn]').textContent,'全部角色 (9)');
  assert.equal(md.querySelector('[data-dlc-heroine="谢昭宁"]').hidden,false);
  assert.equal(md.querySelector('[data-cultivation-panel]').hidden,false);
@@ -1141,6 +1185,16 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  yunPhotos[1].closest('.jy-album-item').querySelector('[data-action="set-album-avatar"]').click();
  assert.equal(mw.localStorage.getItem('jy-avatar:云清晏'),yunSelectedSrc);
  assert.equal(yunStatusAvatar.src,yunSelectedSrc);
+ md.querySelector('[data-action="close-album"]').click();
+ const xieStatus=md.querySelector('[data-dlc-heroine="谢昭宁"]');
+ const xieStatusAvatar=xieStatus.querySelector('.jy-avatar');
+ xieStatus.querySelector('[data-action="open-album"]').click();
+ const xiePhotos=[...md.querySelectorAll('.jy-album-photo')];
+ assert.deepEqual(xiePhotos.map(photo=>photo.src.split('/').at(-1)),['campus.webp','sword.webp','market.webp','spring.webp','city.webp']);
+ assert.equal(xieStatusAvatar.src,xiePhotos[0].src);
+ xiePhotos[1].closest('.jy-album-item').querySelector('[data-action="set-album-avatar"]').click();
+ assert.equal(xieStatusAvatar.src,xiePhotos[1].src);
+ assert.equal(mw.localStorage.getItem('jy-avatar:谢昭宁'),xiePhotos[1].src);
  md.querySelector('[data-action="close-album"]').click();
 
  chatId='B';

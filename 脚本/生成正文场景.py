@@ -27,16 +27,19 @@ groups = json.loads(places_match.group(1))
 
 places = []
 for group in groups:
+    is_dlc = group.get('dlc', False)
     for item in group.get('items', []):
         name = item['place']
         aliases = item.get('aliases', [])
         key = item['scene']
-        places.append([name, aliases, key])
+        places.append([name, aliases, key, is_dlc])
         if key not in photos:
             raise ValueError(f'地点没有可用图片：{name}')
 
 expected = {path.stem for path in (root / '世界书/地理/地点').glob('*.yaml')}
-covered = {place[0] for place in places}
+covered = {place[0] for place in places if not place[3]}
+if len({place[0] for place in places}) != len(places):
+    raise ValueError('地点名称重复')
 if expected != covered:
     raise ValueError(f'地点配图与世界书不一致：{sorted(expected ^ covered)}')
 

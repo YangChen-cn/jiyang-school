@@ -167,7 +167,24 @@
     "mountain": ["雨后老鹰山的听风亭与步道", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@e450d24017cd3fed4bb069b3699ec8f589f32382/statusbar/scenes/mountain.webp"],
     "corridor": ["雨后湿润的教学楼连廊", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@e450d24017cd3fed4bb069b3699ec8f589f32382/statusbar/scenes/corridor.webp"],
     "library": ["图书馆靠窗长桌，旧书上放着一张还书单", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@e450d24017cd3fed4bb069b3699ec8f589f32382/statusbar/scenes/library.webp"],
-    "bus": ["傍晚亮起灯的校门公交站", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@e450d24017cd3fed4bb069b3699ec8f589f32382/statusbar/scenes/bus.webp"]
+    "bus": ["傍晚亮起灯的校门公交站", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@e450d24017cd3fed4bb069b3699ec8f589f32382/statusbar/scenes/bus.webp"],
+    "guiyuan": ["老鹰山归元眼的场景插图", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/scenes/cultivation/guiyuan.webp"],
+    "zju": ["浙江大学紫金港校区的场景插图", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/scenes/cultivation/zju.webp"],
+    "qtxie": ["钱塘谢氏剑庐的场景插图", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/scenes/cultivation/qtxie.webp"],
+    "xixige": ["西溪葛氏丹霞的场景插图", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/scenes/cultivation/xixige.webp"],
+    "nanping": ["南屏法华禅院的场景插图", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/scenes/cultivation/nanping.webp"],
+    "shsufu": ["魔都苏氏水府的场景插图", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/scenes/cultivation/shsufu.webp"],
+    "shzhong": ["申城天星钟氏的场景插图", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/scenes/cultivation/shzhong.webp"],
+    "penglai": ["崇明归墟海坛的场景插图", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/scenes/cultivation/penglai.webp"],
+    "siming": ["四明赤水剑宗的场景插图", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/scenes/cultivation/siming.webp"],
+    "tiantai": ["天台赤城洞天的场景插图", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/scenes/cultivation/tiantai.webp"],
+    "tianmu": ["天目灵虚宫的场景插图", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/scenes/cultivation/tianmu.webp"],
+    "maoshan": ["茅山上清宗的场景插图", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/scenes/cultivation/maoshan.webp"],
+    "longhu": ["龙虎山天师府的场景插图", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/scenes/cultivation/longhu.webp"],
+    "wudang": ["武当山紫霄宫的场景插图", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/scenes/cultivation/wudang.webp"],
+    "zhongnan": ["终南山楼观台的场景插图", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/scenes/cultivation/zhongnan.webp"],
+    "qingcheng": ["青城山丈人洞天的场景插图", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/scenes/cultivation/qingcheng.webp"],
+    "kunlun": ["西域昆仑祖脉的场景插图", "https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/scenes/cultivation/kunlun.webp"]
   };
   // JY_MAP_SCENES_END
 
@@ -212,9 +229,49 @@
         { "place": "老鹰山", "aliases": ["老鹰山步道", "老鹰山山脚", "听风亭", "老鹰山观景台"], "scene": "mountain", "notes": ["路线：城区 → 山脚入口 → 主步道 → 听风亭 → 观景台；可原路返回。", "白天按公告开放，雨后侧路湿滑，雷雨或封山时另约。春季新叶、夏季阵雨、秋季远足和冬季短日照会改变现场。", "从城区先到山脚入口，再沿步道上山。", "周末天气好时有散步和登山的人；雨后或天黑后按现场管制。"] },
         { "place": "暨阳站", "aliases": ["高铁站", "暨阳火车站"], "scene": "station", "notes": ["在城西，从校门或老城坐公交或打车。", "按票面车次和站内公告通行，接送人可在站外公共区域等。"] }
       ]
-    }
+    },
+    { "group": "暨阳 · 灵脉", "dlc": true, "items": [
+      {"place": "老鹰山归元眼", "aliases": ["归元眼", "太微云岫宗遗殿", "太微云岫宗山门", "听风归元窍", "荒径枯井"], "scene": "guiyuan", "notes": ["老鹰山荒径深处的封门与地下灵泉，山门随实际线索显露。"]}
+    ] },
+    { "group": "杭城", "dlc": true, "items": [
+      {"place": "浙江大学紫金港校区", "aliases": ["浙大紫金港", "紫金港校区", "浙大管理学院"], "scene": "zju", "notes": ["现代大学校园，管理学院与图书馆是谢昭宁日常出入的地点。"]},
+      {"place": "钱塘谢氏剑庐", "aliases": ["钱塘剑庐", "谢氏剑庐", "六和塔镇江古眼", "镇江古眼", "钱塘潮汐秘市", "钱塘秘市"], "scene": "qtxie", "notes": ["钱塘潮畔的藏书门庭，六和塔下古眼与潮汐秘市另有通路。"]},
+      {"place": "西溪葛氏丹霞", "aliases": ["西溪葛氏", "抱朴丹霞小洞天", "葛氏丹霞", "古方药庄"], "scene": "xixige", "notes": ["西溪水巷深处的药庄与丹霞洞天。"]},
+      {"place": "南屏法华禅院", "aliases": ["南屏古刹", "法华禅院", "南屏古寺"], "scene": "nanping", "notes": ["西湖南屏古刹后的止观禅院，内院与前山香火分开。"]}
+    ] },
+    { "group": "魔都与东海", "dlc": true, "items": [
+      {"place": "魔都苏氏水府", "aliases": ["沧溟水府", "苏氏水府", "魔都苏氏", "东海苏家"], "scene": "shsufu", "notes": ["东海近海孤屿与浦江海底灵窍相通的隐世水府。"]},
+      {"place": "申城天星钟氏", "aliases": ["静安古钟阁", "天星钟氏", "申城钟氏"], "scene": "shzhong", "notes": ["静安老洋房内的私人古钟阁，暗藏星算与测绘阵具。"]},
+      {"place": "崇明归墟海坛", "aliases": ["崇明归墟", "崇明东滩海坛", "东海蓬莱", "蓬莱仙岛", "方丈仙岛", "瀛洲仙岛"], "scene": "penglai", "notes": ["崇明东滩落潮方露的海坛，是通往东海三仙岛的门户。"]}
+    ] },
+    { "group": "江浙山门", "dlc": true, "items": [
+      {"place": "四明赤水剑宗", "aliases": ["四明山", "赤水剑宗", "四明山赤水剑宗"], "scene": "siming", "notes": ["四明山绝壁云瀑后的浙东古剑宗。"]},
+      {"place": "天台赤城洞天", "aliases": ["天台山", "天台赤城", "赤城洞天"], "scene": "tiantai", "notes": ["与国清寺同山的赤城洞天，沿丹霞石阶可抵山门。"]},
+      {"place": "天目灵虚宫", "aliases": ["天目山", "西天目山", "灵虚宫"], "scene": "tianmu", "notes": ["浙西天目山古杉间的道门净明宗。"]},
+      {"place": "茅山上清宗", "aliases": ["茅山", "上清洞天", "茅山山门", "上清宗"], "scene": "maoshan", "notes": ["江南三茅峰上的上清祖庭。"]}
+    ] },
+    { "group": "华夏名山", "dlc": true, "items": [
+      {"place": "龙虎山天师府", "aliases": ["龙虎山", "龙虎山张氏", "天师府"], "scene": "longhu", "notes": ["泸溪河与丹霞群峰之间的正一祖庭。"]},
+      {"place": "武当山紫霄宫", "aliases": ["武当山", "武当", "紫霄宫"], "scene": "wudang", "notes": ["武当七十二峰中沿石阶展开的真武道场。"]},
+      {"place": "终南山楼观台", "aliases": ["终南山", "楼观台", "终南隐修地"], "scene": "zhongnan", "notes": ["秦岭松林深处的全真清修地。"]},
+      {"place": "青城山丈人洞天", "aliases": ["青城山", "青城丈人峰", "丈人洞天"], "scene": "qingcheng", "notes": ["川西青城山隐雾中的药岭与洞天入口。"]},
+      {"place": "西域昆仑祖脉", "aliases": ["昆仑祖脉", "昆仑山", "西域昆仑"], "scene": "kunlun", "notes": ["西域雪岭深处的神州龙脉总枢。"]}
+    ] }
   ];
   // JY_MAP_PLACES_END
+
+  const MAP_ATLASES = {
+    before: {
+      title: '暨阳地图 · 灵气复苏前',
+      file: 'jiyang-before.webp',
+      pins: [['暨阳中学', 27, 35], ['万风新天地', 76, 33], ['旧城', 46, 50], ['浦阳江', 45, 68], ['老鹰山', 86, 76]]
+    },
+    after: {
+      title: '华夏灵脉图 · 灵气复苏后',
+      file: 'huaxia-after.webp',
+      pins: [['昆仑祖脉', 19, 35], ['青城山', 39, 54], ['终南山', 50, 44], ['武当山', 59, 53], ['龙虎山', 63, 69], ['江浙山门', 69, 48], ['魔都', 78, 55], ['杭城', 73, 65], ['暨阳', 74, 76], ['东海', 87, 63]]
+    }
+  };
 
   const ALBUMS = {
     '许念安': [['nianan/campus.webp', '课间还作业'], ['nianan/library.webp', '图书馆的雨天'], ['nianan/home-diary.webp', '午后居家'], ['nianan/rainy-bookshop.webp', '雨天书店']],
@@ -240,7 +297,11 @@
       ['yu/pic-2.png', '生活照片 02'], ['yu/pic-3.png', '生活照片 03'], ['yu/pic-4.png', '生活照片 04'], ['yu/pic-6.jpg', '生活照片 06']
     ],
     '云清晏': [['yunqingyan/campus.webp', '校服 · 初入暨阳'], ['yunqingyan/teahouse.webp', '便装 · 雨后茶铺'], ['yunqingyan/mountain.webp', '宗门服 · 老鹰山']],
-    '谢昭宁': []
+    '谢昭宁': [
+      ['xiezhaoning/campus.webp', '学院装 · 紫金港'], ['xiezhaoning/sword.webp', '剑庐装 · 钱塘潮'],
+      ['xiezhaoning/market.webp', '夜行装 · 潮汐秘市'], ['xiezhaoning/spring.webp', '春日装 · 湖边桂糕'],
+      ['xiezhaoning/city.webp', '城市装 · 暮色天台']
+    ]
   };
 
   const CHAR_THRESHOLDS = {
@@ -963,7 +1024,16 @@
     .jy-avatar-notice { grid-column: 1 / -1; margin: 2px 0 0; color: var(--c-muted); font-size: 11.5px; }
     .jy-map-picture { margin: 0 0 10px; border: 1px solid var(--c-line); border-radius: 9px; padding: 6px 10px; background: var(--c-panel); }
     .jy-map-picture summary { cursor: pointer; font-weight: 750; color: var(--c-primary); }
-    .jy-map-image { display: block; width: 100%; max-height: 55vh; margin-top: 8px; border-radius: 8px; object-fit: contain; }
+    .jy-map-world { position: relative; width: min(100%, 82vh); margin: 8px auto 0; }
+    .jy-map-image { display: block; width: 100%; height: auto; border-radius: 8px; }
+    .jy-map-pins { display: none; pointer-events: none; }
+    .jy-map-world[data-ready="true"] .jy-map-pins { display: block; }
+    .jy-map-pin {
+      position: absolute; transform: translate(-50%, -50%); white-space: nowrap;
+      border: 1px solid #e1c990; border-radius: 5px; padding: 1px 4px;
+      background: #193b35; color: #fff5d8; font-size: clamp(9px, 1.7vw, 13px); line-height: 1.3;
+    }
+    .jy-map-card[data-img-missing="true"] .jy-map-pins { display: none; }
     .jy-map-unavailable { display: none; padding: 14px; text-align: center; color: var(--c-muted); }
     .jy-map-card[data-img-missing="true"] .jy-map-unavailable { display: block; }
     .jy-place-directory label { display: block; font-weight: 750; margin-bottom: 5px; }
@@ -1225,8 +1295,8 @@
             <span class="jy-map-title">暨阳地点册</span>
             <button class="jy-avatar-button" type="button" data-action="close-map">关闭</button>
           </div>
-          <details class="jy-map-picture"><summary>查看校园示意图</summary>
-            <img class="jy-map-image" alt="暨阳中学校园地图" src="https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v1/map.jpg" data-fallback-queue="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v1/map.jpg|https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v1/map.jpg">
+          <details class="jy-map-picture"><summary></summary>
+            <div class="jy-map-world"></div>
             <p class="jy-map-unavailable" role="status">地图暂时无法加载。</p>
           </details>
           <p data-map-location></p>
@@ -1269,6 +1339,7 @@
     for (const group of MAP_PLACES) {
       const section = hostDoc.createElement('section');
       section.className = 'jy-place-group';
+      section.dataset.dlcOnly = String(group.dlc === true);
       section.setAttribute('aria-label', group.group);
       const h3 = hostDoc.createElement('h3');
       h3.textContent = group.group;
@@ -1278,19 +1349,13 @@
     }
     overlayRoot.querySelectorAll('img').forEach(guardImage);
 
-    const search = overlayRoot.querySelector('#jy-place-search');
-    search.addEventListener('input', () => {
-      const query = search.value.trim().toLowerCase();
-      const places = [...overlayRoot.querySelectorAll('.jy-place')];
-      places.forEach(place => {
-        const names = [place.dataset.place, ...place.dataset.aliases.split('|')].map(s => s.toLowerCase());
-        place.hidden = !names.some(alias => alias.includes(query));
-      });
-      overlayRoot.querySelectorAll('.jy-place-group').forEach(group => {
-        group.hidden = !group.querySelector('.jy-place:not([hidden])');
-      });
-      overlayRoot.querySelector('[data-place-empty]').hidden = places.some(place => !place.hidden);
+    const ov = overlayRoot;
+    ov.querySelector('#jy-place-search').addEventListener('input', () => filterMapPlaces(ov));
+    const mapDetails = ov.querySelector('.jy-map-picture');
+    mapDetails.addEventListener('toggle', () => {
+      if (mapDetails.open) loadMapImage(mapDetails);
     });
+    syncMapPhase(ov, false);
 
     bindOverlayEvents(overlayRoot);
     hostDoc.body.append(overlayRoot);
@@ -1387,6 +1452,67 @@
     local.forEach(item => appendCard(item, true));
   }
 
+  function filterMapPlaces(ov) {
+    const query = ov.querySelector('#jy-place-search').value.trim().toLowerCase();
+    const active = ov.dataset.mapPhase === 'after';
+    let hasPlace = false;
+    for (const group of ov.querySelectorAll('.jy-place-group')) {
+      const permitted = group.dataset.dlcOnly !== 'true' || active;
+      const groupName = group.getAttribute('aria-label').toLowerCase();
+      for (const place of group.querySelectorAll('.jy-place')) {
+        const names = [place.dataset.place, ...place.dataset.aliases.split('|'), groupName];
+        place.hidden = !permitted || !names.some(name => name.toLowerCase().includes(query));
+      }
+      group.hidden = !group.querySelector('.jy-place:not([hidden])');
+      if (!group.hidden) hasPlace = true;
+    }
+    ov.querySelector('[data-place-empty]').hidden = hasPlace;
+  }
+
+  function loadMapImage(details) {
+    const img = details.querySelector('.jy-map-image');
+    if (img && !img.hasAttribute('src')) img.src = img.dataset.initialSrc;
+  }
+
+  function syncMapPhase(ov, active) {
+    const phase = active ? 'after' : 'before';
+    if (phase === ov.dataset.mapPhase) return;
+    ov.dataset.mapPhase = phase;
+    const atlas = MAP_ATLASES[phase];
+    const details = ov.querySelector('.jy-map-picture');
+    const world = details.querySelector('.jy-map-world');
+    const mapCard = ov.querySelector('.jy-map-card');
+    delete mapCard.dataset.imgMissing;
+    delete world.dataset.ready;
+    ov.querySelector('#jy-place-search').value = '';
+    details.querySelector('summary').textContent = atlas.title;
+    const img = hostDoc.createElement('img');
+    img.className = 'jy-map-image';
+    img.alt = atlas.title;
+    img.decoding = 'async';
+    const src = 'https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/maps/v1/' + atlas.file;
+    img.dataset.initialSrc = src;
+    img.dataset.fallbackQueue = cdnAlternatives(src).slice(1).join('|');
+    img.addEventListener('load', () => {
+      if (world.contains(img)) world.dataset.ready = 'true';
+    });
+    guardImage(img);
+    const pins = hostDoc.createElement('div');
+    pins.className = 'jy-map-pins';
+    pins.setAttribute('aria-hidden', 'true');
+    for (const [label, x, y] of atlas.pins) {
+      const pin = hostDoc.createElement('span');
+      pin.className = 'jy-map-pin';
+      pin.textContent = label;
+      pin.style.left = x + '%';
+      pin.style.top = y + '%';
+      pins.append(pin);
+    }
+    world.replaceChildren(img, pins);
+    if (details.open) loadMapImage(details);
+    filterMapPlaces(ov);
+  }
+
   function syncMapLocation(locationText) {
     const ov = ensureOverlayRoot();
     ov.querySelector('[data-map-location]').textContent = '当前位置：' + (locationText || '待确定');
@@ -1396,6 +1522,7 @@
     let maxLen = 0;
     places.forEach(place => {
       place.querySelector('.jy-place-current').hidden = true;
+      if (ov.dataset.mapPhase !== 'after' && place.closest('.jy-place-group').dataset.dlcOnly === 'true') return;
       const aliases = [place.dataset.place, ...place.dataset.aliases.split('|')].map(s => s.toLowerCase());
       aliases.forEach(alias => {
         if (alias.length > maxLen && (locLower === alias || (locLower.includes(alias) && alias.length >= 3 && !IGNORED_MAP_ALIASES.has(alias)))) {
@@ -1819,7 +1946,7 @@
 
     // 地点映射
     const currentLocation = sceneValue(root.querySelector('.jy-location'));
-    syncMapLocation(currentLocation);
+    if (overlayRoot?.querySelector('.jy-map-modal')?.dataset.open !== 'true') syncMapLocation(currentLocation);
 
     // 校历、学籍、论坛数据
     const date = sceneValue(root.querySelector('.jy-date')).replaceAll('/', '-');
@@ -2097,6 +2224,7 @@
       const mapBtn = event.target.closest('[data-action="open-map"]');
       if (mapBtn) {
         const ov = ensureOverlayRoot();
+        syncMapPhase(ov, root.dataset.dlcActive === 'true');
         syncMapLocation(sceneValue(root.querySelector('.jy-location')));
         openModal(ov.querySelector('.jy-map-modal'), mapBtn, '[data-action="close-map"]');
         return;
@@ -2168,6 +2296,10 @@
         const data = await readStatusFloor(win, messageId);
         if (data?.stat_data && root.isConnected && chatId === getChatId() && statusFloorId(win) === messageId) {
           syncDlcUiInFrame(root, data.stat_data);
+          if (overlayRoot?.querySelector('.jy-map-modal')?.dataset.open === 'true' && root.contains(activeReturnFocus)) {
+            syncMapPhase(overlayRoot, root.dataset.dlcActive === 'true');
+            syncMapLocation(sceneValue(root.querySelector('.jy-location')));
+          }
           root.querySelector('[data-campus-channel]')?.dispatchEvent(new win.Event('change'));
         }
       } catch (_) {}
