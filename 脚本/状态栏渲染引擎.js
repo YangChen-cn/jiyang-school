@@ -1771,7 +1771,7 @@
     const allBtn = root.querySelector('[data-people-all-btn]');
     if (allBtn) allBtn.textContent = active ? '全部角色 (9)' : '全部角色 (7)';
 
-    const dlcRealmDefaults = { '云清晏': '炼气圆满·封蛰', '谢昭宁': '筑基中期' };
+    const dlcRealmDefaults = { '云清晏': '炼气大圆满·重修', '谢昭宁': '筑基中期' };
     root.querySelectorAll('.jy-person[data-dlc-heroine]').forEach(card => {
       card.hidden = !active;
       const roleName = card.dataset.dlcHeroine || '';

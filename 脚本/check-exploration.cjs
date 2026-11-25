@@ -952,7 +952,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(plainParsed.谢昭宁,undefined);
  assert.equal(plainParsed.主角.修行,undefined);
  assert.equal(plainParsed.剧情.灵气复苏,undefined);
- const dlcSave={世界:{日期:'2020-09-13'},剧情:{灵气复苏:{已开启:true,开启日期:'2020-09-03',阶段:'旧值'}},主角:{修行:{境界:'筑基初期',灵气感应:35,功法与秘术:['太微引气篇']}},云清晏:{已入班:true,是否在场:true,好感度:22,关系阶段:'问道',当前境界:'金丹跌境'},谢昭宁:{是否在场:true,好感度:18,关系阶段:'观风',当前境界:'筑基中期'}};
+ const dlcSave={世界:{日期:'2020-09-13'},剧情:{灵气复苏:{已开启:true,开启日期:'2020-09-03',阶段:'旧值'}},主角:{修行:{境界:'筑基初期',灵气感应:35,功法与秘术:['太微引气篇']}},云清晏:{已入班:true,是否在场:true,好感度:22,关系阶段:'问道',当前境界:'炼气大圆满（轮回重修）'},谢昭宁:{是否在场:true,好感度:18,关系阶段:'观风',当前境界:'筑基中期'}};
  const dlcParsed=schemaBox.schema.parse(dlcSave);
  assert.equal(dlcParsed.云清晏.好感度,22);
  assert.equal(dlcParsed.谢昭宁.好感度,18);
@@ -1011,6 +1011,11 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.match(tiantai,/第六洞天[\s\S]*元婴期真君[\s\S]*云清晏/);
  const kunlun=render(dlcEntries.get('[DLC]仙宗_西域昆仑祖脉').content,enabled);
  assert.match(kunlun,/越中潜龙·归元眼[\s\S]*化神通玄/);
+ const siming=render(dlcEntries.get('[DLC]仙宗_四明赤水剑宗').content,enabled);
+ assert.match(siming,/极道剑锋[\s\S]*星阵玄印[\s\S]*松风道碑/);
+ assert.doesNotMatch(tiantai,/观剑/);
+ assert.doesNotMatch(render(dlcEntries.get('[DLC]老鹰山灵脉与古宗秘藏').content,enabled),/剑气|剑碑/);
+ assert.doesNotMatch(timeline('2020-09-04'),/主峰剑阵/);
  for (const fName of dlcNames.slice(7)) {
    assert.doesNotMatch(render(dlcEntries.get(fName).content,enabled),/万风/);
  }
@@ -1030,13 +1035,18 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(yun(yunBase,absent,[{},present,absent,{}]),'','离场后仍用过往在场记录关闭入班');
  assert.match(yun(yunBase,absent,[{},absent,{}]),/初次入班/);
  const firstAppearance={...launchDay,...present};
- assert.match(yun(yunBase,firstAppearance),/筑基大圆满[\s\S]*金丹结丹劫[\s\S]*仙凡两隔/);
+ const yunFirstText=yun(yunBase,firstAppearance);
+ assert.match(yunFirstText,/《太微玉女轮回经》[\s\S]*金丹巅峰[\s\S]*元婴大劫[\s\S]*炼气大圆满（轮回重修）[\s\S]*太微轮回印诀[\s\S]*独修亦可重登巅峰[\s\S]*极尽升华[\s\S]*结丹大圆满[\s\S]*宁愿孤身苦修百年[\s\S]*仙凡两隔/);
+ assert.doesNotMatch(yunFirstText,/剑意|剑修|剑法|飞剑/);
  assert.doesNotMatch(yun(yunBase,firstAppearance),/初次入班/);
  assert.equal(yun(yunPalette),'');
  assert.match(yun(yunPalette,{...firstAppearance,'stat_data.云清晏.好感度':45,'stat_data.云清晏.关系阶段':'观澜'}),/观澜·尘外冷眸/);
+ assert.match(yun(yunPalette,{...present,'stat_data.云清晏.好感度':45,'stat_data.云清晏.关系阶段':'问道'}),/《太微玉女轮回经》独修重登极慢极苦/);
+ assert.match(yun(yunPalette,{...present,'stat_data.云清晏.好感度':70,'stat_data.云清晏.关系阶段':'动念'}),/极尽升华/);
  assert.match(yun(yunPalette,{...present,'stat_data.云清晏.好感度':95,'stat_data.云清晏.关系阶段':'道侣'}),/仙凡重量/);
  assert.equal(yun(yunNsfw,{...present,'stat_data.剧情.当前nsfw':true}),'');
- assert.match(yun(yunNsfw,{...present,'stat_data.云清晏.NSFW':true,'stat_data.剧情.当前nsfw':true}),/NSFW实战指导：云清晏/);
+ const yunNsfwText=yun(yunNsfw,{...present,'stat_data.云清晏.NSFW':true,'stat_data.剧情.当前nsfw':true});
+ assert.match(yunNsfwText,/NSFW实战指导：云清晏[\s\S]*《太微玉女轮回经》/);
 
  const [xieBase,xiePalette,xieNsfw]=['谢昭宁_基础信息','谢昭宁_性格调色盘','谢昭宁_NSFW指导'].map(name=>dlcEntries.get(name).content);
  const xie=(tpl,overrides={},floors=[])=>render(tpl,{...scene,...overrides},floors).trim();
@@ -1130,7 +1140,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(mockBook.find(entry=>entry.name===dlcNames[0]).uid,100);
  assert.equal(mockChats.A.stat_data.剧情.灵气复苏.开启日期,'2021-07-03');
  assert.equal(mockChats.A.stat_data.云清晏.是否在场,false);
- assert.equal(mockChats.A.stat_data.云清晏.当前境界,'炼气圆满（道伤封蛰）');
+ assert.equal(mockChats.A.stat_data.云清晏.当前境界,'炼气大圆满（轮回重修）');
  assert.equal(mockChats.A.stat_data.谢昭宁.是否在场,false);
  assert.equal(mockChats.A.stat_data.谢昭宁.关系阶段,'观风');
  assert.equal(mockChats.A.stat_data.云清晏.已入班,undefined);
@@ -1175,6 +1185,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(history.contentDocument.querySelector('[data-cultivation-channel]').hidden,true);
  assert.doesNotMatch(history.contentDocument.querySelector('[data-campus-list]').textContent,/山顶青光/);
  const yunStatus=md.querySelector('[data-dlc-heroine="云清晏"]');
+ assert.match(yunStatus.textContent,/炼气大圆满（轮回重修）/);
  const yunStatusAvatar=yunStatus.querySelector('.jy-avatar');
  assert.equal(yunStatusAvatar.src,yunAvatarSrc);
  yunStatus.querySelector('[data-action="open-album"]').click();
