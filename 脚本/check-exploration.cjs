@@ -1008,14 +1008,16 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
 
  const [xieBase,xiePalette,xieNsfw]=['谢昭宁_基础信息','谢昭宁_性格调色盘','谢昭宁_NSFW指导'].map(name=>dlcEntries.get(name).content);
  const xie=(tpl,overrides={},floors=[])=>render(tpl,{...scene,...overrides},floors).trim();
- assert.match(xie(xieBase),/跨城相逢入口[\s\S]*浙江大学管理学院工商管理专业[\s\S]*谢昭宁\.是否在场=true/);
+ assert.match(xie(xieBase),/相逢入口[\s\S]*浙江大学管理学院工商管理专业[\s\S]*谢昭宁\.是否在场=true/);
  assert.doesNotMatch(xie(xieBase),/角色档案：谢昭宁/);
  const xiePresent={'stat_data.谢昭宁.是否在场':true};
  const xieAbsent={'stat_data.谢昭宁.是否在场':false};
  assert.equal(xie(xieBase,xieAbsent,[{},xiePresent,xieAbsent,{}]),'');
- assert.match(xie(xieBase,xiePresent),/角色档案：谢昭宁[\s\S]*浙江大学管理学院·工商管理专业本科生[\s\S]*钱塘谢氏剑庐/);
+ const xieRendered=xie(xieBase,xiePresent);
+ assert.match(xieRendered,/角色档案：谢昭宁[\s\S]*浙江大学管理学院·工商管理专业学生[\s\S]*钱塘谢氏剑庐/);
+ assert.doesNotMatch(xieRendered,/20岁/);
  assert.equal(xie(xiePalette),'');
- assert.match(xie(xiePalette,{...xiePresent,'stat_data.谢昭宁.好感度':12,'stat_data.谢昭宁.关系阶段':'观风'}),/观风·紫金港学姐与剑庐明珠/);
+ assert.match(xie(xiePalette,{...xiePresent,'stat_data.谢昭宁.好感度':12,'stat_data.谢昭宁.关系阶段':'观风'}),/观风·紫金港清影与剑庐明珠/);
  assert.match(xie(xiePalette,{...xiePresent,'stat_data.谢昭宁.好感度':95,'stat_data.谢昭宁.关系阶段':'执剑'}),/执剑·一诺共生死/);
  assert.equal(xie(xieNsfw,{...xiePresent,'stat_data.剧情.当前nsfw':true}),'');
  assert.match(xie(xieNsfw,{...xiePresent,'stat_data.谢昭宁.NSFW':true,'stat_data.剧情.当前nsfw':true}),/NSFW实战指导：谢昭宁/);
