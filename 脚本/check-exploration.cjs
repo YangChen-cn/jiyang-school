@@ -748,6 +748,8 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    '云清晏_基础信息',
    '云清晏_性格调色盘',
    '云清晏_NSFW指导',
+   '[DLC]境界描述',
+   '[DLC]破境判定',
  ];
  const retiredDlcNames=['[DLC]修行阶梯与仙凡抉择','[DLC]灵潮异象与隐秘特调'];
  assert.ok(!cardEntries.some(entry=>retiredDlcNames.includes(entry.comment)));
@@ -766,7 +768,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    assert.equal(render(entry.content).trim(),'',name + ' 在无 DLC 的聊天应为空');
    assert.equal(render(entry.content,{'stat_data.剧情.灵气复苏.已开启':false}).trim(),'',name + ' 在封缄的聊天应为空');
  }
- for (const [name,key] of [[dlcNames[1],'老鹰山']]) {
+ for (const [name,key] of [[dlcNames[1],'老鹰山'],['[DLC]境界描述','暗劲'],['[DLC]破境判定','冲关']]) {
    const entry=dlcEntries.get(name);
    assert.equal(entry.constant,false);
    assert.ok(entry.keys.includes(key));
@@ -820,8 +822,16 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.match(timeline('2020-09-28'),/特种气象与非典型样本调查组/);
  assert.match(timeline('2020-10-18'),/外地散修与隐门/);
  assert.doesNotMatch(timeline('2020-09-04'),/今日抵达|初次入班/);
+ assert.match(timeline('2020-09-04'),/公开所见与私下所知[\s\S]*证据不足时只说观察与推测/);
+ const plot=cardEntries.find(entry=>entry.comment==='[mvu_plot]剧情推动器').content;
+ assert.doesNotMatch(render(plot),/修仙暗线/);
+ assert.match(render(plot,enabled),/当前校园事件或余波先收束/);
+ const realm=dlcEntries.get('[DLC]境界描述');
+ assert.match(render(realm.content,enabled),/炼气[\s\S]*筑基[\s\S]*金丹[\s\S]*元婴[\s\S]*化神[\s\S]*古武/);
+ const breakthrough=dlcEntries.get('[DLC]破境判定');
+ assert.match(render(breakthrough.content,enabled),/实际冲关[\s\S]*暂稳[\s\S]*失败保留原境/);
 
- const [yunBase,yunPalette,yunNsfw]=dlcNames.slice(2).map(name=>dlcEntries.get(name).content);
+ const [yunBase,yunPalette,yunNsfw]=dlcNames.slice(2,5).map(name=>dlcEntries.get(name).content);
  const scene={...enabled,...origin,'stat_data.世界.日期':'2020-09-04','stat_data.世界.当前位置':'高二重点班教室','stat_data.世界.时间段':'上午','stat_data.剧情.学期':'高二上','stat_data.主角.班级':'高二(8)班'};
  const yun=(tpl,overrides={},floors=[])=>render(tpl,{...scene,...overrides},floors).trim();
  assert.match(yun(yunBase),/初次入班[\s\S]*高二\(8\)班/);

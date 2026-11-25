@@ -43,6 +43,96 @@
           "type": "before_character_definition",
           "order": 22
         }
+      },
+      "[DLC]境界描述": {
+        "path": "世界书/世界观/DLC_境界描述.yaml",
+        "keywords": [
+          "境界",
+          "引气感灵",
+          "炼气",
+          "筑基",
+          "金丹",
+          "元婴",
+          "化神",
+          "明劲",
+          "暗劲",
+          "化劲",
+          "先天通玄"
+        ],
+        "abstract": "境界描述",
+        "uid": 107,
+        "enabled": false,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "境界",
+            "引气感灵",
+            "炼气",
+            "筑基",
+            "金丹",
+            "元婴",
+            "化神",
+            "明劲",
+            "暗劲",
+            "化劲",
+            "先天通玄"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 23
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
+      },
+      "[DLC]破境判定": {
+        "path": "世界书/世界观/DLC_破境判定.yaml",
+        "keywords": [
+          "破境",
+          "冲关",
+          "冲境",
+          "突破境界",
+          "境界突破",
+          "突破瓶颈",
+          "尝试筑基",
+          "尝试结丹",
+          "结丹劫",
+          "元婴劫",
+          "天劫"
+        ],
+        "abstract": "破境判定",
+        "uid": 108,
+        "enabled": false,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "破境",
+            "冲关",
+            "冲境",
+            "突破境界",
+            "境界突破",
+            "突破瓶颈",
+            "尝试筑基",
+            "尝试结丹",
+            "结丹劫",
+            "元婴劫",
+            "天劫"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 24
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       }
     },
     "扮演准则": {
