@@ -226,6 +226,8 @@ for (const [name, misses, hits] of [
   ['珍珠局', ['我家在山下湖，手链用的是淡水珍珠'], ['去澹珠记看看', '去珍珠市场看开蚌']],
   ['[DLC]境界描述', ['他说这首诗的境界很高'], ['我现在是什么境界', '开始炼气']],
   ['虞淑婉_日常接触', ['去英语老师办公室交作业', '到行政楼一楼交表'], ['去校长办公室找虞校长']],
+  ['虞淑婉_基础信息', ['听同学说今天校长在升旗台讲话'], ['去找虞校长汇报', '虞淑婉在办公室']],
+  ['虞淑婉_NSFW指导', ['听同学说今天校长在升旗台讲话'], ['虞淑婉轻轻贴近']],
   ['俞嘉豪_基础信息', ['他们在聊电视剧里的联姻'], ['问问苏俞联姻是怎么回事', '去见俞嘉豪']],
   ['慕佳芊_基础信息', [], ['慕老师，作业交给你']],
   ['慕佳芊_性格调色盘', [], ['慕老师，作业交给你']],
@@ -859,7 +861,6 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    [dlcNames[1],'镇风铎'],
    ['[DLC]境界描述','暗劲'],
    ['[DLC]破境判定','冲关'],
-   ['[DLC]华夏修行界与三教总览','三教'],
    ['[DLC]世家_钱塘谢氏剑庐','谢氏剑庐'],
    ['[DLC]世家_西溪葛氏丹霞','葛氏丹霞'],
    ['[DLC]世家_魔都苏氏水府','魔都苏氏'],
@@ -885,6 +886,16 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    assert.ok(render(entry.content,enabled).trim());
  }
  {
+   const overviewEntry=dlcEntries.get('[DLC]华夏修行界与三教总览');
+   assert.equal(overviewEntry.constant,true);
+   assert.equal(overviewEntry.enabled,false);
+   assert.equal(matchesWorldbookKey('[DLC]仙宗_天台赤城洞天','周末去名山旅游'),false);
+   assert.equal(matchesWorldbookKey('[DLC]世家_魔都苏氏水府','去魔都逛街看外滩'),false);
+   assert.equal(matchesWorldbookKey('[DLC]世家_西溪葛氏丹霞','去杭城西溪湿地散步'),false);
+   const schedTpl=read('世界书/时间线/校园作息.yaml');
+   const schedFall=render(schedTpl,{'stat_data.剧情.学期':'高二上'});
+   assert.doesNotMatch(schedFall,/高二下:|暑假:|高三上:|高三下:/);
+   assert.match(render(schedTpl,{'stat_data.剧情.学期':'高二下'}),/高二下:/);
    const xieNsfwEntry=dlcEntries.get('谢昭宁_NSFW指导');
    assert.equal(xieNsfwEntry.constant,false);
    assert.ok(xieNsfwEntry.keys.includes('剑庐小公主'));

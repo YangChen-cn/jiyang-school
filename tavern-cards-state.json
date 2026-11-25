@@ -144,58 +144,12 @@
       },
       "[DLC]华夏修行界与三教总览": {
         "path": "世界书/世界观/DLC_华夏修行界与三教总览.yaml",
-        "keywords": [
-          "修行界",
-          "修仙界",
-          "三教",
-          "道门",
-          "佛门",
-          "儒修",
-          "隐世世家",
-          "隐世仙宗",
-          "隐世宗门",
-          "隐宗",
-          "仙宗",
-          "洞天",
-          "福地",
-          "潮汐秘市",
-          "坊市",
-          "外地修士",
-          "散修",
-          "特调",
-          "特事",
-          "杭城",
-          "魔都"
-        ],
+        "keywords": [],
         "abstract": "华夏修行界三教总览：道佛儒正统流派与古武桥梁、筑基/金丹/元婴/化神隐世实力标尺、特调三律与杭城魔都名山势力索引",
         "uid": 109,
         "enabled": false,
         "strategy": {
-          "type": "selective",
-          "keys": [
-            "修行界",
-            "修仙界",
-            "三教",
-            "道门",
-            "佛门",
-            "儒修",
-            "隐世世家",
-            "隐世仙宗",
-            "隐世宗门",
-            "隐宗",
-            "仙宗",
-            "洞天",
-            "福地",
-            "潮汐秘市",
-            "坊市",
-            "外地修士",
-            "散修",
-            "特调",
-            "特事",
-            "杭城",
-            "魔都"
-          ],
-          "scan_depth": 2
+          "type": "constant"
         },
         "position": {
           "type": "before_character_definition",
@@ -212,14 +166,12 @@
         "keywords": [
           "谢氏剑庐",
           "钱塘谢氏",
-          "谢氏",
+          "谢昭宁",
           "青莲截江剑",
           "文心圭",
           "六和塔",
           "钱塘潮汐秘市",
-          "潮汐秘市",
-          "杭城",
-          "钱塘"
+          "潮汐秘市"
         ],
         "abstract": "杭城儒道兼修千年剑脉：六和塔镇江古眼祖庭、两位金丹中期供奉、《春秋养吾气》与青莲截江剑、主持潮汐秘市",
         "uid": 110,
@@ -229,14 +181,12 @@
           "keys": [
             "谢氏剑庐",
             "钱塘谢氏",
-            "谢氏",
+            "谢昭宁",
             "青莲截江剑",
             "文心圭",
             "六和塔",
             "钱塘潮汐秘市",
-            "潮汐秘市",
-            "杭城",
-            "钱塘"
+            "潮汐秘市"
           ],
           "scan_depth": 2
         },
@@ -255,14 +205,12 @@
         "keywords": [
           "西溪葛氏",
           "葛氏丹霞",
-          "葛氏",
+          "葛洪",
           "抱朴丹霞",
           "赤蛟焚天残炉",
           "筑基丹",
           "紫金固元丹",
-          "化劫玉髓膏",
-          "杭城",
-          "西溪"
+          "化劫玉髓膏"
         ],
         "abstract": "杭城道门丹鼎正宗：东晋葛洪嫡脉、抱朴丹霞小洞天、金丹长老护炉炼制筑基丹与劫伤圣药，重因果与稀世灵材交换",
         "uid": 111,
@@ -272,14 +220,12 @@
           "keys": [
             "西溪葛氏",
             "葛氏丹霞",
-            "葛氏",
+            "葛洪",
             "抱朴丹霞",
             "赤蛟焚天残炉",
             "筑基丹",
             "紫金固元丹",
-            "化劫玉髓膏",
-            "杭城",
-            "西溪"
+            "化劫玉髓膏"
           ],
           "scan_depth": 2
         },
@@ -303,9 +249,7 @@
           "紫府观潮诀",
           "沧溟七杀剑",
           "沧溟祖谱",
-          "暨阳苏家",
-          "魔都",
-          "沪上"
+          "暨阳苏家"
         ],
         "abstract": "魔都顶级水剑仙族沧溟水府：金丹巅峰供奉与半步元婴老祖坐镇，详述百年前分家至暨阳（苏晓樯父祖一脉）及灵气复苏后保有仙缘之秘",
         "uid": 112,
@@ -320,9 +264,7 @@
             "紫府观潮诀",
             "沧溟七杀剑",
             "沧溟祖谱",
-            "暨阳苏家",
-            "魔都",
-            "沪上"
+            "暨阳苏家"
           ],
           "scan_depth": 2
         },
@@ -341,12 +283,9 @@
         "keywords": [
           "天星钟氏",
           "申城钟氏",
-          "钟氏",
           "静安古钟阁",
           "九宫镇海大阵",
           "太乙观星",
-          "魔都",
-          "沪上",
           "夜场私洽"
         ],
         "abstract": "魔都太乙星算与空间阵道世家：金丹阵宗压阵、护沪九宫阵残角与静安古钟阁折叠空间黑市私洽主持者",
@@ -357,12 +296,9 @@
           "keys": [
             "天星钟氏",
             "申城钟氏",
-            "钟氏",
             "静安古钟阁",
             "九宫镇海大阵",
             "太乙观星",
-            "魔都",
-            "沪上",
             "夜场私洽"
           ],
           "scan_depth": 2
@@ -382,13 +318,10 @@
         "keywords": [
           "南屏法华",
           "法华禅院",
-          "南屏",
           "琉璃止观",
-          "枯禅",
-          "心魔劫",
+          "南屏枯禅",
           "天台止观",
-          "佛门",
-          "杭城"
+          "心魔劫"
         ],
         "abstract": "杭城南屏禁地佛门天台止观古脉：七位闭口苦禅老僧、金丹圆满神魂，专克心魔劫与神魂寒煞",
         "uid": 114,
@@ -398,13 +331,10 @@
           "keys": [
             "南屏法华",
             "法华禅院",
-            "南屏",
             "琉璃止观",
-            "枯禅",
-            "心魔劫",
+            "南屏枯禅",
             "天台止观",
-            "佛门",
-            "杭城"
+            "心魔劫"
           ],
           "scan_depth": 2
         },
@@ -424,10 +354,7 @@
           "天台山",
           "赤城洞天",
           "国清",
-          "司命真经",
-          "浙东三壁",
-          "太微云岫",
-          "名山"
+          "司命真经"
         ],
         "abstract": "浙东道门第六洞天兼国清佛脉：宗主已证元婴真君，与太微云岫宗同列浙东三壁，云清晏幼年观剑旧地",
         "uid": 115,
@@ -438,10 +365,7 @@
             "天台山",
             "赤城洞天",
             "国清",
-            "司命真经",
-            "浙东三壁",
-            "太微云岫",
-            "名山"
+            "司命真经"
           ],
           "scan_depth": 2
         },
@@ -461,9 +385,7 @@
           "四明山",
           "赤水剑宗",
           "赤水九折剑",
-          "剑冢",
-          "浙东三壁",
-          "名山"
+          "四明剑冢"
         ],
         "abstract": "浙东极道纯剑修山门：三位金丹剑尊与绝壁剑冢，筑基即可御剑凌空，曾与太微云岫宗剑意争锋",
         "uid": 116,
@@ -474,9 +396,7 @@
             "四明山",
             "赤水剑宗",
             "赤水九折剑",
-            "剑冢",
-            "浙东三壁",
-            "名山"
+            "四明剑冢"
           ],
           "scan_depth": 2
         },
@@ -495,11 +415,9 @@
         "keywords": [
           "天目山",
           "灵虚宫",
-          "净明",
-          "特调",
+          "净明忠孝",
           "协防密约",
-          "巡察使",
-          "名山"
+          "天目巡察使"
         ],
         "abstract": "浙西道门净明忠孝道重镇：金丹掌门与执律长老，与国家隐秘特调共签江南协防密约、维持里世界律法",
         "uid": 117,
@@ -509,11 +427,9 @@
           "keys": [
             "天目山",
             "灵虚宫",
-            "净明",
-            "特调",
+            "净明忠孝",
             "协防密约",
-            "巡察使",
-            "名山"
+            "天目巡察使"
           ],
           "scan_depth": 2
         },
@@ -534,8 +450,7 @@
           "上清宗",
           "上清洞天",
           "三茅九老",
-          "神霄五雷",
-          "名山"
+          "神霄五雷"
         ],
         "abstract": "江南道门上清祖庭：三茅峰洞天福地、太清法印镇山，专精上清存神、神霄雷符与地脉古阵修补",
         "uid": 118,
@@ -547,8 +462,7 @@
             "上清宗",
             "上清洞天",
             "三茅九老",
-            "神霄五雷",
-            "名山"
+            "神霄五雷"
           ],
           "scan_depth": 2
         },
@@ -567,11 +481,10 @@
         "keywords": [
           "龙虎山",
           "天师府",
-          "正一",
+          "正一盟威",
           "阳平治都功印",
           "三五斩邪",
-          "老天师",
-          "名山"
+          "老天师"
         ],
         "abstract": "赣北正一盟威万法祖庭：元婴级老天师与祖传天师法印镇守，主掌九州道门法度号令与正阳天雷驱邪",
         "uid": 119,
@@ -581,11 +494,10 @@
           "keys": [
             "龙虎山",
             "天师府",
-            "正一",
+            "正一盟威",
             "阳平治都功印",
             "三五斩邪",
-            "老天师",
-            "名山"
+            "老天师"
           ],
           "scan_depth": 2
         },
@@ -604,9 +516,8 @@
         "keywords": [
           "终南山",
           "楼观台",
-          "全真",
-          "天下第一福地",
-          "名山"
+          "全真内丹",
+          "天下第一福地"
         ],
         "abstract": "秦岭全真清修祖庭：深谷石洞潜藏避世两三百载的假婴元婴宿老，重性命双修与纯粹无为内丹道法",
         "uid": 120,
@@ -616,9 +527,8 @@
           "keys": [
             "终南山",
             "楼观台",
-            "全真",
-            "天下第一福地",
-            "名山"
+            "全真内丹",
+            "天下第一福地"
           ],
           "scan_depth": 2
         },
@@ -638,8 +548,7 @@
           "青城山",
           "丈人洞天",
           "青城炼神",
-          "第五洞天",
-          "名山"
+          "第五洞天"
         ],
         "abstract": "巴蜀第五洞天：玄幽迷雾阵蔽山，金丹至准元婴老修坐镇，精擅玄门炼神术、神识攻防与外丹仙酿",
         "uid": 121,
@@ -650,8 +559,7 @@
             "青城山",
             "丈人洞天",
             "青城炼神",
-            "第五洞天",
-            "名山"
+            "第五洞天"
           ],
           "scan_depth": 2
         },
@@ -670,11 +578,9 @@
         "keywords": [
           "武当山",
           "紫霄宫",
-          "武当",
           "太极玄功",
-          "真武",
-          "以武入道",
-          "名山"
+          "真武道场",
+          "以武入道"
         ],
         "abstract": "鄂西真武大道场：外门造就天下化劲宗师，紫霄内峰秘传直指阴阳太极金丹与元婴，乃古武证仙之桥",
         "uid": 122,
@@ -684,11 +590,9 @@
           "keys": [
             "武当山",
             "紫霄宫",
-            "武当",
             "太极玄功",
-            "真武",
-            "以武入道",
-            "名山"
+            "真武道场",
+            "以武入道"
           ],
           "scan_depth": 2
         },
@@ -707,10 +611,9 @@
         "keywords": [
           "蓬莱",
           "瀛洲",
-          "崇明",
+          "崇明归墟",
           "归墟海坛",
-          "海外散仙",
-          "东海"
+          "海外散仙"
         ],
         "abstract": "东海海外三仙岛与魔都崇明潮汐门户：东海大潮早于内陆半拍涌动，崇明归墟连通传闻藏有化神仙尊的蓬莱洞天",
         "uid": 123,
@@ -720,10 +623,9 @@
           "keys": [
             "蓬莱",
             "瀛洲",
-            "崇明",
+            "崇明归墟",
             "归墟海坛",
-            "海外散仙",
-            "东海"
+            "海外散仙"
           ],
           "scan_depth": 2
         },
@@ -743,8 +645,7 @@
           "昆仑",
           "瑶池",
           "玄圃",
-          "万山之祖",
-          "化神"
+          "万山之祖"
         ],
         "abstract": "神州万山之宗与龙脉发源总枢：传闻冰渊深处蛰伏跨过元婴之化神太古老祖，非天地大潮极盛难见行走现世",
         "uid": 124,
@@ -755,8 +656,7 @@
             "昆仑",
             "瑶池",
             "玄圃",
-            "万山之祖",
-            "化神"
+            "万山之祖"
           ],
           "scan_depth": 2
         },
@@ -916,7 +816,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_高二教师办公室（英语组）": {
         "path": "世界书/地理/地点/高二教师办公室（英语组）.yaml",
@@ -943,7 +848,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_操场": {
         "path": "世界书/地理/地点/操场.yaml",
@@ -968,7 +878,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_图书馆": {
         "path": "世界书/地理/地点/图书馆.yaml",
@@ -995,7 +910,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_天台": {
         "path": "世界书/地理/地点/天台.yaml",
@@ -1020,7 +940,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_食堂": {
         "path": "世界书/地理/地点/食堂.yaml",
@@ -1045,7 +970,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_小花园": {
         "path": "世界书/地理/地点/小花园.yaml",
@@ -1070,7 +1000,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_实验楼": {
         "path": "世界书/地理/地点/实验楼.yaml",
@@ -1097,7 +1032,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_行政楼": {
         "path": "世界书/地理/地点/行政楼.yaml",
@@ -1128,7 +1068,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_暨阳路校门口": {
         "path": "世界书/地理/地点/暨阳路校门口.yaml",
@@ -1157,7 +1102,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_雄风老商场": {
         "path": "世界书/地理/地点/雄风老商场.yaml",
@@ -1184,7 +1134,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_KFC与正新鸡排": {
         "path": "世界书/地理/地点/KFC与正新鸡排.yaml",
@@ -1211,7 +1166,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_青悦城": {
         "path": "世界书/地理/地点/青悦城.yaml",
@@ -1236,7 +1196,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_遇见奶茶店": {
         "path": "世界书/地理/地点/遇见奶茶店.yaml",
@@ -1261,7 +1226,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_晨光文具复印店": {
         "path": "世界书/地理/地点/晨光文具复印店.yaml",
@@ -1288,7 +1258,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_浣江步道": {
         "path": "世界书/地理/地点/浣江步道.yaml",
@@ -1319,7 +1294,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_老城生活圈": {
         "path": "世界书/地理/地点/老城生活圈.yaml",
@@ -1348,7 +1328,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_西施故里与御江湾": {
         "path": "世界书/地理/地点/西施故里与御江湾.yaml",
@@ -1373,7 +1358,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_城东万风新天地": {
         "path": "世界书/地理/地点/城东万风新天地.yaml",
@@ -1398,7 +1388,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_万达宝龙商圈": {
         "path": "世界书/地理/地点/万达宝龙商圈.yaml",
@@ -1427,7 +1422,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_老鹰山": {
         "path": "世界书/地理/地点/老鹰山.yaml",
@@ -1458,7 +1458,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_暨阳站": {
         "path": "世界书/地理/地点/暨阳站.yaml",
@@ -1483,7 +1488,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_操场器材室": {
         "path": "世界书/地理/地点/操场器材室.yaml",
@@ -1504,7 +1514,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_音乐教室": {
         "path": "世界书/地理/地点/音乐教室.yaml",
@@ -1525,7 +1540,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "地点_礼堂后台": {
         "path": "世界书/地理/地点/礼堂后台.yaml",
@@ -1546,7 +1566,12 @@
           "type": "before_character_definition",
           "order": 51
         },
-        "part": "scene"
+        "part": "scene",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       }
     },
     "角色": {
@@ -1605,11 +1630,17 @@
           "keys": [
             "苏晓樯",
             "小天女"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 61
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "苏晓樯_性格调色盘": {
@@ -1640,11 +1671,17 @@
             "苏晓樯",
             "晓樯",
             "小天女"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 62
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "温书语_基础信息": {
@@ -1673,11 +1710,17 @@
           "keys": [
             "温书语",
             "书语"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 63
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "温书语_性格调色盘": {
@@ -1706,11 +1749,17 @@
           "keys": [
             "温书语",
             "书语"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 64
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "沈幼楚_基础信息": {
@@ -1739,11 +1788,17 @@
           "keys": [
             "沈幼楚",
             "幼楚"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 65
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "沈幼楚_性格调色盘": {
@@ -1772,11 +1827,17 @@
           "keys": [
             "沈幼楚",
             "幼楚"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 66
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "沈幼楚_三面性": {
@@ -1805,11 +1866,17 @@
           "keys": [
             "沈幼楚",
             "幼楚"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 67
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "慕佳芊_基础信息": {
@@ -1842,11 +1909,17 @@
             "佳芊",
             "英语老师",
             "慕老师"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 70
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "慕佳芊_性格调色盘": {
@@ -1877,11 +1950,17 @@
             "慕佳芊",
             "佳芊",
             "慕老师"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 71
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "陈芷汀_基础信息": {
@@ -1910,11 +1989,17 @@
           "keys": [
             "陈芷汀",
             "芷汀"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 72
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "陈芷汀_性格调色盘": {
@@ -1943,11 +2028,17 @@
           "keys": [
             "陈芷汀",
             "芷汀"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 73
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "虞淑婉_基础信息": {
@@ -1955,7 +2046,6 @@
         "part": "basic",
         "keywords": [
           "虞淑婉",
-          "校长",
           "虞校长"
         ],
         "abstract": "虞淑婉的基础档案：33岁的暨阳中学校长，克制利落的成熟御姐。已婚六年但丈夫性无能且出轨，婚姻名存实亡，没有孩子是隐秘遗憾。铠甲般的克制之下藏着多年未被触碰的渴望——直到<user>的出现让她开始质疑自己维系了太久的克制",
@@ -1976,13 +2066,18 @@
           "type": "selective",
           "keys": [
             "虞淑婉",
-            "校长",
             "虞校长"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 74
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "虞淑婉_性格调色盘": {
@@ -2013,18 +2108,23 @@
             "虞淑婉",
             "校长",
             "虞校长"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 75
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "虞淑婉_NSFW指导": {
         "scope": "specific",
         "keywords": [
           "虞淑婉",
-          "校长",
           "虞校长"
         ],
         "abstract": "虞淑婉的NSFW实战指导：体位偏好、成熟女人被剥夺六年后的释放型行为速查、感情/炮友双模式语料库与硬约束（含婚姻伦理与权力关系底线）",
@@ -2039,13 +2139,18 @@
           "type": "selective",
           "keys": [
             "虞淑婉",
-            "校长",
             "虞校长"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 106
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "虞淑婉_日常接触": {
@@ -2068,14 +2173,20 @@
             "虞校长",
             "校长室",
             "校长办公室"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 76
         },
         "part": "other",
-        "scope": "specific"
+        "scope": "specific",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "许念安_基础信息": {
         "scope": "specific",
@@ -2109,11 +2220,17 @@
             "安安",
             "学习委员",
             "学委"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 77
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "许念安_性格调色盘": {
@@ -2148,11 +2265,17 @@
             "安安",
             "学习委员",
             "学委"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 78
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "云清晏_基础信息": {
@@ -2258,11 +2381,17 @@
           "keys": [
             "吴臻臻",
             "班长"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 90
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "凌知夏_基础信息": {
@@ -2283,11 +2412,17 @@
           "keys": [
             "凌知夏",
             "知夏"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 68
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "俞嘉豪_基础信息": {
@@ -2314,11 +2449,17 @@
             "俞少",
             "俞家",
             "苏俞联姻"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 91
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       }
     },
@@ -2344,11 +2485,17 @@
             "苏晓樯",
             "晓樯",
             "小天女"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 100
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "温书语_NSFW指导": {
@@ -2370,11 +2517,17 @@
           "keys": [
             "温书语",
             "书语"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 101
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "沈幼楚_NSFW指导": {
@@ -2396,11 +2549,17 @@
           "keys": [
             "沈幼楚",
             "幼楚"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 102
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "慕佳芊_NSFW指导": {
@@ -2422,11 +2581,17 @@
           "keys": [
             "慕佳芊",
             "佳芊"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 104
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "陈芷汀_NSFW指导": {
@@ -2448,11 +2613,17 @@
           "keys": [
             "陈芷汀",
             "芷汀"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 105
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "许念安_NSFW指导": {
@@ -2476,11 +2647,17 @@
             "许念安",
             "念安",
             "安安"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 107
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "云清晏_NSFW指导": {
@@ -2500,11 +2677,17 @@
             "云清晏",
             "清晏",
             "圣女"
-          ]
+          ],
+          "scan_depth": 2
         },
         "position": {
           "type": "after_character_definition",
           "order": 108
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "谢昭宁_NSFW指导": {
@@ -2532,6 +2715,11 @@
         "position": {
           "type": "after_character_definition",
           "order": 109
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       }
     },
@@ -2604,6 +2792,11 @@
         "position": {
           "type": "after_character_definition",
           "order": 113
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "体育周": {
@@ -2632,6 +2825,11 @@
         "position": {
           "type": "after_character_definition",
           "order": 114
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "期中考试": {
@@ -2658,6 +2856,11 @@
         "position": {
           "type": "after_character_definition",
           "order": 115
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "远足": {
@@ -2688,6 +2891,11 @@
         "position": {
           "type": "after_character_definition",
           "order": 116
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "艺术周": {
@@ -2716,6 +2924,11 @@
         "position": {
           "type": "after_character_definition",
           "order": 117
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "寒假": {
@@ -2743,6 +2956,11 @@
         "position": {
           "type": "after_character_definition",
           "order": 118
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "事件_元旦": {
@@ -2768,7 +2986,12 @@
           "type": "after_character_definition",
           "order": 119
         },
-        "part": "event"
+        "part": "event",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "事件_开学周": {
         "path": "世界书/事件/开学周.yaml",
@@ -2795,7 +3018,12 @@
           "type": "after_character_definition",
           "order": 120
         },
-        "part": "event"
+        "part": "event",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "老鹰山仙人": {
         "path": "世界书/事件/老鹰山仙人.yaml",
@@ -2833,6 +3061,11 @@
         "position": {
           "type": "before_character_definition",
           "order": 57
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "万风地库": {
@@ -2871,6 +3104,11 @@
         "position": {
           "type": "before_character_definition",
           "order": 58
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "珍珠局": {
@@ -2907,6 +3145,11 @@
         "position": {
           "type": "before_character_definition",
           "order": 59
+        },
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
         }
       },
       "高校研学实践": {
@@ -2939,7 +3182,12 @@
           "type": "after_character_definition",
           "order": 121
         },
-        "part": "event"
+        "part": "event",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "暑期工读与家教实践": {
         "path": "世界书/事件/暑期工读与家教实践.yaml",
@@ -2974,7 +3222,12 @@
           "type": "after_character_definition",
           "order": 122
         },
-        "part": "event"
+        "part": "event",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "高三成人礼与首考誓师": {
         "path": "世界书/事件/高三成人礼与首考誓师.yaml",
@@ -3004,7 +3257,12 @@
           "type": "after_character_definition",
           "order": 123
         },
-        "part": "event"
+        "part": "event",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "最后一课与毕业散伙狂欢夜": {
         "path": "世界书/事件/最后一课与毕业散伙狂欢夜.yaml",
@@ -3038,7 +3296,12 @@
           "type": "after_character_definition",
           "order": 124
         },
-        "part": "event"
+        "part": "event",
+        "recursion": {
+          "prevent_incoming": true,
+          "prevent_outgoing": true,
+          "delay_until": null
+        }
       },
       "[DLC]老鹰山灵脉与古宗秘藏": {
         "path": "世界书/事件/DLC_老鹰山灵脉与古宗秘藏.yaml",
