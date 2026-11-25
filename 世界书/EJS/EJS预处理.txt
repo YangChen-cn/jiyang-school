@@ -6,9 +6,9 @@ define('current_date', getvar('stat_data.世界.日期', { defaults: '2020/09/01
 define('current_period', getvar('stat_data.世界.时间段', { defaults: '' }));
 define('plot_event', getvar('stat_data.剧情.当前事件', { defaults: '无' }));
 define('campus_activity', getvar('stat_data.剧情.校园活动', { defaults: '无' }));
-define('affection_xiaotian', getvar('stat_data.苏晓樯.好感度', { defaults: 0 }));
+define('affection_xiaotian', getvar('stat_data.苏晚棠.好感度', { defaults: 0 }));
 define('affection_shuyu', getvar('stat_data.温书语.好感度', { defaults: 0 }));
-define('affection_youchu', getvar('stat_data.沈幼楚.好感度', { defaults: 0 }));
+define('affection_ruowei', getvar('stat_data.沈若微.好感度', { defaults: 0 }));
 define('affection_jiaqian', getvar('stat_data.慕佳芊.好感度', { defaults: 0 }));
 define('affection_zhiting', getvar('stat_data.陈芷汀.好感度', { defaults: 0 }));
 define('affection_shuwan', getvar('stat_data.虞淑婉.好感度', { defaults: 0 }));

@@ -251,7 +251,7 @@
           "沧溟祖谱",
           "暨阳苏家"
         ],
-        "abstract": "魔都顶级水剑仙族沧溟水府：金丹巅峰供奉与半步元婴老祖坐镇，详述百年前分家至暨阳（苏晓樯父祖一脉）及灵气复苏后保有仙缘之秘",
+        "abstract": "魔都顶级水剑仙族沧溟水府：金丹巅峰供奉与半步元婴老祖坐镇，详述百年前分家至暨阳（苏晚棠父祖一脉）及灵气复苏后保有仙缘之秘",
         "uid": 112,
         "enabled": false,
         "strategy": {
@@ -1580,9 +1580,9 @@
         "scope": "catalog",
         "part": "basic",
         "keywords": [
-          "苏晓樯",
+          "苏晚棠",
           "温书语",
-          "沈幼楚",
+          "沈若微",
           "许念安",
           "念安",
           "安安",
@@ -1593,7 +1593,7 @@
           "陈芷汀",
           "虞淑婉"
         ],
-        "abstract": "角色快速索引：七位可攻略角色（苏晓樯、温书语、沈幼楚、许念安、慕佳芊、陈芷汀、虞淑婉）与三名 NPC（凌知夏、吴臻臻、俞嘉豪）的基本识别信息；修仙 DLC 开启时加入云清晏、谢昭宁",
+        "abstract": "角色快速索引：七位可攻略角色（苏晚棠、温书语、沈若微、许念安、慕佳芊、陈芷汀、虞淑婉）与三名 NPC（凌知夏、吴臻臻、俞嘉豪）的基本识别信息；修仙 DLC 开启时加入云清晏、谢昭宁",
         "uid": 4,
         "enabled": true,
         "strategy": {
@@ -1604,20 +1604,20 @@
           "order": 60
         }
       },
-      "苏晓樯_基础信息": {
+      "苏晚棠_基础信息": {
         "scope": "specific",
         "part": "basic",
         "keywords": [
-          "苏晓樯",
+          "苏晚棠",
           "小天女"
         ],
-        "abstract": "苏晓樯的基础档案：山下湖「澹珠记」珍珠珠宝品牌家族独生女，外号小天女，暨阳中学风云人物。张扬明艳、真诚到刺人",
+        "abstract": "苏晚棠的基础档案：山下湖「澹珠记」珍珠珠宝品牌家族独生女，外号小天女，暨阳中学风云人物。张扬明艳、真诚到刺人",
         "contents": [
           {
-            "content": "---\n<character_basic character=\"苏晓樯\">"
+            "content": "---\n<character_basic character=\"苏晚棠\">"
           },
           {
-            "file": "世界书/角色/苏晓樯/基础信息.yaml"
+            "file": "世界书/角色/苏晚棠/基础信息.yaml"
           },
           {
             "content": "</character_basic>"
@@ -1628,7 +1628,7 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "苏晓樯",
+            "苏晚棠",
             "小天女"
           ],
           "scan_depth": 4
@@ -1643,21 +1643,21 @@
           "delay_until": null
         }
       },
-      "苏晓樯_性格调色盘": {
+      "苏晚棠_性格调色盘": {
         "scope": "specific",
         "part": "personality",
         "keywords": [
-          "苏晓樯",
-          "晓樯",
+          "苏晚棠",
+          "晚棠",
           "小天女"
         ],
-        "abstract": "苏晓樯的五阶段性格调色盘：底色底气，从张扬直率→直率别扭→试探拉扯→坦率柔软→亲密恋人+NSFW，以真诚的尖锐感贯穿，90+解锁完整亲密",
+        "abstract": "苏晚棠的五阶段性格调色盘：底色底气，从张扬直率→直率别扭→试探拉扯→坦率柔软→亲密恋人+NSFW，以真诚的尖锐感贯穿，90+解锁完整亲密",
         "contents": [
           {
-            "content": "---\n<character_personality character=\"苏晓樯\">"
+            "content": "---\n<character_personality character=\"苏晚棠\">"
           },
           {
-            "file": "世界书/角色/苏晓樯/性格调色盘.yaml"
+            "file": "世界书/角色/苏晚棠/性格调色盘.yaml"
           },
           {
             "content": "</character_personality>"
@@ -1668,8 +1668,8 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "苏晓樯",
-            "晓樯",
+            "苏晚棠",
+            "晚棠",
             "小天女"
           ],
           "scan_depth": 4
@@ -1762,20 +1762,20 @@
           "delay_until": null
         }
       },
-      "沈幼楚_基础信息": {
+      "沈若微_基础信息": {
         "scope": "specific",
         "part": "basic",
         "keywords": [
-          "沈幼楚",
-          "幼楚"
+          "沈若微",
+          "若微"
         ],
-        "abstract": "沈幼楚的基础档案：家境困难的女孩，与祖母同住，在奶茶店打工，曾受亲人侵害后独自承受，极度警惕但对善意无比珍惜",
+        "abstract": "沈若微的基础档案：家境困难的女孩，与祖母同住，在奶茶店打工，曾受亲人侵害后独自承受，极度警惕但对善意无比珍惜",
         "contents": [
           {
-            "content": "---\n<character_basic character=\"沈幼楚\">"
+            "content": "---\n<character_basic character=\"沈若微\">"
           },
           {
-            "file": "世界书/角色/沈幼楚/基础信息.yaml"
+            "file": "世界书/角色/沈若微/基础信息.yaml"
           },
           {
             "content": "</character_basic>"
@@ -1786,8 +1786,8 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "沈幼楚",
-            "幼楚"
+            "沈若微",
+            "若微"
           ],
           "scan_depth": 4
         },
@@ -1801,20 +1801,20 @@
           "delay_until": null
         }
       },
-      "沈幼楚_性格调色盘": {
+      "沈若微_性格调色盘": {
         "scope": "specific",
         "part": "personality",
         "keywords": [
-          "沈幼楚",
-          "幼楚"
+          "沈若微",
+          "若微"
         ],
-        "abstract": "沈幼楚的五阶段性格调色盘：底色脆弱，从沉默回避的警觉→隐忍观察的感激→温顺坚韧的依赖萌芽→主动依赖→归属+NSFW，以安全感渐进重建为主线，90+解锁亲密中的信任重构",
+        "abstract": "沈若微的五阶段性格调色盘：底色脆弱，从沉默回避的警觉→隐忍观察的感激→温顺坚韧的依赖萌芽→主动依赖→归属+NSFW，以安全感渐进重建为主线，90+解锁亲密中的信任重构",
         "contents": [
           {
-            "content": "---\n<character_personality character=\"沈幼楚\">"
+            "content": "---\n<character_personality character=\"沈若微\">"
           },
           {
-            "file": "世界书/角色/沈幼楚/性格调色盘.yaml"
+            "file": "世界书/角色/沈若微/性格调色盘.yaml"
           },
           {
             "content": "</character_personality>"
@@ -1825,8 +1825,8 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "沈幼楚",
-            "幼楚"
+            "沈若微",
+            "若微"
           ],
           "scan_depth": 4
         },
@@ -1840,20 +1840,20 @@
           "delay_until": null
         }
       },
-      "沈幼楚_三面性": {
+      "沈若微_三面性": {
         "scope": "specific",
         "part": "tri_faceted",
         "keywords": [
-          "沈幼楚",
-          "幼楚"
+          "沈若微",
+          "若微"
         ],
-        "abstract": "沈幼楚的三面性：学校透明人（隐身自保）→涉及家庭的逃生模式（恐惧切断）→<user>面前停下来的地方（好感度≥50解锁，卸下防御、重建日常），含过渡机制和面间渗透",
+        "abstract": "沈若微的三面性：学校透明人（隐身自保）→涉及家庭的逃生模式（恐惧切断）→<user>面前停下来的地方（好感度≥50解锁，卸下防御、重建日常），含过渡机制和面间渗透",
         "contents": [
           {
-            "content": "---\n<character_tri_faceted character=\"沈幼楚\">"
+            "content": "---\n<character_tri_faceted character=\"沈若微\">"
           },
           {
-            "file": "世界书/角色/沈幼楚/三面性.yaml"
+            "file": "世界书/角色/沈若微/三面性.yaml"
           },
           {
             "content": "</character_tri_faceted>"
@@ -1864,8 +1864,8 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "沈幼楚",
-            "幼楚"
+            "沈若微",
+            "若微"
           ],
           "scan_depth": 4
         },
@@ -2433,7 +2433,7 @@
           "俞家",
           "苏俞联姻"
         ],
-        "abstract": "俞嘉豪的NPC档案：20岁本地花花公子型纨绔，身高175常健身身材不错、开豪车善撩妹但学业荒废（杭州大专挂名常逃课），家里与苏家交好曾有意联姻，对苏晓樯死缠烂打，私下与陈芷汀有数次交易关系（双方保密）",
+        "abstract": "俞嘉豪的NPC档案：20岁本地花花公子型纨绔，身高175常健身身材不错、开豪车善撩妹但学业荒废（杭州大专挂名常逃课），家里与苏家交好曾有意联姻，对苏晚棠死缠烂打，私下与陈芷汀有数次交易关系（双方保密）",
         "contents": [
           {
             "file": "世界书/NPC/俞嘉豪/基础信息.yaml"
@@ -2464,17 +2464,17 @@
       }
     },
     "NSFW指导": {
-      "苏晓樯_NSFW指导": {
+      "苏晚棠_NSFW指导": {
         "scope": "specific",
         "keywords": [
-          "苏晓樯",
-          "晓樯",
+          "苏晚棠",
+          "晚棠",
           "小天女"
         ],
-        "abstract": "苏晓樯的NSFW实战指导：体位偏好（骑乘主导+后入）、语料库、敏感点（耳后/腰侧/大腿内侧）、主动主导型行为速查与硬约束",
+        "abstract": "苏晚棠的NSFW实战指导：体位偏好（骑乘主导+后入）、语料库、敏感点（耳后/腰侧/大腿内侧）、主动主导型行为速查与硬约束",
         "contents": [
           {
-            "file": "世界书/角色/苏晓樯/NSFW指导.yaml"
+            "file": "世界书/角色/苏晚棠/NSFW指导.yaml"
           }
         ],
         "uid": 23,
@@ -2482,8 +2482,8 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "苏晓樯",
-            "晓樯",
+            "苏晚棠",
+            "晚棠",
             "小天女"
           ],
           "scan_depth": 6
@@ -2530,16 +2530,16 @@
           "delay_until": null
         }
       },
-      "沈幼楚_NSFW指导": {
+      "沈若微_NSFW指导": {
         "scope": "specific",
         "keywords": [
-          "沈幼楚",
-          "幼楚"
+          "沈若微",
+          "若微"
         ],
-        "abstract": "沈幼楚的NSFW实战指导：体位偏好（传教士+面对面拥抱式，禁背后位初期）、语料库、敏感点与禁区（脚踝为禁区）、创伤知情行为速查与硬约束",
+        "abstract": "沈若微的NSFW实战指导：体位偏好（传教士+面对面拥抱式，禁背后位初期）、语料库、敏感点与禁区（脚踝为禁区）、创伤知情行为速查与硬约束",
         "contents": [
           {
-            "file": "世界书/角色/沈幼楚/NSFW指导.yaml"
+            "file": "世界书/角色/沈若微/NSFW指导.yaml"
           }
         ],
         "uid": 25,
@@ -2547,8 +2547,8 @@
         "strategy": {
           "type": "selective",
           "keys": [
-            "沈幼楚",
-            "幼楚"
+            "沈若微",
+            "若微"
           ],
           "scan_depth": 6
         },

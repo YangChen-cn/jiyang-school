@@ -214,7 +214,7 @@
         { "place": "雄风老商场", "aliases": ["雄风商场", "老雄风", "雄风"], "scene": "mall", "notes": ["从校门沿街可步行到达，街侧有快餐店。", "白天可逛；晚间按各铺营业情况，放学时学生更多在外街停留。"] },
         { "place": "KFC与正新鸡排", "aliases": ["肯德基", "KFC", "正新鸡排"], "scene": "kfc", "notes": ["雄风外侧临街，回校门沿同一条街走。", "放学高峰排队，打烊时间看门店；校服人群多时也可能碰不到熟人。"] },
         { "place": "青悦城", "aliases": ["无招牌咖啡馆", "青悦城四楼"], "scene": "qing", "notes": ["由校门沿主路步行可达，继续向城区可换乘。", "各楼层各自营业，周末午后人多；四楼咖啡馆可按约碰面。"] },
-        { "place": "遇见奶茶店", "aliases": ["遇见奶茶", "遇见店"], "scene": "tea", "notes": ["在放学步行圈内，从校门沿临街铺面找。", "放学时常排队。沈幼楚平日只排晚自习前短班，考试周暂停，周末或假期可排长班。到店可向店员确认当班。"] },
+        { "place": "遇见奶茶店", "aliases": ["遇见奶茶", "遇见店"], "scene": "tea", "notes": ["在放学步行圈内，从校门沿临街铺面找。", "放学时常排队。沈若微平日只排晚自习前短班，考试周暂停，周末或假期可排长班。到店可向店员确认当班。"] },
         { "place": "晨光文具复印店", "aliases": ["晨光文具", "复印店", "文印店"], "scene": "copyshop", "notes": ["校门对面临街店铺之一。", "上课前及放学有学生买文具、打资料；晚间按店门公告。"] }
       ]
     },
@@ -275,13 +275,13 @@
 
   const ALBUMS = {
     '许念安': [['nianan/campus.webp', '课间还作业'], ['nianan/library.webp', '图书馆的雨天'], ['nianan/home-diary.webp', '午后居家'], ['nianan/rainy-bookshop.webp', '雨天书店']],
-    '苏晓樯': [
+    '苏晚棠': [
       ['su/campus.png', '校园走廊'], ['su/outdoor.png', '天台咖啡'],
       ['su/weekend-breakfast.webp', '周末的草莓吐司'], ['su/ps4-night.webp', '最后一个弯 · PS4 游戏夜'],
       ['su/pic-2.png', '书店闲逛'], ['su/pic-3.png', '雨夜街边'], ['su/pic-4.png', '街角午后']
     ],
     '温书语': [['wen/campus.png', '午后教室'], ['wen/outdoor.png', '旧书店']],
-    '沈幼楚': [['shen/campus.png', '安静课间'], ['shen/outdoor.png', '奶茶店']],
+    '沈若微': [['shen/campus.png', '安静课间'], ['shen/outdoor.png', '奶茶店']],
     '慕佳芊': [
       ['mu/campus.png', '办公室'], ['mu/outdoor.png', '旧街散步'],
       ['mu/pic-1.png', '校外照片 01'], ['mu/pic-2.png', '校外照片 02'],
@@ -305,9 +305,9 @@
   };
 
   const CHAR_THRESHOLDS = {
-    '苏晓樯': [20, 50, 80, 90],
+    '苏晚棠': [20, 50, 80, 90],
     '温书语': [20, 50, 80, 90],
-    '沈幼楚': [20, 50, 80, 90],
+    '沈若微': [20, 50, 80, 90],
     '许念安': [20, 50, 80, 90],
     '慕佳芊': [20, 50, 80, 90],
     '陈芷汀': [40, 60, 80, 90],
@@ -318,9 +318,9 @@
 
   const PROFILES = {
     '许念安': { name: '念安', initial: '念', bg: '#4f688a' },
-    '苏晓樯': { name: 'Margot.', initial: 'M', bg: '#c95b42' },
+    '苏晚棠': { name: 'Margot.', initial: 'M', bg: '#c95b42' },
     '温书语': { name: '兰舟.', initial: '舟', bg: '#3c7399' },
-    '沈幼楚': { name: '小楚', initial: '楚', bg: '#8a6d52' },
+    '沈若微': { name: '小微', initial: '微', bg: '#8a6d52' },
     '陈芷汀': { name: '汀汀不听话✨', initial: '汀', bg: '#b4456c' },
     '慕佳芊': { name: 'Mumu慕老师', initial: '芊', bg: '#c9882c' },
     '虞淑婉': { name: '虞淑婉', initial: '婉', bg: '#2e5950' },
@@ -1849,8 +1849,8 @@
         }
       });
 
-      // 沈幼楚信任锁与许念安控制警示徽标
-      if (name === '沈幼楚') {
+      // 沈若微信任锁与许念安控制警示徽标
+      if (name === '沈若微') {
         const trustNum = Number(sceneValue(person.querySelector('[data-metric-val="trust"]')));
         const lockPill = person.querySelector('[data-trust-lock]');
         if (lockPill) lockPill.hidden = !(Number.isFinite(trustNum) && trustNum < 30 && person.dataset.present === 'true');

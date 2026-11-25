@@ -19,9 +19,9 @@
   const failedScenes = new WeakMap();
   const subscriptions = [];
   const defaults = {
-    '苏晓樯': 'statusbar/v2/avatars/xiaoqiang.png',
+    '苏晚棠': 'statusbar/v2/avatars/xiaoqiang.png',
     '温书语': 'statusbar/v2/avatars/shuyu.png',
-    '沈幼楚': 'statusbar/v2/avatars/youchu.png',
+    '沈若微': 'statusbar/v2/avatars/youchu.png',
     '许念安': 'statusbar/v2/avatars/nianan.png',
     '慕佳芊': 'statusbar/v2/avatars/jiaqian.png',
     '陈芷汀': 'statusbar/v2/avatars/zhiting.png',
@@ -34,7 +34,7 @@
   const reserved = new Set(['旁白', '系统', '状态', '状态栏', '选项', '规则', '内心独白']);
   // 模型偶尔会用称呼写标签，映射回标准角色名，才能命中同名头像缓存。
   const nameAliases = {
-    '小天女': '苏晓樯', '书语': '温书语', '幼楚': '沈幼楚',
+    '小天女': '苏晚棠', '书语': '温书语', '若微': '沈若微',
     '念安': '许念安', '安安': '许念安', '学习委员': '许念安',
     '吴班长': '吴臻臻', '嘉豪': '俞嘉豪',
     '佳芊': '慕佳芊', '慕老师': '慕佳芊', '英语老师': '慕佳芊',
@@ -44,9 +44,9 @@
   };
   const PLAYER_ALIASES = new Set(['主角', '玩家', 'user', '我', '你']);
   const CHARACTER_TONES = {
-    '苏晓樯': { ink: '#c95b42', edge: '#e9c1b7', bg: '#fff8f6' },
+    '苏晚棠': { ink: '#c95b42', edge: '#e9c1b7', bg: '#fff8f6' },
     '温书语': { ink: '#3c7399', edge: '#bdd6e6', bg: '#f6fafd' },
-    '沈幼楚': { ink: '#8a6d52', edge: '#dfcfb9', bg: '#fcf9f4' },
+    '沈若微': { ink: '#8a6d52', edge: '#dfcfb9', bg: '#fcf9f4' },
     '许念安': { ink: '#4f688a', edge: '#c3cfe0', bg: '#f7f9fc' },
     '慕佳芊': { ink: '#b3741e', edge: '#ead2ad', bg: '#fdf9f2' },
     '陈芷汀': { ink: '#b4456c', edge: '#e8becd', bg: '#fdf6f9' },

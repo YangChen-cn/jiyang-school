@@ -64,7 +64,7 @@ export const Schema = z.object({
     消息: z.array(CampusPost).optional(),
   }).prefault({}),
 
-  苏晓樯: z.object({
+  苏晚棠: z.object({
     是否在场: z.coerce.boolean().prefault(false),
     好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
     关系阶段: z.string().prefault(''),
@@ -90,7 +90,7 @@ export const Schema = z.object({
     内心独白: z.string().prefault(''),
   }).prefault({}),
 
-  沈幼楚: z.object({
+  沈若微: z.object({
     是否在场: z.coerce.boolean().prefault(false),
     好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
     信任度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),

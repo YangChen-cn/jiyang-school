@@ -6,8 +6,8 @@
   var ARCHIVE_PREFIX = 'jy-opening-archive:v1:';
   var LEGACY_ENTRY_NAME = '玩家开局设定';
   var WRITE_LEGACY_WORLDBOOK = false; // 旧版把档案写进世界书；新版改为写 MVU 变量，保留代码路径但默认关闭
-  var GREETING_NAMES = ['开局设定界面', '开学第一天', '慕佳芊', '苏晓樯', '温书语', '沈幼楚', '许念安', '陈芷汀', '虞淑婉'];
-  var CHARACTER_NAMES = ['苏晓樯', '温书语', '沈幼楚', '许念安', '慕佳芊', '陈芷汀', '虞淑婉'];
+  var GREETING_NAMES = ['开局设定界面', '开学第一天', '慕佳芊', '苏晚棠', '温书语', '沈若微', '许念安', '陈芷汀', '虞淑婉'];
+  var CHARACTER_NAMES = ['苏晚棠', '温书语', '沈若微', '许念安', '慕佳芊', '陈芷汀', '虞淑婉'];
   var DEFAULT_FIELDS = {
     '开始年份': '2020',
     '年龄': '18岁',
@@ -202,10 +202,10 @@
       date: '2020/09/01', week: '星期二', time: '早自习', weather: '晴', location: '暨阳中学 教学楼四楼 高二（8）班教室',
       area: '校园', privacy: '公开', pace: '日常铺垫', semester: '高二上', focus: '群体', schoolEvent: '无',
       present: {
-        '苏晓樯': { pos: '教室后排靠窗座位', top: '白色短袖校服衬衫', bottom: '深色校服百褶裙', action: '把零食塞进抽屉，回头打量新同学', mood: '好奇里带一点审视', inner: '新来的会坐哪儿？' },
+        '苏晚棠': { pos: '教室后排靠窗座位', top: '白色短袖校服衬衫', bottom: '深色校服百褶裙', action: '把零食塞进抽屉，回头打量新同学', mood: '好奇里带一点审视', inner: '新来的会坐哪儿？' },
         '温书语': { pos: '窗边第二排', top: '白色短袖校服衬衫', bottom: '深色校服长裤', action: '低头看一本卷了边的课外书', mood: '安静，不愿被打扰', inner: '希望今天不要有人来搭话。' },
         '许念安': { pos: '讲台旁', top: '白色短袖校服衬衫', bottom: '深色校服裙', action: '整理各科的作业本', mood: '平静', inner: '' },
-        '沈幼楚': { pos: '最后一排靠墙角落', top: '洗得发白的校服短袖', bottom: '洗得发白的校服长裤', action: '把自己缩进墙角，低头避开视线', mood: '紧张，想消失', inner: '不要看我。' },
+        '沈若微': { pos: '最后一排靠墙角落', top: '洗得发白的校服短袖', bottom: '洗得发白的校服长裤', action: '把自己缩进墙角，低头避开视线', mood: '紧张，想消失', inner: '不要看我。' },
         '慕佳芊': { pos: '讲台上', top: '浅色衬衫', bottom: '及膝浅色半裙', action: '转身写板书，粉笔声清脆', mood: '从容而克制', inner: '这一届会比上一届更难带吗。' }
       }
     },
@@ -218,9 +218,9 @@
     },
     3: {
       date: '2020/08/29', week: '星期六', time: '下午', weather: '晴热', location: '城区 浣江路巷口',
-      area: '城区', privacy: '公开', pace: '事件触发', semester: '高二上', focus: '苏晓樯', schoolEvent: '无',
+      area: '城区', privacy: '公开', pace: '事件触发', semester: '高二上', focus: '苏晚棠', schoolEvent: '无',
       present: {
-        '苏晓樯': { pos: '黑色奔驰车旁', top: '白色 T 恤', bottom: '深蓝色牛仔短裤', action: '拎着奶茶站在车门边，抬了抬下巴', mood: '心虚又好奇', inner: '这人怎么偏偏在这儿。' }
+        '苏晚棠': { pos: '黑色奔驰车旁', top: '白色 T 恤', bottom: '深蓝色牛仔短裤', action: '拎着奶茶站在车门边，抬了抬下巴', mood: '心虚又好奇', inner: '这人怎么偏偏在这儿。' }
       }
     },
     4: {
@@ -232,9 +232,9 @@
     },
     5: {
       date: '2020/09/07', week: '星期一', time: '夜间', weather: '晴', location: '老城窄巷（学校东南侧）',
-      area: '城区', privacy: '半私密', pace: '事件触发', semester: '高二上', focus: '沈幼楚', schoolEvent: '无',
+      area: '城区', privacy: '半私密', pace: '事件触发', semester: '高二上', focus: '沈若微', schoolEvent: '无',
       present: {
-        '沈幼楚': { pos: '青砖墙边', top: '洗得发白的校服短袖', bottom: '洗得发白的校服长裤', action: '背贴着墙，攥紧书包带发抖', mood: '恐惧到极点', inner: '谁来……谁都好。' }
+        '沈若微': { pos: '青砖墙边', top: '洗得发白的校服短袖', bottom: '洗得发白的校服长裤', action: '背贴着墙，攥紧书包带发抖', mood: '恐惧到极点', inner: '谁来……谁都好。' }
       }
     },
     6: {
@@ -751,9 +751,9 @@
         patches.push([name + '.动作', present ? present.action : '']);
         patches.push([name + '.心情', present ? present.mood : '']);
         patches.push([name + '.内心独白', present ? present.inner : '']);
-        if (name === '沈幼楚') {
-          patches.push(['沈幼楚.信任度', 0]);
-          patches.push(['沈幼楚.触发家庭话题', false]);
+        if (name === '沈若微') {
+          patches.push(['沈若微.信任度', 0]);
+          patches.push(['沈若微.触发家庭话题', false]);
         }
         if (name === '许念安') patches.push(['许念安.控制欲', 0]);
       });

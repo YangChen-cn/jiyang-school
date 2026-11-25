@@ -29,8 +29,8 @@ assert.equal(sandbox.pick('2021-02-30',2020),null);
 assert.equal(sandbox.pick('',2020),null);
 const schemaBox = {z,_}; vm.createContext(schemaBox);
 vm.runInContext(read('schema.ts').replace('export const Schema','const Schema').replace(/^export type .*$/gm,'')+'\nthis.schema = Schema;', schemaBox);
-const old = schemaBox.schema.parse({世界:{当前位置:'我找到的小巷'},主角:{姓名:'测试同学',重要物品:[{名称:'借书',描述:'已借未还'}]},苏晓樯:{好感度:17}});
-assert.equal(old.世界.当前位置,'我找到的小巷');assert.equal(old.苏晓樯.好感度,17);assert.equal(old.主角.重要物品.length,1);
+const old = schemaBox.schema.parse({世界:{当前位置:'我找到的小巷'},主角:{姓名:'测试同学',重要物品:[{名称:'借书',描述:'已借未还'}]},苏晚棠:{好感度:17}});
+assert.equal(old.世界.当前位置,'我找到的小巷');assert.equal(old.苏晚棠.好感度,17);assert.equal(old.主角.重要物品.length,1);
 assert.equal(old.校园.有效公告.length,0);
 assert.equal(old.校园.动态流.length,0);
 const manifest = JSON.parse(read('tavern-cards-state.json'));
@@ -41,7 +41,7 @@ assert.ok(!Object.keys(manifest.entryManifest.角色).some(key=>key.startsWith('
 assert.ok(!Object.keys(manifest.entryManifest.NSFW指导).some(key=>key.startsWith('凌知夏')));
 
 async function checkOpeningMappings() {
- const greetingNames=['开学第一天','慕佳芊','苏晓樯','温书语','沈幼楚','许念安','陈芷汀','虞淑婉'];
+ const greetingNames=['开学第一天','慕佳芊','苏晚棠','温书语','沈若微','许念安','陈芷汀','虞淑婉'];
  const files=fs.readdirSync(path.join(root,'开场白')).filter(name=>/^\d-.*\.txt$/.test(name)).sort();
  assert.equal(files.length,greetingNames.length);
  const greetings=files.map(file=>read('开场白/'+file));
@@ -172,16 +172,16 @@ async function checkOpeningArchives() {
 }
 
 function checkRetiredCharacter(write) {
- const history={世界:{日期:'2020-09-03'},剧情:{当日关系增量:{日期:'2020-09-03',已用:{'凌知夏.好感度':3}}},主角:{重要物品:[{名称:'竞赛笔记',描述:'借来查解法'}]},凌知夏:{好感度:97,关系阶段:'熟悉'},苏晓樯:{好感度:12}};
+ const history={世界:{日期:'2020-09-03'},剧情:{当日关系增量:{日期:'2020-09-03',已用:{'凌知夏.好感度':3}}},主角:{重要物品:[{名称:'竞赛笔记',描述:'借来查解法'}]},凌知夏:{好感度:97,关系阶段:'熟悉'},苏晚棠:{好感度:12}};
  history.剧情.重大情感申请=[{事件:'旧申请'}];
  history.剧情.已结算重大情感事件=[{事件:'旧记录'}];
  history.剧情.推进节奏 = '日常铺垫';
  history.剧情.事件冷却 = 2;
- history.剧情.上次焦点角色 = '苏晓樯';
+ history.剧情.上次焦点角色 = '苏晚棠';
  const exact=JSON.stringify(history);
  const checked=schemaBox.schema.parse(history);
  assert.equal(checked.凌知夏,undefined);
- assert.equal(checked.苏晓樯.好感度,12);
+ assert.equal(checked.苏晚棠.好感度,12);
  const snapshot=ejs.render(read('世界书/变量/变量列表.txt'),{getvar:()=>history});
  assert.doesNotMatch(snapshot,/凌知夏|当日关系增量|重大情感申请|已结算重大情感事件|推进节奏|事件冷却|上次焦点角色/);
  assert.match(snapshot,/竞赛笔记/);
@@ -194,7 +194,7 @@ function checkRetiredCharacter(write) {
  assert.equal(continued.剧情.推进节奏,undefined);
  assert.equal(continued.剧情.事件冷却,undefined);
  assert.equal(continued.剧情.上次焦点角色,undefined);
- assert.equal(continued.苏晓樯.好感度,12);
+ assert.equal(continued.苏晚棠.好感度,12);
  assert.equal(continued.主角.重要物品[0].名称,'竞赛笔记');
  assert.equal(JSON.stringify(history),exact);
  assert.doesNotMatch(html,/stat_data\.凌知夏|avatars\/zhixia/);
@@ -362,35 +362,35 @@ async function runRoutes() {
 }
 
 function checkRelationshipPace(update) {
- const people=['苏晓樯','温书语','沈幼楚','陈芷汀','慕佳芊','虞淑婉'];
- const start=()=>({世界:{日期:'2020-09-01'},剧情:{},...Object.fromEntries(people.map(name=>[name,{好感度:0,关系阶段:name==='沈幼楚'?'戒备':name==='慕佳芊'||name==='虞淑婉'?'师生':'初识'}]))});
+ const people=['苏晚棠','温书语','沈若微','陈芷汀','慕佳芊','虞淑婉'];
+ const start=()=>({世界:{日期:'2020-09-01'},剧情:{},...Object.fromEntries(people.map(name=>[name,{好感度:0,关系阶段:name==='沈若微'?'戒备':name==='慕佳芊'||name==='虞淑婉'?'师生':'初识'}]))});
  let state=start();
- state.沈幼楚.信任度=0;
+ state.沈若微.信任度=0;
  const updateState=fn=>{
    const prior=structuredClone(state);
    fn(state);
    update({stat_data:state},{stat_data:prior});
  };
  // Positive gains are capped per character and date. Penalties don't refund the budget.
- for(let i=0;i<10;i++) updateState(s=>{s.苏晓樯.好感度+=2;});
- assert.equal(state.苏晓樯.好感度,12);
- assert.equal(state.苏晓樯.关系阶段,'初识'); // 阶段解耦：不随好感度达标自动晋级（方案一）
+ for(let i=0;i<10;i++) updateState(s=>{s.苏晚棠.好感度+=2;});
+ assert.equal(state.苏晚棠.好感度,12);
+ assert.equal(state.苏晚棠.关系阶段,'初识'); // 阶段解耦：不随好感度达标自动晋级（方案一）
  assert.equal(state.温书语.好感度,0);
 
- updateState(s=>{s.苏晓樯.好感度-=2;});
- updateState(s=>{s.世界.日期='2020/09/01'; s.苏晓樯.好感度+=5;});
- assert.equal(state.苏晓樯.好感度,10);
+ updateState(s=>{s.苏晚棠.好感度-=2;});
+ updateState(s=>{s.世界.日期='2020/09/01'; s.苏晚棠.好感度+=5;});
+ assert.equal(state.苏晚棠.好感度,10);
 
  // Trust stays independent. A new date restores only the new day's affection budget.
- updateState(s=>{s.沈幼楚.信任度+=35; s.沈幼楚.好感度+=30;});
- assert.equal(state.沈幼楚.信任度,35);
- assert.equal(state.沈幼楚.好感度,12);
- assert.equal(state.沈幼楚.关系阶段,'戒备'); // 阶段保持，直至剧情中明确突破
- updateState(s=>{s.世界.日期='2020-09-02';s.苏晓樯.好感度+=6;s.沈幼楚.好感度+=20;});
- updateState(s=>{s.世界.日期='';s.苏晓樯.好感度+=9;});
- assert.equal(state.苏晓樯.好感度,22);
- assert.equal(state.沈幼楚.好感度,24);
- assert.equal(schemaBox.schema.parse(state).剧情.当日好感增量.已用.苏晓樯,12);
+ updateState(s=>{s.沈若微.信任度+=35; s.沈若微.好感度+=30;});
+ assert.equal(state.沈若微.信任度,35);
+ assert.equal(state.沈若微.好感度,12);
+ assert.equal(state.沈若微.关系阶段,'戒备'); // 阶段保持，直至剧情中明确突破
+ updateState(s=>{s.世界.日期='2020-09-02';s.苏晚棠.好感度+=6;s.沈若微.好感度+=20;});
+ updateState(s=>{s.世界.日期='';s.苏晚棠.好感度+=9;});
+ assert.equal(state.苏晚棠.好感度,22);
+ assert.equal(state.沈若微.好感度,24);
+ assert.equal(schemaBox.schema.parse(state).剧情.当日好感增量.已用.苏晚棠,12);
  const currentSnapshot = ejs.render(read('世界书/变量/变量列表.txt'),{getvar:()=>state});
  assert.doesNotMatch(currentSnapshot,/当日好感增量/);
 
@@ -407,16 +407,16 @@ function checkRelationshipPace(update) {
 
  // Old saves keep existing scores. Only the points that fit before 100 are counted.
  state=start();
- state.苏晓樯.好感度=98;
- updateState(s=>{s.苏晓樯.好感度=150; s.沈幼楚.信任度=-20;});
- assert.equal(state.苏晓樯.好感度,100);
- assert.equal(state.剧情.当日好感增量.已用.苏晓樯,2);
- assert.equal(state.沈幼楚.信任度,0);
+ state.苏晚棠.好感度=98;
+ updateState(s=>{s.苏晚棠.好感度=150; s.沈若微.信任度=-20;});
+ assert.equal(state.苏晚棠.好感度,100);
+ assert.equal(state.剧情.当日好感增量.已用.苏晚棠,2);
+ assert.equal(state.沈若微.信任度,0);
 
  // 4. 旧版双轨制遗留字段在运行时被静默清理
- state.剧情.当日关系增量 = {日期: '2020-09-01', 已用: {'苏晓樯.好感度': 3}};
- state.剧情.重大情感申请 = [{事件: '测试', 角色: '苏晓樯', 指标: '好感度'}];
- state.剧情.已结算重大情感事件 = [{事件: '测试', 角色: '苏晓樯', 指标: '好感度'}];
+ state.剧情.当日关系增量 = {日期: '2020-09-01', 已用: {'苏晚棠.好感度': 3}};
+ state.剧情.重大情感申请 = [{事件: '测试', 角色: '苏晚棠', 指标: '好感度'}];
+ state.剧情.已结算重大情感事件 = [{事件: '测试', 角色: '苏晚棠', 指标: '好感度'}];
  state.剧情.推进节奏 = '日常铺垫';
  state.剧情.事件冷却 = 1;
  state.剧情.上次焦点角色 = '温书语';
@@ -436,7 +436,7 @@ function checkRelationshipPace(update) {
  for(const person of people){
    const source=read(`世界书/角色/${person}/性格调色盘.yaml`);
    assert.doesNotThrow(()=>ejs.compile(source));
-   if(person==='沈幼楚') {
+   if(person==='沈若微') {
      const render=score=>ejs.render(source,{getvar:key=>key.endsWith('关系阶段')?'戒备':key.endsWith('好感度')||key.endsWith('信任度')?score:false});
      assert.equal(render(100),render(0));
      continue;
@@ -447,12 +447,12 @@ function checkRelationshipPace(update) {
      getvar: key=>key.endsWith('关系阶段')?stage:95,
    }));
    assert.ok(scoreFor('')<40);
-   const nextStageCaps={苏晓樯:['熟悉',49],温书语:['熟悉',49],陈芷汀:['松动',59],慕佳芊:['熟悉',49],虞淑婉:['留意',54]};
+   const nextStageCaps={苏晚棠:['熟悉',49],温书语:['熟悉',49],陈芷汀:['松动',59],慕佳芊:['熟悉',49],虞淑婉:['留意',54]};
    const [stage,cap]=nextStageCaps[person];
    assert.equal(scoreFor(stage),cap); // 高分也只加载已确认阶段的表现。
-   if(person==='苏晓樯') assert.equal(scoreFor('亲密恋人'),95);
+   if(person==='苏晚棠') assert.equal(scoreFor('亲密恋人'),95);
  }
- for(const h of ['苏晓樯','温书语','沈幼楚','许念安','慕佳芊','陈芷汀','虞淑婉']) {
+ for(const h of ['苏晚棠','温书语','沈若微','许念安','慕佳芊','陈芷汀','虞淑婉']) {
    const pal=read(`世界书/角色/${h}/性格调色盘.yaml`);
    assert.doesNotThrow(()=>ejs.compile(pal));
    const off=ejs.render(pal,{getvar:k=>k.endsWith('关系阶段')?'':(k.endsWith('是否在场')?false:95)}).trim();
@@ -464,7 +464,7 @@ function checkRelationshipPace(update) {
    assert.equal(ejs.render(nsfw,{getvar:k=>k.endsWith('是否在场')?false:(k.endsWith('好感度')?95:true)}).trim(),'');
    assert.ok(ejs.render(nsfw,{getvar:k=>k.endsWith('好感度')?95:true}).trim().length>50);
  }
- const tri=read('世界书/角色/沈幼楚/三面性.yaml');
+ const tri=read('世界书/角色/沈若微/三面性.yaml');
  assert.doesNotThrow(()=>ejs.compile(tri));
  assert.equal(ejs.render(tri,{getvar:k=>k.endsWith('是否在场')?false:''}).trim(),'');
  assert.ok(ejs.render(tri,{getvar:k=>k.endsWith('是否在场')?true:'校园'}).trim().includes('第一面'));
@@ -498,11 +498,11 @@ function checkRelationshipPace(update) {
  state=start();
  for(let day=0;day<20;day++) updateState(s=>{
    s.世界.日期=new Date(Date.UTC(2020,8,1+day)).toISOString().slice(0,10);
-   s.苏晓樯.好感度+=3;
-   if(day===8) s.苏晓樯.关系阶段='熟悉'; // A stage change supplied by the story.
+   s.苏晚棠.好感度+=3;
+   if(day===8) s.苏晚棠.关系阶段='熟悉'; // A stage change supplied by the story.
  });
- assert.equal(state.苏晓樯.好感度,60);
- assert.equal(state.苏晓樯.关系阶段,'熟悉');
+ assert.equal(state.苏晚棠.好感度,60);
+ assert.equal(state.苏晚棠.关系阶段,'熟悉');
  for(const other of people.slice(1)) assert.equal(state[other].好感度,0);
 }
 const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_message_variable::stat_data.世界.日期}}','2021/07/03').replaceAll('{{format_message_variable::stat_data.世界.起始年份}}','2020').replaceAll('{{format_message_variable::stat_data.世界.当前位置}}','我找到的小巷').replaceAll('{{format_message_variable::stat_data.主角.出生日期}}','2000/07/03').replaceAll('{{format_message_variable::stat_data.主角.班级}}','返乡实习生').replaceAll('{{format_message_variable::stat_data.许念安.是否在场}}','true').replaceAll('{{format_message_variable::stat_data.许念安.当前上装}}','蓝白色校服外套和柔软的浅色针织衫');
@@ -586,12 +586,12 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  update();
  assert.equal(state.校园.日程.arts.状态,'已结束');
  assert.deepEqual(Array.from(state.校园.有效公告, post=>post.标识),['midterm']);
- const pupil={世界:{起始年份:'2030',日期:'2031/02/20'},剧情:{学期:'高二下'},主角:{年龄:'21岁',班级:'暨阳中学高二重点班学生',重要物品:[{名称:'借书',描述:'已借未还'}]},苏晓樯:{好感度:96}};
+ const pupil={世界:{起始年份:'2030',日期:'2031/02/20'},剧情:{学期:'高二下'},主角:{年龄:'21岁',班级:'暨阳中学高二重点班学生',重要物品:[{名称:'借书',描述:'已借未还'}]},苏晚棠:{好感度:96}};
  const pupilTurn=(date,period)=>{
    pupil.世界.日期=date;
    callbackBox.write({variables:{stat_data:pupil}});
    assert.equal(pupil.剧情.学期,period);
-   assert.equal(pupil.苏晓樯.好感度,96);
+   assert.equal(pupil.苏晚棠.好感度,96);
    assert.equal(pupil.主角.重要物品[0].名称,'借书');
  };
  pupilTurn('2031/02/20','高二上');
@@ -758,10 +758,10 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.deepEqual(errors,[]);
  dom.window.close();
 
- // Verify dual-axis status alerts (沈幼楚 trust lock <= 30, 许念安 control >= 85) & singleton overlay across mounts
+ // Verify dual-axis status alerts (沈若微 trust lock <= 30, 许念安 control >= 85) & singleton overlay across mounts
  const axisHtml=neutral
-   .replaceAll('{{format_message_variable::stat_data.沈幼楚.是否在场}}','true')
-   .replaceAll('{{format_message_variable::stat_data.沈幼楚.信任度}}','25')
+   .replaceAll('{{format_message_variable::stat_data.沈若微.是否在场}}','true')
+   .replaceAll('{{format_message_variable::stat_data.沈若微.信任度}}','25')
    .replaceAll('{{format_message_variable::stat_data.许念安.控制欲}}','86');
  const axisDom=new JSDOM(axisHtml+axisHtml,{runScripts:'dangerously',url:'http://localhost:18969',pretendToBeVisual:true});
  const aw=axisDom.window,ad=aw.document;
@@ -774,14 +774,14 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(ctrlWarn.textContent,'高压共生');
  aw.close();
 
- const dialogue=new JSDOM('<div id="chat"><div class="mes" is_user="false" mesid="1"><div class="mes_text"><p>{苏晓樯}「今天真热闹。」</p><p>{杨辰}「走吧。」</p><p>{清晏}「那就走吧。」</p><p>{昭宁}「财报模型拿给我。」</p></div></div></div><textarea id="send_textarea">未发送</textarea>',{runScripts:'dangerously',url:'http://localhost:18968',pretendToBeVisual:true});
+ const dialogue=new JSDOM('<div id="chat"><div class="mes" is_user="false" mesid="1"><div class="mes_text"><p>{苏晚棠}「今天真热闹。」</p><p>{杨辰}「走吧。」</p><p>{清晏}「那就走吧。」</p><p>{昭宁}「财报模型拿给我。」</p></div></div></div><textarea id="send_textarea">未发送</textarea>',{runScripts:'dangerously',url:'http://localhost:18968',pretendToBeVisual:true});
  const dw=dialogue.window;
  dw.getVariables=()=>({stat_data:{主角:{姓名:'杨辰'}}});
- dw.localStorage.setItem('jy-avatar:苏晓樯','data:image/png;base64,YWJj');
+ dw.localStorage.setItem('jy-avatar:苏晚棠','data:image/png;base64,YWJj');
  dw.eval(read('脚本/正文对白.js'));
  const rows=dw.document.querySelectorAll('[data-jy-dialogue-row]');
  assert.equal(rows.length,4);
- assert.equal(rows[0].dataset.speakerCanon,'苏晓樯');
+ assert.equal(rows[0].dataset.speakerCanon,'苏晚棠');
  assert.equal(rows[1].dataset.player,'true');
  assert.equal(rows[3].dataset.speakerCanon,'谢昭宁');
  const avatar=rows[0].querySelector('[data-jy-dialogue-avatar]');
@@ -821,7 +821,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(dw.document.querySelector('#send_textarea').value,'未发送');
  dw.__jyDialogue.destroy();
  assert.equal(dw.document.querySelector('[data-jy-dialogue-row]'),null);
- assert.match(dw.document.querySelector('.mes_text').textContent,/\{苏晓樯\}「今天真热闹。」/);
+ assert.match(dw.document.querySelector('.mes_text').textContent,/\{苏晚棠\}「今天真热闹。」/);
  dw.close();
 
  // Verify the restored master entry, per-chat gating, and the one-time classroom introduction.
@@ -947,7 +947,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.match(forumSnapshot(false),/暑假自习/);
  assert.equal(forumCampus.动态流.length,2);
 
- const plainParsed=schemaBox.schema.parse({世界:{日期:'2020-09-01'},苏晓樯:{好感度:5}});
+ const plainParsed=schemaBox.schema.parse({世界:{日期:'2020-09-01'},苏晚棠:{好感度:5}});
  assert.equal(plainParsed.云清晏,undefined);
  assert.equal(plainParsed.谢昭宁,undefined);
  assert.equal(plainParsed.主角.修行,undefined);
@@ -1024,7 +1024,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  for (const fName of dlcNames.slice(7)) {
    assert.doesNotMatch(render(dlcEntries.get(fName).content,enabled),/万风/);
  }
- assert.match(render(dlcMaster,{...enabled,...origin,'stat_data.世界.日期':'2020-09-04'}),/暨阳苏家（苏晓樯父祖一脉）实与魔都「苏氏沧溟水府」百年前同源/);
+ assert.match(render(dlcMaster,{...enabled,...origin,'stat_data.世界.日期':'2020-09-04'}),/暨阳苏家（苏晚棠父祖一脉）实与魔都「苏氏沧溟水府」百年前同源/);
 
  const [yunBase,yunPalette,yunNsfw]=dlcNames.slice(2,5).map(name=>dlcEntries.get(name).content);
  const scene={...enabled,...origin,'stat_data.世界.日期':'2020-09-04','stat_data.世界.当前位置':'高二重点班教室','stat_data.世界.时间段':'上午','stat_data.剧情.学期':'高二上','stat_data.主角.班级':'高二(8)班'};

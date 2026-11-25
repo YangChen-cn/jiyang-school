@@ -39,7 +39,7 @@ world:
       key_members: [凌知夏]
 
 characters:
-  - name: 苏晓樯
+  - name: 苏晚棠
     basic:
       age: 18
       gender: 女
@@ -113,7 +113,7 @@ characters:
           description: 书不再是她的盾牌，在亲密中学会用身体和语言同时说爱
     tri_faceted: false
 
-  - name: 沈幼楚
+  - name: 沈若微
     basic:
       age: 18
       gender: 女
@@ -126,27 +126,27 @@ characters:
         - name: 戒备期
           main: [沉默, 回避]
           accent: [警觉]
-          condition: affection_youchu < 20
+          condition: affection_ruowei < 20
           description: 习惯性缩小存在感，对触碰敏感，对善意既渴望又恐惧
         - name: 松动期
           main: [隐忍, 观察]
           accent: [感激]
-          condition: affection_youchu >= 20 && affection_youchu < 50
+          condition: affection_ruowei >= 20 && affection_ruowei < 50
           description: 开始相信<user>没有恶意，用行动而非语言回应善意，仍在反复确认安全
         - name: 信任期
           main: [温顺, 坚韧]
           accent: [依赖萌芽]
-          condition: affection_youchu >= 50 && affection_youchu < 80
+          condition: affection_ruowei >= 50 && affection_ruowei < 80
           description: 在<user>面前不再绷紧，偶尔露出笑容，信赖已经建立但过往阴影仍在暗处
         - name: 依赖期
           main: [温顺, 坚韧]
           accent: [依赖]
-          condition: affection_youchu >= 80 && affection_youchu < 90
+          condition: affection_ruowei >= 80 && affection_ruowei < 90
           description: 主动靠近，不再需要反复确认安全，<user>成为她唯一愿意停靠的地方
         - name: 归属期
           main: [温顺, 坚韧]
           accent: [依赖, 情欲]
-          condition: affection_youchu >= 90
+          condition: affection_ruowei >= 90
           description: 完全交付身体和灵魂，在亲密中确认自己被无条件接纳，她的过去终于不再定义她的未来
     tri_faceted: true
     tri_faceted_details:  # 待细化：三面具体触发条件和行为模式
@@ -298,16 +298,16 @@ entries:
     type: 角色
     path: 世界书/角色/角色速览.yaml
     scope: catalog
-  - name: 苏晓樯_基础信息
+  - name: 苏晚棠_基础信息
     type: 角色
-    path: 世界书/角色/苏晓樯/基础信息.yaml
+    path: 世界书/角色/苏晚棠/基础信息.yaml
     part: basic
-    keywords: [苏晓樯, 小天女]
-  - name: 苏晓樯_性格调色盘
+    keywords: [苏晚棠, 小天女]
+  - name: 苏晚棠_性格调色盘
     type: 角色
-    path: 世界书/角色/苏晓樯/性格调色盘.yaml
+    path: 世界书/角色/苏晚棠/性格调色盘.yaml
     part: personality
-    keywords: [苏晓樯]
+    keywords: [苏晚棠]
   - name: 温书语_基础信息
     type: 角色
     path: 世界书/角色/温书语/基础信息.yaml
@@ -318,21 +318,21 @@ entries:
     path: 世界书/角色/温书语/性格调色盘.yaml
     part: personality
     keywords: [温书语]
-  - name: 沈幼楚_基础信息
+  - name: 沈若微_基础信息
     type: 角色
-    path: 世界书/角色/沈幼楚/基础信息.yaml
+    path: 世界书/角色/沈若微/基础信息.yaml
     part: basic
-    keywords: [沈幼楚]
-  - name: 沈幼楚_性格调色盘
+    keywords: [沈若微]
+  - name: 沈若微_性格调色盘
     type: 角色
-    path: 世界书/角色/沈幼楚/性格调色盘.yaml
+    path: 世界书/角色/沈若微/性格调色盘.yaml
     part: personality
-    keywords: [沈幼楚]
-  - name: 沈幼楚_三面性
+    keywords: [沈若微]
+  - name: 沈若微_三面性
     type: 角色
-    path: 世界书/角色/沈幼楚/三面性.yaml
+    path: 世界书/角色/沈若微/三面性.yaml
     part: tri_faceted
-    keywords: [沈幼楚]
+    keywords: [沈若微]
   - name: 凌知夏_基础信息
     type: NPC
     path: 世界书/NPC/凌知夏/基础信息.yaml
@@ -347,18 +347,18 @@ entries:
     path: 世界书/角色/慕佳芊/性格调色盘.yaml
     part: personality
     keywords: [慕佳芊]
-  - name: 苏晓樯_NSFW指导
+  - name: 苏晚棠_NSFW指导
     type: NSFW指导
-    path: 世界书/角色/苏晓樯/NSFW指导.yaml
-    keywords: [苏晓樯]
+    path: 世界书/角色/苏晚棠/NSFW指导.yaml
+    keywords: [苏晚棠]
   - name: 温书语_NSFW指导
     type: NSFW指导
     path: 世界书/角色/温书语/NSFW指导.yaml
     keywords: [温书语]
-  - name: 沈幼楚_NSFW指导
+  - name: 沈若微_NSFW指导
     type: NSFW指导
-    path: 世界书/角色/沈幼楚/NSFW指导.yaml
-    keywords: [沈幼楚]
+    path: 世界书/角色/沈若微/NSFW指导.yaml
+    keywords: [沈若微]
   - name: 慕佳芊_NSFW指导
     type: NSFW指导
     path: 世界书/角色/慕佳芊/NSFW指导.yaml
@@ -438,7 +438,7 @@ mvu:
     ├── 剧情
     │   ├── 当前事件：无/日常小事件/校园活动事件
     │   └── 校园活动：无/体育周/艺术周/远足
-    ├── 苏晓樯
+    ├── 苏晚棠
     │   ├── 是否在场：true/false
     │   ├── 好感度：0~100
     │   ├── 关系阶段：初识/熟悉/暧昧/恋人
@@ -448,7 +448,7 @@ mvu:
     │   ├── 好感度：0~100
     │   ├── 关系阶段：初识/熟悉/暧昧/恋人
     │   └── 即时状态：当前上装/当前下装/所在位置/动作/心情/内心独白
-    ├── 沈幼楚
+    ├── 沈若微
     │   ├── 是否在场：true/false
     │   ├── 好感度：0~100
     │   ├── 信任度：0~100（独立于好感度）
@@ -484,7 +484,7 @@ ejs:
     - name: 周边街区
       complexity: 条目显隐
       condition: 'getvar(''stat_data.世界.所在区域'', { defaults: '''' }) === ''周边'''
-    - name: 苏晓樯_性格调色盘
+    - name: 苏晚棠_性格调色盘
       complexity: 段落控制
       stages:
         - name: 初识期
@@ -510,26 +510,26 @@ ejs:
           condition: affection_shuyu >= 80 && affection_shuyu < 90
         - name: 亲密恋人
           condition: affection_shuyu >= 90
-    - name: 沈幼楚_性格调色盘
+    - name: 沈若微_性格调色盘
       complexity: 段落控制
       stages:
         - name: 戒备期
-          condition: affection_youchu < 20
+          condition: affection_ruowei < 20
         - name: 松动期
-          condition: affection_youchu >= 20 && affection_youchu < 50
+          condition: affection_ruowei >= 20 && affection_ruowei < 50
         - name: 信任期
-          condition: affection_youchu >= 50 && affection_youchu < 80
+          condition: affection_ruowei >= 50 && affection_ruowei < 80
         - name: 依赖期
-          condition: affection_youchu >= 80 && affection_youchu < 90
+          condition: affection_ruowei >= 80 && affection_ruowei < 90
         - name: 归属期
-          condition: affection_youchu >= 90
-    - name: 沈幼楚_三面性
+          condition: affection_ruowei >= 90
+    - name: 沈若微_三面性
       complexity: 段落控制
       stages:
         - name: 在校期间
           condition: 'getvar(''stat_data.世界.所在区域'', { defaults: '''' }) === ''校园'''
         - name: 涉及家庭相关
-          condition: 'getvar(''stat_data.沈幼楚.触发家庭话题'', { defaults: false }) === true'
+          condition: 'getvar(''stat_data.沈若微.触发家庭话题'', { defaults: false }) === true'
         - name: 安全环境（独处 + 依赖/归属）
           condition: '关系阶段 ∈ {依赖, 归属} 且 世界.私密程度 === ''独处'''
     - name: 慕佳芊_性格调色盘
@@ -545,15 +545,15 @@ ejs:
           condition: affection_jiaqian >= 80 && affection_jiaqian < 90
         - name: 交付期
           condition: affection_jiaqian >= 90
-    - name: 苏晓樯_NSFW指导
+    - name: 苏晚棠_NSFW指导
       complexity: 条目显隐
-      condition: 'getvar(''stat_data.苏晓樯.NSFW'', { defaults: false }) === true'
+      condition: 'getvar(''stat_data.苏晚棠.NSFW'', { defaults: false }) === true'
     - name: 温书语_NSFW指导
       complexity: 条目显隐
       condition: 'getvar(''stat_data.温书语.NSFW'', { defaults: false }) === true'
-    - name: 沈幼楚_NSFW指导
+    - name: 沈若微_NSFW指导
       complexity: 条目显隐
-      condition: 'getvar(''stat_data.沈幼楚.NSFW'', { defaults: false }) === true'
+      condition: 'getvar(''stat_data.沈若微.NSFW'', { defaults: false }) === true'
     - name: 慕佳芊_NSFW指导
       complexity: 条目显隐
       condition: 'getvar(''stat_data.慕佳芊.NSFW'', { defaults: false }) === true'

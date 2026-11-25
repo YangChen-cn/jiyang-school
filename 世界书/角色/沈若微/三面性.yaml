@@ -1,10 +1,10 @@
 <%_ {
-const _p = getvar('stat_data.沈幼楚.是否在场', { defaults: false });
+const _p = getvar('stat_data.沈若微.是否在场', { defaults: false });
 if (_p === true || _p === 'true' || _p === 1) {
-const inFamily = getvar('stat_data.沈幼楚.触发家庭话题', { defaults: false }) === true;
+const inFamily = getvar('stat_data.沈若微.触发家庭话题', { defaults: false }) === true;
 const area = getvar('stat_data.世界.所在区域', { defaults: '' });
 const priv = getvar('stat_data.世界.私密程度', { defaults: '' });
-const stage = getvar('stat_data.沈幼楚.关系阶段', { defaults: '' });
+const stage = getvar('stat_data.沈若微.关系阶段', { defaults: '' });
 const thirdFace = !inFamily && area !== '校园' && priv === '独处' && (stage === '依赖' || stage === '归属');
 const firstFace = !inFamily && area === '校园';
 _%>
