@@ -8,6 +8,7 @@ const relationshipMetrics = [
   ['虞淑婉', '好感度'],
   ['许念安', '好感度'],
   ['许念安', '控制欲'],
+  ['云清晏', '好感度'],
 ];
 
 const dailyAffectionLimit = 12;

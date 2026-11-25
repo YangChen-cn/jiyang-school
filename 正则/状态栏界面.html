@@ -5,7 +5,7 @@
     margin: 10px auto;
     font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
     font-size: 12.5px;
-    color: #1e2a27;
+    color: var(--c-ink, #1e2a27);
   }
   .jy-status [hidden] { display: none !important; }
   .jy-shell { border: 1px solid rgba(30, 86, 76, 0.16); border-radius: 14px; background: #faf7f0; overflow: hidden; }
@@ -39,9 +39,12 @@
     <div class="jy-scene-now">
       <span class="jy-intimate-note"><span aria-hidden="true">♥</span>亲密场景</span>
       <span class="jy-stage-chip"><b>阶段</b> <span data-stage-display>待确定</span></span>
+      <span class="jy-aura-chip" data-aura-badge hidden><b>灵潮</b> <span data-aura-badge-text>未启</span></span>
       <span class="jy-weather" data-weather><b>天气</b> <span data-scene-value>{{format_message_variable::stat_data.世界.天气}}</span></span>
       <span><b>在场</b> <span data-present-names>待确定</span></span>
       <span data-scene-event hidden><b>本段</b> <span data-event-name>{{format_message_variable::stat_data.剧情.当前事件}}</span></span>
+      <pre hidden data-dlc-source>{{format_message_variable::stat_data.剧情.灵气复苏}}</pre>
+      <pre hidden data-cultivation-source>{{format_message_variable::stat_data.主角.修行}}</pre>
     </div>
 
     <nav class="jy-tabs" role="tablist" aria-label="状态栏面板">
@@ -57,7 +60,7 @@
           <span class="jy-people-hint">点击头像可换图，右上角进入个人相册</span>
           <div class="jy-filter-pills" role="group" aria-label="人物显示筛选">
             <button class="jy-filter-pill" type="button" data-people-filter="present" aria-pressed="true">仅看在场</button>
-            <button class="jy-filter-pill" type="button" data-people-filter="all" aria-pressed="false">全部角色 (7)</button>
+            <button class="jy-filter-pill" type="button" data-people-filter="all" aria-pressed="false" data-people-all-btn>全部角色 (7)</button>
           </div>
         </div>
         <div class="jy-people" data-view="present">
@@ -169,6 +172,21 @@
             <div class="jy-detail-grid"><div class="jy-detail"><b>上装</b><span>{{format_message_variable::stat_data.虞淑婉.当前上装}}</span></div><div class="jy-detail"><b>下装</b><span>{{format_message_variable::stat_data.虞淑婉.当前下装}}</span></div><div class="jy-detail jy-detail-wide"><b>位置</b><span>{{format_message_variable::stat_data.虞淑婉.所在位置}}</span></div><div class="jy-detail jy-detail-wide"><b>动作</b><span>{{format_message_variable::stat_data.虞淑婉.动作}}</span></div></div>
             <div class="jy-thought" data-scene-value>{{format_message_variable::stat_data.虞淑婉.内心独白}}</div>
           </div>
+
+          <div class="jy-person" data-tone="immortal" data-dlc-heroine="云清晏" hidden data-present="{{format_message_variable::stat_data.云清晏.是否在场}}" data-intimacy-unlocked="{{format_message_variable::stat_data.云清晏.NSFW}}">
+            <div class="jy-person-head">
+              <img class="jy-avatar" alt="云清晏" data-avatar-key="云清晏">
+              <div class="jy-name-wrap">
+                <div class="jy-name-line"><div class="jy-name">云清晏</div><span class="jy-presence-dot">在场</span><span class="jy-unlock-heart" role="img" aria-label="亲密已解锁" title="亲密已解锁">♥</span><span class="jy-immortal-pill" data-yun-realm>{{format_message_variable::stat_data.云清晏.当前境界}}</span></div>
+                <div class="jy-meta-line"><div class="jy-stage">{{format_message_variable::stat_data.云清晏.关系阶段}}</div><div class="jy-mood" data-scene-value>{{format_message_variable::stat_data.云清晏.心情}}</div></div>
+              </div>
+              <button class="jy-album-button" type="button" data-action="open-album" data-album-key="云清晏" aria-label="查看云清晏相册" title="查看相册">▧</button>
+            </div>
+            <div class="jy-bar-row"><div class="jy-bar-top"><span>好感</span><span class="jy-num">{{format_message_variable::stat_data.云清晏.好感度}}</span></div><div class="jy-bar" data-metric="affection"><span class="jy-fill" style="--v: {{format_message_variable::stat_data.云清晏.好感度}};"></span></div></div>
+            <div class="jy-person-offsite-loc">最近位置：<span data-scene-value>{{format_message_variable::stat_data.云清晏.所在位置}}</span> · <span data-scene-value>{{format_message_variable::stat_data.云清晏.伤势余韵}}</span></div>
+            <div class="jy-detail-grid"><div class="jy-detail"><b>上装</b><span>{{format_message_variable::stat_data.云清晏.当前上装}}</span></div><div class="jy-detail"><b>下装</b><span>{{format_message_variable::stat_data.云清晏.当前下装}}</span></div><div class="jy-detail jy-detail-wide"><b>位置</b><span>{{format_message_variable::stat_data.云清晏.所在位置}}</span></div><div class="jy-detail jy-detail-wide"><b>动作</b><span>{{format_message_variable::stat_data.云清晏.动作}}</span></div></div>
+            <div class="jy-thought" data-scene-value>{{format_message_variable::stat_data.云清晏.内心独白}}</div>
+          </div>
         </div>
       </section>
 
@@ -205,6 +223,14 @@
                 <div><b>性格</b><span data-scene-value>{{format_message_variable::stat_data.主角.性格}}</span></div>
                 <div><b>擅长与学业</b><span data-scene-value>{{format_message_variable::stat_data.主角.擅长与学业}}</span></div>
                 <div><b>家庭背景</b><span data-scene-value>{{format_message_variable::stat_data.主角.家庭背景}}</span></div>
+              </div>
+              <div class="jy-cultivation-panel" data-cultivation-panel hidden>
+                <div class="jy-cultivation-head"><span>太虚灵枢 · 个人修行录</span><span data-cultivation-stage>未启封</span></div>
+                <div class="jy-cultivation-grid">
+                  <div><b>当前境界</b><span data-cultivation-realm>未引气（凡躯）</span></div>
+                  <div><b>灵气感应</b><span data-cultivation-qi>0</span></div>
+                  <div><b>功法与秘术</b><span data-cultivation-arts>暂无</span></div>
+                </div>
               </div>
               <div class="jy-card-seal" aria-hidden="true"><span>浙江省暨阳高级中学</span><span class="jy-card-seal-star">★</span><span>教务处学籍专用章</span></div>
             </details>

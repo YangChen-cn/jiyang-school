@@ -299,7 +299,7 @@ if yaml:
 
 # ---------- H. YAML 合法性 ----------
 if yaml:
-    for p in [REPO / '世界书/变量/initvar.yaml', REPO / '世界书/变量/变量更新规则.yaml']:
+    for p in [REPO / '世界书/变量/initvar.yaml', REPO / '世界书/变量/变量更新规则.yaml', REPO / '世界书/MVU/DLC_修仙变量契约.yaml']:
         if p.exists():
             try:
                 yaml.safe_load(p.read_text(encoding='utf-8'))
@@ -314,7 +314,10 @@ if yaml:
 
     # ---------- I. 规则路径覆盖 ----------
     try:
-        rules = yaml.safe_load((REPO / '世界书/变量/变量更新规则.yaml').read_text(encoding='utf-8'))['变量更新规则']
+        rules = dict(yaml.safe_load((REPO / '世界书/变量/变量更新规则.yaml').read_text(encoding='utf-8'))['变量更新规则'])
+        dlc_rules_path = REPO / '世界书/MVU/DLC_修仙变量契约.yaml'
+        if dlc_rules_path.exists():
+            rules.update((yaml.safe_load(dlc_rules_path.read_text(encoding='utf-8')) or {}).get('变量更新规则') or {})
         known = set(containers)
         covered = {}
         for k, v in rules.items():

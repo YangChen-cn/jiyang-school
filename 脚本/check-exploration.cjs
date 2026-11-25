@@ -203,7 +203,7 @@ function checkRetiredCharacter(write) {
 for (const alias of ['老鹰山','听风亭','旧值守屋','周伯','山路旧照']) assert.ok(manifest.entryManifest.事件.老鹰山仙人.strategy.keys.includes(alias));
 assert.ok(!manifest.entryManifest.事件.远足.strategy.keys.includes('老鹰山'));
 const eventEntries = Object.values(manifest.entryManifest.事件);
-assert.equal(eventEntries.length, 17);
+assert.equal(eventEntries.length, 18);
 for (const side of ['万风地库', '珍珠局']) {
   const entry = manifest.entryManifest.事件[side];
   assert.ok(entry && entry.enabled && entry.strategy.scan_depth === 2);
@@ -741,9 +741,110 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.match(dw.document.querySelector('.mes_text').textContent,/\{苏晓樯\}「今天真热闹。」/);
  dw.close();
 
- const musicDom=new JSDOM('<!doctype html><body></body>',{runScripts:'dangerously',url:'http://localhost:18970',pretendToBeVisual:true});
+ // Verify Cultivation DLC worldbook entries, EJS 4-stage timeline, Yun Qingyan Day-2 & presence gates, Schema & Multi-Function Console
+ const dlcNames=[
+   '[DLC]灵气复苏总纲与异象日程',
+   '[DLC]老鹰山灵脉与古宗秘藏',
+   '云清晏_基础信息',
+   '云清晏_性格调色盘',
+   '云清晏_NSFW指导',
+   '[mvu_update]修仙变量契约',
+ ];
+ for (const comment of dlcNames) {
+   const entry=cardEntries.find(e=>e.comment===comment);
+   assert.ok(entry, `卡内缺 DLC 条目: ${comment}`);
+   assert.equal(entry.enabled, false, `DLC 条目默认应禁用: ${comment}`);
+   if (entry.content.includes('<%')) {
+     assert.doesNotThrow(()=>ejs.compile(entry.content,{async:true}), `DLC EJS 编译失败: ${comment}`);
+   }
+ }
+ assert.ok(!cardEntries.some(e=>e.comment.includes('古武与隐秘异闻')),'不应包含已取消的古武条目');
+ const initRaw=read('世界书/变量/initvar.yaml');
+ assert.doesNotMatch(initRaw,/云清晏|灵气复苏|修行/);
+
+ // Validate Schemas for non-DLC vs DLC modes + Zod BEFORE_MESSAGE_UPDATE phase sync + 关系节奏
+ const plainParsed=schemaBox.schema.parse({世界:{日期:'2020-09-01'},苏晓樯:{好感度:5}});
+ assert.equal(plainParsed.云清晏,undefined,'普通日常档不应自动生成云清晏字段');
+ assert.equal(plainParsed.主角.修行,undefined);
+ assert.equal(plainParsed.剧情.灵气复苏,undefined);
+
+ const dlcSave={世界:{日期:'2020-09-20'},剧情:{灵气复苏:{已开启:true,开启日期:'2020-09-03',阶段:'旧值'}},主角:{修行:{境界:'筑基初期',灵气感应:35,功法与秘术:['太微引气篇']}},云清晏:{是否在场:true,好感度:22,关系阶段:'熟悉',当前境界:'金丹跌境'}};
+ const dlcParsed=schemaBox.schema.parse(dlcSave);
+ assert.equal(dlcParsed.云清晏.好感度,22);
+ assert.equal(dlcParsed.主角.修行.境界,'筑基初期');
+ await callbackBox.write({variables:{stat_data:dlcSave}});
+ assert.equal(dlcSave.剧情.灵气复苏.阶段,'古武抬头期');
+ const dlcPrior=structuredClone(dlcSave);
+ dlcSave.云清晏.好感度+=30;
+ callbackBox.pace({stat_data:dlcSave},{stat_data:dlcPrior});
+ assert.equal(dlcSave.云清晏.好感度,34,'云清晏单日好感增量同样受+12上限约束');
+
+ // Verify 4-stage progressive anomalies & philosophical/dragon-vein core + Yun Qingyan Day-1 block vs Day-2 entry
+ const dlcMaster=read('世界书/世界观/DLC_灵气复苏总纲与异象日程.yaml');
+ const renderDlcMaster=(origin, cur)=>{
+   const vars={'stat_data.剧情.灵气复苏.开启日期':origin,'stat_data.世界.日期':cur,'stat_data.主角.班级':'高二(8)班','stat_data.主角.修行.境界':'引气感灵'};
+   return ejs.render(dlcMaster,{getvar:k=>vars[k]??''});
+ };
+ const d0=renderDlcMaster('2020-09-03','2020-09-03');
+ assert.match(d0,/第 1 日（微兆潜龙期）/);
+ assert.match(d0,/越中潜龙·归元眼/);
+ assert.match(d0,/太微云岫宗/);
+ assert.match(d0,/仙凡两隔/);
+ assert.match(d0,/不设僵化天数或阶段天花板/);
+ assert.match(d0,/明日（第2天）起正式转入高二\(8\)班/);
+ assert.doesNotMatch(d0,/第二阶段·古武抬头/);
+
+ const d1=renderDlcMaster('2020-09-03','2020/09/04');
+ assert.match(d1,/第 2 日（微兆潜龙期）/);
+ assert.match(d1,/已于今日抵达暨阳并作为转校生插入高二\(8\)班/);
+
+ const d15=renderDlcMaster('2020-09-03','2020-09-18');
+ assert.match(d15,/第 16 日（古武抬头期）/);
+ assert.doesNotMatch(d15,/微兆潜龙期（第1～10天）|龙眼破禁期（第26～45天）/);
+
+ const d35=renderDlcMaster('2020-09-03','2020-10-08');
+ assert.match(d35,/第 36 日（龙眼破禁期）/);
+
+ const d55=renderDlcMaster('2020-09-03','2020-10-28');
+ assert.match(d55,/第 56 日（两界并序期）/);
+
+ const yunBase=read('世界书/角色/云清晏/基础信息.yaml');
+ const yunPalette=read('世界书/角色/云清晏/性格调色盘.yaml');
+ const yunNsfw=read('世界书/角色/云清晏/NSFW指导.yaml');
+ const renderYun=(tpl,overrides={})=>{
+   const vals={'stat_data.剧情.灵气复苏.开启日期':'2020-09-03','stat_data.世界.日期':'2020-09-04','stat_data.云清晏.是否在场':false,'stat_data.云清晏.关系阶段':'初识','stat_data.云清晏.好感度':0,'stat_data.云清晏.NSFW':false,'stat_data.剧情.当前nsfw':false,'stat_data.主角.班级':'高二(8)班',...overrides};
+   return ejs.render(tpl,{getvar:k=>vals[k]??''});
+ };
+ assert.match(renderYun(yunBase,{'stat_data.世界.日期':'2020-09-03'}),/启封首日未入校伏笔/);
+ assert.match(renderYun(yunBase,{'stat_data.云清晏.是否在场':false}),/\[不在场｜云清晏.*今天|今日为DLC开启第2天/);
+ const yunPresent=renderYun(yunBase,{'stat_data.云清晏.是否在场':true});
+ assert.match(yunPresent,/金丹巅峰/);
+ assert.match(yunPresent,/元婴大劫/);
+ assert.match(yunPresent,/仙凡两隔/);
+ assert.match(renderYun(yunPalette,{'stat_data.云清晏.是否在场':true,'stat_data.云清晏.好感度':95,'stat_data.云清晏.关系阶段':'亲密恋人'}),/仙凡重量/);
+ assert.equal(renderYun(yunNsfw,{'stat_data.云清晏.是否在场':true,'stat_data.云清晏.NSFW':false,'stat_data.剧情.当前nsfw':true}).trim(),'');
+ assert.match(renderYun(yunNsfw,{'stat_data.云清晏.是否在场':true,'stat_data.云清晏.NSFW':true,'stat_data.剧情.当前nsfw':true}),/NSFW实战指导：云清晏/);
+
+ // JSDOM End-to-End: Multi-function floating console + worldbook injection + antique seal overlay + Status Bar 7->8 transition
+ const musicDom=new JSDOM('<!doctype html><body><div id="mount"></div></body>',{runScripts:'dangerously',url:'http://localhost:18970',pretendToBeVisual:true});
  const mw=musicDom.window,md=mw.document;
+ try {
+ let mockBook=[{name:'世界设定',enabled:true,content:'base'}];
+ let mockVars={stat_data:{世界:{日期:'2021/07/03',起始年份:'2020'},剧情:{},主角:{姓名:'杨辰'}}};
+ const updatedLogs=[];
+ mw.getLastMessageId=()=>3;
+ mw.getCharWorldbookNames=()=>({primary:'暨阳测试书'});
+ mw.getWorldbookNames=()=>['暨阳测试书'];
+ mw.getWorldbook=name=>name==='暨阳测试书'?mockBook:[];
+ mw.updateWorldbookWith=async(name,fn)=>{assert.equal(name,'暨阳测试书');mockBook=fn(mockBook);updatedLogs.push(mockBook.length);return mockBook;};
+ mw.getVariables=()=>structuredClone(mockVars);
+ mw.updateVariablesWith=async(fn)=>{mockVars=fn(structuredClone(mockVars));return mockVars;};
+ const statusWrap=md.getElementById('mount');
+ statusWrap.innerHTML=neutral;
+ mw.eval(engineCode);
  mw.eval(read('脚本/悬浮音乐播放器.js'));
+ await new Promise(r=>mw.setTimeout(r,60));
+
  const mp=md.getElementById('jy-floating-music-player');
  assert.ok(mp);
  assert.equal(mp.dataset.theme,'light');
@@ -753,9 +854,57 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const savedMusic=JSON.parse(mw.localStorage.getItem('jy-music-player:暨阳中学:v2'));
  assert.equal(savedMusic.defaultTracksVersion,5);
  assert.match(savedMusic.playlist[0].sources[0],/^https:\/\/testingcf\.jsdelivr\.net\//);
- mw.__jiyangFloatingMusicPlayerV2.destroy();
- assert.equal(md.getElementById('jy-floating-music-player'),null);
- mw.close();
 
- console.log('PASS: 学期边界/自定义年份、EJS分期输出、旧存档缺字段、别名配置、只读DOM交互、Bento面板与双轴提示、音乐主题同步。');
+ assert.equal(md.querySelector('[data-aura-badge]').hidden,true);
+ assert.equal(md.querySelector('[data-dlc-heroine="云清晏"]').hidden,true);
+ assert.equal(md.querySelector('[data-people-all-btn]').textContent,'全部角色 (7)');
+
+ mp.querySelector('[data-console-tab="codex"]').click();
+ assert.equal(mp.querySelector('[data-panel="codex"]').hidden,false);
+ mp.querySelector('[data-console-tab="dlc"]').click();
+ assert.equal(mp.querySelector('[data-panel="dlc"]').hidden,false);
+ mp.querySelector('[data-action="dlc-toggle"]').click();
+ await new Promise(r=>mw.setTimeout(r,80));
+
+ assert.equal(mp.dataset.dlcActive,'true');
+ assert.equal(mockBook.length, 7);
+ const injectedMaster=mockBook.find(e=>e.name==='[DLC]灵气复苏总纲与异象日程');
+ assert.ok(injectedMaster && injectedMaster.enabled===true);
+ assert.match(injectedMaster.content,/const dlcOriginDate = "2021-07-03";/);
+ assert.equal(mockVars.stat_data.剧情.灵气复苏.已开启,true);
+ assert.equal(mockVars.stat_data.剧情.灵气复苏.开启日期,'2021-07-03');
+ assert.equal(mockVars.stat_data.云清晏.关系阶段,'初识');
+
+ const sealOv=md.getElementById('jy-aura-seal-overlay');
+ assert.ok(sealOv,'应渲染全屏古风阵法特效 #jy-aura-seal-overlay');
+ assert.match(sealOv.textContent,/太虚启封[\s\S]*2021-07-03/);
+ sealOv.click();
+ assert.equal(md.getElementById('jy-aura-seal-overlay'),null);
+
+ assert.equal(md.querySelector('[data-aura-badge]').hidden,false);
+ assert.match(md.querySelector('[data-aura-badge-text]').textContent,/第1日 · 微兆潜龙期/);
+ const yunCard=md.querySelector('[data-dlc-heroine="云清晏"]');
+ assert.equal(yunCard.hidden,false);
+ assert.match(yunCard.querySelector('.jy-avatar').src,/^data:image\/svg\+xml/);
+ assert.equal(md.querySelector('[data-people-all-btn]').textContent,'全部角色 (8)');
+ assert.equal(md.querySelector('[data-cultivation-panel]').hidden,false);
+
+ mp.querySelector('[data-action="dlc-toggle"]').click();
+ await new Promise(r=>mw.setTimeout(r,80));
+ assert.equal(mp.dataset.dlcActive,'false');
+ assert.ok(mockBook.filter(e=>dlcNames.includes(e.name)).every(e=>e.enabled===false));
+ assert.equal(md.querySelector('[data-dlc-heroine="云清晏"]').hidden,true);
+ assert.equal(md.querySelector('[data-people-all-btn]').textContent,'全部角色 (7)');
+ md.getElementById('jy-aura-seal-overlay')?.click();
+
+ mw.__jiyangFloatingMusicPlayerV2.destroy();
+ mw.__jyStatusEngineV1.destroy();
+ assert.equal(md.getElementById('jy-floating-music-player'),null);
+ } finally {
+   mw.__jiyangFloatingMusicPlayerV2?.destroy?.();
+   mw.__jyStatusEngineV1?.destroy?.();
+   mw.close();
+ }
+
+ console.log('PASS: 学期边界/自定义年份、EJS分期输出、旧存档缺字段、别名配置、只读DOM交互、Bento面板、多功能灵枢控制台/古风特效/世界书注入与云清晏DLC联动全部通过。');
 })().catch(e=>{console.error(e);process.exitCode=1;});

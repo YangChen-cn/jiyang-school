@@ -8,6 +8,8 @@
   const THEME_KEY = 'jy-status-theme';
   const AVATAR_EVENT = 'jy-avatar-changed';
   const THEME_EVENT = 'jy-status-theme-changed';
+  const DLC_EVENT = 'jy-aura-dlc-changed';
+  const DLC_STORAGE_KEY = 'jy-aura-dlc:暨阳中学:v1';
   const READY_EVENT = 'jy-status-engine-ready';
   const ASSET_BASE = 'https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/albums/v1';
   const ASSET_BASE_CDN = 'https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/albums/v1';
@@ -237,7 +239,8 @@
     '虞淑婉': [
       ['yu/campus.png', '校长室'], ['yu/outdoor.png', '书店傍晚'],
       ['yu/pic-2.png', '生活照片 02'], ['yu/pic-3.png', '生活照片 03'], ['yu/pic-4.png', '生活照片 04'], ['yu/pic-6.jpg', '生活照片 06']
-    ]
+    ],
+    '云清晏': []
   };
 
   const CHAR_THRESHOLDS = {
@@ -247,7 +250,8 @@
     '许念安': [20, 50, 80, 90],
     '慕佳芊': [20, 50, 80, 90],
     '陈芷汀': [40, 60, 80, 90],
-    '虞淑婉': [25, 55, 80, 90]
+    '虞淑婉': [25, 55, 80, 90],
+    '云清晏': [20, 50, 80, 90]
   };
 
   const PROFILES = {
@@ -258,6 +262,7 @@
     '陈芷汀': { name: '汀汀不听话✨', initial: '汀', bg: '#b4456c' },
     '慕佳芊': { name: 'Mumu慕老师', initial: '芊', bg: '#c9882c' },
     '虞淑婉': { name: '虞淑婉', initial: '婉', bg: '#2e5950' },
+    '云清晏': { name: '云清晏', initial: '云', bg: '#1d6b61' },
     '吴臻臻': { name: 'Zhen_23⚡', initial: 'Z', bg: '#1c1c1e' },
     'Zhen': { name: 'Zhen_23⚡', initial: 'Z', bg: '#1c1c1e' }
   };
@@ -449,6 +454,13 @@
       display: inline-flex; align-items: center; gap: 4px; padding: 1px 8px;
       border-radius: 999px; background: rgba(30, 86, 76, 0.11); color: var(--c-primary); font-weight: 750;
     }
+    .jy-aura-chip {
+      display: inline-flex; align-items: center; gap: 4px; padding: 1px 8px;
+      border: 1px solid rgba(201, 146, 56, 0.42); border-radius: 999px;
+      background: linear-gradient(120deg, rgba(29, 107, 97, 0.14), rgba(201, 146, 56, 0.12));
+      color: var(--c-primary); font-weight: 750;
+    }
+    .jy-aura-chip b { color: var(--c-accent); }
     .jy-intimate-note { display: none; align-items: center; gap: 4px; padding: 1px 8px; border-radius: 999px; background: var(--rose-wash); color: var(--rose-ink); font-weight: 800; }
     .jy-status[data-intimate-scene="true" i] .jy-intimate-note { display: inline-flex; }
 
@@ -541,6 +553,25 @@
     .jy-person[data-tone="bright"] { --tone: #c9882c; }
     .jy-person[data-tone="silk"] { --tone: #b4456c; }
     .jy-person[data-tone="principal"] { --tone: #2e5950; }
+    .jy-person[data-tone="immortal"] { --tone: #1d6b61; border-top-color: rgba(201, 146, 56, 0.36); }
+    .jy-immortal-pill {
+      padding: 0 5px; border: 1px solid rgba(201, 146, 56, 0.45); border-radius: 4px;
+      background: linear-gradient(120deg, rgba(29, 107, 97, 0.14), rgba(201, 146, 56, 0.14));
+      color: #1d6b61; font-size: 9.5px; font-weight: 750;
+    }
+    .jy-status[data-theme="dark"] .jy-immortal-pill { color: #8ad3be; border-color: rgba(226, 184, 98, 0.42); }
+    .jy-cultivation-panel {
+      margin-top: 8px; padding: 8px 10px; border: 1px solid rgba(29, 107, 97, 0.28);
+      border-radius: 8px; background: linear-gradient(135deg, rgba(29, 107, 97, 0.08), rgba(201, 146, 56, 0.07));
+    }
+    .jy-cultivation-head {
+      display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 8px; margin-bottom: 5px;
+      padding-right: 72px; font-size: 11px; font-weight: 800; color: var(--c-primary);
+    }
+    .jy-cultivation-grid { display: grid; gap: 4px; padding-right: 72px; font-size: 11px; }
+    .jy-cultivation-grid div { display: grid; grid-template-columns: 60px minmax(0, 1fr); gap: 6px; }
+    .jy-cultivation-grid b { color: var(--c-primary); font-size: 10.5px; }
+    .jy-cultivation-grid span { color: var(--c-ink); overflow-wrap: anywhere; }
     .jy-person[data-present="false"],
     .jy-person[data-present="False"],
     .jy-person[data-present="0"],
@@ -796,6 +827,7 @@
       --rose-ink: #ffb9d4;
       --rose-wash: #512e42;
       --rose-line: #80526b;
+      color: var(--c-ink);
       color-scheme: dark;
     }
     .jy-status[data-theme="dark"] .jy-head { background: linear-gradient(120deg, #1b2824, #222c27); }
@@ -842,10 +874,11 @@
       .jy-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 420px) {
-      .jy-head { padding: 10px 10px 9px; }
+      .jy-head { padding: 10px 10px 9px; gap: 8px; }
+      .jy-scene-tools { margin-left: auto; }
       .jy-panels { padding: 8px 9px 10px; }
       .jy-card-body { grid-template-columns: 1fr; }
-      .jy-card-dossier-grid { padding-right: 0; }
+      .jy-card-dossier-grid, .jy-cultivation-head, .jy-cultivation-grid { padding-right: 0; }
     }
     @media (prefers-reduced-motion: reduce) {
       .jy-theme-track::before, .jy-tab-panel, .jy-fill, .jy-avatar { transition: none; animation: none; }
@@ -1548,8 +1581,111 @@
     });
   }
 
+  function parseJsonVar(node) {
+    const raw = String(node?.textContent || '').trim();
+    if (!raw || raw.startsWith('{{') || raw === 'null' || raw === 'undefined') return null;
+    try {
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === 'object' ? parsed : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function dlcDayProgress(originRaw, currentRaw) {
+    const parseMs = s => {
+      const m = String(s || '').trim().match(/^(\d{4})[-/年.](\d{1,2})[-/月.](\d{1,2})/);
+      if (!m) return null;
+      const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);
+      return (mo >= 1 && mo <= 12 && d >= 1 && d <= 31) ? Date.UTC(y, mo - 1, d) : null;
+    };
+    const ori = parseMs(originRaw);
+    const cur = parseMs(currentRaw) ?? ori;
+    const elapsed = (ori !== null && cur !== null) ? Math.max(0, Math.floor((cur - ori) / 86400000)) : 0;
+    const stage = elapsed <= 10 ? '微兆潜龙期' : elapsed <= 25 ? '古武抬头期' : elapsed <= 45 ? '龙眼破禁期' : '两界并序期';
+    return { elapsed, dayNumber: elapsed + 1, stage };
+  }
+
+  function syncDlcUiInFrame(root, opts = {}) {
+    if (!root) return;
+    const doc = root.ownerDocument;
+    const dlcSource = parseJsonVar(root.querySelector('[data-dlc-source]'));
+    const cultSource = parseJsonVar(root.querySelector('[data-cultivation-source]'));
+    const stat = opts.fromStat || null;
+    const statDlc = stat?.剧情?.灵气复苏;
+    const statCult = stat?.主角?.修行;
+
+    let enabled = null;
+    if (typeof opts.enabled === 'boolean') {
+      enabled = opts.enabled;
+      root.dataset.dlcOverride = enabled ? 'true' : 'false';
+    } else if (root.dataset.dlcOverride === 'true' || root.dataset.dlcOverride === 'false') {
+      enabled = root.dataset.dlcOverride === 'true';
+    } else if (stat && typeof stat === 'object') {
+      enabled = Boolean(statDlc && statDlc.已开启);
+    } else if (dlcSource && typeof dlcSource.已开启 === 'boolean') {
+      enabled = Boolean(dlcSource.已开启);
+    } else {
+      try {
+        const cached = JSON.parse(hostWin.localStorage.getItem(DLC_STORAGE_KEY) || '{}');
+        if (typeof cached.enabled === 'boolean') enabled = cached.enabled;
+      } catch (_) {}
+    }
+    const active = Boolean(enabled);
+    root.dataset.dlcActive = active ? 'true' : 'false';
+
+    const curDate = opts.currentDate || stat?.世界?.日期 || sceneValue(root.querySelector('.jy-date')) || '';
+    const originDate = opts.originDate || (statDlc && statDlc.开启日期) || (dlcSource && dlcSource.开启日期) || curDate || '2020-09-01';
+    const calc = dlcDayProgress(originDate, curDate);
+    const dayNum = (typeof opts.dayNumber === 'number' && Number.isFinite(opts.dayNumber)) ? opts.dayNumber : calc.dayNumber;
+    const stageText = opts.stageName || (statDlc && statDlc.阶段) || (dlcSource && dlcSource.阶段) || calc.stage;
+
+    const cult = statCult || cultSource || null;
+    const realmText = cult?.境界 && !String(cult.境界).startsWith('{{') ? String(cult.境界) : '未引气（凡躯）';
+    const qiVal = cult && cult.灵气感应 !== undefined ? String(cult.灵气感应) : '0';
+    const artsList = Array.isArray(cult?.功法与秘术) && cult.功法与秘术.length ? cult.功法与秘术.join('、') : '暂无';
+
+    const badge = root.querySelector('[data-aura-badge]');
+    const badgeText = root.querySelector('[data-aura-badge-text]');
+    if (badge) badge.hidden = !active;
+    if (badgeText) badgeText.textContent = `第${dayNum}日 · ${stageText}${realmText && realmText !== '未引气（凡躯）' ? ' · ' + realmText : ''}`;
+
+    const allBtn = root.querySelector('[data-people-all-btn]');
+    if (allBtn) allBtn.textContent = active ? '全部角色 (8)' : '全部角色 (7)';
+
+    root.querySelectorAll('.jy-person[data-dlc-heroine]').forEach(card => {
+      card.hidden = !active;
+      const yunRealm = card.querySelector('[data-yun-realm]');
+      if (yunRealm) {
+        const liveRealm = stat?.云清晏?.当前境界;
+        const txt = liveRealm || sceneValue(yunRealm) || '金丹跌境·封蛰';
+        yunRealm.textContent = txt;
+      }
+      if (stat?.云清晏 && typeof stat.云清晏.是否在场 === 'boolean') {
+        card.dataset.present = String(stat.云清晏.是否在场);
+      } else if (active && !/^(?:true|false|1|0|是|否|在场|不在场)$/i.test((card.dataset.present || '').trim())) {
+        card.dataset.present = 'false';
+      }
+    });
+
+    const cultPanel = root.querySelector('[data-cultivation-panel]');
+    if (cultPanel) {
+      cultPanel.hidden = !active;
+      const stEl = cultPanel.querySelector('[data-cultivation-stage]');
+      const rlEl = cultPanel.querySelector('[data-cultivation-realm]');
+      const qiEl = cultPanel.querySelector('[data-cultivation-qi]');
+      const arEl = cultPanel.querySelector('[data-cultivation-arts]');
+      if (stEl) stEl.textContent = active ? `第${dayNum}日 · ${stageText}` : '未启封';
+      if (rlEl) rlEl.textContent = realmText;
+      if (qiEl) qiEl.textContent = qiVal;
+      if (arEl) arEl.textContent = artsList;
+    }
+
+    enhanceCharacters(root, doc);
+  }
+
   function enhanceCharacters(root, doc) {
-    const people = [...root.querySelectorAll('.jy-person')];
+    const people = [...root.querySelectorAll('.jy-person')].filter(person => !person.hidden);
     const present = people.filter(person => /^(?:true|1|是|在场)$/i.test((person.dataset.present || '').trim()));
     const knownPresence = Boolean(sceneValue(root.querySelector('.jy-location'))) &&
       people.some(person => /^(?:true|false|1|0|是|否|在场|不在场)$/i.test((person.dataset.present || '').trim()));
@@ -1684,7 +1820,7 @@
     if (eventNode?.parentElement) eventNode.parentElement.hidden = !eventName || eventName === '无';
 
     applyStoredAvatarsInFrame(root);
-    enhanceCharacters(root, doc);
+    syncDlcUiInFrame(root);
     renderInventoryCount(root);
 
     // 地点映射
@@ -1904,6 +2040,7 @@
         if (sequence !== campusRead) return;
         if (!data?.stat_data) throw new Error('invalid snapshot');
         campus = normalizeCampus(data.stat_data.校园, date, activityIds);
+        syncDlcUiInFrame(root, { fromStat: data.stat_data });
         readState = '';
       } catch (_) {
         if (sequence !== campusRead) return;
@@ -1937,7 +2074,7 @@
       });
       const emptyNotice = root.querySelector('[data-people-empty]');
       if (emptyNotice) {
-        const hasPresent = [...root.querySelectorAll('.jy-person')].some(p => /^(?:true|1|是|在场)$/i.test((p.dataset.present || '').trim()));
+        const hasPresent = [...root.querySelectorAll('.jy-person')].some(p => !p.hidden && /^(?:true|1|是|在场)$/i.test((p.dataset.present || '').trim()));
         emptyNotice.hidden = !(view === 'present' && !hasPresent);
       }
     };
@@ -2020,19 +2157,26 @@
   const onAvatarChanged = () => {
     mountedFrames.forEach(root => { if (root.isConnected) applyStoredAvatarsInFrame(root); });
   };
+  const onDlcChanged = event => {
+    const detail = event?.detail || {};
+    mountedFrames.forEach(root => { if (root.isConnected) syncDlcUiInFrame(root, detail); });
+  };
   const onThemeStorage = () => {
     mountedFrames.forEach(root => { if (root.isConnected) syncThemeInFrame(root); });
     syncOverlayTheme();
   };
 
   hostWin.addEventListener(AVATAR_EVENT, onAvatarChanged);
+  hostWin.addEventListener(DLC_EVENT, onDlcChanged);
   hostWin.addEventListener('storage', event => {
     if (event.key === null || event.key?.startsWith(STORAGE_PREFIX)) onAvatarChanged();
     if (event.key === null || event.key === THEME_KEY) onThemeStorage();
+    if (event.key === null || event.key === DLC_STORAGE_KEY) onDlcChanged();
   });
 
   function destroy() {
     hostWin.removeEventListener(AVATAR_EVENT, onAvatarChanged);
+    hostWin.removeEventListener(DLC_EVENT, onDlcChanged);
     mountedFrames.clear();
     overlayRoot?.remove();
     overlayRoot = null;

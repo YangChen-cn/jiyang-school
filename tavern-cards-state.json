@@ -22,6 +22,27 @@
           "type": "before_character_definition",
           "order": 20
         }
+      },
+      "[DLC]灵气复苏总纲与异象日程": {
+        "path": "世界书/世界观/DLC_灵气复苏总纲与异象日程.yaml",
+        "keywords": [
+          "灵气复苏",
+          "修仙",
+          "华夏龙脉",
+          "云岫宗",
+          "境界",
+          "仙凡两隔"
+        ],
+        "abstract": "都市修仙DLC总纲：暨阳越中潜龙脉与太微云岫古宗百年兴衰、无上限修仙/古武体系、仙凡两隔哲学命题与60+天四阶段逐步灵气复苏异象",
+        "uid": 100,
+        "enabled": false,
+        "strategy": {
+          "type": "constant"
+        },
+        "position": {
+          "type": "before_character_definition",
+          "order": 22
+        }
       }
     },
     "扮演准则": {
@@ -1401,6 +1422,47 @@
           "type": "after_character_definition",
           "order": 78
         }
+      },
+      "云清晏_基础信息": {
+        "path": "世界书/角色/云清晏/基础信息.yaml",
+        "scope": "specific",
+        "part": "basic",
+        "keywords": [
+          "云清晏",
+          "清晏",
+          "圣女",
+          "云岫宗"
+        ],
+        "abstract": "DLC可攻略圣女云清晏基础档案：云岫古宗直系嫡传，末法金丹巅峰冲元婴受创跌境，开启DLC次日插班主角班级，兼具古风反差与仙凡两隔宿命张力",
+        "uid": 102,
+        "enabled": false,
+        "strategy": {
+          "type": "constant"
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 79
+        }
+      },
+      "云清晏_性格调色盘": {
+        "path": "世界书/角色/云清晏/性格调色盘.yaml",
+        "scope": "specific",
+        "part": "personality",
+        "keywords": [
+          "云清晏",
+          "清晏",
+          "圣女"
+        ],
+        "abstract": "云清晏五阶段性格调色盘：古宗孤清与红尘反差，随好感从尘缘初照演进至道侣共证与仙凡抉择，含第2日入班及在场EJS门控",
+        "uid": 103,
+        "enabled": false,
+        "strategy": {
+          "type": "constant"
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 80
+        }
       }
     },
     "NPC": {
@@ -1645,6 +1707,30 @@
         "position": {
           "type": "after_character_definition",
           "order": 107
+        }
+      },
+      "云清晏_NSFW指导": {
+        "path": "世界书/角色/云清晏/NSFW指导.yaml",
+        "scope": "specific",
+        "keywords": [
+          "云清晏",
+          "清晏",
+          "圣女"
+        ],
+        "abstract": "云清晏NSFW指导：道侣灵机共融与清冷圣女动情反差，受第2日入班、是否在场与NSFW门槛双重门控",
+        "uid": 104,
+        "enabled": false,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "云清晏",
+            "清晏",
+            "圣女"
+          ]
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 108
         }
       }
     },
@@ -2146,6 +2232,63 @@
           "order": 124
         },
         "part": "event"
+      },
+      "[DLC]老鹰山灵脉与古宗秘藏": {
+        "path": "世界书/事件/DLC_老鹰山灵脉与古宗秘藏.yaml",
+        "keywords": [
+          "老鹰山",
+          "听风亭",
+          "旧值守屋",
+          "周伯",
+          "周守山",
+          "镇风铎",
+          "枯井",
+          "石碑",
+          "云岫宗",
+          "太微云岫宗",
+          "古宗",
+          "山门",
+          "龙脉",
+          "潜龙",
+          "灵气",
+          "吐纳",
+          "古武",
+          "澹珠",
+          "万风"
+        ],
+        "abstract": "DLC老鹰山灵脉深线：太微云岫宗沉封山门、镇风铎与听风残阵、守灯执事周守山真身、古宗遗藏及与澹珠/万风旧器联动",
+        "uid": 101,
+        "enabled": false,
+        "strategy": {
+          "type": "selective",
+          "keys": [
+            "老鹰山",
+            "听风亭",
+            "旧值守屋",
+            "周伯",
+            "周守山",
+            "镇风铎",
+            "枯井",
+            "石碑",
+            "云岫宗",
+            "太微云岫宗",
+            "古宗",
+            "山门",
+            "龙脉",
+            "潜龙",
+            "灵气",
+            "吐纳",
+            "古武",
+            "澹珠",
+            "万风"
+          ],
+          "scan_depth": 2
+        },
+        "position": {
+          "type": "after_character_definition",
+          "order": 125
+        },
+        "part": "event"
       }
     },
     "MVU": {
@@ -2212,6 +2355,23 @@
           "role": "system",
           "depth": 0,
           "order": 150
+        }
+      },
+      "[mvu_update]修仙变量契约": {
+        "path": "世界书/MVU/DLC_修仙变量契约.yaml",
+        "part": "update_rules",
+        "keywords": [],
+        "abstract": "都市修仙DLC专属MVU变量更新契约（未开启DLC时禁用零开销）",
+        "uid": 105,
+        "enabled": false,
+        "strategy": {
+          "type": "constant"
+        },
+        "position": {
+          "type": "at_depth",
+          "role": "system",
+          "depth": 0,
+          "order": 145
         }
       }
     },

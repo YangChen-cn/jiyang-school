@@ -49,6 +49,7 @@ export const Schema = z.object({
     校园活动: z.string().prefault(''),
     学期: z.string().prefault(''),       // 高二上 | 高二下 | 暑假 | 高三上 | 高三下 | 已毕业
     当日好感增量: z.object({ 日期: z.string(), 已用: z.record(z.string(), z.number().int().min(0).max(12)) }).optional(),
+    灵气复苏: z.object({ 已开启: z.coerce.boolean(), 开启日期: z.string(), 阶段: z.string() }).optional(),
   }).prefault({}),
 
   校园: z.object({
@@ -157,6 +158,21 @@ export const Schema = z.object({
     内心独白: z.string().prefault(''),
   }).prefault({}),
 
+  云清晏: z.object({
+    是否在场: z.coerce.boolean().optional(),
+    好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).optional(),
+    关系阶段: z.string().optional(),
+    NSFW: z.coerce.boolean().optional(),
+    当前境界: z.string().optional(),
+    伤势余韵: z.string().optional(),
+    当前上装: z.string().optional(),
+    当前下装: z.string().optional(),
+    所在位置: z.string().optional(),
+    动作: z.string().optional(),
+    心情: z.string().optional(),
+    内心独白: z.string().optional(),
+  }).optional(),
+
   主角: z.object({
     姓名: z.string().prefault(''),
     年龄: z.string().prefault(''),
@@ -168,6 +184,7 @@ export const Schema = z.object({
     性格: z.string().prefault(''),
     擅长与学业: z.string().prefault(''),
     家庭背景: z.string().prefault(''),
+    修行: z.object({ 境界: z.string(), 灵气感应: z.number(), 功法与秘术: z.array(z.string()) }).optional(),
     重要物品: z.array(z.object({
       名称: z.string(),
       描述: z.string(),

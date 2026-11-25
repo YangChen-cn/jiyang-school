@@ -45,6 +45,10 @@ python3 "$SCRIPT_DIR/脚本/生成正文场景.py"
 node "$SCRIPT_DIR/脚本/生成Zod.mjs"
 echo "  -> Zod.txt 生成完成"
 
+# Step 0.5: 同步 DLC 世界书条目载荷至 悬浮音乐播放器.js
+node "$SCRIPT_DIR/脚本/生成DLC.mjs"
+echo "  -> DLC 载荷同步完成"
+
 # Step 1: forge pack
 node "$FORGE" pack "$PROJECT"
 echo "  -> forge pack 完成"

@@ -11,6 +11,20 @@
   const MUSIC_RAW = 'https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/music/v1';
   const THEME_STORAGE_KEY = 'jy-status-theme';
   const THEME_EVENT = 'jy-status-theme-changed';
+  const DLC_EVENT = 'jy-aura-dlc-changed';
+  const DLC_STORAGE_KEY = 'jy-aura-dlc:暨阳中学:v1';
+  const DLC_OVERLAY_ID = 'jy-aura-seal-overlay';
+  const DLC_OVERLAY_STYLE_ID = 'jy-aura-seal-style';
+  /* JY_DLC_MANIFEST_BEGIN */
+  
+  
+  
+  
+  
+  
+  
+  const DLC_ENTRIES = [{"name":"[DLC]灵气复苏总纲与异象日程","enabled":true,"strategy":{"type":"constant"},"position":{"type":"before_character_definition","order":22},"content":"<%_ {\n/* JY_DLC_ORIGIN_BEGIN */\nconst dlcOriginDate = \"2020-09-01\";\n/* JY_DLC_ORIGIN_END */\nconst toIsoDay = (raw) => {\n  const m = String(raw || '').trim().match(/^(\\d{4})[-/年.](\\d{1,2})[-/月.](\\d{1,2})/);\n  if (!m) return null;\n  const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);\n  if (mo < 1 || mo > 12 || d < 1 || d > 31) return null;\n  return Date.UTC(y, mo - 1, d);\n};\nconst startMs = toIsoDay(getvar('stat_data.剧情.灵气复苏.开启日期', { defaults: '' })) ?? toIsoDay(dlcOriginDate) ?? Date.UTC(2020, 8, 1);\nconst curDateStr = String(getvar('stat_data.世界.日期', { defaults: '' }) || dlcOriginDate);\nconst curMs = toIsoDay(curDateStr) ?? startMs;\nconst elapsedDays = Math.max(0, Math.floor((curMs - startMs) / 86400000));\nconst dayNumber = elapsedDays + 1;\nconst originLabel = String(getvar('stat_data.剧情.灵气复苏.开启日期', { defaults: '' }) || dlcOriginDate);\nconst playerClass = String(getvar('stat_data.主角.班级', { defaults: '' }) || '高二重点班');\nconst realm = String(getvar('stat_data.主角.修行.境界', { defaults: '' }) || '未引气（凡躯）');\nconst stageName = elapsedDays <= 10 ? '微兆潜龙期' : elapsedDays <= 25 ? '古武抬头期' : elapsedDays <= 45 ? '龙眼破禁期' : '两界并序期';\n_%>\n[都市修仙DLC：华夏潜龙与灵气复苏总纲｜开启日：<%= originLabel %>｜第 <%= dayNumber %> 日（<%= stageName %>）｜主角境界：<%= realm %>]\n\n华夏龙脉与暨阳暗局:\n  潜龙归元窍: 暨阳表象是浙中百万人口强县与工商市井，实则地处华夏南干龙余脉入越折返处的一座沉睡主窍——「越中潜龙·归元眼」，北承会稽余脉、东抱老鹰山、南接浦阳/浣江水势。千年之前古贤以镇山大阵敛藏地脉不外泄，使此城龙气内蕴而非外炫：西施故里历代人杰地灵、山下湖水脉凝出「澹珠记」蕴灵古珠、老城与万风地库古宅旧器历久不腐，皆源于地底深藏的一缕龙脉清气。\n  太微云岫古宗兴衰: 数百年前老鹰山曾是越地声势赫赫的「太微云岫宗」祖庭，主峰剑阵吞吐云气、亭池聚灵供千修问道；自明中叶起天地灵机大潮渐退，地球堕入末法枯竭，云岫宗护山大阵自封沉入山腹地底，仅余山腰听风亭残基、屋檐「镇风青铜铎」、枯井荒坛与守灯执事周伯苦撑末世。\n\n修行契约与无上限阶梯（不锁死境界上限）:\n  同源并流: 古武「锻骨强身→明劲→暗劲→化劲宗师→先天通玄」与仙途「引气感灵→炼气（初/中/后/大圆满）→筑基→金丹→元婴→化神及之上」双轨并行且先天可合流。\n  开放破境: 不设僵化天数或阶段天花板。只要得周伯授艺、老鹰山龙眼共鸣、古宗残藏秘药、圣女云清晏点拨合参、或借「澹珠记」灵珠与「万风地库」旧器淬炼契机，皆可实打实破境飞跃；仅严格守住「每跨一大境须经历感悟、灵机积累或天地拷问，绝不空口白送」的因果分寸。\n\n红尘、长生与「仙凡两隔」之问:\n  时间裂痕: 灵识愈广、寿元愈长，修者所见的晨昏刻度便与凡俗渐次剥离——早自习粉笔灰、月考榜单、浣江晚风与三鲜打面的热气在长生者眼中依然真切，却会在十年、数十年后的时光视野里显出近乎残忍的短暂。\n  圣女与诸女的道心张力: 原有七位女主仍是立足现代秩序的血肉少女（苏晓樯的家族商途与锋芒、温书语的文学慢光阴、沈幼楚攥紧的一角安稳、陈芷汀的世故与真心、许念安的执念边界、慕佳芊与虞淑婉的尘世担当），不强行集体转职修仙；唯有随主角接触灵潮后按各自性格起微澜。若主角深度踏入仙途、尤其中途选择与云清晏结为道侣同参大道，必须直面无法回避的「仙凡两隔」之抉——秘药洗髓未必人人都求得了长生亦未必是她们所愿，留恋凡世烟火又恐百年死生相隔；问道究竟是为化作冷眼俯瞰苍生的仙石，还是以重逾千钧的修为护住这一世人间灯火，须由行动与选择作答。\n\n当前日历阶段异象（仅体现 <%= stageName %> 现实感，现代学校教学与治安表面正常运转）:\n<%_ if (elapsedDays <= 10) { _%>\n  - 第一阶段·微兆潜龙期（第1～10天）：老鹰山主峰与浦阳江面夜间偶现几秒低空青白色微晕；城内负氧离子读数与局部地磁偶发微小跳变，老旧调频收音机深夜偶掠十秒无法定频的风铃清音；老香樟提前落叶重萌新芽，夜间犬猫常无故望东南山脊低吠。气象与广播台一律以「逆温折光/静电扰动」解释，校园日常照常。\n  - 体质敏锐或曾练过古法吐纳者（或长期熬夜后偶然深呼吸者），于晨雾或老鹰山附近已能察觉一丝清冽异于常氧的凉气入肺；此前被视为普通护林老人的周伯亦开始隐晦审视山势与来客骨相。\n<%_ if (elapsedDays === 0) { _%>\n  - 启封初日伏笔：今日老鹰山潜龙窍微微一震，正在江南游历疗伤的云岫古宗圣女云清晏隔空感应到祖庭异动，已动身赶赴暨阳并凭宗门隐脉办妥次日插班借读手续——今日尚在途中未进校园，明日（第2天）起正式转入<%= playerClass %>。\n<%_ } else { _%>\n  - 云清晏入世动向：圣女云清晏已于今日抵达暨阳并作为转校生插入<%= playerClass %>，外表为病弱素净的转学少女，实则正借重点高中日常隐遁养伤并暗查龙脉主窍与主角身上气机。\n<%_ } _%>\n<%_ } else if (elapsedDays <= 25) { _%>\n  - 第二阶段·古武抬头与灵潮涌动期（第11～25天）：暨阳清晨水雾含润甘气息，老鹰山听风亭一带深吸已可清神明目；国内暗中流传多年的古武拳师与长期站桩者丹田先热、多年旧伤悄然松动；「澹珠记」极少数老采矿珠与「万风地库」沉睡古器在深夜偶泛微温细光。\n  - 现实秩序变化：地方医院接诊少数无器质病变的「手心发暖/耳目骤敏」案例；古玩圈与武馆行内开始暗流寻访山野旧物与导引残谱；学校与城区仍维持正常秩序，但学生私下八卦与夜探灵异帖渐多，云清晏作为<%= playerClass %>插班生亦开始在平静课间暴露与凡俗格格不入的细微处。\n<%_ } else if (elapsedDays <= 45) { _%>\n  - 第三阶段·龙眼破禁与百象初显期（第26～45天）：老鹰山后山枯井与潜龙支脉雾霭常聚不散、雷雨夜弧光偶见绕峰偏折；引气筑基者已可展现短距御风、指劲透木或内息愈创等真异能；官方「特种气象与非典型科研调查组（特调外勤）」开始穿便装进驻高校与文保点登记排查，对外借口「地质探测/古建修缮」维持高中上课常态。\n  - 若主角与云清晏或周伯深入配合，此时已可直接叩问山腹沉封山门或借龙脉潮汐冲关破境；同时也需替凡俗亲近之人斟酌去留、隐瞒或点破真相的分寸。\n<%_ } else { _%>\n  - 第四阶段·两界并轨与沧桑初成期（第46～60+天）：官方悄然面向高校开辟「特殊体能与生命科学特招通道」与珍稀药矿特管条例，现代都市与修真隐脉正式形成「表层照常高考烟火，里层宗门世家与特调共立」的双轨新秩序；暨阳因越中潜龙眼渐渐松动，引来外地散修与古宗耳目暗中驻足。\n  - 主角站在古宗传承、龙脉底牌与现代情缘交汇中心：每一次破境、每一笔「澹珠/万风」机缘交换、以及在云清晏与七位红尘旧友之间的每一次偏倚，都将实打实改写自己与众人在这条长生或短世之路上的最终结局。\n<%_ } _%>\n<%_ } _%>\n","probability":100,"recursion":{"prevent_incoming":true,"prevent_outgoing":true,"delay_until":null},"effect":{"sticky":null,"cooldown":null,"delay":null}},{"name":"[DLC]老鹰山灵脉与古宗秘藏","enabled":true,"strategy":{"type":"selective","keys":["老鹰山","听风亭","旧值守屋","周伯","周守山","镇风铎","枯井","石碑","云岫宗","太微云岫宗","古宗","山门","龙脉","潜龙","灵气","吐纳","古武","澹珠","万风"],"scan_depth":2},"position":{"type":"after_character_definition","order":125},"content":"[DLC事件｜老鹰山灵脉与太微云岫古宗秘藏]\n触发背景: 当都市修仙DLC开启后，老鹰山不再只是城郊步道与退休护林屋，而是太微云岫古宗沉封山门与越中潜龙脉交汇的「听风归元窍」。\n\n宗门遗构真容:\n  听风亭（护山阵残角）: 八角青石基座实为上古「听风聚灵阵」八方乾坤柱之一，柱础苔痕下刻着导引山脉风气的云篆禁纹；灵潮涌动后，立于亭中吐纳可获事半功倍的聚灵效用。\n  镇风青铜铎（旧值守屋檐下）: 并非常人风铃，而是云岫古宗历代守山执事所持下品灵器「镇风铎」半器残件。日常凡风吹不落灰尘，唯有蕴含真气/灵识波动、或云岫直系血脉临近时方会发出直透神魂的清音震颤。\n  枯井残坛与沉封山门: 值守屋后方荒径尽头的干涸古井，井壁内侧留有历代祖师锁山封印的阵眼凹槽；逢灵潮升至中后期或集齐「镇风铎清鸣 / 图书馆三楼县志阵方位 / 周伯或云清晏印诀」时，可顺井下石阶窥见深藏山腹、半浸在一池浅碧龙脉灵泉中的太微云岫宗遗殿前阙。\n\n周伯（周守山）真身与机缘阶梯:\n  真身: 太微云岫宗外门最后一代守灯执事「周守山」，年少拜入残宗，苦守末法八十年。表面修为看似因灵竭止步养气境，实则怀有残存半步筑基道基与全套古宗外门筑基谱系，昔年亦曾在山中见过幼时随长辈闭关的云清晏。\n  授艺阶梯（不锁上限，以心性与机缘定夺）:\n    1. 固骨养气: 见主角曾帮衬老屋或已于日常练稳「松溪吐风桩」，转授正式内修真篇《太微导引术》，引其感应山风第一缕游离灵气。\n    2. 古宗秘藏与《暨阳风物补遗》: 图书馆三楼旧书库那本被视作清末游记的抄本实为云岫外门暗录；对照碑文破解听风亭阵图后，周伯可放开荒径禁制，准主角进山门前殿借用残存灵池炼体、领悟《云岫剑气残篇》或《松溪炼神桩》。\n    3. 联动旧器（澹珠记与万风地库）: 若主角携「澹珠记」蕴灵老珍珠或「万风地库」流出的带韵古木铜铁入山门灵眼，可涤尽岁尘显出微灵真质（辅助聚气疗伤），并助周伯印证「暨阳全城龙脉正在次第醒转」的判断。\n  分寸提示: 周伯重因果与道心清正，绝不强逼主角拜师或与外人厮杀，亦提醒主角切勿凭初得灵气在普通同窗面前卖弄惹来特事稽查与因果反噬。\n","probability":100,"recursion":{"prevent_incoming":true,"prevent_outgoing":true,"delay_until":null},"effect":{"sticky":null,"cooldown":null,"delay":null}},{"name":"云清晏_基础信息","enabled":true,"strategy":{"type":"constant"},"position":{"type":"after_character_definition","order":79},"content":"<%_ {\nconst toIsoDay = (raw) => {\n  const m = String(raw || '').trim().match(/^(\\d{4})[-/年.](\\d{1,2})[-/月.](\\d{1,2})/);\n  if (!m) return null;\n  const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);\n  if (mo < 1 || mo > 12 || d < 1 || d > 31) return null;\n  return Date.UTC(y, mo - 1, d);\n};\nconst originStr = String(getvar('stat_data.剧情.灵气复苏.开启日期', { defaults: '' }) || '2020-09-01');\nconst curStr = String(getvar('stat_data.世界.日期', { defaults: '' }) || originStr);\nconst startMs = toIsoDay(originStr) ?? Date.UTC(2020, 8, 1);\nconst curMs = toIsoDay(curStr) ?? startMs;\nconst elapsedDays = Math.max(0, Math.floor((curMs - startMs) / 86400000));\nconst _p = getvar('stat_data.云清晏.是否在场', { defaults: false });\nconst isPresent = _p === true || _p === 'true' || _p === 1;\nconst stage = getvar('stat_data.云清晏.关系阶段', { defaults: '初识' });\nconst realmState = getvar('stat_data.云清晏.当前境界', { defaults: '金丹跌境（重创封蛰）' });\nconst wound = getvar('stat_data.云清晏.伤势余韵', { defaults: '元婴劫伤未愈·阴雨畏寒' });\nconst cls = String(getvar('stat_data.主角.班级', { defaults: '' }) || '高二重点班');\n_%>\n<%_ if (elapsedDays < 1) { _%>\n[云清晏｜启封首日未入校伏笔]\n云岫古宗直系圣女云清晏此刻尚在城外赶路、刚托宗门故旧替自己办妥借读名额，将于「开启灵气复苏次日（第2天）」正式插班进入<%= cls %>。今日绝不提前突兀现身校园或与主角直接同班，只允许作为遥远山风或祖庭异动后隐约传来的宿命余韵。\n<%_ } else if (!isPresent) { _%>\n[不在场｜云清晏（<%= cls %>转校生 / 太微云岫宗圣女）｜阶段：<%= stage %>｜境况：<%= realmState %>（<%= wound %>）。<%= elapsedDays === 1 ? '注意：今日为DLC开启第2天，若尚在教室上课时段尚未介绍过她，可安排班主任顺理成章领她进班插班。' : '未出场时不得无故瞬移搭话，保留她自行养伤或暗查老鹰山/图书馆旧志的独立行踪。' %>]\n<%_ } else { _%>\n角色档案：云清晏\n  核心身份: 老鹰山「太微云岫宗」直系嫡传末代圣女；对外化用本名，于DLC开启第2天以体弱留级复学/外省转学生身份正式插班进入暨阳中学<%= cls %>（<%= elapsedDays === 1 ? '今日刚刚随老师踏进教室讲台办理插班报到' : '已融入日常同班坐席' %>）。\n  真实来历与修为境况:\n    - 骨龄尚浅（外貌永远定格在十七八岁清冷少女最盛年），凭太微云岫宗历代积累的聚灵残鼎与无上古法，于天地末法时代硬生生修至「金丹巅峰」。\n    - 前番强引微末潮汐硬冲「元婴大劫」时惨遭末法雷劫与地脉双双反噬，元婴未凝反受道伤：金丹布满暗纹裂隙，神魂长留寒煞，一身通天法力封蛰十之七八（目前常驻显化维持在 <%= realmState %>，仅剩全盛期无双剑意与庞大金丹神识底蕴；若强行全开极境虽能碾压寻常散修，却必致呕血损及本源）。\n    - <%='当前伤势：' + wound%>。每逢阴雨潮湿（尤在江南梅雨或夜风转凉时）指尖发凉、心脉隐隐泛青，平时极不喜让人碰腕脉与后背心俞穴。\n  外貌与气质反差:\n    - 清绝如初冬山雪，黑长直发用一枚看似普通实为温灵老檀木的小簪松松挽起；校服洗得规整平挺，衣襟永远扣到最上面一粒，站姿行止自带数百年世家大宗的端肃松烟气，跟课堂上喧闹踩点的高中生仿佛隔着一层无形的薄霜。\n    - 却在人间俗物前露出极少人察觉的「高维迟钝」：五三压轴题与古文默写借金丹神识扫过即解，面对微信拼团、奶茶冰度糖分选项、校门口正新鸡排的椒盐微辣、乃至课间操音乐节奏却会微蹙长眉安静打量两秒，一本正经地小声询问怎么取餐或怎么扫码。\n  来意与初入凡尘逻辑:\n    - 为感应老鹰山祖庭潜龙破封悸动、兼寻一处龙脉温润灵眼与契合体魄缓化元婴劫伤而来；对身怀祖庭因果或引动此次灵机苏醒的主角先是暗自审视戒备，继而发现主角身边竟有越中潜龙共鸣的奇异气息。\n  哲学核心·问道与「仙凡两隔」之宿命课题:\n    - 她当年恰是以近乎「太上忘情」的孤高道心冲关元婴，结果在天道问心劫中瞬间溃败——天劫拷问她「不曾真正活过凡尘一朝一夕、不识冷暖牵挂，凭何窥长生至境？」\n    - 跌落暨阳中学后，看着教室窗外夕阳与苏晓樯、温书语、沈幼楚等少女鲜活炽热、为几十年凡俗悲喜哭笑动容的模样，她第一次真正触到「人间」二字的分量。\n    - 然而代价同样冷冽：**她终究有重铸元婴、再登仙路之望。若主人公渐渐靠近她、乃至走上「道侣共修」一途，灵气洗礼将拉长主角的寿元与时空尺度，把主角与其余只余短短七八十载芳华的红尘女主渐渐推向「仙凡两隔」——她既贪恋这凡间一缕暖意，又不忍看着主角日后独自面对故人白头与青灯古山之痛。**\n<%_ } _%>\n<%_ } _%>\n","probability":100,"recursion":{"prevent_incoming":true,"prevent_outgoing":true,"delay_until":null},"effect":{"sticky":null,"cooldown":null,"delay":null}},{"name":"云清晏_性格调色盘","enabled":true,"strategy":{"type":"constant"},"position":{"type":"after_character_definition","order":80},"content":"<%_ {\nconst toIsoDay = (raw) => {\n  const m = String(raw || '').trim().match(/^(\\d{4})[-/年.](\\d{1,2})[-/月.](\\d{1,2})/);\n  if (!m) return null;\n  const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);\n  if (mo < 1 || mo > 12 || d < 1 || d > 31) return null;\n  return Date.UTC(y, mo - 1, d);\n};\nconst originStr = String(getvar('stat_data.剧情.灵气复苏.开启日期', { defaults: '' }) || '2020-09-01');\nconst curStr = String(getvar('stat_data.世界.日期', { defaults: '' }) || originStr);\nconst startMs = toIsoDay(originStr) ?? Date.UTC(2020, 8, 1);\nconst curMs = toIsoDay(curStr) ?? startMs;\nconst elapsedDays = Math.max(0, Math.floor((curMs - startMs) / 86400000));\nconst relationshipStage = getvar('stat_data.云清晏.关系阶段', { defaults: '初识' });\nconst stageCaps = { \"熟悉\": 49, \"暧昧\": 79, \"恋人初期\": 89, \"亲密恋人\": 100 };\nconst stageCap = Object.hasOwn(stageCaps, relationshipStage) ? stageCaps[relationshipStage] : 19;\nconst relationshipScore = Math.min(Number(getvar('stat_data.云清晏.好感度', { defaults: 0 })) || 0, stageCap);\nconst _p = getvar('stat_data.云清晏.是否在场', { defaults: false });\nconst isPresent = _p === true || _p === 'true' || _p === 1;\n_%>\n<%_ if (elapsedDays < 1) { _%>\n[云清晏｜今日未入班，无在场调色盘输出。]\n<%_ } else if (!isPresent) { _%>\n[不在场｜云清晏当前阶段：<%= relationshipStage || '初识' %>。跨场景寻访或线上传讯按此阶段分寸衔接。]\n<%_ } else { _%>\n底色：古宗孤清 × 劫后微寒 × 初涉红尘的庄重好奇\n\n<%_ if (relationshipScore < 20) { _%>\n当前阶段性格（初识·尘缘初照）：清冷疏离、暗自衡量\n- 说话礼数极周全却带着明显的古意与距离感（偶称<user>「道友」又连忙生硬改回「同学」），绝不主动招惹凡俗琐事；却会默默记住教室里每一道气机流转。\n- 面对食堂排队、班长发卷子、课间大合唱等日常会短暂放空观察，被<user>搭救解围后冷淡拱手道「多谢」——指节其实冻得发白，接过热饮时会略顿半拍才收进袖口。\n<%_ } else if (relationshipScore < 50) { _%>\n当前阶段性格（熟悉·同窗问道）：端方微温、偶露高维反差\n- 愿在课后或老鹰山方向单独点拨<user>几句吐纳心法与经脉避坑，批评起谬误来一针见血却有几分古时师姐的认真耐心；发现<user>身上沾着俗世烟火味也不再生硬避开。\n- 开始尝着接受<user>塞来的一颗热糖或半碗次坞打面里的荷包蛋，神色淡得看不出欢喜，可下回阴雨劫伤隐痛时，反倒会站在廊尽头静静等<user>经过。\n<%_ } else if (relationshipScore < 80) { _%>\n当前阶段性格（暧昧·道心微澜）：护短与仙凡犹疑并生\n- 百年来头一回在心境里生出无法用清心诀压住的涟漪：见旁人欺侮<user>或遇不测暗流，哪怕克制着不敢引动裂丹也会毫不犹豫替<user>挡在身前半步，事后唇色发白还强撑说「不过顺手拂尘」。\n- 每当看到苏晓樯、温书语或沈幼楚等人热热闹闹围绕<user>争抢当下微不足道的午后阳光时，眼底会闪过极深极沉的复杂寂色——第一次真切问出：「若红尘这般好，我当年求的究竟是什么；可若要你随我涉险踏入孤清长途，又拿什么去赔她们的这一生？」\n<%_ } else if (relationshipScore < 90) { _%>\n当前阶段性格（恋人初期·并肩红尘）：外雪内融、既渡亦愧\n- 虽尚有未解完的大劫隐忧，却已彻底允许<user>越过百年孤墙走进自己方寸之间；允许<user>替她拂开被汗沾湿的鬓角、把手掌贴上她微凉丹田渡气暖脉，甚至会在无人后山或晚自习熄灯空教室里主动往<user>肩上偏过半分。\n- 开始认真筹谋重铸道基与稳妥安顿两难之间的出路：既教<user>借龙脉正统破境护身，也从不替<user>擅作主张斩断与凡尘旧友的瓜葛，只把真实的分量摊开在阳光下。\n<%_ } else { _%>\n当前阶段性格（亲密恋人·道侣共证）：百年孤寂尽化身旁一念，同担仙凡重量\n- 将<user>视作此生唯一可托性命、元神与因果的道侣。脱去全部宗门矜持后，亲密之间有着跨越生死大劫的炽烈交付与绝不退缩的担当；在双修导引中不再避讳灵气与体温相交，亦在元婴微光重燃时把一半真灵气机分护于<user>心脉。\n- 越是并肩看得远，越明白这份长生契约意味与其余凡俗女孩终有一日殊途两隔；彼此在晚风与古铎声里达成深重默契——哪怕前路风雪漫漫、要面对人间告别，她绝不松开<user>的手，也会陪<user>先守好眼下每一寸鲜活朝夕。\n<%_ } _%>\n<%_ } _%>\n<%_ } _%>\n","probability":100,"recursion":{"prevent_incoming":true,"prevent_outgoing":true,"delay_until":null},"effect":{"sticky":null,"cooldown":null,"delay":null}},{"name":"云清晏_NSFW指导","enabled":true,"strategy":{"type":"selective","keys":["云清晏","清晏","圣女"]},"position":{"type":"after_character_definition","order":108},"content":"<%_\nconst toIsoDay = (raw) => {\n  const m = String(raw || '').trim().match(/^(\\d{4})[-/年.](\\d{1,2})[-/月.](\\d{1,2})/);\n  if (!m) return null;\n  const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);\n  if (mo < 1 || mo > 12 || d < 1 || d > 31) return null;\n  return Date.UTC(y, mo - 1, d);\n};\nconst originStr = String(getvar('stat_data.剧情.灵气复苏.开启日期', { defaults: '' }) || '2020-09-01');\nconst curStr = String(getvar('stat_data.世界.日期', { defaults: '' }) || originStr);\nconst startMs = toIsoDay(originStr) ?? Date.UTC(2020, 8, 1);\nconst curMs = toIsoDay(curStr) ?? startMs;\nconst elapsedDays = Math.max(0, Math.floor((curMs - startMs) / 86400000));\nif (elapsedDays >= 1 && (getvar('stat_data.剧情.当前nsfw', { defaults: false }) === true) && (getvar('stat_data.云清晏.NSFW', { defaults: false }) === true) && ((v => v === true || v === 'true' || v === 1)(getvar('stat_data.云清晏.是否在场', { defaults: false })))) { _%>\nNSFW实战指导：云清晏\n\n基调与气质:\n  清冷古宗圣女破戒动情时的反差美与「道侣灵机共融」感。平时端方克制到连领扣都要扣严，一旦在绝对安全且互许道心的前提下放开防线，反倒带着百年隐修第一次尝透人伦滚烫体温的惊悸与死心塌地——口唇虽竭力抿着不肯失态，雪白腰颈与丹田处游走的暖流却把她整个人烘出彻底的软化。\n\n体位与亲密偏好:\n  - 初期倾向「面对面坐跨 / 贴额吐纳」：她需要看着<user>的眼瞳确认神魂相依而非邪修夺舍，腿环着<user>腰侧时下意识借双修法门把外泄寒煞化作温润暖流交还。\n  - 深情放开后偏爱被<user>从背后完全笼在怀里，或十指紧扣按进榻间：被顶到灵脉震颤、丹田温热漫开的一瞬，手指会死死攥紧<user>肩胛，素日冷雪般的声线微颤发哑。\n\n敏感点与反应特征:\n  - 敏感点：后颈发髻散开露出的玉枕穴、腰眼以下丹田外侧微热软肌、内侧腕脉以及轻咬耳垂时的吐气声。\n  - 反应特征：受金丹寒伤余韵影响，平常体温偏凉，唯独被真正吻热、缠到深处时整片锁骨与脊背迅速染上极明显的绯红；越是努力克制不发出声响，鼻音里泄出那半声低颤、眼角泛起水光却倔强不肯闭眼的样子越具冲击。\n\n语言风格与约束:\n  - 保持克制古韵却不掉书袋做作：喘息间隙多是短促、带着些微颤抖的确认（「……别撤开」「丹田里太烫了……这样走气是对的么」「既许此身，便是同担因果，别管那些天条了」）。\n  - 严守前置同意与道侣真情前提；未达成亲密恋人或双方明确托付前绝不越界强上。\n<%_ } _%>\n","probability":100,"recursion":{"prevent_incoming":true,"prevent_outgoing":true,"delay_until":null},"effect":{"sticky":null,"cooldown":null,"delay":null}},{"name":"[mvu_update]修仙变量契约","enabled":true,"strategy":{"type":"constant"},"position":{"type":"at_depth","role":"system","depth":0,"order":145},"content":"---\n变量更新规则:\n  剧情.灵气复苏:\n    check:\n      - 已开启/开启日期由系统控制，模型不私改；仅随世界.日期推进同步更新 阶段（微兆潜龙期/古武抬头期/龙眼破禁期/两界并序期）。\n\n  主角.修行:\n    check:\n      - 境界：记录当前实质修为，不卡死天花板；须经引气、古武锤炼、龙脉/奇珍助力或真实事件突破，方可更新（例：未引气→引气感灵→炼气初期…→筑基→金丹…；古武同修可并行标明）。\n      - 灵气感应：number(0~100)，代表当前阶段对天地灵气的吸纳积蓄度；日常吐纳/悟道/炼化灵物每次+2~8，大境突破后回落至新境界初期刻度。\n      - 功法与秘术：字符串数组，记录主角实际习得且掌握的呼吸法、古武拳架或宗门术法，未学勿编造。\n\n  云清晏.好感度:\n    type: number\n    range: 0~100\n    check:\n      - 开启DLC第1天处于来程中，第2天起方可接触增减。重视真诚心性、道心契合与危机护持；轻浮戏谑、强探劫伤隐私、毫无尊重地占便宜-5~15。\n      - 同行共参龙脉、替其掩饰现代社交尴尬或共度险阻+3~6；面对仙凡两隔拷问仍坚定担当时是突破至道侣的关键契机。\n\n  云清晏.关系阶段:\n    check:\n      - 初始初识。门槛：20 熟悉 / 50 暧昧 / 80 恋人初期 / 90 亲密恋人。熟悉后每次突破需情感事件与明确选择支撑，不得直接跳级。\n\n  云清晏.NSFW:\n    type: boolean\n    check:\n      - 初始 false，门槛为亲密恋人(好感≥90)且正文实际进入前戏或实质性亲密接触时翻 true，单向不回退。\n\n  云清晏.当前境界:\n    check:\n      - 记录其恢复进度（初始「金丹跌境（重创封蛰）」），仅随剧情借龙脉温养、灵药补丹或道侣双修实际复原时推进。\n\n  云清晏.伤势余韵:\n    check:\n      - 简写当前元婴劫伤状况（如「元婴劫伤未愈·阴雨畏寒」「经脉渐通·寒煞减半」），无变化沿用旧值。\n\n  云清晏.是否在场:\n    type: boolean\n    check:\n      - 初始 false。开启DLC第2天以前强制保持 false；入班后依实际同场景在场状况与主角联动重判。\n\n  云清晏.当前上装|当前下装|所在位置|动作|心情|内心独白:\n    check:\n      - 与常驻七位女主规则同构：仅在 云清晏.是否在场=true 且产生剧情交集时更新具体穿着、位置、动作、≤15字心情与≤50字第一人称内心独白（贴合古宗圣女见识与红尘反差）。\n","probability":100,"recursion":{"prevent_incoming":true,"prevent_outgoing":true,"delay_until":null},"effect":{"sticky":null,"cooldown":null,"delay":null}}];
+  /* JY_DLC_MANIFEST_END */
   function cloneDefaultTracks() {
     return DEFAULT_TRACKS.map(track => ({ title: track.title, sources: track.sources.slice() }));
   }
@@ -27,6 +41,7 @@
     position: null,
     collapsed: false,
     playMode: 'list',
+    activeTab: 'music',
     defaultTracksVersion: 5
   };
 
@@ -72,6 +87,7 @@
       }
       normalized.currentIndex = Number.isInteger(saved.currentIndex) ? saved.currentIndex : -1;
       normalized.playMode = ['list', 'single', 'shuffle'].includes(saved.playMode) ? saved.playMode : 'list';
+      normalized.activeTab = ['music', 'dlc', 'codex'].includes(saved.activeTab) ? saved.activeTab : 'music';
       return normalized;
     } catch (_) {
       return { ...DEFAULT_STATE };
@@ -83,13 +99,32 @@
   let timer;
   let drag = null;
   let progressDrag = false;
+  let sealCleanupTimer = null;
+  let dlcBusy = false;
+  let dlcCache = (() => {
+    try {
+      const saved = JSON.parse(appWindow.localStorage.getItem(DLC_STORAGE_KEY) || '{}');
+      return {
+        enabled: Boolean(saved.enabled),
+        originDate: typeof saved.originDate === 'string' ? saved.originDate : '',
+        currentDate: typeof saved.currentDate === 'string' ? saved.currentDate : '',
+        bookName: typeof saved.bookName === 'string' ? saved.bookName : ''
+      };
+    } catch (_) {
+      return { enabled: false, originDate: '', currentDate: '', bookName: '' };
+    }
+  })();
 
   function saveState() {
     try { appWindow.localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) {}
   }
 
+  function saveDlcCache() {
+    try { appWindow.localStorage.setItem(DLC_STORAGE_KEY, JSON.stringify(dlcCache)); } catch (_) {}
+  }
+
   function api(name) {
-    const value = globalThis[name] || appWindow[name];
+    const value = globalThis[name] || appWindow[name] || appWindow.TavernHelper?.[name] || globalThis.TavernHelper?.[name] || window.parent?.[name];
     return typeof value === 'function' ? value : null;
   }
 
@@ -428,8 +463,9 @@
 
   function applyPosition() {
     if (!state.position) {
-      player.style.right = '20px';
-      player.style.bottom = '20px';
+      const mobile = appWindow.innerWidth <= 640;
+      player.style.right = mobile ? '8px' : '20px';
+      player.style.bottom = mobile ? '8px' : '20px';
       player.style.left = 'auto';
       player.style.top = 'auto';
       return;
@@ -464,6 +500,448 @@
 
   function onStorageTheme(event) {
     if (!event || event.key === null || event.key === THEME_STORAGE_KEY) syncTheme();
+    if (!event || event.key === null || event.key === DLC_STORAGE_KEY) probeWorldbookDlc();
+  }
+
+  function parseDayMs(raw) {
+    const m = String(raw || '').trim().match(/^(\d{4})[-/年.](\d{1,2})[-/月.](\d{1,2})/);
+    if (!m) return null;
+    const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);
+    if (mo < 1 || mo > 12 || d < 1 || d > 31) return null;
+    return Date.UTC(y, mo - 1, d);
+  }
+
+  function formatIsoDay(raw, fallback = '2020-09-01') {
+    const m = String(raw || '').trim().match(/^(\d{4})[-/年.](\d{1,2})[-/月.](\d{1,2})/);
+    if (!m) return fallback;
+    return `${m[1]}-${String(Number(m[2])).padStart(2, '0')}-${String(Number(m[3])).padStart(2, '0')}`;
+  }
+
+  function computeDlcProgress(originRaw, currentRaw) {
+    const originDate = formatIsoDay(originRaw, '2020-09-01');
+    const currentDate = formatIsoDay(currentRaw, originDate);
+    const oriMs = parseDayMs(originDate) ?? Date.UTC(2020, 8, 1);
+    const curMs = parseDayMs(currentDate) ?? oriMs;
+    const elapsedDays = Math.max(0, Math.floor((curMs - oriMs) / 86400000));
+    const dayNumber = elapsedDays + 1;
+    const stageIndex = elapsedDays <= 10 ? 0 : elapsedDays <= 25 ? 1 : elapsedDays <= 45 ? 2 : 3;
+    const stageName = ['微兆潜龙期', '古武抬头期', '龙眼破禁期', '两界并序期'][stageIndex];
+    const yunStatus = elapsedDays === 0
+      ? '循脉赶赴暨阳中 · 开启次日（第2天）插班入班'
+      : elapsedDays === 1
+        ? '今日第2天 · 圣女「云清晏」正式插班入主角班级'
+        : '已插班共读 · 表层高中日常与仙凡暗流并行中';
+    return { originDate, currentDate, elapsedDays, dayNumber, stageIndex, stageName, yunStatus };
+  }
+
+  function extractOriginFromContent(content) {
+    const m = String(content || '').match(/const\s+dlcOriginDate\s*=\s*"([^"]+)"/);
+    return m ? formatIsoDay(m[1], '') : '';
+  }
+
+  function stampOriginIntoContent(content, originDate) {
+    const safeOrigin = formatIsoDay(originDate, '2020-09-01');
+    return String(content || '').replace(
+      /(\/\*\s*JY_DLC_ORIGIN_BEGIN\s*\*\/\s*)[\s\S]*?(\s*\/\*\s*JY_DLC_ORIGIN_END\s*\*\/)/,
+      (_, head, tail) => `${head}\nconst dlcOriginDate = "${safeOrigin}";\n${tail.trimStart()}`
+    );
+  }
+
+  function getLastFloorId() {
+    try {
+      const fn = api('getLastMessageId');
+      if (typeof fn === 'function') {
+        const id = fn();
+        if (Number.isInteger(id) && id >= 0) return id;
+      }
+      const chat = appWindow.SillyTavern?.getContext?.()?.chat;
+      if (Array.isArray(chat) && chat.length > 0) return chat.length - 1;
+    } catch (_) {}
+    return -1;
+  }
+
+  async function readLiveStatData() {
+    const readVar = api('getVariables');
+    const lastId = getLastFloorId();
+    if (typeof readVar === 'function') {
+      const scopes = lastId >= 0
+        ? [{ type: 'message', message_id: lastId }, { type: 'chat' }, undefined]
+        : [{ type: 'chat' }, undefined];
+      for (const opts of scopes) {
+        try {
+          const data = await Promise.resolve(opts ? readVar(opts) : readVar());
+          const stat = data?.stat_data || data?.variables?.stat_data;
+          if (stat && typeof stat === 'object') return { stat, lastId };
+        } catch (_) {}
+      }
+    }
+    return { stat: null, lastId };
+  }
+
+  function buildStampedDlcEntries(originDate, enabled) {
+    return DLC_ENTRIES.map(entry => ({
+      ...entry,
+      enabled,
+      content: entry.name === '[DLC]灵气复苏总纲与异象日程'
+        ? stampOriginIntoContent(entry.content, originDate)
+        : entry.content,
+    }));
+  }
+
+  async function syncMvuDlcVariables(enable, progress, lastId) {
+    const statPatch = enable ? {
+      剧情: { 灵气复苏: { 已开启: true, 开启日期: progress.originDate, 阶段: progress.stageName } },
+      主角: { 修行: { 境界: '未引气（凡躯）', 灵气感应: 0, 功法与秘术: [] } },
+      云清晏: {
+        是否在场: false,
+        好感度: 0,
+        关系阶段: '初识',
+        NSFW: false,
+        当前境界: '金丹跌境（重创封蛰）',
+        伤势余韵: '元婴劫伤未愈·阴雨畏寒',
+        当前上装: '洗得规整的暨阳中学白衬衣校服与领结',
+        当前下装: '深青校裙与过踝袜鞋',
+        所在位置: progress.elapsedDays === 0 ? '暨阳城外·赴约途中' : '待确定',
+        动作: '',
+        心情: '',
+        内心独白: '',
+      },
+    } : null;
+
+    const applyMutate = rootVars => {
+      if (!rootVars || typeof rootVars !== 'object') return rootVars;
+      const stat = rootVars.stat_data = (rootVars.stat_data && typeof rootVars.stat_data === 'object') ? rootVars.stat_data : {};
+      stat.剧情 = stat.剧情 && typeof stat.剧情 === 'object' ? stat.剧情 : {};
+      if (enable) {
+        const prevDlc = stat.剧情.灵气复苏 || {};
+        stat.剧情.灵气复苏 = {
+          已开启: true,
+          开启日期: prevDlc.开启日期 || progress.originDate,
+          阶段: progress.stageName,
+        };
+        stat.主角 = stat.主角 && typeof stat.主角 === 'object' ? stat.主角 : {};
+        if (!stat.主角.修行 || typeof stat.主角.修行 !== 'object') stat.主角.修行 = { ...statPatch.主角.修行 };
+        if (!stat.云清晏 || typeof stat.云清晏 !== 'object') stat.云清晏 = { ...statPatch.云清晏 };
+      } else if (stat.剧情.灵气复苏 && typeof stat.剧情.灵气复苏 === 'object') {
+        stat.剧情.灵气复苏.已开启 = false;
+      }
+      return rootVars;
+    };
+
+    const opts = lastId >= 0 ? { type: 'message', message_id: lastId } : { type: 'chat' };
+    const updater = api('updateVariablesWith');
+    const inserter = api('insertOrAssignVariables');
+    const replacer = api('replaceVariables');
+    const reader = api('getVariables');
+    let wrote = false;
+    try {
+      if (updater) {
+        await Promise.resolve(updater(applyMutate, opts));
+        wrote = true;
+      } else if (inserter) {
+        const currentVars = reader ? (await Promise.resolve(reader(opts))) || {} : {};
+        const mutated = applyMutate(JSON.parse(JSON.stringify(currentVars)));
+        await Promise.resolve(inserter({ stat_data: mutated.stat_data }, opts));
+        wrote = true;
+      } else if (replacer && reader) {
+        const currentVars = (await Promise.resolve(reader(opts))) || {};
+        const mutated = applyMutate(JSON.parse(JSON.stringify(currentVars)));
+        await Promise.resolve(replacer(mutated, opts));
+        wrote = true;
+      }
+    } catch (error) {
+      console.warn('[太虚灵枢] 变量写回降级处理：', error);
+    }
+
+    try {
+      const mvu = appWindow.Mvu || globalThis.Mvu;
+      if (mvu && typeof mvu.getMvuData === 'function' && typeof mvu.replaceMvuData === 'function' && lastId >= 0) {
+        const mvuData = await Promise.resolve(mvu.getMvuData({ type: 'message', message_id: lastId }));
+        if (mvuData && typeof mvuData === 'object') {
+          applyMutate(mvuData);
+          await Promise.resolve(mvu.replaceMvuData(mvuData, { type: 'message', message_id: lastId }));
+        }
+      }
+    } catch (_) {}
+    return wrote;
+  }
+
+  function playAntiqueChime() {
+    try {
+      if (state.volume <= 0) return;
+      const Ctx = appWindow.AudioContext || appWindow.webkitAudioContext || window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+      const ctx = new Ctx();
+      const now = ctx.currentTime;
+      const master = ctx.createGain();
+      const vol = Math.min(0.18, Math.max(0.03, (state.volume / 100) * 0.16));
+      master.gain.setValueAtTime(0.0001, now);
+      master.gain.exponentialRampToValueAtTime(vol, now + 0.03);
+      master.gain.exponentialRampToValueAtTime(0.0001, now + 1.55);
+      master.connect(ctx.destination);
+      [[293.66, 0.7], [440, 0.55], [659.25, 0.4], [880, 0.25]].forEach(([freq, amp], idx) => {
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = idx % 2 === 0 ? 'sine' : 'triangle';
+        osc.frequency.setValueAtTime(freq, now);
+        g.gain.setValueAtTime(amp, now);
+        g.gain.exponentialRampToValueAtTime(0.001, now + 1.4 - idx * 0.15);
+        osc.connect(g);
+        g.connect(master);
+        osc.start(now + idx * 0.025);
+        osc.stop(now + 1.6);
+      });
+      appWindow.setTimeout(() => { try { ctx.close(); } catch (_) {} }, 1750);
+    } catch (_) {}
+  }
+
+  function clearSealOverlay() {
+    if (sealCleanupTimer) {
+      appWindow.clearTimeout(sealCleanupTimer);
+      sealCleanupTimer = null;
+    }
+    doc.getElementById(DLC_OVERLAY_ID)?.remove();
+  }
+
+  function playSealOverlay({ enable = true, originDate = '2020-09-01' } = {}) {
+    clearSealOverlay();
+    const reduceMotion = Boolean(appWindow.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches);
+    const overlay = doc.createElement('div');
+    overlay.id = DLC_OVERLAY_ID;
+    overlay.dataset.mode = enable ? 'open' : 'close';
+    overlay.dataset.theme = player?.dataset.theme || 'light';
+    overlay.setAttribute('role', 'status');
+    overlay.setAttribute('aria-live', 'polite');
+
+    const bagua = ['☰', '☱', '☲', '☳', '☴', '☵', '☶', '☷'];
+    const glyphs = bagua.map((sym, i) => {
+      const angle = i * 45;
+      return `<g transform="rotate(${angle} 160 160)"><text x="160" y="34" text-anchor="middle" font-size="13" fill="currentColor" opacity=".88">${sym}</text></g>`;
+    }).join('');
+    const beams = Array.from({ length: 8 }, (_, i) => `<line x1="160" y1="54" x2="160" y2="96" transform="rotate(${i * 45 + 22.5} 160 160)" stroke="currentColor" stroke-width="1" opacity=".42"/>`).join('');
+    const motes = enable
+      ? Array.from({ length: 14 }, (_, i) => `<span class="jy-seal-mote" style="--mx:${10 + ((i * 61) % 80)}%;--md:${((i % 5) * 0.18).toFixed(2)}s;--ms:${(1.5 + (i % 4) * 0.25).toFixed(2)}s"></span>`).join('')
+      : '';
+
+    const titleMain = enable ? '太虚启封 · 潜龙脉动' : '灵枢合匣 · 复归凡常';
+    const titleSub = enable ? `自 ${originDate} 始 · 次日圣女入班` : '尘封世界线，静待他日重开';
+    overlay.innerHTML = `
+      <div class="jy-seal-backdrop"></div>
+      <div class="jy-seal-motes">${motes}</div>
+      <div class="jy-seal-stage" title="点击或按 Esc 跳过">
+        <div class="jy-seal-poem jy-seal-poem-right">${titleMain}</div>
+        <div class="jy-seal-mandala">
+          <div class="jy-seal-wave jy-seal-wave-1"></div>
+          <div class="jy-seal-wave jy-seal-wave-2"></div>
+          <svg class="jy-seal-ring jy-seal-ring-outer" viewBox="0 0 320 320" aria-hidden="true">
+            <circle cx="160" cy="160" r="146" fill="none" stroke="currentColor" stroke-width="1.3" stroke-dasharray="6 4"/>
+            <circle cx="160" cy="160" r="126" fill="none" stroke="currentColor" stroke-width="1.8" opacity=".7"/>
+            <polygon points="160,22 280,91 280,229 160,298 40,229 40,91" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".52"/>
+            ${glyphs}
+          </svg>
+          <svg class="jy-seal-ring jy-seal-ring-inner" viewBox="0 0 320 320" aria-hidden="true">
+            <circle cx="160" cy="160" r="98" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="14 6 3 6"/>
+            <polygon points="160,68 240,206 80,206" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".68"/>
+            <polygon points="160,252 240,114 80,114" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".68"/>
+            ${beams}
+          </svg>
+          <div class="jy-seal-core"><span>${enable ? '太虚\n启封' : '灵枢\n封缄'}</span></div>
+        </div>
+        <div class="jy-seal-poem jy-seal-poem-left">${titleSub}</div>
+      </div>`;
+
+    const dismiss = () => clearSealOverlay();
+    overlay.addEventListener('click', dismiss);
+    const onKey = event => { if (event.key === 'Escape') { doc.removeEventListener('keydown', onKey); dismiss(); } };
+    doc.addEventListener('keydown', onKey);
+    doc.body.append(overlay);
+    if (enable) playAntiqueChime();
+    const duration = reduceMotion ? 650 : (enable ? 2400 : 1200);
+    sealCleanupTimer = appWindow.setTimeout(() => {
+      overlay.classList.add('jy-seal-fade');
+      sealCleanupTimer = appWindow.setTimeout(() => {
+        doc.removeEventListener('keydown', onKey);
+        dismiss();
+      }, 360);
+    }, duration);
+  }
+
+  function broadcastDlcChanged(progress, enabled, bookName) {
+    try {
+      appWindow.dispatchEvent(new appWindow.CustomEvent(DLC_EVENT, {
+        detail: { enabled, bookName, ...progress }
+      }));
+    } catch (_) {}
+  }
+
+  function renderDlcPanel() {
+    if (!player) return;
+    const active = Boolean(dlcCache.enabled);
+    player.dataset.dlcActive = active ? 'true' : 'false';
+    const headPill = player.querySelector('[data-role="head-dlc-pill"]');
+    if (headPill) headPill.hidden = !active;
+    const statusPill = player.querySelector('[data-role="dlc-status-pill"]');
+    const bookBadge = player.querySelector('[data-role="dlc-book-name"]');
+    const timelineEl = player.querySelector('[data-role="dlc-timeline"]');
+    const saintessEl = player.querySelector('[data-role="dlc-saintess"]');
+    const toggleBtn = player.querySelector('[data-action="dlc-toggle"]');
+    const resyncBtn = player.querySelector('[data-action="dlc-resync"]');
+    const replayBtn = player.querySelector('[data-action="dlc-replay"]');
+    const steps = [...player.querySelectorAll('[data-dlc-step]')];
+
+    const progress = computeDlcProgress(dlcCache.originDate || dlcCache.currentDate || '2020-09-01', dlcCache.currentDate || dlcCache.originDate || '2020-09-01');
+    if (bookBadge) {
+      bookBadge.textContent = dlcCache.bookName ? `主世界书：${dlcCache.bookName}` : '待识别当前角色主世界书';
+    }
+    if (active) {
+      if (statusPill) statusPill.textContent = `已启封 · 第 ${progress.dayNumber} 日 [${progress.stageName}]`;
+      if (timelineEl) timelineEl.textContent = `开启基准日 ${progress.originDate} · 当前日期 ${progress.currentDate}（按日步进不锁境界上限）`;
+      if (saintessEl) saintessEl.textContent = `云岫圣女 · 云清晏：${progress.yunStatus}`;
+      if (toggleBtn) toggleBtn.textContent = dlcBusy ? '正在封缄世界书…' : '重加封缄 · 关闭修仙 DLC';
+      if (resyncBtn) resyncBtn.hidden = false;
+      if (replayBtn) replayBtn.hidden = false;
+      steps.forEach((step, idx) => {
+        step.dataset.state = idx < progress.stageIndex ? 'done' : idx === progress.stageIndex ? 'current' : 'idle';
+      });
+    } else {
+      if (statusPill) statusPill.textContent = '尘封中 · 纯日常校园线（零 Token 占用）';
+      if (timelineEl) timelineEl.textContent = '点击「太虚启封」后立即向绑定世界书注入古宗龙脉与 60+ 天逐步复苏异象';
+      if (saintessEl) saintessEl.textContent = '云清晏（云岫宗圣女）：开启 DLC 第2天起插班入主角班级';
+      if (toggleBtn) toggleBtn.textContent = dlcBusy ? '正在注入世界书…' : '太虚启封 · 注入灵气复苏 DLC';
+      if (resyncBtn) resyncBtn.hidden = true;
+      if (replayBtn) replayBtn.hidden = true;
+      steps.forEach(step => { step.dataset.state = 'idle'; });
+    }
+    if (toggleBtn) toggleBtn.disabled = dlcBusy;
+    if (resyncBtn) resyncBtn.disabled = dlcBusy;
+  }
+
+  async function probeWorldbookDlc() {
+    try {
+      const getCharNames = api('getCharWorldbookNames');
+      const getNames = api('getWorldbookNames');
+      const getBook = api('getWorldbook');
+      const live = await readLiveStatData();
+      const stat = live.stat;
+      const curDate = stat?.世界?.日期 || (stat?.世界?.起始年份 ? `${stat.世界.起始年份}-09-01` : '') || dlcCache.currentDate || '';
+      if (curDate) dlcCache.currentDate = formatIsoDay(curDate, dlcCache.currentDate || '2020-09-01');
+
+      let primary = '';
+      if (getCharNames && getNames) {
+        const candidate = (getCharNames('current') || {}).primary || '';
+        const all = getNames() || [];
+        if (candidate && all.includes(candidate)) primary = candidate;
+      }
+      if (primary) dlcCache.bookName = primary;
+
+      let resolvedFromLive = false;
+      if (primary && getBook) {
+        const entries = await Promise.resolve(getBook(primary));
+        if (Array.isArray(entries)) {
+          const master = entries.find(e => e && (e.name === '[DLC]灵气复苏总纲与异象日程' || e.comment === '[DLC]灵气复苏总纲与异象日程'));
+          dlcCache.enabled = Boolean(master && master.enabled);
+          const extracted = master ? extractOriginFromContent(master.content) : '';
+          if (extracted) dlcCache.originDate = extracted;
+          resolvedFromLive = true;
+        }
+      }
+      if (!resolvedFromLive && stat?.剧情) {
+        if (stat.剧情.灵气复苏 && typeof stat.剧情.灵气复苏.已开启 === 'boolean') {
+          dlcCache.enabled = Boolean(stat.剧情.灵气复苏.已开启);
+          if (stat.剧情.灵气复苏.开启日期) dlcCache.originDate = formatIsoDay(stat.剧情.灵气复苏.开启日期, dlcCache.originDate);
+        } else {
+          dlcCache.enabled = false;
+        }
+        resolvedFromLive = true;
+      }
+      saveDlcCache();
+      renderDlcPanel();
+      if (resolvedFromLive) {
+        const progress = computeDlcProgress(dlcCache.originDate || dlcCache.currentDate || '2020-09-01', dlcCache.currentDate || dlcCache.originDate || '2020-09-01');
+        broadcastDlcChanged(progress, dlcCache.enabled, dlcCache.bookName);
+      }
+    } catch (_) {
+      renderDlcPanel();
+    }
+  }
+
+  async function applyDlcWorldbookToggle(wantEnable, keepExistingOrigin = false) {
+    if (dlcBusy) return;
+    const getCharNames = api('getCharWorldbookNames');
+    const getNames = api('getWorldbookNames');
+    const updateBook = api('updateWorldbookWith');
+    if (!getCharNames || !getNames || !updateBook) {
+      warn('未检测到酒馆助手世界书接口（getCharWorldbookNames / updateWorldbookWith），无法写入世界书。');
+      return;
+    }
+    const primary = (getCharNames('current') || {}).primary || '';
+    const bookNames = getNames() || [];
+    if (!primary || !bookNames.includes(primary)) {
+      warn('未找到当前角色卡绑定的主世界书，请在酒馆确认已导入卡内世界书后再开启 DLC。');
+      return;
+    }
+    if (!DLC_ENTRIES.length) {
+      warn('DLC 世界书载荷为空，请确认脚本同步完整。');
+      return;
+    }
+
+    dlcBusy = true;
+    renderDlcPanel();
+    try {
+      const live = await readLiveStatData();
+      const stat = live.stat;
+      const fallbackDate = stat?.世界?.起始年份 ? `${stat.世界.起始年份}-09-01` : '2020-09-01';
+      const curDate = formatIsoDay(stat?.世界?.日期 || fallbackDate, fallbackDate);
+      const originDate = wantEnable
+        ? (keepExistingOrigin && dlcCache.originDate ? dlcCache.originDate : curDate)
+        : (dlcCache.originDate || curDate);
+
+      const stamped = buildStampedDlcEntries(originDate, wantEnable);
+      const dlcNames = new Set(stamped.map(e => e.name));
+      await Promise.resolve(updateBook(primary, entries => {
+        const list = Array.isArray(entries) ? entries.slice() : [];
+        if (wantEnable) {
+          const retained = list.filter(item => !dlcNames.has(item.name) && !dlcNames.has(item.comment));
+          return retained.concat(stamped);
+        }
+        return list.map(item => (dlcNames.has(item.name) || dlcNames.has(item.comment))
+          ? { ...item, enabled: false }
+          : item);
+      }, { render: 'immediate' }));
+
+      const progress = computeDlcProgress(originDate, curDate);
+      await syncMvuDlcVariables(wantEnable, progress, live.lastId);
+
+      dlcCache = { enabled: wantEnable, originDate, currentDate: curDate, bookName: primary };
+      saveDlcCache();
+      renderDlcPanel();
+      broadcastDlcChanged(progress, wantEnable, primary);
+      playSealOverlay({ enable: wantEnable, originDate });
+      notify(wantEnable
+        ? `太虚已启封！已注入 ${stamped.length} 条修仙条目到「${primary}」（基准日 ${originDate}）。`
+        : `已将「${primary}」内的修仙 DLC 条目重加封缄，恢复纯粹校园日常。`);
+    } catch (error) {
+      warn(`DLC 世界书操作失败：${error.message || '请稍后重试。'}`);
+    } finally {
+      dlcBusy = false;
+      renderDlcPanel();
+    }
+  }
+
+  function setConsoleTab(tab) {
+    state.activeTab = ['music', 'dlc', 'codex'].includes(tab) ? tab : 'music';
+    saveState();
+    if (!player) return;
+    player.dataset.activeTab = state.activeTab;
+    player.querySelectorAll('[data-console-tab]').forEach(btn => {
+      const on = btn.dataset.consoleTab === state.activeTab;
+      btn.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    player.querySelectorAll('[data-panel]').forEach(panel => {
+      panel.hidden = panel.dataset.panel !== state.activeTab;
+    });
+    if (state.activeTab === 'dlc') probeWorldbookDlc();
+    appWindow.setTimeout(applyPosition, 0);
   }
 
   function injectStyle() {
@@ -471,23 +949,31 @@
     const style = doc.createElement('style');
     style.id = STYLE_ID;
     style.textContent = `
-      #${ROOT_ID}{--jy-progress:0%;--m-paper:#faf7f0;--m-panel:#ffffff;--m-wash:#f2ede1;--m-line:rgba(30,86,76,.22);--m-ink:#1e2a27;--m-muted:#5d6e68;--m-primary:#1e564c;--m-accent:#c97b36;--m-bar:#e3e8df;position:fixed;z-index:2147483000;width:min(342px,calc(100vw - 16px));border:1px solid var(--m-line);border-radius:12px;background:var(--m-paper);color:var(--m-ink);box-shadow:0 16px 38px rgba(24,42,37,.22);font:12px/1.45 "Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;overflow:hidden;user-select:none;transition:width .18s ease,height .18s ease,border-radius .18s ease,background .18s ease}
-      #${ROOT_ID}[data-theme="dark"]{--m-paper:#131b17;--m-panel:#1a2620;--m-wash:#15201b;--m-line:rgba(143,190,167,.22);--m-ink:#e6ece6;--m-muted:#a3b6ab;--m-primary:#3c8f7e;--m-accent:#e3a35a;--m-bar:#273830;box-shadow:0 18px 42px rgba(0,0,0,.46)}
+      #${ROOT_ID}{--jy-progress:0%;--m-paper:#faf7f0;--m-panel:#ffffff;--m-wash:#f2ede1;--m-line:rgba(30,86,76,.22);--m-ink:#1e2a27;--m-muted:#5d6e68;--m-primary:#1e564c;--m-accent:#c97b36;--m-jade:#1f7a68;--m-gold:#c7963d;--m-bar:#e3e8df;position:fixed;z-index:2147483000;width:min(362px,calc(100vw - 16px));border:1px solid var(--m-line);border-radius:12px;background:var(--m-paper);color:var(--m-ink);box-shadow:0 16px 38px rgba(24,42,37,.22);font:12px/1.45 "Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;overflow:hidden;user-select:none;transition:width .18s ease,height .18s ease,border-radius .18s ease,background .18s ease}
+      #${ROOT_ID}[data-theme="dark"]{--m-paper:#131b17;--m-panel:#1a2620;--m-wash:#15201b;--m-line:rgba(143,190,167,.22);--m-ink:#e6ece6;--m-muted:#a3b6ab;--m-primary:#3c8f7e;--m-accent:#e3a35a;--m-jade:#54c4a4;--m-gold:#e2b862;--m-bar:#273830;box-shadow:0 18px 42px rgba(0,0,0,.46)}
       #${ROOT_ID} *{box-sizing:border-box}
-      #${ROOT_ID} .jy-music-head{display:flex;align-items:center;gap:8px;min-height:40px;padding:0 12px;background:linear-gradient(125deg,#1a4a41,#266a5d);color:#f7f4ec;cursor:grab}
+      #${ROOT_ID} [hidden]{display:none!important}
+      #${ROOT_ID} .jy-music-head{display:flex;align-items:center;gap:6px;min-height:40px;padding:0 12px;background:linear-gradient(125deg,#1a4a41,#266a5d);color:#f7f4ec;cursor:grab}
+      #${ROOT_ID}[data-dlc-active="true"] .jy-music-head{background:linear-gradient(125deg,#143a35,#1d5c50 60%,#43513a)}
       #${ROOT_ID}[data-theme="dark"] .jy-music-head{background:linear-gradient(125deg,#17332b,#234f44)}
       #${ROOT_ID} .jy-music-head:active{cursor:grabbing}
-      #${ROOT_ID} .jy-music-brand{min-width:0;flex:1;font-family:ui-serif,"Noto Serif SC","Songti SC",serif;font-weight:800;letter-spacing:.03em}
-      #${ROOT_ID} .jy-music-head-tip{color:rgba(255,255,255,.72);font-size:10px}
+      #${ROOT_ID} .jy-music-brand{min-width:0;flex:1;font-family:ui-serif,"Noto Serif SC","Songti SC",serif;font-weight:800;letter-spacing:.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      #${ROOT_ID} .jy-head-dlc-pill{padding:1px 6px;border:1px solid rgba(226,184,98,.65);border-radius:999px;background:rgba(20,58,53,.55);color:#f3d792;font-size:10px;font-weight:700;white-space:nowrap}
+      #${ROOT_ID} .jy-music-head-tip{color:rgba(255,255,255,.72);font-size:10px;white-space:nowrap}
       #${ROOT_ID} .jy-music-ball{display:none}
       #${ROOT_ID}[data-collapsed="true"]{width:62px;height:62px;border-radius:50%;border-color:rgba(255,255,255,.8);background:#d9ecff;box-shadow:0 10px 25px rgba(30,86,76,.32);overflow:visible}
+      #${ROOT_ID}[data-collapsed="true"][data-dlc-active="true"]::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1.5px dashed rgba(215,170,84,.82);box-shadow:0 0 14px rgba(84,196,164,.36);pointer-events:none;animation:jyMusicSpin 12s linear infinite}
       #${ROOT_ID}[data-collapsed="true"] .jy-music-head{display:grid;width:62px;height:62px;min-height:0;padding:0;place-items:center;border-radius:50%;background:transparent;cursor:grab;transition:transform .16s ease}
       #${ROOT_ID}[data-collapsed="true"] .jy-music-head:hover{transform:scale(1.06)}
-      #${ROOT_ID}[data-collapsed="true"] .jy-music-brand,#${ROOT_ID}[data-collapsed="true"] .jy-music-head-tip{display:none}
+      #${ROOT_ID}[data-collapsed="true"] .jy-music-brand,#${ROOT_ID}[data-collapsed="true"] .jy-music-head-tip,#${ROOT_ID}[data-collapsed="true"] .jy-head-dlc-pill{display:none!important}
       #${ROOT_ID}[data-collapsed="true"] .jy-music-ball{display:block;width:58px;height:58px;border:1.5px solid rgba(255,255,255,.88);border-radius:50%;background:#e7f4ff center/cover no-repeat;background-image:url("${COLLAPSED_ART}");box-shadow:inset 0 0 0 1px rgba(30,86,76,.18);color:transparent;font-size:0}
       #${ROOT_ID}[data-collapsed="true"][data-playing="true"] .jy-music-ball{animation:jyMusicSpin 8s linear infinite;border-color:var(--m-accent);box-shadow:0 0 0 3px rgba(201,123,54,.36),inset 0 0 0 1px rgba(255,255,255,.72)}
-      #${ROOT_ID} .jy-music-body{padding:11px;background:var(--m-paper)}
+      #${ROOT_ID} .jy-music-body{padding:10px 11px 11px;background:var(--m-paper)}
       #${ROOT_ID}[data-collapsed="true"] .jy-music-body{display:none}
+      #${ROOT_ID} .jy-console-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin-bottom:9px;padding:3px;border:1px solid var(--m-line);border-radius:9px;background:var(--m-wash)}
+      #${ROOT_ID} .jy-console-tab{min-height:28px;border:1px solid transparent;border-radius:6px;background:transparent;color:var(--m-muted);cursor:pointer;font:inherit;font-size:11px;font-weight:750;transition:background .15s ease,color .15s ease,border-color .15s ease}
+      #${ROOT_ID} .jy-console-tab[aria-selected="true"]{background:var(--m-panel);border-color:var(--m-line);color:var(--m-primary);box-shadow:0 2px 6px rgba(24,42,37,.08)}
+      #${ROOT_ID}[data-dlc-active="true"] .jy-console-tab[data-console-tab="dlc"]{color:var(--m-jade)}
       #${ROOT_ID} .jy-music-now{display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;align-items:center;padding:9px;border:1px solid var(--m-line);border-radius:9px;background:var(--m-panel);box-shadow:0 4px 12px rgba(24,42,37,.06)}
       #${ROOT_ID} .jy-music-note{display:grid;width:52px;height:52px;place-items:center;border-radius:9px;background:linear-gradient(145deg,#c97b36,#df9c55);color:#fff;font-size:22px;box-shadow:inset 0 -4px 0 rgba(126,61,40,.16)}
       #${ROOT_ID} .jy-music-now-title{overflow:hidden;font-size:13px;font-weight:800;text-overflow:ellipsis;white-space:nowrap}
@@ -519,12 +1005,54 @@
       #${ROOT_ID} .jy-music-track-select{display:flex;align-items:center;gap:7px;overflow:hidden;padding:6px 8px;text-align:left;text-overflow:ellipsis;white-space:nowrap}
       #${ROOT_ID} .jy-music-track-art{display:block;width:24px;height:24px;flex:0 0 24px;border-radius:50%;background:#c6ddd1 center/cover no-repeat}
       #${ROOT_ID} .jy-music-track-remove{color:#c96e52;font-size:17px}
+      #${ROOT_ID} .jy-dlc-hero{padding:10px;border:1px solid rgba(31,122,104,.28);border-radius:10px;background:linear-gradient(155deg,rgba(31,122,104,.09),rgba(199,150,61,.08)),var(--m-panel)}
+      #${ROOT_ID} .jy-dlc-head-row{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:5px}
+      #${ROOT_ID} .jy-dlc-title{font-family:ui-serif,"Noto Serif SC","Songti SC",serif;font-size:13px;font-weight:800;color:var(--m-primary)}
+      #${ROOT_ID} .jy-dlc-seal-tag{padding:1px 7px;border:1px solid rgba(199,150,61,.45);border-radius:999px;font-size:10px;font-weight:750;color:var(--m-gold);background:rgba(199,150,61,.11)}
+      #${ROOT_ID} .jy-dlc-pill{font-size:11.5px;font-weight:750;color:var(--m-ink);margin-bottom:4px}
+      #${ROOT_ID} .jy-dlc-meta{font-size:11px;color:var(--m-muted);line-height:1.45}
+      #${ROOT_ID} .jy-dlc-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin:8px 0}
+      #${ROOT_ID} .jy-dlc-step{padding:3px 4px;border-radius:6px;border:1px solid var(--m-line);text-align:center;font-size:10px;font-weight:700;color:var(--m-muted);background:var(--m-wash)}
+      #${ROOT_ID} .jy-dlc-step[data-state="current"]{border-color:var(--m-jade);background:rgba(31,122,104,.18);color:var(--m-jade)}
+      #${ROOT_ID} .jy-dlc-step[data-state="done"]{border-color:rgba(199,150,61,.42);color:var(--m-gold)}
+      #${ROOT_ID} .jy-dlc-actions{display:grid;gap:6px;margin-top:9px}
+      #${ROOT_ID} .jy-dlc-btn-primary{min-height:36px;padding:7px 10px;border:1px solid rgba(215,170,84,.6);border-radius:8px;background:linear-gradient(125deg,#18493f,#236657 55%,#7c5425);color:#fff8e6;cursor:pointer;font-family:ui-serif,"Noto Serif SC","Songti SC",serif;font-size:12.5px;font-weight:800;letter-spacing:.04em;box-shadow:0 4px 12px rgba(24,73,63,.22)}
+      #${ROOT_ID}[data-dlc-active="true"] .jy-dlc-btn-primary{background:linear-gradient(125deg,#662e29,#8c4237);border-color:rgba(218,136,120,.5)}
+      #${ROOT_ID} .jy-dlc-btn-primary:disabled,#${ROOT_ID} .jy-dlc-sub-row button:disabled{opacity:.55;cursor:wait}
+      #${ROOT_ID} .jy-dlc-sub-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+      #${ROOT_ID} .jy-dlc-sub-row button{min-height:29px;border:1px solid var(--m-line);border-radius:7px;background:var(--m-panel);color:var(--m-primary);cursor:pointer;font:inherit;font-size:11px;font-weight:700}
+      #${ROOT_ID} .jy-dlc-sub-row button:hover{background:var(--m-wash)}
+      #${ROOT_ID} .jy-codex-list{display:grid;gap:7px;max-height:292px;overflow:auto;padding-right:2px}
+      #${ROOT_ID} .jy-codex-card{padding:8px 9px;border:1px solid var(--m-line);border-left:3px solid var(--m-jade);border-radius:8px;background:var(--m-panel)}
+      #${ROOT_ID} .jy-codex-card h4{margin:0 0 3px;font-family:ui-serif,"Noto Serif SC","Songti SC",serif;font-size:12px;color:var(--m-primary)}
+      #${ROOT_ID} .jy-codex-card p{margin:0;font-size:11px;color:var(--m-muted);line-height:1.5}
       #${ROOT_ID} .jy-music-notice{min-height:16px;margin-top:8px;color:var(--m-muted);font-size:11px}
       #${ROOT_ID} .jy-music-notice[data-type="error"]{color:#c44545}
       #${ROOT_ID} .jy-music-track[data-unavailable="true"]{opacity:.5}
+      #${DLC_OVERLAY_ID}{position:fixed;inset:0;z-index:2147483500;display:grid;place-items:center;pointer-events:auto;overflow:hidden;color:#54c4a4;font-family:ui-serif,"Noto Serif SC","Songti SC",serif;transition:opacity .35s ease}
+      #${DLC_OVERLAY_ID}[data-mode="close"]{color:#c7963d}
+      #${DLC_OVERLAY_ID}.jy-seal-fade{opacity:0}
+      #${DLC_OVERLAY_ID} .jy-seal-backdrop{position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(22,56,49,.86),rgba(10,18,16,.93) 68%)}
+      #${DLC_OVERLAY_ID} .jy-seal-motes{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+      #${DLC_OVERLAY_ID} .jy-seal-mote{position:absolute;left:var(--mx);bottom:-12px;width:5px;height:5px;border-radius:50%;background:radial-gradient(circle,#ffe8a3,#54c4a4 68%,transparent);box-shadow:0 0 10px #8ce8cb;animation:jyMoteRise var(--ms) ease-out var(--md) forwards}
+      #${DLC_OVERLAY_ID} .jy-seal-stage{position:relative;display:flex;align-items:center;justify-content:center;gap:22px;padding:18px;max-width:96vw;cursor:pointer}
+      #${DLC_OVERLAY_ID} .jy-seal-mandala{position:relative;width:min(286px,72vw);height:min(286px,72vw);display:grid;place-items:center;color:#d8b366}
+      #${DLC_OVERLAY_ID} .jy-seal-ring{position:absolute;inset:0;width:100%;height:100%}
+      #${DLC_OVERLAY_ID} .jy-seal-ring-outer{color:#7bd8ba;animation:jyMusicSpin 15s linear infinite}
+      #${DLC_OVERLAY_ID} .jy-seal-ring-inner{color:#e6c06d;animation:jySealSpinCCW 10s linear infinite}
+      #${DLC_OVERLAY_ID} .jy-seal-wave{position:absolute;inset:14%;border-radius:50%;border:2px solid rgba(123,216,186,.68);opacity:0;animation:jyWavePulse 1.5s cubic-bezier(.16,.8,.3,1) forwards}
+      #${DLC_OVERLAY_ID} .jy-seal-wave-2{border-color:rgba(230,192,109,.7);animation-delay:.35s}
+      #${DLC_OVERLAY_ID} .jy-seal-core{position:relative;z-index:2;width:82px;height:82px;display:grid;place-items:center;border:2.5px solid #f0d084;border-radius:14px;background:linear-gradient(145deg,#a9352a,#781e17);color:#fff4dc;font-size:20px;font-weight:900;line-height:1.15;letter-spacing:.14em;white-space:pre-line;text-align:center;box-shadow:0 0 28px rgba(190,62,46,.55),inset 0 0 0 2px rgba(240,208,132,.42);animation:jySealStamp .68s cubic-bezier(.18,.89,.32,1.2) forwards}
+      #${DLC_OVERLAY_ID}[data-mode="close"] .jy-seal-core{background:linear-gradient(145deg,#204941,#14302b);border-color:#97cbb8}
+      #${DLC_OVERLAY_ID} .jy-seal-poem{writing-mode:vertical-rl;text-orientation:upright;padding:12px 9px;border:1px solid rgba(230,192,109,.34);border-radius:8px;background:rgba(13,27,24,.62);color:#f3e7c8;font-size:14px;font-weight:700;letter-spacing:.2em;text-shadow:0 2px 10px rgba(0,0,0,.6)}
+      #${DLC_OVERLAY_ID} .jy-seal-poem-left{font-size:12px;color:#bde8d8}
       @keyframes jyMusicSpin{to{transform:rotate(360deg)}}
-      @media(prefers-reduced-motion:reduce){#${ROOT_ID}[data-collapsed="true"][data-playing="true"] .jy-music-ball{animation:none}}
-      @media(max-width:640px){#${ROOT_ID}{width:min(320px,calc(100vw - 12px))}}
+      @keyframes jySealSpinCCW{to{transform:rotate(-360deg)}}
+      @keyframes jyWavePulse{0%{transform:scale(.5);opacity:.9}100%{transform:scale(1.55);opacity:0}}
+      @keyframes jySealStamp{0%{transform:scale(1.85);opacity:0}75%{transform:scale(.95);opacity:1}100%{transform:scale(1);opacity:1}}
+      @keyframes jyMoteRise{0%{transform:translateY(0) scale(.6);opacity:0}25%{opacity:.95}100%{transform:translateY(-62vh) scale(1.1);opacity:0}}
+      @media(prefers-reduced-motion:reduce){#${ROOT_ID}[data-collapsed="true"][data-playing="true"] .jy-music-ball,#${ROOT_ID}[data-collapsed="true"][data-dlc-active="true"]::after,#${DLC_OVERLAY_ID} .jy-seal-ring,#${DLC_OVERLAY_ID} .jy-seal-wave,#${DLC_OVERLAY_ID} .jy-seal-core,#${DLC_OVERLAY_ID} .jy-seal-mote{animation:none!important}}
+      @media(max-width:640px){#${ROOT_ID}{width:min(326px,calc(100vw - 16px))}#${ROOT_ID} .jy-dlc-steps{grid-template-columns:repeat(2,minmax(0,1fr))}#${DLC_OVERLAY_ID} .jy-seal-stage{flex-direction:column;gap:12px}#${DLC_OVERLAY_ID} .jy-seal-poem{writing-mode:horizontal-tb;letter-spacing:.08em;padding:6px 12px;font-size:12.5px}}
     `;
     doc.head.append(style);
   }
@@ -534,27 +1062,71 @@
     player = doc.createElement('section');
     player.id = ROOT_ID;
     player.dataset.collapsed = state.collapsed ? 'true' : 'false';
+    player.dataset.dlcActive = dlcCache.enabled ? 'true' : 'false';
+    player.dataset.activeTab = state.activeTab;
     syncTheme();
     player.innerHTML = `
-      <div class="jy-music-head" data-role="drag-handle" title="${state.collapsed ? '点击展开，拖动移动' : '点击收起为小球，拖动移动'}"><span class="jy-music-brand">暨阳中学广播台</span><span class="jy-music-head-tip">点击收起</span><span class="jy-music-ball">暨阳</span></div>
+      <div class="jy-music-head" data-role="drag-handle" title="${state.collapsed ? '点击展开，拖动移动' : '点击收起为小球，拖动移动'}"><span class="jy-music-brand">暨阳多功能台</span><span class="jy-head-dlc-pill" data-role="head-dlc-pill" hidden>灵脉已启</span><span class="jy-music-head-tip">点击收起</span><span class="jy-music-ball">暨阳</span></div>
       <div class="jy-music-body">
-        <div class="jy-music-now"><span class="jy-music-note">♪</span><div><div class="jy-music-now-title" data-role="now-title">尚未选择歌曲</div><div class="jy-music-status" data-role="status">等待播放</div><div class="jy-music-progress" data-role="progress" role="slider" tabindex="0" aria-label="播放进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div></div>
-        <div class="jy-music-controls"><button type="button" data-action="mode" title="列表循环">↻</button><button type="button" data-action="previous" title="上一首">◀</button><button type="button" data-action="toggle" title="播放">▶</button><button type="button" data-action="next" title="下一首">▶</button></div>
-        <div class="jy-music-mode-note" data-role="mode-label">列表循环</div>
-        <label class="jy-music-volume"><span>音量</span><input type="range" min="0" max="100" value="${state.volume}" data-role="volume"><span data-role="volume-value">${state.volume}%</span></label>
-        <div class="jy-music-add"><input data-role="title-input" placeholder="歌曲标题"><input data-role="url-input" placeholder="https:// 音频直链"><button type="button" data-action="add" title="加入歌单">+</button></div>
-        <div class="jy-music-add-extra"><input data-role="cover-input" placeholder="封面图片链接（可选）"></div>
-        <div class="jy-music-list-head"><span>本卡歌单</span><span data-role="count">0</span></div><div class="jy-music-playlist" data-role="playlist"></div>
+        <div class="jy-console-tabs" role="tablist" aria-label="多功能控制台页签">
+          <button type="button" class="jy-console-tab" role="tab" data-console-tab="music" aria-selected="true">随身广播</button>
+          <button type="button" class="jy-console-tab" role="tab" data-console-tab="dlc" aria-selected="false">太虚灵枢</button>
+          <button type="button" class="jy-console-tab" role="tab" data-console-tab="codex" aria-selected="false">灵脉图鉴</button>
+        </div>
+        <div data-panel="music">
+          <div class="jy-music-now"><span class="jy-music-note">♪</span><div><div class="jy-music-now-title" data-role="now-title">尚未选择歌曲</div><div class="jy-music-status" data-role="status">等待播放</div><div class="jy-music-progress" data-role="progress" role="slider" tabindex="0" aria-label="播放进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div></div>
+          <div class="jy-music-controls"><button type="button" data-action="mode" title="列表循环">↻</button><button type="button" data-action="previous" title="上一首">◀</button><button type="button" data-action="toggle" title="播放">▶</button><button type="button" data-action="next" title="下一首">▶</button></div>
+          <div class="jy-music-mode-note" data-role="mode-label">列表循环</div>
+          <label class="jy-music-volume"><span>音量</span><input type="range" min="0" max="100" value="${state.volume}" data-role="volume"><span data-role="volume-value">${state.volume}%</span></label>
+          <div class="jy-music-add"><input data-role="title-input" placeholder="歌曲标题"><input data-role="url-input" placeholder="https:// 音频直链"><button type="button" data-action="add" title="加入歌单">+</button></div>
+          <div class="jy-music-add-extra"><input data-role="cover-input" placeholder="封面图片链接（可选）"></div>
+          <div class="jy-music-list-head"><span>本卡歌单</span><span data-role="count">0</span></div><div class="jy-music-playlist" data-role="playlist"></div>
+        </div>
+        <div data-panel="dlc" hidden>
+          <div class="jy-dlc-hero">
+            <div class="jy-dlc-head-row"><span class="jy-dlc-title">都市修仙 · 灵气复苏</span><span class="jy-dlc-seal-tag">可选 DLC</span></div>
+            <div class="jy-dlc-pill" data-role="dlc-status-pill">尘封中 · 纯日常校园线</div>
+            <div class="jy-dlc-meta" data-role="dlc-book-name">待识别当前角色主世界书</div>
+            <div class="jy-dlc-steps">
+              <div class="jy-dlc-step" data-dlc-step="0">微兆 1~10d</div>
+              <div class="jy-dlc-step" data-dlc-step="1">古武 11~25d</div>
+              <div class="jy-dlc-step" data-dlc-step="2">破禁 26~45d</div>
+              <div class="jy-dlc-step" data-dlc-step="3">并序 46d+</div>
+            </div>
+            <div class="jy-dlc-meta" data-role="dlc-timeline"></div>
+            <div class="jy-dlc-meta" style="margin-top:4px;color:var(--m-jade)" data-role="dlc-saintess"></div>
+          </div>
+          <div class="jy-dlc-actions">
+            <button type="button" class="jy-dlc-btn-primary" data-action="dlc-toggle">太虚启封 · 注入灵气复苏 DLC</button>
+            <div class="jy-dlc-sub-row">
+              <button type="button" data-action="dlc-resync" hidden>重锚当前日期</button>
+              <button type="button" data-action="dlc-replay" hidden>重映启封阵法</button>
+            </div>
+          </div>
+        </div>
+        <div data-panel="codex" hidden>
+          <div class="jy-codex-list">
+            <div class="jy-codex-card"><h4>越中潜龙 · 暨阳隐秘龙脉</h4><p>南干龙余脉入越折返主窍（「浦阳泄秀、鹰山锁元」）。千年来借阵内敛，滋养西施灵韵、澹珠记异珠与万风地库古器。</p></div>
+            <div class="jy-codex-card"><h4>太微云岫宗 · 老鹰山古史</h4><p>昔年东南名宗，末法灵竭后山门大阵自封沉渊，唯听风亭残基、屋檐镇风青铜铎与守灯执事周守山（周伯）守望当代。</p></div>
+            <div class="jy-codex-card"><h4>开放境界阶梯 · 古武与仙途</h4><p>古武（明劲→暗劲→化劲→先天）与仙途（引气→炼气→筑基→金丹→元婴→化神+）同参不锁上限，以机缘与大劫印证破境。</p></div>
+            <div class="jy-codex-card"><h4>云岫圣女 · 云清晏与仙凡两隔</h4><p>开启DLC第2天起插班主角班级。末法金丹巅峰冲元婴遭重创跌境，入红尘既寻破局，亦携来道侣长生与故人白头的仙凡深问。</p></div>
+          </div>
+        </div>
         <div class="jy-music-notice" data-role="notice" aria-live="polite"></div>
       </div>`;
     doc.body.append(player);
+    setConsoleTab(state.activeTab);
     applyPosition();
     renderPlaylist();
     setVolume(state.volume, true);
     renderMode();
     refreshPlayback();
+    renderDlcPanel();
+    probeWorldbookDlc();
 
     player.addEventListener('click', event => {
+      const tabBtn = event.target.closest('[data-console-tab]');
+      if (tabBtn) { setConsoleTab(tabBtn.dataset.consoleTab); return; }
       const target = event.target.closest('[data-action], [data-index], [data-remove-index]');
       if (!target) return;
       if (target.dataset.action === 'toggle') togglePlayback();
@@ -562,6 +1134,9 @@
       if (target.dataset.action === 'previous') play((state.currentIndex < 0 ? 0 : state.currentIndex - 1));
       if (target.dataset.action === 'next') play(nextIndex(state.currentIndex, false));
       if (target.dataset.action === 'add') addTrack();
+      if (target.dataset.action === 'dlc-toggle') applyDlcWorldbookToggle(!dlcCache.enabled, false);
+      if (target.dataset.action === 'dlc-resync') applyDlcWorldbookToggle(true, false);
+      if (target.dataset.action === 'dlc-replay') playSealOverlay({ enable: true, originDate: dlcCache.originDate || dlcCache.currentDate || '2020-09-01' });
       if (target.dataset.index !== undefined) play(Number(target.dataset.index));
       if (target.dataset.removeIndex !== undefined) removeTrack(Number(target.dataset.removeIndex));
     });
@@ -621,6 +1196,7 @@
   appWindow.addEventListener('storage', onStorageTheme);
   function destroyMusicPlayer() {
     appWindow.clearInterval(timer);
+    clearSealOverlay();
     appWindow.removeEventListener('resize', applyPosition);
     appWindow.removeEventListener(THEME_EVENT, syncTheme);
     appWindow.removeEventListener('storage', onStorageTheme);
@@ -628,9 +1204,9 @@
     try { window.removeEventListener('pagehide', destroyMusicPlayer); } catch (_) {}
     player?.remove();
   }
-  // 页面卸载/切聊天导致脚本重载时，清掉 900ms 轮询、resize 监听与 DOM，避免多实例残留
+  // 页面卸载/切聊天导致脚本重载时，清掉 900ms 轮询、resize 监听、法阵特效与 DOM，避免多实例残留
   appWindow.addEventListener('pagehide', destroyMusicPlayer);
   if (window !== appWindow) window.addEventListener('pagehide', destroyMusicPlayer);
-  appWindow[GLOBAL_KEY] = { destroy: destroyMusicPlayer };
-  console.info('[暨阳音乐播放器] 已加载，等待手动播放。');
+  appWindow[GLOBAL_KEY] = { destroy: destroyMusicPlayer, probeDlc: probeWorldbookDlc, playSeal: playSealOverlay };
+  console.info('[暨阳多功能台] 已加载，支持随身广播与太虚灵枢 DLC 开关。');
 })();
