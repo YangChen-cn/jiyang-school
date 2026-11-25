@@ -787,6 +787,18 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.doesNotMatch(rulesOff,/云清晏|灵气复苏|主角\.修行|观澜|道侣/);
  assert.match(rulesOn,/云清晏\.好感度[\s\S]*观澜[\s\S]*问道[\s\S]*动念[\s\S]*同参[\s\S]*道侣/);
  assert.doesNotMatch(rulesOn,/已入班/);
+ assert.doesNotMatch(rulesOff,/修士风闻/);
+ assert.match(rulesOn,/渠道也可用「修士风闻」/);
+ const rumor={标识:'rumor-1',日期:'2021-07-03',渠道:'修士风闻',来源:'城郊夜跑群',标题:'山顶青光',摘要:'传闻：步道上看到短暂青光。'};
+ const ordinaryPost={标识:'campus-1',日期:'2021-07-03',渠道:'趣事',来源:'校园树洞',标题:'暑假自习',摘要:'阅览室调整开放时间。'};
+ const forumCampus={有效公告:[],动态流:[ordinaryPost,rumor]};
+ assert.equal(schemaBox.schema.parse({校园:forumCampus}).校园.动态流[1].渠道,'修士风闻');
+ const snapshotTpl=read('世界书/变量/变量列表.txt');
+ const forumSnapshot=(active)=>render(snapshotTpl,{stat_data:{校园:forumCampus,剧情:{灵气复苏:{已开启:active}}}});
+ assert.match(forumSnapshot(true),/山顶青光/);
+ assert.doesNotMatch(forumSnapshot(false),/山顶青光/);
+ assert.match(forumSnapshot(false),/暑假自习/);
+ assert.equal(forumCampus.动态流.length,2);
 
  const plainParsed=schemaBox.schema.parse({世界:{日期:'2020-09-01'},苏晓樯:{好感度:5}});
  assert.equal(plainParsed.云清晏,undefined);
@@ -860,10 +872,10 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  try {
  let mockBook=[{name:'世界设定',enabled:true,content:'base'},{name:dlcNames[0],uid:100,enabled:false,content:'旧版总纲'}];
  const mockChats={
-   A:{stat_data:{世界:{日期:'2021/07/03',起始年份:'2020'},剧情:{},主角:{姓名:'测试生'}}},
+   A:{stat_data:{世界:{日期:'2021/07/03',起始年份:'2020'},剧情:{},主角:{姓名:'测试生'},校园:forumCampus}},
    B:{stat_data:{世界:{日期:'2021/08/09',起始年份:'2020'},剧情:{},主角:{姓名:'测试生'}}},
  };
- const oldFloor={stat_data:{世界:{日期:'2021/07/02'},剧情:{},主角:{}}};
+ const oldFloor={stat_data:{世界:{日期:'2021/07/02'},剧情:{},主角:{},校园:forumCampus}};
  let chatId='A';
  let onChatChanged;
  let bookWrites=0;
@@ -907,6 +919,13 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(savedMusic.defaultTracksVersion,5);
  assert.match(savedMusic.playlist[0].sources[0],/^https:\/\/testingcf\.jsdelivr\.net\//);
  assert.equal(bookWrites,0);
+ const forumChannel=md.querySelector('[data-campus-channel]');
+ const rumorOption=forumChannel.querySelector('[data-cultivation-channel]');
+ const forumFeed=md.querySelector('[data-campus-list]');
+ assert.equal(rumorOption.hidden,true);
+ assert.equal(rumorOption.disabled,true);
+ assert.doesNotMatch(forumFeed.textContent,/山顶青光/);
+ assert.match(forumFeed.textContent,/暑假自习/);
  assert.equal(md.querySelector('[data-aura-badge]').hidden,true);
  assert.equal(md.querySelector('[data-dlc-heroine="云清晏"]').hidden,true);
 
@@ -929,6 +948,15 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(history.contentDocument.querySelector('[data-aura-badge]').hidden,true,'历史楼层不接受当前启封');
  assert.equal(md.querySelector('[data-people-all-btn]').textContent,'全部角色 (8)');
  assert.equal(md.querySelector('[data-cultivation-panel]').hidden,false);
+ assert.equal(rumorOption.hidden,false);
+ assert.equal(rumorOption.disabled,false);
+ assert.match(forumFeed.textContent,/山顶青光/);
+ forumChannel.value='修士风闻';
+ forumChannel.dispatchEvent(new mw.Event('change'));
+ assert.match(forumFeed.textContent,/山顶青光/);
+ assert.doesNotMatch(forumFeed.textContent,/暑假自习/);
+ assert.equal(history.contentDocument.querySelector('[data-cultivation-channel]').hidden,true);
+ assert.doesNotMatch(history.contentDocument.querySelector('[data-campus-list]').textContent,/山顶青光/);
  assert.match(md.querySelector('[data-dlc-heroine="云清晏"] .jy-avatar').src,/^data:image\/svg\+xml/);
 
  chatId='B';
@@ -953,6 +981,10 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(mockChats.A.stat_data.剧情.灵气复苏.已开启,false);
  assert.equal(mockChats.B.stat_data.剧情.灵气复苏.已开启,true);
  assert.equal(bookWrites,1,'封缄只写当前聊天 MVU');
+ assert.equal(rumorOption.hidden,true);
+ assert.equal(forumChannel.value,'全部');
+ assert.doesNotMatch(forumFeed.textContent,/山顶青光/);
+ assert.match(forumFeed.textContent,/暑假自习/);
  assert.equal(md.querySelector('[data-people-all-btn]').textContent,'全部角色 (7)');
  mockChats.A.stat_data.世界.日期='2021/07/22';
  toggle();
@@ -961,6 +993,8 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(mockChats.A.stat_data.剧情.灵气复苏.开启日期,'2021-07-03');
  assert.equal(mockChats.A.stat_data.主角.修行.境界,'筑基');
  assert.match(md.querySelector('[data-aura-badge-text]').textContent,/第20日 · 古武抬头期 · 筑基/);
+ assert.equal(rumorOption.hidden,false);
+ assert.match(forumFeed.textContent,/山顶青光/);
  assert.equal(history.contentDocument.querySelector('[data-aura-badge]').hidden,true);
 
  // An already-enabled worldbook from the previous build must be gated even when the open chat is off.

@@ -18,7 +18,7 @@ const CampusInteractions = z.object({
 const CampusPost = z.object({
   标识: z.string().prefault(''),
   日期: z.string().prefault(''),
-  渠道: z.enum(['公告', '班群', '来信', '趣事', '八卦', '余波', '朋友圈']).prefault('公告'),
+  渠道: z.enum(['公告', '班群', '来信', '趣事', '八卦', '余波', '朋友圈', '修士风闻']).prefault('公告'),
   来源: z.string().prefault(''),
   标题: z.string().prefault(''),
   摘要: z.string().prefault(''),

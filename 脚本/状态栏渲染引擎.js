@@ -795,6 +795,7 @@
     .jy-feed-tag[data-channel="八卦"] { background: #fff3e0; color: #e65100; }
     .jy-feed-tag[data-channel="来信"] { background: #f3e5f5; color: #7b1fa2; }
     .jy-feed-tag[data-channel="趣事"] { background: #e0f7fa; color: #00838f; }
+    .jy-feed-tag[data-channel="修士风闻"] { background: #e9e8f3; color: #554478; }
     .jy-feed-tag[data-channel="余波"] { background: #ffebee; color: #c62828; }
     .jy-feed-source { font-size: 10.5px; color: var(--c-muted); }
     .jy-moment-title { display: block; margin: 2px 0; font-size: 13px; font-weight: 800; color: var(--c-ink); }
@@ -1898,6 +1899,7 @@
     // 校园论坛渲染
     const panel = root.querySelector('[data-campus-messages]');
     const channel = panel?.querySelector('[data-campus-channel]');
+    const cultivationChannel = channel?.querySelector('[data-cultivation-channel]');
     const messageList = panel?.querySelector('[data-campus-list]');
     const messageStatus = panel?.querySelector('[data-campus-status]');
     const announcementList = panel?.querySelector('[data-campus-announcements]');
@@ -1906,6 +1908,7 @@
 
     const getAuthorProfile = item => {
       const source = String(item.来源 || '');
+      if (item.渠道 === '修士风闻') return { name: '暨阳风闻', initial: '闻', bg: '#554478' };
       if (source.trim() === '俞嘉豪' || source.trim() === '嘉豪') {
         return { name: '俞嘉豪', initial: '俞', bg: '#535d6e', portrait: 'yujiahao.webp' };
       }
@@ -1924,10 +1927,17 @@
 
     const renderMessages = () => {
       if (!panel) return;
+      const dlcActive = root.dataset.dlcActive === 'true';
+      if (cultivationChannel) {
+        cultivationChannel.hidden = cultivationChannel.disabled = !dlcActive;
+        if (!dlcActive && channel.value === cultivationChannel.value) channel.value = '全部';
+      }
       messageList.replaceChildren();
       announcementList.replaceChildren();
       const announcements = campus.有效公告.slice().reverse();
-      const visible = campus.动态流.slice().reverse().filter(item => channel.value === '全部' || item.渠道 === channel.value);
+      const visible = campus.动态流.slice().reverse().filter(item => (
+        (dlcActive || item.渠道 !== '修士风闻') && (channel.value === '全部' || item.渠道 === channel.value)
+      ));
       announcementStatus.textContent = readState || (announcements.length ? '' : '暂无有效公告。');
       announcementStatus.hidden = !announcementStatus.textContent;
       messageStatus.textContent = readState || (visible.length ? '' : '这个分类暂时没有动态。');
@@ -2151,6 +2161,7 @@
         const data = await readStatusFloor(win, messageId);
         if (data?.stat_data && root.isConnected && chatId === getChatId() && statusFloorId(win) === messageId) {
           syncDlcUiInFrame(root, data.stat_data);
+          root.querySelector('[data-campus-channel]')?.dispatchEvent(new win.Event('change'));
         }
       } catch (_) {}
     });

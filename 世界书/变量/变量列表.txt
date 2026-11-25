@@ -4,6 +4,9 @@
 <%_ {
 const snapshot = {...getvar('stat_data', { defaults: {} })};
 delete snapshot.凌知夏;
+if (snapshot.剧情?.灵气复苏?.已开启 !== true && Array.isArray(snapshot.校园?.动态流)) {
+  snapshot.校园 = {...snapshot.校园, 动态流: snapshot.校园.动态流.filter(post => post?.渠道 !== '修士风闻')};
+}
 if (snapshot.剧情) {
   snapshot.剧情 = {...snapshot.剧情};
   delete snapshot.剧情.推进节奏;
