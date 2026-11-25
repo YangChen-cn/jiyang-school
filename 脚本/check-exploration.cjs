@@ -209,7 +209,7 @@ for (const side of ['万风地库', '珍珠局']) {
   assert.ok(entry && entry.enabled && entry.strategy.scan_depth === 2);
   assert.ok(read(entry.path).length > 0);
 }
-assert.ok(manifest.entryManifest.事件.万风地库.strategy.keys.includes('万风地库'));
+assert.ok(manifest.entryManifest.事件.万风地库.strategy.keys.includes('万风'));
 assert.ok(manifest.entryManifest.事件.珍珠局.strategy.keys.includes('澹珠记'));
 const worldbookByName = new Map(cardEntries.map(entry => [entry.comment, entry]));
 const matchesWorldbookKey = (entryName, ...messages) => {
@@ -221,19 +221,38 @@ const matchesWorldbookKey = (entryName, ...messages) => {
   });
 };
 for (const [name, misses, hits] of [
-  ['万风地库', ['课间聊周末去万风新天地看电影', '我去万风健身房', '到小区地下车库取车', '学校的B2车库有空位', '万风旁边酒店的地下车库'], ['我去万风地库找人', '来到万风新天地的地下停车场', '到了万风 b2 层']],
-  ['老鹰山仙人', ['周末去老鹰山步道跑步'], ['问周伯那张山路旧照', '在听风亭歇一会']],
-  ['[DLC]老鹰山灵脉与古宗秘藏', ['走到听风亭和周伯打个招呼', '老家的院子有口枯井', '云清晏说自己来自太微云岫宗'], ['找镇风铎', '查一下云岫宗山门', '去老鹰山灵脉看看']],
-  ['珍珠局', ['我家在山下湖，手链用的是淡水珍珠'], ['去澹珠记看看', '去山下湖珍珠市场挑珠']],
-  ['[DLC]境界描述', ['他说这首诗的境界很高'], ['请介绍修炼境界', '开始炼气']],
+  ['老鹰山仙人', ['聊到老鹰山远处的风景'], ['周末去老鹰山步道跑步', '问周伯那张山路旧照', '在听风亭歇一会']],
+  ['[DLC]老鹰山灵脉与古宗秘藏', ['老家的院子有口枯井', '云清晏说自己来自太微云岫宗'], ['走到听风亭和周伯打个招呼', '找镇风铎', '查一下云岫宗山门', '去老鹰山灵脉看看']],
+  ['珍珠局', ['我家在山下湖，手链用的是淡水珍珠'], ['去澹珠记看看', '去珍珠市场看开蚌']],
+  ['[DLC]境界描述', ['他说这首诗的境界很高'], ['我现在是什么境界', '开始炼气']],
   ['虞淑婉_日常接触', ['去英语老师办公室交作业', '到行政楼一楼交表'], ['去校长办公室找虞校长']],
   ['俞嘉豪_基础信息', ['他们在聊电视剧里的联姻'], ['问问苏俞联姻是怎么回事', '去见俞嘉豪']],
 ]) {
   for (const line of misses) assert.equal(matchesWorldbookKey(name, line), false, name + ' 误触发：' + line);
   for (const line of hits) assert.equal(matchesWorldbookKey(name, line), true, name + ' 漏触发：' + line);
 }
-assert.equal(matchesWorldbookKey('万风地库', '去小区地下车库', '昨天去万风'), false);
-assert.equal(matchesWorldbookKey('万风地库', '继续过去', '我在万风新天地地库'), true);
+const garageGate = worldbookByName.get('万风地库').content.split('\n')[0];
+assert.match(garageGate, /^@@if /);
+const allowsGarage = (place, zone, message, previous = '') =>
+  matchesWorldbookKey('万风地库', message, previous) &&
+  ejs.render('<%- !!(' + garageGate.slice(5) + ') %>', {
+    lastUserMessage: message,
+    getvar: key => key.endsWith('当前位置') ? place : zone,
+  }) === 'true';
+for (const [place, zone, message, previous, expected] of [
+  ['高二八班教室', '校园', '课间聊起周末去万风看电影', '', false],
+  ['年级组办公室', '校园', '我说起昨天去了万风健身房', '', false],
+  ['教室', '', '<本轮用户输入>聊周末去万风看电影</本轮用户输入>旧记忆：在万风车库取车', '', false],
+  ['家里', '家', '去小区地下车库取车', '昨天去万风', false],
+  ['万风三楼餐厅', '城区', '吃完了，下楼取车', '', true],
+  ['商场电梯', '城区', '到 b2，出去看看', '', true],
+  ['', '', '我去地下停车场找一下', '', true],
+  ['校长室', '校园', '场景切到万风，我下楼取车', '', true],
+  ['教室', '校园', '坐电梯下到 B2', '两人吃完饭走向万风的电梯', true],
+  ['B2车库', '城区', '沿着柱子继续走', '先往地库里走', true],
+]) {
+  assert.equal(allowsGarage(place, zone, message, previous), expected, '万风地库：' + message);
+}
 assert.equal(matchesWorldbookKey('地点_城东万风新天地', '周末去万风吃饭'), true);
 assert.equal(matchesWorldbookKey('地点_老鹰山', '周末去老鹰山步道跑步'), true);
 for (const period of periods) {
