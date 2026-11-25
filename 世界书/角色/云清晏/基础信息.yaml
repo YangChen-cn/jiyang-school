@@ -12,25 +12,34 @@ const curStr = String(getvar('stat_data.世界.日期', { defaults: '' }) || ori
 const startMs = toIsoDay(originStr) ?? Date.UTC(2020, 8, 1);
 const curMs = toIsoDay(curStr) ?? startMs;
 const elapsedDays = Math.max(0, Math.floor((curMs - startMs) / 86400000));
-const _p = getvar('stat_data.云清晏.是否在场', { defaults: false });
-const isPresent = _p === true || _p === 'true' || _p === 1;
+const presencePath = 'stat_data.云清晏.是否在场';
+const present = value => value === true || value === 'true' || value === 1;
+const isPresent = present(getvar(presencePath, { defaults: false }));
 const realmState = getvar('stat_data.云清晏.当前境界', { defaults: '金丹跌境（重创封蛰）' });
 const wound = getvar('stat_data.云清晏.伤势余韵', { defaults: '元婴劫伤未愈·阴雨畏寒' });
 const cls = String(getvar('stat_data.主角.班级', { defaults: '' }) || '高二重点班');
 const location = String(getvar('stat_data.世界.当前位置', { defaults: '' }));
 const schoolStage = getvar('stat_data.剧情.学期', { defaults: '' });
 const schoolTime = getvar('stat_data.世界.时间段', { defaults: '' });
-const entered = getvar('stat_data.云清晏.已入班', { defaults: true }) !== false;
 const classScene = /教室/.test(location) && !/音乐|美术|闲置|空置/.test(location);
-const canEnroll = elapsedDays >= 1 && !entered && classScene && /早自习|上午|下午|上课|课间|晚自习/.test(schoolTime)
+let canEnroll = elapsedDays >= 1 && !isPresent && classScene && /早自习|上午|下午|上课|课间|晚自习/.test(schoolTime)
   && !/暑假|寒假|已毕业/.test(schoolStage) && !/毕业/.test(cls);
+if (canEnroll) {
+  // Query the selected swipes in this chat only. The first on-scene encounter closes the introduction.
+  for (let id = lastMessageId; id >= 0; id--) {
+    if (present(getvar(presencePath, { scope: 'message', withMsg: { id }, defaults: false }))) {
+      canEnroll = false;
+      break;
+    }
+  }
+}
 _%>
 <%_ if (canEnroll) { _%>
-[云清晏｜初次入班] 本场若顺接教室日常，可由班主任引荐借读生云清晏进入<%= cls %>。正文完成引荐时，同轮将「云清晏.已入班」写为 true。
+[云清晏｜初次入班] 本场若顺接教室日常，可由班主任引荐借读生云清晏进入<%= cls %>。班主任完成引荐后，云清晏在场。
 <%_ } _%>
 <%_ if (elapsedDays >= 1 && (isPresent || canEnroll)) { _%>
 角色档案：云清晏
-  核心身份: 老鹰山「太微云岫宗」直系嫡传末代圣女；以本名在暨阳低调养伤。<%= entered ? "在校身份延续既有同窗关系。" : "以体弱外省借读生为公开身份。" %>
+  核心身份: 老鹰山「太微云岫宗」直系嫡传末代圣女；以本名在暨阳低调养伤。在校以体弱外省借读生为公开身份。
   真实来历与修为境况:
     - 骨龄尚浅（外貌永远定格在十七八岁清冷少女最盛年），凭太微云岫宗历代积累的聚灵残鼎与无上古法，于天地末法时代硬生生修至「金丹巅峰」。
     - 前番强引微末潮汐硬冲「元婴大劫」时惨遭末法雷劫与地脉双双反噬，元婴未凝反受道伤：金丹布满暗纹裂隙，神魂长留寒煞，一身通天法力封蛰十之七八（目前常驻显化维持在 <%= realmState %>，仅剩全盛期无双剑意与庞大金丹神识底蕴；若强行全开极境虽能碾压寻常散修，却必致呕血损及本源）。

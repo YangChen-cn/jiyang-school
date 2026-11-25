@@ -163,7 +163,6 @@ export const Schema = z.object({
   }).prefault({}),
 
   云清晏: z.object({
-    已入班: z.boolean().optional(),
     是否在场: z.coerce.boolean().optional(),
     好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).optional(),
     关系阶段: z.string().optional(),
@@ -381,8 +380,6 @@ $(async () => {
   });
   eventOn(Mvu.events.VARIABLE_UPDATE_ENDED, (variables, before) => {
     limitRelationshipGains(variables?.stat_data, before?.stat_data);
-    const yun = variables?.stat_data?.云清晏;
-    if (yun && before?.stat_data?.云清晏?.已入班 === true) yun.已入班 = true;
   });
   eventOn(Mvu.events.BEFORE_MESSAGE_UPDATE, ({ variables }) => {
     const state = variables?.stat_data;
@@ -392,6 +389,7 @@ $(async () => {
     }
     // MVU carries old fields forward. Retire these keys on the newly written floor only.
     delete state?.凌知夏;
+    delete state?.云清晏?.已入班;
     delete state?.剧情?.当日关系增量;
     delete state?.剧情?.重大情感申请;
     delete state?.剧情?.已结算重大情感事件;
