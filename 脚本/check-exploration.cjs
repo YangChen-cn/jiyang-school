@@ -880,7 +880,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    const entry=dlcEntries.get(name);
    assert.equal(entry.constant,false);
    assert.ok(entry.keys.includes(key), name + ' 缺少触发词 ' + key);
-   assert.equal(entry.extensions.scan_depth,2);
+   assert.equal(entry.extensions.scan_depth,4);
    assert.equal(entry.extensions.exclude_recursion,true);
    assert.equal(entry.extensions.prevent_recursion,true);
    assert.ok(render(entry.content,enabled).trim());
@@ -892,14 +892,14 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    assert.equal(matchesWorldbookKey('[DLC]仙宗_天台赤城洞天','周末去名山旅游'),false);
    assert.equal(matchesWorldbookKey('[DLC]世家_魔都苏氏水府','去魔都逛街看外滩'),false);
    assert.equal(matchesWorldbookKey('[DLC]世家_西溪葛氏丹霞','去杭城西溪湿地散步'),false);
-   const schedTpl=read('世界书/时间线/校园作息.yaml');
-   const schedFall=render(schedTpl,{'stat_data.剧情.学期':'高二上'});
-   assert.doesNotMatch(schedFall,/高二下:|暑假:|高三上:|高三下:/);
-   assert.match(render(schedTpl,{'stat_data.剧情.学期':'高二下'}),/高二下:/);
+   assert.equal(cardEntries.some(e=>e.comment==='时间线_校园作息'),false);
+   assert.equal(worldbookByName.get('许念安_基础信息').extensions.scan_depth,4);
+   assert.equal(worldbookByName.get('虞淑婉_NSFW指导').extensions.scan_depth,6);
+   assert.equal(worldbookByName.get('万风地库').extensions.scan_depth,2);
    const xieNsfwEntry=dlcEntries.get('谢昭宁_NSFW指导');
    assert.equal(xieNsfwEntry.constant,false);
    assert.ok(xieNsfwEntry.keys.includes('剑庐小公主'));
-   assert.equal(xieNsfwEntry.extensions.scan_depth,2);
+   assert.equal(xieNsfwEntry.extensions.scan_depth,6);
  }
  assert.ok(!cardEntries.some(e=>e.comment.includes('古武与隐秘异闻') || e.comment==='[mvu_update]修仙变量契约' || e.comment==='[DLC]红尘灵根与渡凡引途'));
  const initRaw=read('世界书/变量/initvar.yaml');

@@ -85,7 +85,7 @@
             "什么境界",
             "境界划分"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "before_character_definition",
@@ -130,7 +130,7 @@
             "元婴劫",
             "天劫"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "before_character_definition",
@@ -188,7 +188,7 @@
             "钱塘潮汐秘市",
             "潮汐秘市"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "before_character_definition",
@@ -227,7 +227,7 @@
             "紫金固元丹",
             "化劫玉髓膏"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "before_character_definition",
@@ -266,7 +266,7 @@
             "沧溟祖谱",
             "暨阳苏家"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "before_character_definition",
@@ -301,7 +301,7 @@
             "太乙观星",
             "夜场私洽"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "before_character_definition",
@@ -336,7 +336,7 @@
             "天台止观",
             "心魔劫"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "before_character_definition",
@@ -367,7 +367,7 @@
             "国清",
             "司命真经"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "before_character_definition",
@@ -398,7 +398,7 @@
             "赤水九折剑",
             "四明剑冢"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "before_character_definition",
@@ -431,7 +431,7 @@
             "协防密约",
             "天目巡察使"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "before_character_definition",
@@ -464,7 +464,7 @@
             "三茅九老",
             "神霄五雷"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "before_character_definition",
@@ -499,7 +499,7 @@
             "三五斩邪",
             "老天师"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "before_character_definition",
@@ -530,7 +530,7 @@
             "全真内丹",
             "天下第一福地"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "before_character_definition",
@@ -561,7 +561,7 @@
             "青城炼神",
             "第五洞天"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "before_character_definition",
@@ -594,7 +594,7 @@
             "真武道场",
             "以武入道"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "before_character_definition",
@@ -627,7 +627,7 @@
             "归墟海坛",
             "海外散仙"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "before_character_definition",
@@ -658,7 +658,7 @@
             "玄圃",
             "万山之祖"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "before_character_definition",
@@ -1631,7 +1631,7 @@
             "苏晓樯",
             "小天女"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "after_character_definition",
@@ -1672,7 +1672,7 @@
             "晓樯",
             "小天女"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "after_character_definition",
@@ -1711,7 +1711,7 @@
             "温书语",
             "书语"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "after_character_definition",
@@ -1750,7 +1750,7 @@
             "温书语",
             "书语"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "after_character_definition",
@@ -1789,7 +1789,7 @@
             "沈幼楚",
             "幼楚"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "after_character_definition",
@@ -1828,7 +1828,7 @@
             "沈幼楚",
             "幼楚"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "after_character_definition",
@@ -1867,7 +1867,7 @@
             "沈幼楚",
             "幼楚"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "after_character_definition",
@@ -1910,7 +1910,7 @@
             "英语老师",
             "慕老师"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "after_character_definition",
@@ -1951,7 +1951,7 @@
             "佳芊",
             "慕老师"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "after_character_definition",
@@ -1990,7 +1990,7 @@
             "陈芷汀",
             "芷汀"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "after_character_definition",
@@ -2029,7 +2029,7 @@
             "陈芷汀",
             "芷汀"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "after_character_definition",
@@ -2068,7 +2068,7 @@
             "虞淑婉",
             "虞校长"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "after_character_definition",
@@ -2109,7 +2109,7 @@
             "校长",
             "虞校长"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "after_character_definition",
@@ -2141,7 +2141,7 @@
             "虞淑婉",
             "虞校长"
           ],
-          "scan_depth": 2
+          "scan_depth": 6
         },
         "position": {
           "type": "after_character_definition",
@@ -2174,7 +2174,7 @@
             "校长室",
             "校长办公室"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "after_character_definition",
@@ -2221,7 +2221,7 @@
             "学习委员",
             "学委"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "after_character_definition",
@@ -2266,7 +2266,7 @@
             "学习委员",
             "学委"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "after_character_definition",
@@ -2382,7 +2382,7 @@
             "吴臻臻",
             "班长"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "after_character_definition",
@@ -2413,7 +2413,7 @@
             "凌知夏",
             "知夏"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "after_character_definition",
@@ -2450,7 +2450,7 @@
             "俞家",
             "苏俞联姻"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "after_character_definition",
@@ -2486,7 +2486,7 @@
             "晓樯",
             "小天女"
           ],
-          "scan_depth": 2
+          "scan_depth": 6
         },
         "position": {
           "type": "after_character_definition",
@@ -2518,7 +2518,7 @@
             "温书语",
             "书语"
           ],
-          "scan_depth": 2
+          "scan_depth": 6
         },
         "position": {
           "type": "after_character_definition",
@@ -2550,7 +2550,7 @@
             "沈幼楚",
             "幼楚"
           ],
-          "scan_depth": 2
+          "scan_depth": 6
         },
         "position": {
           "type": "after_character_definition",
@@ -2582,7 +2582,7 @@
             "慕佳芊",
             "佳芊"
           ],
-          "scan_depth": 2
+          "scan_depth": 6
         },
         "position": {
           "type": "after_character_definition",
@@ -2614,7 +2614,7 @@
             "陈芷汀",
             "芷汀"
           ],
-          "scan_depth": 2
+          "scan_depth": 6
         },
         "position": {
           "type": "after_character_definition",
@@ -2648,7 +2648,7 @@
             "念安",
             "安安"
           ],
-          "scan_depth": 2
+          "scan_depth": 6
         },
         "position": {
           "type": "after_character_definition",
@@ -2678,7 +2678,7 @@
             "清晏",
             "圣女"
           ],
-          "scan_depth": 2
+          "scan_depth": 6
         },
         "position": {
           "type": "after_character_definition",
@@ -2710,7 +2710,7 @@
             "谢大小姐",
             "剑庐小公主"
           ],
-          "scan_depth": 2
+          "scan_depth": 6
         },
         "position": {
           "type": "after_character_definition",
@@ -3340,7 +3340,7 @@
             "听风亭",
             "旧值守屋"
           ],
-          "scan_depth": 2
+          "scan_depth": 4
         },
         "position": {
           "type": "after_character_definition",
@@ -3448,21 +3448,6 @@
         "position": {
           "type": "before_character_definition",
           "order": 55
-        },
-        "part": "history"
-      },
-      "时间线_校园作息": {
-        "path": "世界书/时间线/校园作息.yaml",
-        "keywords": [],
-        "abstract": "普通上课日与假期节奏，主要角色及同班配角的常见去向",
-        "uid": 82,
-        "enabled": true,
-        "strategy": {
-          "type": "constant"
-        },
-        "position": {
-          "type": "before_character_definition",
-          "order": 54
         },
         "part": "history"
       },
