@@ -76,7 +76,7 @@ _%>
 '''
 (ROOT / '世界书/时间线/学期生活.txt').write_text(text)
 
-p = ROOT / '正则/状态栏界面.html'
+p = ROOT / '脚本/状态栏渲染引擎.js'
 
 
 def replace_block(text, key, body):

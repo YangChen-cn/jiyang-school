@@ -2409,6 +2409,18 @@
             "buttons": []
           },
           "data": {}
+        },
+        "状态栏引擎": {
+          "type": "script",
+          "script_file": "脚本/状态栏渲染引擎.js",
+          "enabled": true,
+          "id": "84e6c7b4-3f21-4c9a-9e8d-202611250001",
+          "info": "状态栏统一渲染引擎：集中托管样式、校历/论坛/地点册与顶层弹窗，避免每层重复注入大段代码。",
+          "button": {
+            "enabled": false,
+            "buttons": []
+          },
+          "data": {}
         }
       },
       "variables": {}

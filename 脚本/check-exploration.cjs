@@ -18,7 +18,8 @@ for (const entry of cardEntries) {
   assert.doesNotThrow(() => ejs.compile(entry.content, { async: true }), `EJS 编译失败：${entry.comment}`);
 }
 const cases = [['2020-08-31','高二上'],['2021-02-20','高二上'],['2021-02-21','高二下'],['2021-06-30','高二下'],['2021-07-01','暑假'],['2021-08-31','暑假'],['2021-09-01','高三上'],['2022-02-20','高三上'],['2022-02-21','高三下'],['2022-06-30','高三下'],['2022-07-01','已毕业']];
-const pure = html.slice(html.indexOf('  // JY_PERIODS_BEGIN'), html.indexOf('  function bindSceneReadouts'));
+const engineSrc = read('脚本/状态栏渲染引擎.js');
+const pure = engineSrc.slice(engineSrc.indexOf('  // JY_PERIODS_BEGIN'), engineSrc.indexOf('  // JY_CAMPUS_END'));
 const sandbox = {}; vm.createContext(sandbox); vm.runInContext(pure + '\nthis.pick = (date, year) => campusPeriod(JY_PERIODS, date, year);', sandbox);
 for (const [date, id] of cases) {
   assert.equal(sandbox.pick(date, 2020)?.id, id);
@@ -147,6 +148,14 @@ async function checkOpeningArchives() {
    assert.equal(get('[data-opening-action]').value, '把伞收起来。');
    assert.equal(get('#send_textarea').value, '原有聊天草稿');
    assert.equal(writes, 0);
+   assert.equal(get('[data-id-preview-name]').textContent, '陈默');
+   get('[data-action="apply-template"][data-template="hardware"]').click();
+   assert.equal(field('开场地点').value, '暨阳路校门口');
+   assert.equal(field('开场日期').value, '2020-09-01');
+   assert.equal(get('[data-id-preview-class]').textContent, '暨阳中学高二重点班插班生');
+   get('[data-action="apply-template"][data-template="gaokao"]').click();
+   assert.equal(field('开场日期').value, '2022-02-26');
+   assert.equal(get('[data-opening-action]').value.length > 0, true);
 
    w.confirm = () => false;
    click('delete-archive');
@@ -531,6 +540,8 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const snapshot=JSON.stringify(stored);
  const dom=new JSDOM('<textarea id="send_textarea">尚未发送的草稿</textarea>'+neutral,{runScripts:'dangerously',url:'http://localhost:18967',pretendToBeVisual:true,virtualConsole:vc,beforeParse(w){w.HTMLElement.prototype.scrollIntoView=function(){};w.scrollTo=()=>{};w.getCurrentMessageId=()=>7;w.getVariables=opts=>{reads.push(opts);return stored;};}});
  const w=dom.window,d=w.document;
+ const engineCode=read('脚本/状态栏渲染引擎.js');
+ w.eval(engineCode);
  await new Promise(r=>w.setTimeout(r,220));
  const themeButton=d.querySelector('[data-action="toggle-theme"]');
  const status=d.querySelector('.jy-status');
@@ -614,7 +625,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    assert.equal(photo.hasAttribute('src'),false);
    place.open=true;
    place.dispatchEvent(new w.Event('toggle'));
-   assert.match(photo.getAttribute('src'),/^https:\/\/cdn\.jsdelivr\.net\/gh\/YangChen-cn\/jiyang-school-assets@/);
+   assert.match(photo.getAttribute('src'),/^https:\/\/(?:testingcf|cdn)\.jsdelivr\.net\/gh\/YangChen-cn\/jiyang-school-assets@/);
    assert.ok(photo.alt.trim());
  }
  d.querySelector('[data-action="close-map"]').click();
@@ -645,8 +656,40 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(JSON.stringify(stored),snapshot);
  assert.equal(d.querySelector('#send_textarea').value,'尚未发送的草稿');
  assert.equal(d.querySelectorAll('[data-period-select] option').length,periods.length);
+
+ // Bento tabs, view toggle & singleton overlay
+ assert.equal(d.querySelectorAll('#jy-status-overlay-root').length,1);
+ assert.equal(d.querySelector('#jy-status-overlay-root').parentElement,d.body);
+ d.querySelector('[data-tab-target="idcard"]').click();
+ assert.equal(d.querySelector('[data-tab-panel="idcard"]').dataset.active,'true');
+ assert.equal(d.querySelector('[data-tab-panel="people"]').dataset.active,'false');
+ d.querySelector('[data-tab-target="forum"]').click();
+ assert.equal(d.querySelector('[data-campus-messages]').open,true);
+ d.querySelector('[data-tab-target="people"]').click();
+ d.querySelector('[data-people-filter="all"]').click();
+ assert.equal(d.querySelector('.jy-people').dataset.view,'all');
+ d.querySelector('[data-people-filter="present"]').click();
+ assert.equal(d.querySelector('.jy-people').dataset.view,'present');
+
  assert.deepEqual(errors,[]);
  dom.window.close();
+
+ // Verify dual-axis status alerts (沈幼楚 trust lock <= 30, 许念安 control >= 85) & singleton overlay across mounts
+ const axisHtml=neutral
+   .replaceAll('{{format_message_variable::stat_data.沈幼楚.是否在场}}','true')
+   .replaceAll('{{format_message_variable::stat_data.沈幼楚.信任度}}','25')
+   .replaceAll('{{format_message_variable::stat_data.许念安.控制欲}}','86');
+ const axisDom=new JSDOM(axisHtml+axisHtml,{runScripts:'dangerously',url:'http://localhost:18969',pretendToBeVisual:true});
+ const aw=axisDom.window,ad=aw.document;
+ aw.eval(engineCode);
+ await new Promise(r=>aw.setTimeout(r,80));
+ assert.equal(ad.querySelectorAll('#jy-status-overlay-root').length,1);
+ assert.equal(ad.querySelector('[data-trust-lock]').hidden,false);
+ const ctrlWarn=ad.querySelector('[data-control-warn]');
+ assert.equal(ctrlWarn.hidden,false);
+ assert.equal(ctrlWarn.textContent,'高压共生');
+ aw.close();
+
  const dialogue=new JSDOM('<div id="chat"><div class="mes" is_user="false" mesid="1"><div class="mes_text"><p>{苏晓樯}「今天真热闹。」</p><p>{杨辰}「走吧。」</p></div></div></div><textarea id="send_textarea">未发送</textarea>',{runScripts:'dangerously',url:'http://localhost:18968',pretendToBeVisual:true});
  const dw=dialogue.window;
  dw.getVariables=()=>({stat_data:{主角:{姓名:'杨辰'}}});
@@ -654,10 +697,11 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  dw.eval(read('脚本/正文对白.js'));
  const rows=dw.document.querySelectorAll('[data-jy-dialogue-row]');
  assert.equal(rows.length,2);
+ assert.equal(rows[0].dataset.speakerCanon,'苏晓樯');
  assert.equal(rows[1].dataset.player,'true');
  const avatar=rows[0].querySelector('[data-jy-dialogue-avatar]');
  assert.equal(dw.getComputedStyle(avatar).width,'88px');
- assert.equal(dw.getComputedStyle(avatar).borderRadius,'0px');
+ assert.equal(dw.getComputedStyle(avatar).borderRadius,'10px');
  assert.equal(dw.getComputedStyle(avatar).height,'auto');
  assert.equal(dw.getComputedStyle(avatar.querySelector('img')).height,'auto');
  assert.equal(dw.getComputedStyle(avatar.querySelector('img')).width,'100%');
@@ -672,5 +716,22 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(dw.document.querySelector('[data-jy-dialogue-row]'),null);
  assert.match(dw.document.querySelector('.mes_text').textContent,/\{苏晓樯\}「今天真热闹。」/);
  dw.close();
- console.log('PASS: 学期边界/自定义年份、EJS分期输出、旧存档缺字段、别名配置、只读DOM交互、消息层隔离、安全文本与草稿保留。');
+
+ const musicDom=new JSDOM('<!doctype html><body></body>',{runScripts:'dangerously',url:'http://localhost:18970',pretendToBeVisual:true});
+ const mw=musicDom.window,md=mw.document;
+ mw.eval(read('脚本/悬浮音乐播放器.js'));
+ const mp=md.getElementById('jy-floating-music-player');
+ assert.ok(mp);
+ assert.equal(mp.dataset.theme,'light');
+ mw.localStorage.setItem('jy-status-theme','dark');
+ mw.dispatchEvent(new mw.CustomEvent('jy-status-theme-changed'));
+ assert.equal(mp.dataset.theme,'dark');
+ const savedMusic=JSON.parse(mw.localStorage.getItem('jy-music-player:暨阳中学:v2'));
+ assert.equal(savedMusic.defaultTracksVersion,5);
+ assert.match(savedMusic.playlist[0].sources[0],/^https:\/\/testingcf\.jsdelivr\.net\//);
+ mw.__jiyangFloatingMusicPlayerV2.destroy();
+ assert.equal(md.getElementById('jy-floating-music-player'),null);
+ mw.close();
+
+ console.log('PASS: 学期边界/自定义年份、EJS分期输出、旧存档缺字段、别名配置、只读DOM交互、Bento面板与双轴提示、音乐主题同步。');
 })().catch(e=>{console.error(e);process.exitCode=1;});

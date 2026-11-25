@@ -1,86 +1,82 @@
-<div style="width: 80%; margin: 20px auto;">
-  <details class="thinking-description" style="
-    background: #2d2d2d;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    transition: 
-      height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-      box-shadow 0.25s ease;
-    overflow: hidden;
-    will-change: height;
-  ">
-    <summary style="
-      padding: 12px 16px;
-      color: #e0e0e0;
-      cursor: pointer;
-      list-style: none;
-      transition: 
-        background 0.15s ease,
-        border-radius 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      font-weight: 500;
-      position: relative;
-    ">👾变量更新 - <small><span class="thinking-summary" data-close="点击查看 ▶︎ " data-open="点击隐藏 ▼ "></span></small></summary>
-    <div style="
-      max-height: 300px;
-      overflow-y: auto;
-      padding: 12px 16px;
-      color: #b0b0b0;
-      line-height: 1.6;
-      transition: 
-        opacity 0.2s ease,
-        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      transform: translateY(-8px);
-      opacity: 0;
-      white-space: pre-wrap;">
-    $2
+<div class="jy-var-pill-wrap">
+  <details class="thinking-description">
+    <summary>
+      <span class="jy-var-pill-title">
+        <span class="jy-var-dot" aria-hidden="true"></span>
+        <span>本回校务档案已同步</span>
+      </span>
+      <small><span class="thinking-summary" data-close="查看变动 ▾" data-open="收起明细 ▴"></span></small>
+    </summary>
+    <div class="jy-var-pill-body">
+$2
     </div>
   </details>
 </div>
 
 <style>
-  /* 滚动条美化，仅限于 .thinking-description 内部 */
-  .thinking-description::-webkit-scrollbar {
-    width: 6px;
+  .jy-var-pill-wrap {
+    width: min(740px, calc(100% - 12px));
+    margin: 8px auto;
+    font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   }
-
-  .thinking-description::-webkit-scrollbar-track {
-    background: #2d2d2d;
+  .thinking-description {
+    border: 1px solid rgba(30, 86, 76, 0.22);
+    border-radius: 11px;
+    background: rgba(250, 247, 240, 0.94);
+    box-shadow: 0 3px 12px rgba(24, 42, 37, 0.08);
+    overflow: hidden;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
   }
-
-  .thinking-description::-webkit-scrollbar-thumb {
-    background: #404040;
-    border-radius: 3px;
+  .thinking-description summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 13px;
+    color: #1e564c;
+    cursor: pointer;
+    list-style: none;
+    font-size: 12px;
+    font-weight: 750;
+    user-select: none;
+    transition: background 0.15s ease;
   }
-
-  /* 展开状态样式 */
-  .thinking-description[open] {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.24) !important;
+  .thinking-description summary::-webkit-details-marker { display: none; }
+  .thinking-description summary::marker { display: none; }
+  .thinking-description summary:hover { background: rgba(30, 86, 76, 0.06); }
+  .jy-var-pill-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
   }
-
-  .thinking-description[open]>div {
-    transform: translateY(0) !important;
-    opacity: 1 !important;
+  .jy-var-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: #1e564c;
+    box-shadow: 0 0 0 3px rgba(30, 86, 76, 0.14);
   }
-
-  /* 交互状态 */
-  .thinking-description summary:hover {
-    background: #363636 !important;
+  .thinking-summary {
+    color: #5d6e68;
+    font-size: 11px;
+    font-weight: 700;
   }
-
-  .thinking-description[open] summary {
-    border-radius: 12px 12px 0 0 !important;
+  .thinking-description[open] summary .thinking-summary::after { content: attr(data-open); }
+  .thinking-description:not([open]) summary .thinking-summary::after { content: attr(data-close); }
+  .jy-var-pill-body {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 10px 14px 12px;
+    border-top: 1px solid rgba(30, 86, 76, 0.12);
+    background: rgba(255, 255, 255, 0.72);
+    color: #243832;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 11.5px;
+    line-height: 1.58;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
   }
-
-  .thinking-description summary::marker {
-    display: none;
-  }
-
-  /* 文字改变效果 */
-  .thinking-description[open] summary .thinking-summary::after {
-    content: attr(data-open);
-  }
-
-  .thinking-description:not([open]) summary .thinking-summary::after {
-    content: attr(data-close);
-  }
+  .jy-var-pill-body::-webkit-scrollbar { width: 5px; }
+  .jy-var-pill-body::-webkit-scrollbar-track { background: transparent; }
+  .jy-var-pill-body::-webkit-scrollbar-thumb { background: rgba(30, 86, 76, 0.22); border-radius: 999px; }
 </style>

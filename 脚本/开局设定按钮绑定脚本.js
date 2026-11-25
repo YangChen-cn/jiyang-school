@@ -13,6 +13,181 @@
     '年龄': '18岁',
     '班级或身份': '暨阳中学高二重点班学生'
   };
+
+  var OPENING_TEMPLATES = {
+    hardware: {
+      title: '空降五金二代',
+      offsetYear: 0,
+      mmdd: '09-01',
+      fields: {
+        '班级或身份': '暨阳中学高二重点班插班生',
+        '家庭背景': '父亲在店口镇经营精工五金配件厂，刚在老城置产搬来陪读；家境殷实但平日习惯低调，偶尔帮家里跑几趟车间交接。',
+        '擅长与学业': '理科中上，动手能力强，会骑改装电摩也会修常见家用电器与精密小件。',
+        '重要物品': '淘汰的老款行车记录仪、铜质厂徽钥匙扣，以及刚办好的校园饭卡。',
+        '开局心事': '刚从镇上转进全市最卷的重点班，只想先安顿下来，看看这所百年中学里的人和传闻究竟什么样。',
+        '开场地点': '暨阳路校门口',
+        '开场时段': '晨光初露（7:10）'
+      },
+      story: '秋初七点的风里还带着点槐花落尽后的凉意。我把电动车停在校门对面的香樟树影里，摘下头盔理了理新领的校服领口，校徽别在左胸口袋上方，阳光正落在一行行进门的蓝色校服脊背上。',
+      action: '推车走进校门旁的停车棚，抬头打量教学楼墙上的百年校训牌。'
+    },
+    contest: {
+      title: '竞赛夜班寒门生',
+      offsetYear: 0,
+      mmdd: '10-14',
+      fields: {
+        '班级或身份': '暨阳中学高二重点班 · 物理竞赛组走读生',
+        '家庭背景': '与外婆同住在老城窄巷旧楼里，父母常年在外跑长途运输；平时周末帮巷口面馆或便利店搭把手挣生活费。',
+        '擅长与学业': '物理竞赛强项、数学稳居前列，晚上常泡在实验楼三楼竞赛自习室做题。',
+        '重要物品': '写满批注的二手《物理竞赛教程》、掉了漆的不锈钢保温杯、一张月底到期的公交月票。',
+        '开局心事': '省初赛名单快定下来了，晚上加训完还得赶最后一班回老城的车，顺路看看老城巷口灯还亮不亮。',
+        '开场地点': '实验楼',
+        '开场时段': '晚自习后（21:40）'
+      },
+      story: '实验楼三楼只剩竞赛自习室那盏白炽灯还亮着。窗外操场早就熄了高杆灯，风吹过连廊时带着食堂散尽后的淡淡油烟味。我把最后一道电磁感应大题收进活页夹，关灯锁门下楼。',
+      action: '拎着旧书包穿过漆黑的连廊去往校门方向。'
+    },
+    gaokao: {
+      title: '高三百日狂飙',
+      offsetYear: 2,
+      mmdd: '02-26',
+      fields: {
+        '班级或身份': '暨阳中学高三重点班学生',
+        '家庭背景': '普通工薪家庭走读生，高三这一年家里晚饭总是准点摆在桌上，父母嘴上说别紧张却比谁都早起床。',
+        '擅长与学业': '进入高三总复习冲刺节奏，强科稳步拔高，弱科靠错题本一点点补。',
+        '重要物品': '写满红蓝批注的高考倒计时活页册、半板薄荷糖、一枚高二体育周留下来的铜牌。',
+        '开局心事': '距离高考只剩一百来天，教室后墙的红纸换了一次又一次；越是临近告别，有些一直没说出口的话越难装作没看见。',
+        '开场地点': '高三教室',
+        '开场时段': '早读前（6:50）'
+      },
+      story: '二月末的早春还很冷，教室玻璃上结了一层薄雾。讲台黑板右上角的百日倒计时昨晚刚被值日生擦新，粉笔灰落在窗台一排厚厚的《五年高考三年模拟》书脊上。前排陆续有人哈着白气进来放书包。',
+      action: '把热豆浆和英语听力词汇本摊在课桌上，擦去玻璃窗上的一角水雾。'
+    },
+    summer: {
+      title: '盛夏自由沙盒',
+      offsetYear: 1,
+      mmdd: '07-12',
+      fields: {
+        '班级或身份': '暨阳中学高二重点班学生',
+        '家庭背景': '家里暑期照常早出晚归，留了充分自由支配时间；城市不大，穿街走巷半小时就能绕过半个城区。',
+        '擅长与学业': '完成暑期作业之余精力充沛，熟知暨阳城里各家奶茶店、书店、公园和步道的去处。',
+        '重要物品': '一把折叠晴雨伞、两百块零钱、装满冰美式或矿泉水的运动水壶。',
+        '开局心事': '七月的蝉鸣从早响到晚，难得整片暑假没有早晚自习束缚，想看看这个夏天能和谁撞见什么意料之外的故事。',
+        '开场地点': '浣江步道',
+        '开场时段': '午后（15:30）'
+      },
+      story: '七月的日头白花花地铺在江面上，风从浣江上游吹过来，带着水汽和岸边栀子花残香。树荫底下的青石板长椅还算阴凉，远处西施故里的飞檐隐在热浪里，几步外的冷饮亭正响着老式冰柜的嗡嗡声。',
+      action: '从背包里摸出一瓶冰水拧开，沿江堤慢步朝老城与遇见奶茶店方向走。'
+    },
+    press: {
+      title: '校刊特派记者',
+      offsetYear: 0,
+      mmdd: '09-22',
+      fields: {
+        '班级或身份': '暨阳中学高二重点班 · 《青砚》校刊特派采编',
+        '家庭背景': '书香小家庭长大，家里书架挤满旧报纸和胶片洗印相册；对校园里每栋楼的故事格外敏锐。',
+        '擅长与学业': '文笔利落、摄影构图敏锐、记忆力好，常借校刊采访名义正大光明出入办公室、图书馆和社团排练室。',
+        '重要物品': '挂脖工作证（《青砚》编辑部）、一支黑色中性笔、一本贴着便利贴的采访手账。',
+        '开局心事': '新一期校刊的“秋日暨阳图鉴”专刊还差几篇鲜活的人物特写，今天正好可以借采风的名义约几个人聊两句。',
+        '开场地点': '小花园',
+        '开场时段': '午休（12:35）'
+      },
+      story: '午休的小花园很安静，鹅卵石小路两旁桂花刚透出几星甜香。我把采访本翻到新的一页，钢笔帽咬开又合上——手里列着一长串还没敲定受访人的名单，从办公室到图书馆再到操场看台都有得跑。',
+      action: '把校刊采访证挂到脖子上，在鹅卵石长椅旁站定翻看今天的采编清单。'
+    }
+  };
+
+  function safePlayerAvatar() {
+    var wins = windowList();
+    for (var i = 0; i < wins.length; i++) {
+      try {
+        var val = wins[i].localStorage && wins[i].localStorage.getItem('jy-avatar:主角');
+        if (typeof val === 'string' && /^(https?:\/\/|data:image\/)/.test(val.trim())) return val.trim();
+      } catch (_) {}
+    }
+    return '';
+  }
+
+  function updateIdPreview(root) {
+    if (!root) return;
+    var name = readField(root, '姓名') || '未署名新生';
+    var age = readField(root, '年龄') || '18岁';
+    var gender = readField(root, '性别或称谓');
+    var cls = readField(root, '班级或身份') || '暨阳中学高二重点班学生';
+    var year = String(campusYear(readField(root, '开始年份') || '2020'));
+    var setText = function (sel, val) {
+      var el = root.querySelector(sel);
+      if (el) el.textContent = val;
+    };
+    setText('[data-id-preview-name]', name);
+    setText('[data-id-preview-meta]', age + ' · ' + (gender || '学生'));
+    setText('[data-id-preview-class]', cls);
+    setText('[data-id-preview-num]', year + '级 · 在读档案');
+    setText('[data-id-preview-year]', year);
+    setText('[data-id-preview-initial]', (name.replace(/\s+/g, '') || '新').slice(0, 1));
+    var photo = root.querySelector('[data-id-preview-photo]');
+    var cached = safePlayerAvatar();
+    if (photo) {
+      if (cached) {
+        photo.src = cached;
+        photo.hidden = false;
+      } else {
+        photo.hidden = true;
+      }
+    }
+  }
+
+  function applyOpeningTemplate(root, key) {
+    var tpl = OPENING_TEMPLATES[key];
+    if (!tpl) return;
+    root.__jyUserEditing = true;
+    closePreview(root);
+    var year = campusYear(readField(root, '开始年份') || '2020');
+    var payload = Object.assign({}, tpl.fields, {
+      '开场日期': String(year + tpl.offsetYear) + '-' + tpl.mmdd
+    });
+    fillForm(root, payload);
+    var customBox = root.querySelector('[data-custom-opening]');
+    if (customBox) customBox.value = tpl.story || '';
+    var actionBox = root.querySelector('[data-opening-action]');
+    if (actionBox) actionBox.value = tpl.action || '';
+    setMode(root, 'custom');
+    updateIdPreview(root);
+    toast(root, '已填入「' + tpl.title + '」开局模板，可直接开始或继续微调。', 'info');
+  }
+
+  function bindSceneThumbs(root) {
+    var syncAvatar = function (img) {
+      var charName = img.getAttribute('data-thumb-char');
+      if (!charName) return;
+      var wins = windowList();
+      for (var i = 0; i < wins.length; i++) {
+        try {
+          var cached = wins[i].localStorage && wins[i].localStorage.getItem('jy-avatar:' + charName);
+          if (typeof cached === 'string' && /^(https?:\/\/|data:image\/)/.test(cached.trim())) {
+            img.src = cached.trim();
+            img.hidden = false;
+            return;
+          }
+        } catch (_) {}
+      }
+    };
+    root.querySelectorAll('.jy-opening-scene-thumb img').forEach(function (img) {
+      if (img.__jyFallbackBound) {
+        syncAvatar(img);
+        return;
+      }
+      img.__jyFallbackBound = true;
+      img.addEventListener('error', function () {
+        var step = Number(img.dataset.fallbackStep || '0');
+        var next = step === 0 ? img.getAttribute('data-fallback-src') : (step === 1 ? img.getAttribute('data-fallback-raw') : '');
+        img.dataset.fallbackStep = String(step + 1);
+        if (next && next !== img.src) img.src = next;
+        else img.hidden = true;
+      });
+      syncAvatar(img);
+    });
+  }
   var PLACEHOLDER = '<OpeningSetupUI/>';
   var cleanups = [];
   var timers = [];
@@ -199,6 +374,7 @@
       var next = value === '未设定' ? '' : value;
       if ('value' in el) el.value = next; else el.textContent = next;
     });
+    updateIdPreview(root);
   }
 
   function readText(root, selector) {
@@ -321,6 +497,7 @@
           setGreetingIndex(root, Number.isInteger(greeting) && greeting >= 1 && greeting < GREETING_NAMES.length ? greeting : 1);
           root.querySelector('[data-custom-opening]').value = typeof selected.story === 'string' ? selected.story : '';
           root.querySelector('[data-opening-action]').value = typeof selected.action === 'string' ? selected.action : '';
+          updateIdPreview(root);
           status.textContent = '已填入「' + selected.name + '」，可继续编辑。';
         } else if (window.top.confirm('删除本地档案「' + selected.name + '」？')) {
           storage.removeItem(key);
@@ -999,6 +1176,9 @@
       root.__jyUserEditing = true;
       closePreview(root);
       setMode(root, target.getAttribute('data-mode'));
+    } else if (action === 'apply-template') {
+      event.preventDefault();
+      applyOpeningTemplate(root, target.getAttribute('data-template'));
     } else if (action === 'select-greeting') {
       event.preventDefault();
       root.__jyUserEditing = true;
@@ -1043,6 +1223,7 @@
       if (customBox) customBox.value = '';
       var actionBox = root.querySelector('[data-opening-action]');
       if (actionBox) actionBox.value = '';
+      updateIdPreview(root);
       toast(root, '已清空表单，可重新填写。', 'info');
     } else if (action === 'close-preview' || action === 'use-preview') {
       event.preventDefault();
@@ -1052,6 +1233,7 @@
     } else if (action === 'reset-opening') {
       event.preventDefault();
       resetToEditing(root);
+      updateIdPreview(root);
     }
   }
 
@@ -1081,13 +1263,35 @@
     };
     archives?.addEventListener('toggle', refreshArchives);
     var markEditing = function (event) {
-      if (!event.target.closest('[data-opening-archives]')) root.__jyUserEditing = true;
+      if (!event.target.closest('[data-opening-archives]')) {
+        root.__jyUserEditing = true;
+        updateIdPreview(root);
+      }
+    };
+    var onAvatarChanged = function () {
+      updateIdPreview(root);
+      bindSceneThumbs(root);
     };
     root.addEventListener('input', markEditing);
     root.addEventListener('click', onClick);
     root.addEventListener('submit', onSubmit);
     root.addEventListener('keydown', onKeydown);
-    cleanups.push(function () { archives?.removeEventListener('toggle', refreshArchives); root.removeEventListener('input', markEditing); root.removeEventListener('click', onClick); root.removeEventListener('submit', onSubmit); root.removeEventListener('keydown', onKeydown); root.__jyOpeningBoundV7 = false; });
+    windowList().forEach(function (win) {
+      try { win.addEventListener('jy-avatar-changed', onAvatarChanged); } catch (_) {}
+    });
+    cleanups.push(function () {
+      archives?.removeEventListener('toggle', refreshArchives);
+      root.removeEventListener('input', markEditing);
+      root.removeEventListener('click', onClick);
+      root.removeEventListener('submit', onSubmit);
+      root.removeEventListener('keydown', onKeydown);
+      windowList().forEach(function (win) {
+        try { win.removeEventListener('jy-avatar-changed', onAvatarChanged); } catch (_) {}
+      });
+      root.__jyOpeningBoundV7 = false;
+    });
+    bindSceneThumbs(root);
+    updateIdPreview(root);
     syncRoot(root);
   }
 

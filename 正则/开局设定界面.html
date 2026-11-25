@@ -1,149 +1,574 @@
 <style>
   .jy-opening {
-    --paper: #f8fbf8;
-    --ink: #26312e;
-    --muted: #65736c;
-    --line: #cbd8d1;
-    --green: #237b6c;
-    --gold: #c58a35;
-    max-width: 820px;
-    margin: 16px auto;
+    --paper: #faf7f0;
+    --panel: #ffffff;
+    --wash: #f2ede1;
+    --ink: #1e2a27;
+    --muted: #5d6e68;
+    --soft: #85948e;
+    --line: rgba(30, 86, 76, 0.18);
+    --green: #1e564c;
+    --green-deep: #16423a;
+    --gold: #c97b36;
+    --crimson: #b83c4c;
+    max-width: 840px;
+    margin: 14px auto;
     border: 1px solid var(--line);
-    border-radius: 8px;
+    border-radius: 14px;
     color: var(--ink);
-    background: var(--paper);
-    box-shadow: 0 12px 30px rgba(31, 55, 48, 0.13);
-    font-family: "Noto Sans SC", "PingFang SC", sans-serif;
+    background:
+      radial-gradient(circle at 100% 0%, rgba(201, 123, 54, 0.08), transparent 36%),
+      radial-gradient(circle at 0% 0%, rgba(30, 86, 76, 0.08), transparent 32%),
+      var(--paper);
+    box-shadow: 0 12px 28px rgba(24, 42, 37, 0.1), 0 2px 6px rgba(24, 42, 37, 0.05);
+    font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
     overflow: hidden;
   }
 
   .jy-opening *, .jy-opening *::before, .jy-opening *::after { box-sizing: border-box; }
+  .jy-opening [hidden] { display: none !important; }
 
   .jy-opening-head {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
-    align-items: start;
-    padding: 20px 22px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 16px;
+    padding: 18px 22px 15px;
     border-bottom: 1px solid var(--line);
-    background: #eaf2ee;
+    background: linear-gradient(120deg, rgba(235, 243, 238, 0.92), rgba(250, 245, 235, 0.95));
+  }
+  .jy-opening-head-main {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-width: 0;
+  }
+  .jy-opening-crest {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 46px;
+    height: 46px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 11px;
+    background: linear-gradient(145deg, #1e564c, #2f7d72);
+    color: #fdfaf2;
+    font-family: ui-serif, "Noto Serif SC", "Songti SC", serif;
+    font-size: 12.5px;
+    font-weight: 850;
+    line-height: 1.08;
+    text-align: center;
+    box-shadow: 0 6px 14px rgba(30, 86, 76, 0.22);
+  }
+  .jy-opening-kicker { color: var(--green); font-size: 11px; font-weight: 800; letter-spacing: 0.04em; }
+  .jy-opening-title {
+    margin-top: 2px;
+    font-family: ui-serif, "Noto Serif SC", "Songti SC", serif;
+    font-size: 23px;
+    font-weight: 850;
+    line-height: 1.2;
+    color: var(--green-deep);
+  }
+  .jy-opening-copy { margin: 4px 0 0; color: var(--muted); font-size: 12.5px; line-height: 1.5; }
+  .jy-opening-stamp {
+    flex: 0 0 auto;
+    border: 1.5px solid var(--crimson);
+    border-radius: 6px;
+    background: rgba(184, 60, 76, 0.06);
+    color: var(--crimson);
+    font-family: ui-serif, "Noto Serif SC", "Songti SC", serif;
+    font-size: 11.5px;
+    font-weight: 850;
+    letter-spacing: 0.14em;
+    padding: 5px 10px;
+    transform: rotate(-2.5deg);
   }
 
-  .jy-opening-kicker { color: var(--green); font-size: 11px; font-weight: 800; }
-  .jy-opening-title { margin-top: 4px; font-size: 24px; font-weight: 800; line-height: 1.2; }
-  .jy-opening-copy { margin: 6px 0 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
-  .jy-opening-stamp { align-self: center; border: 2px solid var(--gold); color: #9e671e; font-size: 12px; font-weight: 800; letter-spacing: 2px; padding: 8px 10px; transform: rotate(-3deg); }
-
-  .jy-opening-form { padding: 16px 22px 20px; }
-  .jy-opening-archives { margin: 12px 22px 0; padding: 8px 12px; background: #edf4ef; border: 1px solid var(--line); border-radius: 6px; }
+  .jy-opening-archives {
+    margin: 14px 22px 0;
+    padding: 9px 13px;
+    background: rgba(242, 237, 225, 0.72);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+  }
   .jy-opening[data-opening-state="complete"] .jy-opening-archives { display: none; }
-  .jy-opening-archives summary { padding: 4px 0; color: var(--green); cursor: pointer; font-size: 13px; font-weight: 800; }
-  .jy-opening-archive-row { display: flex; flex-wrap: wrap; align-items: end; gap: 6px; margin-top: 8px; }
+  .jy-opening-archives summary { padding: 3px 0; color: var(--green); cursor: pointer; font-size: 13px; font-weight: 800; }
+  .jy-opening-archive-row { display: flex; flex-wrap: wrap; align-items: end; gap: 7px; margin-top: 8px; }
   .jy-opening-archive-row label { flex: 1 1 215px; min-width: 0; }
   .jy-opening-archive-status { margin: 6px 0 0; color: var(--green); font-size: 12px; overflow-wrap: anywhere; }
   .jy-opening-archive-status:empty { display: none; }
-  .jy-opening-archive-status[data-error="true"] { color: #a3352b; }
-  .jy-opening-section { padding: 14px 0 2px; border-top: 1px solid var(--line); }
+  .jy-opening-archive-status[data-error="true"] { color: var(--crimson); }
+
+  .jy-opening-form { padding: 16px 22px 20px; }
+  .jy-opening-section { padding: 15px 0 2px; border-top: 1px solid var(--line); }
   .jy-opening-section:first-child { padding-top: 0; border-top: 0; }
-  .jy-opening-hint { display:block; margin-top:4px; color:#8a7a6a; font-size:11px; line-height:1.5; letter-spacing:.2px; }
-  .jy-opening-section-title { margin-bottom: 10px; color: var(--green); font-size: 12px; font-weight: 800; }
+  .jy-opening-hint { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; line-height: 1.45; }
+  .jy-opening-section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    color: var(--green);
+    font-size: 12.5px;
+    font-weight: 800;
+  }
+  .jy-opening-section-title::before {
+    content: "";
+    width: 3px;
+    height: 13px;
+    border-radius: 99px;
+    background: var(--gold);
+  }
+
+  /* Basic info + live student ID preview */
+  .jy-opening-basic-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 232px;
+    gap: 14px;
+    align-items: start;
+  }
+  .jy-opening-idcard {
+    border: 1px solid rgba(30, 86, 76, 0.22);
+    border-radius: 12px;
+    background: linear-gradient(155deg, #fffdf8, #f2ede0);
+    box-shadow: 0 8px 18px rgba(24, 42, 37, 0.08);
+    overflow: hidden;
+  }
+  .jy-opening-id-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 7px 11px;
+    background: linear-gradient(125deg, #1a4a41, #266a5d);
+    color: #f6f2e7;
+    font-size: 10.5px;
+    font-weight: 750;
+  }
+  .jy-opening-id-cohort {
+    padding: 1px 6px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    font-variant-numeric: tabular-nums;
+    font-size: 10px;
+  }
+  .jy-opening-id-body {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 11px 9px;
+  }
+  .jy-opening-id-avatar {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 50px;
+    height: 62px;
+    border: 1px solid rgba(30, 86, 76, 0.24);
+    border-radius: 7px;
+    background: linear-gradient(160deg, rgba(30, 86, 76, 0.12), rgba(201, 123, 54, 0.12));
+    color: var(--green);
+    font-family: ui-serif, "Noto Serif SC", "Songti SC", serif;
+    font-size: 19px;
+    font-weight: 850;
+    overflow: hidden;
+  }
+  .jy-opening-id-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .jy-opening-id-info { min-width: 0; flex: 1 1 auto; display: grid; gap: 3px; }
+  .jy-opening-id-name {
+    font-family: ui-serif, "Noto Serif SC", "Songti SC", serif;
+    font-size: 15px;
+    font-weight: 850;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .jy-opening-id-meta { font-size: 11px; font-weight: 700; color: var(--gold); }
+  .jy-opening-id-class { font-size: 10.5px; color: var(--muted); line-height: 1.35; overflow-wrap: anywhere; }
+  .jy-opening-id-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 7px 11px 8px;
+    border-top: 1px dashed rgba(30, 86, 76, 0.16);
+    background: rgba(255, 255, 255, 0.52);
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .jy-opening-id-barcode {
+    flex: 1 1 auto;
+    height: 12px;
+    opacity: 0.72;
+    background: repeating-linear-gradient(
+      90deg,
+      #1e2a27 0 2px, transparent 2px 4px,
+      #1e2a27 4px 5px, transparent 5px 8px,
+      #1e2a27 8px 11px, transparent 11px 13px
+    );
+  }
+  .jy-opening-id-foot b { color: var(--green); font-variant-numeric: tabular-nums; }
+
   .jy-opening-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; }
   .jy-opening-field { min-width: 0; display: block; }
   .jy-opening-field.wide { grid-column: 1 / -1; }
-  .jy-opening-label { display: block; margin-bottom: 5px; color: var(--muted); font-size: 12px; font-weight: 700; }
+  .jy-opening-label { display: block; margin-bottom: 4px; color: var(--muted); font-size: 11.5px; font-weight: 750; }
   .jy-opening-input, .jy-opening-textarea {
-    width: 100%; min-width: 0; border: 1px solid var(--line); border-radius: 5px; padding: 9px 10px;
-    color: var(--ink); background: #fff; font: inherit; font-size: 13px; line-height: 1.45;
+    width: 100%;
+    min-width: 0;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 8px 10px;
+    color: var(--ink);
+    background: var(--panel);
+    font: inherit;
+    font-size: 13px;
+    line-height: 1.45;
+    transition: border-color .15s ease, box-shadow .15s ease;
   }
-  .jy-opening-input:focus, .jy-opening-textarea:focus { outline: 2px solid rgba(35, 123, 108, 0.22); border-color: var(--green); }
+  .jy-opening-input:focus, .jy-opening-textarea:focus {
+    outline: none;
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(30, 86, 76, 0.14);
+  }
   .jy-opening-textarea { min-height: 68px; resize: vertical; }
   .jy-opening-textarea.tall { min-height: 82px; }
-  .jy-opening-mode-switch { display: inline-flex; gap: 0; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
-  .jy-opening-mode { border: 0; border-right: 1px solid var(--line); padding: 8px 11px; color: var(--muted); background: #fff; font: inherit; font-size: 12px; font-weight: 800; cursor: pointer; }
-  .jy-opening-mode:last-child { border-right: 0; }
+
+  .jy-opening-mode-switch {
+    display: inline-flex;
+    padding: 3px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--wash);
+    gap: 3px;
+  }
+  .jy-opening-mode {
+    border: 0;
+    border-radius: 7px;
+    padding: 7px 14px;
+    color: var(--muted);
+    background: transparent;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease, box-shadow .15s ease;
+  }
   .jy-opening[data-opening-mode="preset"] .jy-opening-mode[data-mode="preset"],
-  .jy-opening[data-opening-mode="custom"] .jy-opening-mode[data-mode="custom"] { color: #fff; background: var(--green); }
+  .jy-opening[data-opening-mode="custom"] .jy-opening-mode[data-mode="custom"] {
+    color: #fff;
+    background: var(--green);
+    box-shadow: 0 2px 6px rgba(30, 86, 76, 0.22);
+  }
+
   .jy-opening-panel { display: none; margin-top: 12px; }
   .jy-opening[data-opening-mode="preset"] .jy-opening-panel[data-mode-panel="preset"],
   .jy-opening[data-opening-mode="custom"] .jy-opening-panel[data-mode-panel="custom"] { display: block; }
-  .jy-opening-profile { margin: 12px 0; border-block: 1px solid var(--line); }
-  .jy-opening-profile summary { padding: 10px 2px; cursor: pointer; font-weight: 700; color: var(--green); }
+
+  .jy-opening-profile {
+    margin: 13px 0;
+    border-block: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.35);
+    border-radius: 8px;
+    padding-inline: 10px;
+  }
+  .jy-opening-profile summary { padding: 10px 2px; cursor: pointer; font-size: 12.5px; font-weight: 800; color: var(--green); }
   .jy-opening-profile[open] { padding-bottom: 12px; }
-  .jy-opening-panel[data-mode-panel="custom"] { padding: 14px; border-left: 3px solid var(--green); background: #edf4ef; }
-  .jy-opening-panel [data-custom-opening] { min-height: 9em; line-height: 1.8; background: repeating-linear-gradient(#fffdf6 0 calc(1.8em - 1px), #e8ebe1 calc(1.8em - 1px) 1.8em); background-origin: content-box; }
+
+  /* Preset theater greeting cards */
+  .jy-opening-scenes {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 9px;
+  }
+  .jy-opening-scene {
+    --tone: #1e564c;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-height: 92px;
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    padding: 9px;
+    text-align: left;
+    color: var(--ink);
+    background: var(--panel);
+    font: inherit;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .jy-opening-scene::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--tone);
+    opacity: 0.72;
+  }
+  .jy-opening-scene:hover {
+    transform: translateY(-2px);
+    border-color: var(--tone);
+    box-shadow: 0 7px 16px rgba(24, 42, 37, 0.09);
+  }
+  .jy-opening .jy-opening-scene[data-selected="true"] {
+    border-color: var(--tone) !important;
+    background: linear-gradient(160deg, color-mix(in srgb, var(--tone) 9%, #ffffff), #ffffff) !important;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--tone) 22%, transparent), 0 8px 18px rgba(24, 42, 37, 0.1) !important;
+  }
+  .jy-opening-scene-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    width: 100%;
+  }
+  .jy-opening-scene-thumb {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    border: 1px solid color-mix(in srgb, var(--tone) 40%, transparent);
+    background: color-mix(in srgb, var(--tone) 14%, #ffffff);
+    color: var(--tone);
+    font-family: ui-serif, "Noto Serif SC", "Songti SC", serif;
+    font-size: 13px;
+    font-weight: 850;
+    overflow: hidden;
+  }
+  .jy-opening-scene-thumb img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .jy-opening-scene-tag {
+    padding: 1px 6px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--tone) 12%, transparent);
+    color: var(--tone);
+    font-size: 10px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+  .jy-opening-scene-main { display: block; min-width: 0; }
+  .jy-opening-scene-number {
+    display: inline-block;
+    margin-right: 4px;
+    color: var(--tone);
+    font-size: 10px;
+    font-weight: 800;
+  }
+  .jy-opening-scene-name {
+    display: inline-block;
+    font-family: ui-serif, "Noto Serif SC", "Songti SC", serif;
+    font-size: 13.5px;
+    font-weight: 850;
+    color: var(--ink);
+  }
+  .jy-opening-scene-note {
+    display: block;
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 10.5px;
+    line-height: 1.35;
+  }
+
+  /* Custom mode panel & quick templates */
+  .jy-opening-panel[data-mode-panel="custom"] {
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--green);
+    border-radius: 11px;
+    background: rgba(242, 237, 225, 0.55);
+  }
+  .jy-opening-tpl-bar {
+    margin-bottom: 12px;
+    padding-bottom: 11px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .jy-opening-tpl-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  .jy-opening-tpl-title { color: var(--green); font-size: 12px; font-weight: 800; }
+  .jy-opening-tpl-sub { color: var(--muted); font-size: 11px; }
+  .jy-opening-tpl-list { display: flex; flex-wrap: wrap; gap: 7px; }
+  .jy-opening-tpl-chip {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+    padding: 7px 10px;
+    border: 1px solid rgba(30, 86, 76, 0.22);
+    border-radius: 9px;
+    background: var(--panel);
+    color: var(--ink);
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+    transition: border-color .14s ease, transform .14s ease, background .14s ease;
+  }
+  .jy-opening-tpl-chip:hover {
+    transform: translateY(-1px);
+    border-color: var(--gold);
+    background: #fffdf8;
+  }
+  .jy-opening-tpl-chip strong { font-size: 12px; font-weight: 800; color: var(--green); }
+  .jy-opening-tpl-chip span { font-size: 10px; color: var(--muted); }
+
+  .jy-opening-panel [data-custom-opening] {
+    min-height: 9em;
+    line-height: 1.85;
+    background: repeating-linear-gradient(#fffdf8 0 calc(1.85em - 1px), #e8e3d6 calc(1.85em - 1px) 1.85em);
+    background-origin: content-box;
+  }
   .jy-opening [data-custom-action-note] { display: none; }
   .jy-opening[data-opening-mode="custom"] [data-custom-action-note] { display: inline; }
-  .jy-opening-scenes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; }
-  .jy-opening-scene { min-height: 74px; border: 1px solid var(--line); border-radius: 5px; padding: 8px; text-align: left; color: var(--ink); background: #fff; font: inherit; cursor: pointer; }
-  .jy-opening-scene:hover { border-color: var(--green); background: #f0f7f3; }
-  .jy-opening .jy-opening-scene[data-selected="true"] { border-color: var(--green) !important; background: #dceee7 !important; box-shadow: inset 0 0 0 1px rgba(35, 123, 108, 0.08) !important; }
-  .jy-opening .jy-opening-scene[data-selected="true"] .jy-opening-scene-number { color: var(--green) !important; }
-  .jy-opening .jy-opening-scene[data-selected="true"] .jy-opening-scene-name { color: var(--ink) !important; }
-  .jy-opening .jy-opening-scene[data-selected="true"] .jy-opening-scene-note { color: #526a61 !important; }
-  .jy-opening-scene-number { display: block; color: var(--green); font-size: 10px; font-weight: 800; }
-  .jy-opening-scene-name { display: block; margin-top: 3px; font-size: 12px; font-weight: 800; }
-  .jy-opening-scene-note { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; line-height: 1.3; }
-  .jy-opening-preview { display: none; min-width: 0; margin-bottom: 10px; scroll-margin-top: 72px; }
+
+  .jy-opening-preview { display: none; min-width: 0; margin-bottom: 12px; scroll-margin-top: 72px; }
   .jy-opening-preview[data-open="true"] { display: grid; }
-  .jy-opening-preview-card { display: grid; grid-template-rows: auto minmax(0, 1fr); width: 100%; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); overflow: hidden; }
-  .jy-opening-preview-head { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 10px 12px 10px 16px; border-bottom: 1px solid var(--line); background: #eaf2ee; }
-  .jy-opening-preview-title { font-size: 14px; font-weight: 800; }
+  .jy-opening-preview-card {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fffdf8;
+    box-shadow: 0 8px 22px rgba(24, 42, 37, 0.1);
+    overflow: hidden;
+  }
+  .jy-opening-preview-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 12px 10px 15px;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(120deg, rgba(235, 243, 238, 0.9), rgba(250, 245, 235, 0.94));
+  }
+  .jy-opening-preview-title { font-family: ui-serif, "Noto Serif SC", "Songti SC", serif; font-size: 14.5px; font-weight: 850; color: var(--green-deep); }
   .jy-opening-preview-close { width: 30px; height: 30px; border: 0; color: var(--muted); background: transparent; font-size: 22px; line-height: 1; cursor: pointer; }
-  .jy-opening-preview-content { min-height: 0; margin: 0; padding: 16px; max-height: min(42vh, 360px); overflow: auto; overscroll-behavior: contain; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--ink); font: 13px/1.72 "Noto Serif SC", "Songti SC", serif; }
+  .jy-opening-preview-content {
+    min-height: 0;
+    margin: 0;
+    padding: 16px 18px;
+    max-height: min(44vh, 380px);
+    overflow: auto;
+    overscroll-behavior: contain;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    color: var(--ink);
+    font: 13.5px/1.78 ui-serif, "Noto Serif SC", "Songti SC", serif;
+  }
   .jy-opening-preview-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-left: auto; }
-  .jy-opening-preview-actions .jy-opening-button { min-height: 31px; padding: 6px 9px; font-size: 12px; }
-  .jy-opening-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
-  .jy-opening-note { flex: 1 1 280px; color: var(--muted); font-size: 12px; line-height: 1.5; }
-  .jy-opening-button { min-height: 36px; border: 1px solid var(--line); border-radius: 5px; padding: 8px 12px; color: var(--ink); background: #fff; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+  .jy-opening-preview-actions .jy-opening-button { min-height: 31px; padding: 6px 10px; font-size: 12px; }
+
+  .jy-opening-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+  }
+  .jy-opening-note { flex: 1 1 260px; color: var(--muted); font-size: 11.5px; line-height: 1.5; }
+  .jy-opening-button {
+    min-height: 36px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 8px 13px;
+    color: var(--ink);
+    background: var(--panel);
+    font: inherit;
+    font-size: 12.5px;
+    font-weight: 750;
+    cursor: pointer;
+    transition: border-color .15s ease, color .15s ease, background .15s ease;
+  }
   .jy-opening-button:hover { border-color: var(--green); color: var(--green); }
-  .jy-opening-button.primary { border-color: var(--green); color: #fff; background: var(--green); }
-  .jy-opening-button.primary:hover { color: #fff; background: #186457; }
+  .jy-opening-button.primary {
+    border-color: var(--green);
+    color: #fff;
+    background: linear-gradient(135deg, #1e564c, #276e61);
+  }
+  .jy-opening-button.primary:hover { color: #fff; background: #16443c; }
   .jy-opening-button[disabled] { opacity: 0.6; cursor: wait; }
   .jy-opening[data-opening-state="submitting"] .jy-opening-button[data-action="confirm"] { opacity: 0.6; pointer-events: none; }
-  .jy-opening-toast { display: none; margin-top: 10px; color: var(--green); font-size: 12px; font-weight: 700; }
+
+  .jy-opening-toast { display: none; margin-top: 10px; color: var(--green); font-size: 12px; font-weight: 750; }
   .jy-opening-toast[data-show="true"] { display: block; }
-  .jy-opening-toast[data-type="error"] { color: #a3352b; }
+  .jy-opening-toast[data-type="error"] { color: var(--crimson); }
+
   .jy-opening[data-opening-state="complete"] .jy-opening-form { display: none; }
   .jy-opening-summary { display: none; padding: 18px 22px 20px; }
   .jy-opening[data-opening-state="complete"] .jy-opening-summary { display: block; }
-  .jy-opening-summary-title { color: var(--green); font-size: 13px; font-weight: 800; letter-spacing: 1px; }
+  .jy-opening-summary-title { color: var(--green); font-family: ui-serif, "Noto Serif SC", "Songti SC", serif; font-size: 15px; font-weight: 850; letter-spacing: 0.04em; }
   .jy-opening-summary-text { margin: 8px 0 0; color: var(--ink); font-size: 13px; line-height: 1.6; white-space: pre-wrap; }
   .jy-opening-summary-hint { margin: 4px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
   .jy-opening-summary-actions { display: flex; gap: 8px; margin-top: 12px; }
 
+  @media (max-width: 720px) {
+    .jy-opening-basic-layout { grid-template-columns: 1fr; }
+    .jy-opening-scenes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
   @media (max-width: 640px) {
     .jy-opening { margin: 10px 6px; }
-    .jy-opening-head { grid-template-columns: 1fr; padding: 16px; }
-    .jy-opening-stamp { justify-self: start; }
+    .jy-opening-head { padding: 15px 16px; }
     .jy-opening-form { padding: 14px 16px 18px; }
     .jy-opening-archives { margin-inline: 16px; }
     .jy-opening-grid { grid-template-columns: 1fr; }
-    .jy-opening-scenes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .jy-opening-field.wide { grid-column: auto; }
     .jy-opening-button { flex: 1 1 auto; }
     .jy-opening-preview-head { flex-wrap: wrap; }
   }
 
   @media (max-width: 420px) {
-    .jy-opening { margin: 8px 0; border-radius: 6px; }
+    .jy-opening { margin: 8px 0; border-radius: 10px; }
     .jy-opening-head { padding: 12px 12px 10px; }
     .jy-opening-title { font-size: 20px; }
+    .jy-opening-stamp { display: none; }
     .jy-opening-form { padding: 12px 12px 14px; }
     .jy-opening-archives { margin-inline: 12px; }
     .jy-opening-scenes { grid-template-columns: 1fr; }
-    .jy-opening-scene { min-height: 0; padding: 7px 8px; }
+    .jy-opening-scene { min-height: 0; padding: 8px 10px; }
     .jy-opening-summary { padding: 14px 12px 16px; }
   }
 </style>
 
 <section class="jy-opening" data-jy-opening data-opening-state="editing" data-opening-mode="preset" data-greeting-index="1">
   <header class="jy-opening-head">
-    <div>
-      <div class="jy-opening-kicker">暨阳中学 · 故事档案</div>
-      <div class="jy-opening-title">先写下你是谁</div>
-      <p class="jy-opening-copy">选一篇开场，或从你自己写下的那一刻开始。</p>
+    <div class="jy-opening-head-main">
+      <div class="jy-opening-crest" aria-hidden="true">暨阳<br>中学</div>
+      <div>
+        <div class="jy-opening-kicker">暨阳中学 · 故事档案</div>
+        <div class="jy-opening-title">先写下你是谁</div>
+        <p class="jy-opening-copy">选一篇序幕，或套用快捷开局，从你自己落笔的那一刻开始。</p>
+      </div>
     </div>
-
+    <span class="jy-opening-stamp" aria-hidden="true">入学建档</span>
   </header>
 
   <details class="jy-opening-archives" data-opening-archives>
@@ -164,12 +589,35 @@
   <form class="jy-opening-form" autocomplete="off">
     <div class="jy-opening-section">
       <div class="jy-opening-section-title">基本资料</div>
-      <div class="jy-opening-grid">
-        <label class="jy-opening-field"><span class="jy-opening-label">姓名</span><input class="jy-opening-input" data-field="姓名" placeholder="例如：陈默" required></label>
-        <label class="jy-opening-field"><span class="jy-opening-label">年龄</span><input class="jy-opening-input" data-field="年龄" value="18岁" placeholder="例如：18岁"></label>
-        <label class="jy-opening-field"><span class="jy-opening-label">性别 / 称谓</span><input class="jy-opening-input" data-field="性别或称谓" placeholder="可留空"></label>
-        <label class="jy-opening-field"><span class="jy-opening-label">班级 / 身份</span><input class="jy-opening-input" data-field="班级或身份" value="暨阳中学高二重点班学生" placeholder="例如：转学生、走读生"></label>
-        <label class="jy-opening-field"><span class="jy-opening-label">开始年份</span><input class="jy-opening-input" data-field="开始年份" value="2020" inputmode="numeric" placeholder="例如：2020"><small class="jy-opening-hint">高二入学的年份，用来推算校历。</small></label>
+      <div class="jy-opening-basic-layout">
+        <div class="jy-opening-grid">
+          <label class="jy-opening-field"><span class="jy-opening-label">姓名</span><input class="jy-opening-input" data-field="姓名" placeholder="例如：陈默" required></label>
+          <label class="jy-opening-field"><span class="jy-opening-label">年龄</span><input class="jy-opening-input" data-field="年龄" value="18岁" placeholder="例如：18岁"></label>
+          <label class="jy-opening-field"><span class="jy-opening-label">性别 / 称谓</span><input class="jy-opening-input" data-field="性别或称谓" placeholder="可留空"></label>
+          <label class="jy-opening-field"><span class="jy-opening-label">班级 / 身份</span><input class="jy-opening-input" data-field="班级或身份" value="暨阳中学高二重点班学生" placeholder="例如：转学生、走读生"></label>
+          <label class="jy-opening-field wide"><span class="jy-opening-label">开始年份</span><input class="jy-opening-input" data-field="开始年份" value="2020" inputmode="numeric" placeholder="例如：2020"><small class="jy-opening-hint">高二入学的年份，用来推算校历。</small></label>
+        </div>
+        <aside class="jy-opening-idcard" aria-label="学生证实时预览">
+          <div class="jy-opening-id-head">
+            <span>暨阳中学 · 学生证</span>
+            <span class="jy-opening-id-cohort" data-id-preview-num>2020级 · 试读档案</span>
+          </div>
+          <div class="jy-opening-id-body">
+            <div class="jy-opening-id-avatar" data-id-preview-avatar>
+              <span data-id-preview-initial>新</span>
+              <img class="jy-opening-id-photo" data-id-preview-photo alt="学生证头像" hidden>
+            </div>
+            <div class="jy-opening-id-info">
+              <strong class="jy-opening-id-name" data-id-preview-name>未署名新生</strong>
+              <span class="jy-opening-id-meta" data-id-preview-meta>18岁 · 学生</span>
+              <span class="jy-opening-id-class" data-id-preview-class>暨阳中学高二重点班学生</span>
+            </div>
+          </div>
+          <div class="jy-opening-id-foot">
+            <span class="jy-opening-id-barcode" aria-hidden="true"></span>
+            <span>入学 <b data-id-preview-year>2020</b></span>
+          </div>
+        </aside>
       </div>
     </div>
 
@@ -215,18 +663,31 @@
           </div>
         </div>
         <div class="jy-opening-scenes" role="listbox" aria-label="预写开场白">
-          <button class="jy-opening-scene" type="button" data-action="select-greeting" data-greeting="1" data-selected="true"><span class="jy-opening-scene-number">1</span><span class="jy-opening-scene-name">开学第一天</span><span class="jy-opening-scene-note">走进重点班</span></button>
-          <button class="jy-opening-scene" type="button" data-action="select-greeting" data-greeting="2"><span class="jy-opening-scene-number">2</span><span class="jy-opening-scene-name">慕佳芊</span><span class="jy-opening-scene-note">办公室</span></button>
-          <button class="jy-opening-scene" type="button" data-action="select-greeting" data-greeting="3"><span class="jy-opening-scene-number">3</span><span class="jy-opening-scene-name">苏晓樯</span><span class="jy-opening-scene-note">车祸之后</span></button>
-          <button class="jy-opening-scene" type="button" data-action="select-greeting" data-greeting="4"><span class="jy-opening-scene-number">4</span><span class="jy-opening-scene-name">温书语</span><span class="jy-opening-scene-note">图书馆</span></button>
-          <button class="jy-opening-scene" type="button" data-action="select-greeting" data-greeting="5"><span class="jy-opening-scene-number">5</span><span class="jy-opening-scene-name">沈幼楚</span><span class="jy-opening-scene-note">小巷</span></button>
-          <button class="jy-opening-scene" type="button" data-action="select-greeting" data-greeting="6"><span class="jy-opening-scene-number">6</span><span class="jy-opening-scene-name">许念安</span><span class="jy-opening-scene-note">教室</span></button>
-          <button class="jy-opening-scene" type="button" data-action="select-greeting" data-greeting="7"><span class="jy-opening-scene-number">7</span><span class="jy-opening-scene-name">陈芷汀</span><span class="jy-opening-scene-note">Tinder</span></button>
-          <button class="jy-opening-scene" type="button" data-action="select-greeting" data-greeting="8"><span class="jy-opening-scene-number">8</span><span class="jy-opening-scene-name">虞淑婉</span><span class="jy-opening-scene-note">校长室</span></button>
+          <button class="jy-opening-scene" style="--tone:#1e564c" type="button" data-action="select-greeting" data-greeting="1" data-selected="true"><span class="jy-opening-scene-top"><span class="jy-opening-scene-thumb"><span aria-hidden="true">开</span><img src="https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@e450d24017cd3fed4bb069b3699ec8f589f32382/statusbar/scenes/corridor.webp" data-thumb-char="走廊" data-fallback-src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@e450d24017cd3fed4bb069b3699ec8f589f32382/statusbar/scenes/corridor.webp" data-fallback-raw="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/e450d24017cd3fed4bb069b3699ec8f589f32382/statusbar/scenes/corridor.webp" alt="" loading="lazy" decoding="async"></span><span class="jy-opening-scene-tag">9月1日</span></span><span class="jy-opening-scene-main"><span class="jy-opening-scene-number">01</span><span class="jy-opening-scene-name">开学第一天</span><span class="jy-opening-scene-note">走进高二重点班</span></span></button>
+          <button class="jy-opening-scene" style="--tone:#c9882c" type="button" data-action="select-greeting" data-greeting="2"><span class="jy-opening-scene-top"><span class="jy-opening-scene-thumb"><span aria-hidden="true">慕</span><img src="https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/jiaqian.png" data-thumb-char="慕佳芊" data-fallback-src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/jiaqian.png" data-fallback-raw="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/jiaqian.png" alt="" loading="lazy" decoding="async"></span><span class="jy-opening-scene-tag">英语组</span></span><span class="jy-opening-scene-main"><span class="jy-opening-scene-number">02</span><span class="jy-opening-scene-name">慕佳芊</span><span class="jy-opening-scene-note">高二教师办公室</span></span></button>
+          <button class="jy-opening-scene" style="--tone:#c95b42" type="button" data-action="select-greeting" data-greeting="3"><span class="jy-opening-scene-top"><span class="jy-opening-scene-thumb"><span aria-hidden="true">苏</span><img src="https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/xiaoqiang.png" data-thumb-char="苏晓樯" data-fallback-src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/xiaoqiang.png" data-fallback-raw="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/xiaoqiang.png" alt="" loading="lazy" decoding="async"></span><span class="jy-opening-scene-tag">傍晚街口</span></span><span class="jy-opening-scene-main"><span class="jy-opening-scene-number">03</span><span class="jy-opening-scene-name">苏晓樯</span><span class="jy-opening-scene-note">车祸之后</span></span></button>
+          <button class="jy-opening-scene" style="--tone:#3c7399" type="button" data-action="select-greeting" data-greeting="4"><span class="jy-opening-scene-top"><span class="jy-opening-scene-thumb"><span aria-hidden="true">温</span><img src="https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/shuyu.png" data-thumb-char="温书语" data-fallback-src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/shuyu.png" data-fallback-raw="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/shuyu.png" alt="" loading="lazy" decoding="async"></span><span class="jy-opening-scene-tag">图书馆</span></span><span class="jy-opening-scene-main"><span class="jy-opening-scene-number">04</span><span class="jy-opening-scene-name">温书语</span><span class="jy-opening-scene-note">长桌与借还台</span></span></button>
+          <button class="jy-opening-scene" style="--tone:#8a6d52" type="button" data-action="select-greeting" data-greeting="5"><span class="jy-opening-scene-top"><span class="jy-opening-scene-thumb"><span aria-hidden="true">沈</span><img src="https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/youchu.png" data-thumb-char="沈幼楚" data-fallback-src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/youchu.png" data-fallback-raw="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/youchu.png" alt="" loading="lazy" decoding="async"></span><span class="jy-opening-scene-tag">老城夜巷</span></span><span class="jy-opening-scene-main"><span class="jy-opening-scene-number">05</span><span class="jy-opening-scene-name">沈幼楚</span><span class="jy-opening-scene-note">小巷遇见</span></span></button>
+          <button class="jy-opening-scene" style="--tone:#4f688a" type="button" data-action="select-greeting" data-greeting="6"><span class="jy-opening-scene-top"><span class="jy-opening-scene-thumb"><span aria-hidden="true">许</span><img src="https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/nianan.png" data-thumb-char="许念安" data-fallback-src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/nianan.png" data-fallback-raw="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/nianan.png" alt="" loading="lazy" decoding="async"></span><span class="jy-opening-scene-tag">课后教室</span></span><span class="jy-opening-scene-main"><span class="jy-opening-scene-number">06</span><span class="jy-opening-scene-name">许念安</span><span class="jy-opening-scene-note">高二重点班教室</span></span></button>
+          <button class="jy-opening-scene" style="--tone:#b4456c" type="button" data-action="select-greeting" data-greeting="7"><span class="jy-opening-scene-top"><span class="jy-opening-scene-thumb"><span aria-hidden="true">陈</span><img src="https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/zhiting.png" data-thumb-char="陈芷汀" data-fallback-src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/zhiting.png" data-fallback-raw="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/zhiting.png" alt="" loading="lazy" decoding="async"></span><span class="jy-opening-scene-tag">周末线上</span></span><span class="jy-opening-scene-main"><span class="jy-opening-scene-number">07</span><span class="jy-opening-scene-name">陈芷汀</span><span class="jy-opening-scene-note">Tinder 匹配</span></span></button>
+          <button class="jy-opening-scene" style="--tone:#2e5950" type="button" data-action="select-greeting" data-greeting="8"><span class="jy-opening-scene-top"><span class="jy-opening-scene-thumb"><span aria-hidden="true">虞</span><img src="https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v1/avatars/shuwan.png" data-thumb-char="虞淑婉" data-fallback-src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v1/avatars/shuwan.png" data-fallback-raw="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v1/avatars/shuwan.png" alt="" loading="lazy" decoding="async"></span><span class="jy-opening-scene-tag">行政楼</span></span><span class="jy-opening-scene-main"><span class="jy-opening-scene-number">08</span><span class="jy-opening-scene-name">虞淑婉</span><span class="jy-opening-scene-note">校长室约谈</span></span></button>
         </div>
       </div>
 
       <div class="jy-opening-panel" data-mode-panel="custom">
+        <div class="jy-opening-tpl-bar">
+          <div class="jy-opening-tpl-head">
+            <span class="jy-opening-tpl-title">快捷开局模板</span>
+            <span class="jy-opening-tpl-sub">一键填入对应身份、校园日期与第一幕，随时可改写</span>
+          </div>
+          <div class="jy-opening-tpl-list">
+            <button class="jy-opening-tpl-chip" type="button" data-action="apply-template" data-template="hardware"><strong>空降五金二代</strong><span>高二插班 · 9月1日</span></button>
+            <button class="jy-opening-tpl-chip" type="button" data-action="apply-template" data-template="contest"><strong>竞赛夜班寒门生</strong><span>实验楼 · 10月14日</span></button>
+            <button class="jy-opening-tpl-chip" type="button" data-action="apply-template" data-template="gaokao"><strong>高三百日狂飙</strong><span>高三下 · 2月26日</span></button>
+            <button class="jy-opening-tpl-chip" type="button" data-action="apply-template" data-template="summer"><strong>盛夏自由沙盒</strong><span>暑假 · 7月12日</span></button>
+            <button class="jy-opening-tpl-chip" type="button" data-action="apply-template" data-template="press"><strong>校刊特派记者</strong><span>小花园 · 9月22日</span></button>
+          </div>
+        </div>
         <div class="jy-opening-grid">
           <label class="jy-opening-field wide"><span class="jy-opening-label">从哪里开始</span><input class="jy-opening-input" data-field="开场地点" placeholder="校内、城区，或自己起名的地方"></label>
           <label class="jy-opening-field"><span class="jy-opening-label">日期（选填）</span><input class="jy-opening-input" type="date" data-field="开场日期"></label>
@@ -255,6 +716,4 @@
       <button class="jy-opening-button" type="button" data-action="reset-opening">重新设定</button>
     </div>
   </div>
-
-
 </section>

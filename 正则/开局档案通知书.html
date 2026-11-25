@@ -1,14 +1,15 @@
 <section class="jy-admission-letter">
-  <div class="jy-admission-ribbon">暨阳中学 · 开局档案</div>
-  <div class="jy-admission-topline">
-    <span>暨阳中学教务处</span>
-    <span>故事起点</span>
+  <div class="jy-admission-ribbon">
+    <span>暨阳中学 · 校务档案馆</span>
+    <span>高二学籍建档回执</span>
   </div>
   <header class="jy-admission-heading">
-    <div class="jy-admission-emblem" aria-hidden="true">暨阳</div>
-    <div>
-      <h2>开场存档</h2>
+    <div class="jy-admission-emblem" aria-hidden="true">暨阳<br>中学</div>
+    <div class="jy-admission-title-wrap">
+      <h2>开局档案通知书</h2>
+      <p>故事初始角色建档与开篇坐标确认</p>
     </div>
+    <span class="jy-admission-seal">已立档</span>
   </header>
   <div class="jy-admission-rule"></div>
   <p class="jy-admission-address">致 <strong>$1</strong>：</p>
@@ -33,55 +34,190 @@
     <p>$10</p>
   </div>
   <div class="jy-admission-foot">
-    <span>起始场景：$11</span>
-    <span class="jy-admission-seal">已存档</span>
+    <span>起始场景：<b>$11</b></span>
+    <span class="jy-admission-foot-note">以青砚纸笔录，随故事进展续写</span>
   </div>
 </section>
 
 <style>
   .jy-admission-letter {
-    width: min(760px, calc(100% - 20px));
-    margin: 14px auto;
-    border: 1px solid #bccfc6;
-    border-radius: 8px;
-    color: #26312e;
+    position: relative;
+    width: min(740px, calc(100% - 12px));
+    margin: 12px auto;
+    border: 1px solid rgba(30, 86, 76, 0.22);
+    border-radius: 14px;
+    color: #1e2a27;
     background:
-      linear-gradient(90deg, rgba(35, 123, 108, 0.055) 1px, transparent 1px) 0 0 / 22px 22px,
-      linear-gradient(rgba(35, 123, 108, 0.04) 1px, transparent 1px) 0 0 / 22px 22px,
-      #fcfefd;
-    box-shadow: 0 13px 30px rgba(29, 57, 48, 0.13);
-    font-family: "Noto Sans SC", "PingFang SC", sans-serif;
+      radial-gradient(circle at 100% 0%, rgba(201, 123, 54, 0.08), transparent 36%),
+      linear-gradient(90deg, rgba(30, 86, 76, 0.032) 1px, transparent 1px) 0 0 / 20px 20px,
+      linear-gradient(rgba(30, 86, 76, 0.028) 1px, transparent 1px) 0 0 / 20px 20px,
+      #faf7f0;
+    box-shadow: 0 12px 28px rgba(24, 42, 37, 0.1), 0 2px 6px rgba(24, 42, 37, 0.05);
+    font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
     overflow: hidden;
   }
 
   .jy-admission-letter *, .jy-admission-letter *::before, .jy-admission-letter *::after { box-sizing: border-box; }
-  .jy-admission-ribbon { padding: 8px 16px; color: #edf8f4; background: #237b6c; font-size: 11px; font-weight: 800; letter-spacing: 0; }
-  .jy-admission-topline { display: flex; justify-content: space-between; gap: 12px; padding: 10px 16px 0; color: #6c8178; font-size: 10px; font-weight: 750; }
-  .jy-admission-heading { display: flex; align-items: center; justify-content: center; gap: 13px; padding: 12px 16px 14px; text-align: left; }
-  .jy-admission-emblem { display: grid; width: 46px; height: 46px; place-items: center; border: 2px solid #237b6c; border-radius: 50%; color: #237b6c; font-family: "Noto Serif SC", "Songti SC", serif; font-size: 13px; font-weight: 850; }
-  .jy-admission-heading h2 { margin: 0; color: #1e4f45; font-family: "Noto Serif SC", "Songti SC", serif; font-size: 22px; font-weight: 850; line-height: 1.2; letter-spacing: 0; }
-  .jy-admission-heading p { margin: 3px 0 0; color: #6f857b; font-size: 9px; font-weight: 750; letter-spacing: 1px; }
-  .jy-admission-rule { height: 2px; margin: 0 16px; background: linear-gradient(90deg, transparent, #237b6c 16%, #237b6c 84%, transparent); }
-  .jy-admission-address { margin: 17px 18px 0; color: #34443f; font-family: "Noto Serif SC", "Songti SC", serif; font-size: 14px; }
-  .jy-admission-address strong { color: #1f7162; font-size: 16px; }
-  .jy-admission-copy { margin: 7px 18px 14px; color: #50645c; font: 12px/1.65 "Noto Serif SC", "Songti SC", serif; }
-  .jy-admission-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; margin: 0 16px; }
-  .jy-admission-facts > div { min-width: 0; border: 1px solid #d2e0da; border-radius: 5px; background: rgba(255, 255, 255, 0.68); padding: 8px 9px; }
-  .jy-admission-facts span, .jy-admission-row > span, .jy-admission-opening > span { display: block; color: #698077; font-size: 10px; font-weight: 800; }
-  .jy-admission-facts b { display: block; margin-top: 3px; overflow-wrap: anywhere; color: #2e3e39; font-size: 12px; font-weight: 800; }
+  .jy-admission-ribbon {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    color: #f6f2e7;
+    background: linear-gradient(125deg, #1a4a41, #266a5d);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 0.04em;
+  }
+  .jy-admission-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 15px 18px 13px;
+  }
+  .jy-admission-emblem {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 48px;
+    height: 48px;
+    border: 1.5px solid rgba(30, 86, 76, 0.35);
+    border-radius: 12px;
+    background: linear-gradient(145deg, #1e564c, #2f7d72);
+    color: #fdfaf2;
+    font-family: ui-serif, "Noto Serif SC", "Songti SC", serif;
+    font-size: 13px;
+    font-weight: 850;
+    line-height: 1.1;
+    text-align: center;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+  .jy-admission-title-wrap { flex: 1 1 auto; min-width: 0; }
+  .jy-admission-heading h2 {
+    margin: 0;
+    color: #1a473f;
+    font-family: ui-serif, "Noto Serif SC", "Songti SC", serif;
+    font-size: 20px;
+    font-weight: 850;
+    line-height: 1.2;
+  }
+  .jy-admission-heading p {
+    margin: 3px 0 0;
+    color: #5d6e68;
+    font-size: 11.5px;
+    font-weight: 600;
+  }
+  .jy-admission-seal {
+    flex: 0 0 auto;
+    padding: 4px 10px;
+    border: 1.5px solid #b83c4c;
+    border-radius: 6px;
+    background: rgba(184, 60, 76, 0.07);
+    color: #a12d3d;
+    font-family: ui-serif, "Noto Serif SC", "Songti SC", serif;
+    font-size: 12px;
+    font-weight: 850;
+    letter-spacing: 0.14em;
+    transform: rotate(-3deg);
+  }
+  .jy-admission-rule {
+    height: 1px;
+    margin: 0 18px;
+    background: linear-gradient(90deg, rgba(30, 86, 76, 0.36), rgba(201, 123, 54, 0.45), transparent);
+  }
+  .jy-admission-address {
+    margin: 14px 18px 10px;
+    color: #2f3f3a;
+    font-family: ui-serif, "Noto Serif SC", "Songti SC", serif;
+    font-size: 14px;
+  }
+  .jy-admission-address strong { color: #1e564c; font-size: 16px; }
+  .jy-admission-facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0 18px;
+  }
+  .jy-admission-facts > div {
+    min-width: 0;
+    border: 1px solid rgba(30, 86, 76, 0.16);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.82);
+    padding: 8px 10px;
+  }
+  .jy-admission-facts span,
+  .jy-admission-row > span,
+  .jy-admission-opening > span {
+    display: block;
+    color: #5d6e68;
+    font-size: 10.5px;
+    font-weight: 800;
+  }
+  .jy-admission-facts b {
+    display: block;
+    margin-top: 2px;
+    overflow-wrap: anywhere;
+    color: #1e2a27;
+    font-size: 12.5px;
+    font-weight: 800;
+  }
   .jy-admission-fact-wide { grid-column: 1 / -1; }
-  .jy-admission-profile { display: grid; gap: 7px; margin: 11px 16px 0; }
-  .jy-admission-row { display: grid; grid-template-columns: 82px minmax(0, 1fr); gap: 10px; align-items: start; border-left: 3px solid rgba(35, 123, 108, 0.5); background: rgba(35, 123, 108, 0.045); padding: 8px 10px; }
-  .jy-admission-row p, .jy-admission-opening p { margin: 0; color: #3e514a; font: 12px/1.58 "Noto Serif SC", "Songti SC", serif; white-space: pre-wrap; overflow-wrap: anywhere; }
-  .jy-admission-opening { margin: 11px 16px 0; border: 1px dashed rgba(182, 122, 74, 0.45); background: rgba(182, 122, 74, 0.055); padding: 9px 10px; }
-  .jy-admission-opening > span { color: #9a6339; margin-bottom: 4px; }
-  .jy-admission-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 13px; padding: 10px 16px; border-top: 1px solid #d8e3de; color: #6b8178; font-size: 11px; font-weight: 750; }
-  .jy-admission-seal { flex: 0 0 auto; border: 1px solid #af6943; border-radius: 4px; color: #995b33; font-weight: 850; letter-spacing: 1px; padding: 4px 7px; transform: rotate(-2deg); }
+  .jy-admission-profile {
+    display: grid;
+    gap: 7px;
+    margin: 11px 18px 0;
+  }
+  .jy-admission-row {
+    display: grid;
+    grid-template-columns: 82px minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+    border-left: 3px solid #1e564c;
+    border-radius: 0 8px 8px 0;
+    background: rgba(255, 255, 255, 0.68);
+    padding: 8px 12px;
+  }
+  .jy-admission-row p,
+  .jy-admission-opening p {
+    margin: 0;
+    color: #2f3f3a;
+    font: 12.5px/1.62 ui-serif, "Noto Serif SC", "Songti SC", serif;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .jy-admission-opening {
+    margin: 11px 18px 0;
+    border: 1px dashed rgba(201, 123, 54, 0.45);
+    border-radius: 9px;
+    background: rgba(201, 123, 54, 0.06);
+    padding: 9px 12px;
+  }
+  .jy-admission-opening > span { color: #a86122; margin-bottom: 4px; }
+  .jy-admission-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    margin-top: 13px;
+    padding: 10px 18px 12px;
+    border-top: 1px solid rgba(30, 86, 76, 0.14);
+    background: rgba(242, 237, 225, 0.65);
+    color: #5d6e68;
+    font-size: 11.5px;
+    font-weight: 700;
+  }
+  .jy-admission-foot b { color: #1e564c; font-weight: 800; }
+  .jy-admission-foot-note { color: #85948e; font-size: 11px; font-weight: 600; }
 
   @media (max-width: 520px) {
-    .jy-admission-letter { width: calc(100% - 12px); }
-    .jy-admission-topline, .jy-admission-foot { align-items: flex-start; flex-direction: column; gap: 6px; }
+    .jy-admission-letter { width: calc(100% - 8px); border-radius: 12px; }
+    .jy-admission-heading { padding: 12px 14px 10px; gap: 10px; }
+    .jy-admission-facts, .jy-admission-profile, .jy-admission-opening { margin-inline: 14px; }
+    .jy-admission-address { margin: 12px 14px 8px; }
     .jy-admission-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .jy-admission-row { grid-template-columns: 1fr; gap: 4px; }
+    .jy-admission-row { grid-template-columns: 1fr; gap: 3px; }
+    .jy-admission-foot { padding: 9px 14px 11px; }
   }
 </style>
