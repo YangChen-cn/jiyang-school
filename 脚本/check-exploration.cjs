@@ -809,9 +809,24 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    '云清晏_NSFW指导',
    '[DLC]境界描述',
    '[DLC]破境判定',
-   '[DLC]华夏修行界与隐世宗门世家',
+   '[DLC]华夏修行界与三教总览',
+   '[DLC]世家_钱塘谢氏剑庐',
+   '[DLC]世家_西溪葛氏丹霞',
+   '[DLC]世家_魔都苏氏水府',
+   '[DLC]世家_申城天星钟氏',
+   '[DLC]仙宗_南屏法华禅院',
+   '[DLC]仙宗_天台赤城洞天',
+   '[DLC]仙宗_四明赤水剑宗',
+   '[DLC]仙宗_天目灵虚宫',
+   '[DLC]仙宗_茅山上清宗',
+   '[DLC]仙宗_龙虎山天师府',
+   '[DLC]仙宗_终南山楼观台',
+   '[DLC]仙宗_青城山丈人洞天',
+   '[DLC]仙宗_武当山紫霄宫',
+   '[DLC]仙宗_东海蓬莱与崇明归墟',
+   '[DLC]仙宗_西域昆仑祖脉',
  ];
- const retiredDlcNames=['[DLC]修行阶梯与仙凡抉择','[DLC]灵潮异象与隐秘特调'];
+ const retiredDlcNames=['[DLC]修行阶梯与仙凡抉择','[DLC]灵潮异象与隐秘特调','[DLC]华夏修行界与隐世宗门世家'];
  assert.ok(!cardEntries.some(entry=>retiredDlcNames.includes(entry.comment)));
  const dlcEntries=new Map(dlcNames.map(name=>[name,cardEntries.find(entry=>entry.comment===name)]));
  const render=(template,vars={},floors=[])=>ejs.render(template,{
@@ -835,10 +850,30 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    assert.equal(render(entry.content).trim(),'',name + ' 在无 DLC 的聊天应为空');
    assert.equal(render(entry.content,{'stat_data.剧情.灵气复苏.已开启':false}).trim(),'',name + ' 在封缄的聊天应为空');
  }
- for (const [name,key] of [[dlcNames[1],'镇风铎'],['[DLC]境界描述','暗劲'],['[DLC]破境判定','冲关'],['[DLC]华夏修行界与隐世宗门世家','杭城']]) {
+ for (const [name,key] of [
+   [dlcNames[1],'镇风铎'],
+   ['[DLC]境界描述','暗劲'],
+   ['[DLC]破境判定','冲关'],
+   ['[DLC]华夏修行界与三教总览','三教'],
+   ['[DLC]世家_钱塘谢氏剑庐','谢氏剑庐'],
+   ['[DLC]世家_西溪葛氏丹霞','葛氏丹霞'],
+   ['[DLC]世家_魔都苏氏水府','魔都苏氏'],
+   ['[DLC]世家_申城天星钟氏','静安古钟阁'],
+   ['[DLC]仙宗_南屏法华禅院','法华禅院'],
+   ['[DLC]仙宗_天台赤城洞天','赤城洞天'],
+   ['[DLC]仙宗_四明赤水剑宗','赤水剑宗'],
+   ['[DLC]仙宗_天目灵虚宫','灵虚宫'],
+   ['[DLC]仙宗_茅山上清宗','茅山'],
+   ['[DLC]仙宗_龙虎山天师府','天师府'],
+   ['[DLC]仙宗_终南山楼观台','终南山'],
+   ['[DLC]仙宗_青城山丈人洞天','青城山'],
+   ['[DLC]仙宗_武当山紫霄宫','武当山'],
+   ['[DLC]仙宗_东海蓬莱与崇明归墟','蓬莱'],
+   ['[DLC]仙宗_西域昆仑祖脉','昆仑'],
+ ]) {
    const entry=dlcEntries.get(name);
    assert.equal(entry.constant,false);
-   assert.ok(entry.keys.includes(key));
+   assert.ok(entry.keys.includes(key), name + ' 缺少触发词 ' + key);
    assert.equal(entry.extensions.scan_depth,2);
    assert.equal(entry.extensions.exclude_recursion,true);
    assert.equal(entry.extensions.prevent_recursion,true);
@@ -911,15 +946,22 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.match(render(realm.content,enabled),/炼气[\s\S]*筑基[\s\S]*金丹[\s\S]*元婴[\s\S]*化神[\s\S]*古武/);
  const breakthrough=dlcEntries.get('[DLC]破境判定');
  assert.match(render(breakthrough.content,enabled),/实际冲关[\s\S]*暂稳[\s\S]*失败保留原境/);
- const jianghu=dlcEntries.get('[DLC]华夏修行界与隐世宗门世家');
- const jianghuRendered=render(jianghu.content,enabled);
- assert.match(jianghuRendered,/道、佛、儒/);
- assert.match(jianghuRendered,/杭城·钱塘真修大族[\s\S]*钱塘谢氏[\s\S]*西溪葛氏[\s\S]*潮汐秘市/);
- assert.match(jianghuRendered,/魔都·沪上巨室[\s\S]*魔都苏氏[\s\S]*沧溟水府[\s\S]*暨阳苏家同源之秘[\s\S]*保有那一缕先天水脉仙缘/);
- assert.match(jianghuRendered,/赤城洞天[\s\S]*赤水剑宗[\s\S]*茅山[\s\S]*龙虎山[\s\S]*武当/);
- assert.match(jianghuRendered,/金丹巅峰[\s\S]*元婴真君/);
+ const overview=render(dlcEntries.get('[DLC]华夏修行界与三教总览').content,enabled);
+ assert.match(overview,/道、佛、儒[\s\S]*钱塘谢氏剑庐[\s\S]*魔都苏氏水府[\s\S]*天台赤城洞天/);
+ const suClan=render(dlcEntries.get('[DLC]世家_魔都苏氏水府').content,enabled);
+ assert.match(suClan,/沧溟水府[\s\S]*金丹巅峰[\s\S]*元婴期[\s\S]*暨阳苏家同源之秘[\s\S]*保有先天仙缘[\s\S]*先天太阴水脉仙缘/);
+ const xieClan=render(dlcEntries.get('[DLC]世家_钱塘谢氏剑庐').content,enabled);
+ assert.match(xieClan,/金丹中期[\s\S]*青莲截江剑[\s\S]*钱塘潮汐秘市/);
+ const geClan=render(dlcEntries.get('[DLC]世家_西溪葛氏丹霞').content,enabled);
+ assert.match(geClan,/葛洪[\s\S]*赤蛟焚天残炉[\s\S]*筑基丹/);
+ const tiantai=render(dlcEntries.get('[DLC]仙宗_天台赤城洞天').content,enabled);
+ assert.match(tiantai,/第六洞天[\s\S]*元婴期真君[\s\S]*云清晏/);
+ const kunlun=render(dlcEntries.get('[DLC]仙宗_西域昆仑祖脉').content,enabled);
+ assert.match(kunlun,/越中潜龙·归元眼[\s\S]*化神通玄/);
+ for (const fName of dlcNames.slice(7)) {
+   assert.doesNotMatch(render(dlcEntries.get(fName).content,enabled),/万风/);
+ }
  assert.match(render(dlcMaster,{...enabled,...origin,'stat_data.世界.日期':'2020-09-04'}),/暨阳苏家（苏晓樯父祖一脉）实与魔都苏氏同源/);
- assert.doesNotMatch(jianghuRendered,/澹珠|万风/);
 
  const [yunBase,yunPalette,yunNsfw]=dlcNames.slice(2,5).map(name=>dlcEntries.get(name).content);
  const scene={...enabled,...origin,'stat_data.世界.日期':'2020-09-04','stat_data.世界.当前位置':'高二重点班教室','stat_data.世界.时间段':'上午','stat_data.剧情.学期':'高二上','stat_data.主角.班级':'高二(8)班'};
