@@ -991,14 +991,42 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    assert.ok(timeline(date).includes('第 '+day+' 日（'+stage+'）'), date+' -> '+day+' '+stage);
  }
  assert.equal(dlcEntries.get(dlcNames[0]).constant,true);
- assert.match(timeline('2020-09-04'),/潜龙归元窍与学宫聚灵核心[\s\S]*暨阳中学[\s\S]*觉醒灵根乃至高品\/特殊灵根的概率远超外界百倍[\s\S]*阵内避世与老怪出山铁律[\s\S]*龙脉高觉醒与原人物仙缘[\s\S]*四层空间秩序[\s\S]*奇遇独立性[\s\S]*旧调频收音机/);
+ assert.match(timeline('2020-09-04'),/潜龙归元窍与学宫聚灵核心[\s\S]*暨阳中学[\s\S]*唤醒灵根乃至高品\/特殊灵根的概率远超外界百倍[\s\S]*秘密仙班（对外称实验尖子班）[\s\S]*清北强基实验尖子班[\s\S]*阵内避世与老怪出山铁律[\s\S]*四层空间秩序[\s\S]*奇遇独立性[\s\S]*旧调频收音机/);
  assert.doesNotMatch(timeline('2020-09-04'),/云清晏|谢昭宁|仙凡两隔|极尽升华/);
+ assert.doesNotMatch(timeline('2020-09-04'),/苏晚棠|温书语|沈若微|许念安|陈芷汀|慕佳芊|虞淑婉/);
  assert.match(timeline('2021-10-08'),/第五阶段·百宗出山期[\s\S]*出阵不损道基[\s\S]*陆续突破瓶口或解封出山/);
  assert.match(timeline('2020-10-18'),/脱敏归档/);
- assert.match(timeline('2021-01-01'),/特种气象与非典型样本调查组/);
- assert.match(timeline('2021-05-01'),/外地散修与隐门/);
+ assert.match(timeline('2021-01-01'),/特种气象与非典型样本调查组[\s\S]*秘密实验尖子班（仙班）/);
+ assert.match(timeline('2021-05-01'),/秘密实验尖子班稳步运作[\s\S]*外地散修与隐门/);
  assert.doesNotMatch(timeline('2020-09-03'),/今日尚在途中|第2天起|初次入班/);
- assert.match(timeline('2020-09-04'),/苏晚棠[\s\S]*温书语[\s\S]*沈若微[\s\S]*许念安[\s\S]*陈芷汀[\s\S]*慕佳芊[\s\S]*虞淑婉/);
+ for (const [name, cultivatedRe] of [
+   ['苏晚棠', /当前身份:[\s\S]*秘密实验尖子班[\s\S]*踏入修行后设定/],
+   ['温书语', /当前身份:[\s\S]*秘密实验尖子班[\s\S]*踏入修行后设定/],
+   ['沈若微', /当前身份:[\s\S]*秘密实验尖子班[\s\S]*经济与生计变化:[\s\S]*踏入修行后设定/],
+   ['许念安', /当前身份:[\s\S]*秘密实验尖子班[\s\S]*踏入修行后设定/],
+   ['陈芷汀', /当前身份:[\s\S]*秘密实验尖子班[\s\S]*修行资财与生计重塑:[\s\S]*性格基调与修行蜕变/],
+   ['慕佳芊', /当前身份:[\s\S]*秘密实验尖子班[\s\S]*衍生一_仙班护苗与松弛底色/],
+   ['虞淑婉', /当前身份:[\s\S]*秘密实验尖子班[\s\S]*踏入修行后设定/],
+ ]) {
+   const tpl = worldbookByName.get(`${name}_基础信息`).content;
+   for (const offState of [{}, { 'stat_data.剧情.灵气复苏.已开启': false }, { 'stat_data.剧情.灵气复苏.已开启': false, [`stat_data.${name}.当前境界`]: '炼气一层' }]) {
+     const offOut = render(tpl, offState);
+     assert.match(offOut, /开局身份:/, `${name} 关闭DLC时应保留开局身份`);
+     assert.doesNotMatch(offOut, /潜在仙缘|踏入修行后设定|修行资财与生计重塑|衍生一_仙班护苗|秘密实验尖子班/, `${name} 关闭DLC时不注入修行内容`);
+   }
+   for (const dormantState of [enabled, { ...enabled, [`stat_data.${name}.当前境界`]: '凡人' }, { ...enabled, [`stat_data.${name}.当前境界`]: '未引气' }]) {
+     const dormantOut = render(tpl, dormantState);
+     assert.match(dormantOut, /开局身份:/, `${name} 未觉醒时应保留校园日常身份`);
+     assert.match(dormantOut, /潜在仙缘/, `${name} DLC开启未觉醒时应展示潜在仙缘`);
+     assert.doesNotMatch(dormantOut, /踏入修行后设定|修行资财与生计重塑|衍生一_仙班护苗/, `${name} 未觉醒时不应替换日常设定`);
+   }
+   const awakenedByRealm = render(tpl, { ...enabled, [`stat_data.${name}.当前境界`]: '炼气一层' });
+   const awakenedByRoot = render(tpl, { ...enabled, [`stat_data.${name}.灵根`]: '测试灵根' });
+   for (const out of [awakenedByRealm, awakenedByRoot]) {
+     assert.match(out, cultivatedRe, `${name} 踏入修行后应启用新设定`);
+     assert.doesNotMatch(out, /开局身份:|潜在仙缘/, `${name} 踏入修行后应替换原有日常定位`);
+   }
+ }
  const plot=cardEntries.find(entry=>entry.comment==='[mvu_plot]剧情推动器').content;
  assert.doesNotMatch(render(plot),/修仙暗线/);
  assert.match(render(plot,enabled),/修仙暗线优先交织在校内外既有角色/);
@@ -1033,7 +1061,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  for (const fName of dlcNames.slice(7)) {
    assert.doesNotMatch(render(dlcEntries.get(fName).content,enabled),/万风/);
  }
- assert.match(render(dlcMaster,{...enabled,...origin,'stat_data.世界.日期':'2020-09-04'}),/暨阳苏家（苏晚棠父祖一脉）实与魔都「苏氏沧溟水府」百年前同源/);
+ assert.match(render(dlcMaster,{...enabled,...origin,'stat_data.世界.日期':'2020-09-04'}),/暨阳苏家实与魔都「苏氏沧溟水府」百年前同源分家/);
 
  const [yunBase,yunPalette,yunNsfw]=dlcNames.slice(2,5).map(name=>dlcEntries.get(name).content);
  const scene={...enabled,...origin,'stat_data.世界.日期':'2020-09-04','stat_data.世界.当前位置':'高二重点班教室','stat_data.世界.时间段':'上午','stat_data.剧情.学期':'高二上','stat_data.主角.班级':'高二(8)班'};
@@ -1144,7 +1172,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
 
  mp.querySelector('[data-console-tab="codex"]').click();
  assert.equal(mp.querySelector('[data-panel="codex"]').hidden,false);
- assert.match(mp.querySelector('[data-panel="codex"]').textContent,/三教隐世巨室[\s\S]*谢昭宁[\s\S]*苏氏沧溟水府[\s\S]*四百日渐进出山/);
+ assert.match(mp.querySelector('[data-panel="codex"]').textContent,/灵潮暗涌 · 秘设实验尖子班[\s\S]*清北强基实验尖子班[\s\S]*三教隐世巨室[\s\S]*谢昭宁[\s\S]*苏氏沧溟水府[\s\S]*四百日渐进出山/);
  mp.querySelector('[data-console-tab="dlc"]').click();
  const toggle=()=>mp.querySelector('[data-action="dlc-toggle"]').click();
  toggle();
