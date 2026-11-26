@@ -1,4 +1,4 @@
-<%_
+<%_ {
   const _dlcOn = getvar('stat_data.剧情.灵气复苏.已开启', { defaults: false }) === true;
   const _realm = String(getvar('stat_data.陈芷汀.当前境界', { defaults: '' }) || '').trim();
   const _root = String(getvar('stat_data.陈芷汀.灵根', { defaults: '' }) || '').trim();
@@ -80,3 +80,4 @@ _%>
     与<user>的关系:
       初印象: 走廊上见过几次，没留下什么印象——她每天要过滤太多人，<user>暂时只是被过滤掉的其中一个
     班级人际: 在九班她是不可接近的存在。男生私下讨论她的腿、她的妆、她身上若有若无的香水味，但没有人真的敢追——她设定了一个"你们配不上"的气场。女生既想成为她又暗暗嫉妒她，但没有人说她的坏话——她的社交管理做得太好
+<%_ } _%>

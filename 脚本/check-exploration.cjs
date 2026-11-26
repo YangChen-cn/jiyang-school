@@ -17,6 +17,9 @@ for (const entry of cardEntries) {
   if (!entry.enabled || !entry.content.includes('<%')) continue;
   assert.doesNotThrow(() => ejs.compile(entry.content, { async: true }), `EJS 编译失败：${entry.comment}`);
 }
+// Prompt Template 合并条目后一次编译，单条编译无法发现同名声明。
+const combinedWorldbook = cardEntries.map(entry => entry.content).join('\n---\n');
+assert.doesNotThrow(() => ejs.compile(combinedWorldbook, { async: true }), '合并后的世界书 EJS 编译失败');
 const cases = [['2020-08-31','高二上'],['2021-02-20','高二上'],['2021-02-21','高二下'],['2021-06-30','高二下'],['2021-07-01','暑假'],['2021-08-31','暑假'],['2021-09-01','高三上'],['2022-02-20','高三上'],['2022-02-21','高三下'],['2022-06-30','高三下'],['2022-07-01','已毕业']];
 const engineSrc = read('脚本/状态栏渲染引擎.js');
 const pure = engineSrc.slice(engineSrc.indexOf('  // JY_PERIODS_BEGIN'), engineSrc.indexOf('  // JY_CAMPUS_END'));
@@ -986,6 +989,12 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    },
  });
  const enabled={'stat_data.剧情.灵气复苏.已开启':true};
+ const sharedScene = ['苏晚棠', '温书语'].map(name => worldbookByName.get(`${name}_基础信息`).content).join('\n');
+ const dormantScene = render(sharedScene);
+ assert.equal((dormantScene.match(/开局身份:/g) || []).length, 2);
+ const awakenedScene = render(sharedScene,{...enabled,'stat_data.苏晚棠.当前境界':'炼气一层'});
+ assert.match(awakenedScene, /苏晚棠（炼气一层）[\s\S]*<character_basic character="温书语">[\s\S]*开局身份:/);
+ assert.equal((awakenedScene.match(/当前身份:/g) || []).length, 1);
  const catalog=worldbookByName.get('角色速览');
  assert.equal(catalog.constant,true);
  assert.doesNotMatch(render(catalog.content),/云清晏/);

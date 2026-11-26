@@ -1,4 +1,4 @@
-<%_
+<%_ {
   const _dlcOn = getvar('stat_data.剧情.灵气复苏.已开启', { defaults: false }) === true;
   const _realm = String(getvar('stat_data.苏晚棠.当前境界', { defaults: '' }) || '').trim();
   const _root = String(getvar('stat_data.苏晚棠.灵根', { defaults: '' }) || '').trim();
@@ -64,3 +64,4 @@ _%>
   关系设定:
     与<user>的关系:
       互动方式: 嘴比脑子快，想说什么就说什么。觉得好笑就笑，觉得无聊就说无聊——不因为对方是谁而收敛。但她有个原则：调侃归调侃，真有人过分了她第一个翻脸。"你们够了啊"，语气很随意，但所有人都安静了。因为她是苏晚棠，苏晚棠说话没有人敢不听
+<%_ } _%>

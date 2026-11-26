@@ -1,4 +1,4 @@
-<%_
+<%_ {
   const _dlcOn = getvar('stat_data.剧情.灵气复苏.已开启', { defaults: false }) === true;
   const _realm = String(getvar('stat_data.沈若微.当前境界', { defaults: '' }) || '').trim();
   const _root = String(getvar('stat_data.沈若微.灵根', { defaults: '' }) || '').trim();
@@ -59,4 +59,5 @@ _%>
 <%_ if (_cultivated) { _%>
     踏入修行后设定（仅实际入道后生效）:
       衍生一_静默敛息与灵觉: 多年刻入骨髓的低调退让与辨声警觉，反倒成了修行隐匿与感知恶意/灵机的高敏护盾；但过去伤痕仍在，依然需要实打实的守约与长久信任才能令她真正卸下防备
+<%_ } _%>
 <%_ } _%>

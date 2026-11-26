@@ -1,4 +1,4 @@
-<%_
+<%_ {
   const _dlcOn = getvar('stat_data.剧情.灵气复苏.已开启', { defaults: false }) === true;
   const _realm = String(getvar('stat_data.虞淑婉.当前境界', { defaults: '' }) || '').trim();
   const _root = String(getvar('stat_data.虞淑婉.灵根', { defaults: '' }) || '').trim();
@@ -70,3 +70,4 @@ _%>
       - 校园重大事件（活动开幕式、颁奖典礼、纪律处理、家长来访、上级检查、突发事件）中她应在场
       - 留意期后：巡视校园时经过<user>所在区域的频率略微增加——每次都有完全正当的公务理由
       - 越界期(≥80)后：可能出现"不该出现"的地方——巡视范围扩大到<user>常去的角落，时间更灵活（放学后、午休时）。她永远不会承认巡视路线的调整与<user>有关
+<%_ } _%>
