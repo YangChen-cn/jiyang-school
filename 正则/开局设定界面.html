@@ -545,6 +545,80 @@
     .jy-opening-preview-head { flex-wrap: wrap; }
   }
 
+  .jy-opening-dlc-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding: 10px 13px;
+    border: 1px solid rgba(30, 86, 76, 0.25);
+    border-radius: 11px;
+    background: linear-gradient(145deg, rgba(30, 86, 76, 0.06), rgba(201, 123, 54, 0.06)), #fffdf8;
+  }
+  .jy-opening-dlc-box[data-enabled="true"] {
+    border-color: rgba(199, 150, 61, 0.72);
+    background: linear-gradient(145deg, rgba(24, 94, 84, 0.12), rgba(199, 150, 61, 0.12)), #fcfaf2;
+    box-shadow: 0 4px 14px rgba(24, 94, 84, 0.08);
+  }
+  .jy-opening-dlc-info { min-width: 0; flex: 1 1 auto; }
+  .jy-opening-dlc-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: ui-serif, "Noto Serif SC", "Songti SC", serif;
+    font-size: 13px;
+    font-weight: 850;
+    color: var(--green-deep);
+  }
+  .jy-opening-dlc-badge {
+    padding: 1px 6px;
+    border: 1px solid rgba(201, 123, 54, 0.45);
+    border-radius: 999px;
+    background: rgba(201, 123, 54, 0.1);
+    color: var(--gold);
+    font-family: "Noto Sans SC", sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+  }
+  .jy-opening-dlc-hint { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; line-height: 1.45; }
+  .jy-opening-dlc-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    flex: 0 0 auto;
+    padding: 6px 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--panel);
+    color: var(--green-deep);
+    font-size: 11.5px;
+    font-weight: 800;
+    cursor: pointer;
+    user-select: none;
+  }
+  .jy-opening-dlc-switch input { width: 15px; height: 15px; accent-color: var(--green); cursor: pointer; margin: 0; }
+  .jy-opening-scene.dlc-featured {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    min-height: 0;
+    gap: 12px;
+    padding: 10px 12px;
+    border-style: dashed;
+    border-color: color-mix(in srgb, var(--tone) 46%, transparent);
+    background: linear-gradient(135deg, rgba(24, 94, 84, 0.05), rgba(199, 150, 61, 0.06)), var(--panel);
+  }
+  .jy-opening-scene.dlc-featured .jy-opening-scene-top {
+    width: auto;
+    flex: 0 0 auto;
+    gap: 8px;
+  }
+  .jy-opening-scene.dlc-featured .jy-opening-scene-main {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
   @media (max-width: 420px) {
     .jy-opening { margin: 8px 0; border-radius: 10px; }
     .jy-opening-head { padding: 12px 12px 10px; }
@@ -554,6 +628,9 @@
     .jy-opening-archives { margin-inline: 12px; }
     .jy-opening-scenes { grid-template-columns: 1fr; }
     .jy-opening-scene { min-height: 0; padding: 8px 10px; }
+    .jy-opening-dlc-box { flex-direction: column; align-items: flex-start; }
+    .jy-opening-scene.dlc-featured { flex-direction: column; align-items: stretch; }
+    .jy-opening-scene.dlc-featured .jy-opening-scene-top { width: 100%; }
     .jy-opening-summary { padding: 14px 12px 16px; }
   }
 </style>
@@ -643,6 +720,13 @@
     </details>
     <div class="jy-opening-section">
       <div class="jy-opening-section-title">选择开场</div>
+      <div class="jy-opening-dlc-box" data-opening-dlc-box data-enabled="false">
+        <div class="jy-opening-dlc-info">
+          <div class="jy-opening-dlc-title"><span>开局直接开启「都市修仙 DLC」</span><span class="jy-opening-dlc-badge">太虚启封 · 可选</span></div>
+          <span class="jy-opening-dlc-hint" data-opening-dlc-hint>未开启（保持 100% 纯校园日常；勾选后按当前开局日期自动匹配 400 日 / 高三自适应 / 毕业后 90 日节奏）</span>
+        </div>
+        <label class="jy-opening-dlc-switch"><input type="checkbox" data-opening-dlc><span>开启修仙 DLC</span></label>
+      </div>
       <div class="jy-opening-mode-switch" role="group" aria-label="开场方式">
         <button class="jy-opening-mode" type="button" data-action="select-mode" data-mode="preset" aria-pressed="true">预写开场</button>
         <button class="jy-opening-mode" type="button" data-action="select-mode" data-mode="custom" aria-pressed="false">自定义开局</button>
@@ -671,6 +755,7 @@
           <button class="jy-opening-scene" style="--tone:#4f688a" type="button" data-action="select-greeting" data-greeting="6"><span class="jy-opening-scene-top"><span class="jy-opening-scene-thumb"><span aria-hidden="true">许</span><img src="https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/nianan.png" data-thumb-char="许念安" data-fallback-src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/nianan.png" data-fallback-raw="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/nianan.png" alt="" loading="lazy" decoding="async"></span><span class="jy-opening-scene-tag">课后教室</span></span><span class="jy-opening-scene-main"><span class="jy-opening-scene-number">06</span><span class="jy-opening-scene-name">许念安</span><span class="jy-opening-scene-note">高二重点班教室</span></span></button>
           <button class="jy-opening-scene" style="--tone:#b4456c" type="button" data-action="select-greeting" data-greeting="7"><span class="jy-opening-scene-top"><span class="jy-opening-scene-thumb"><span aria-hidden="true">陈</span><img src="https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/zhiting.png" data-thumb-char="陈芷汀" data-fallback-src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v2/avatars/zhiting.png" data-fallback-raw="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v2/avatars/zhiting.png" alt="" loading="lazy" decoding="async"></span><span class="jy-opening-scene-tag">周末线上</span></span><span class="jy-opening-scene-main"><span class="jy-opening-scene-number">07</span><span class="jy-opening-scene-name">陈芷汀</span><span class="jy-opening-scene-note">Tinder 匹配</span></span></button>
           <button class="jy-opening-scene" style="--tone:#2e5950" type="button" data-action="select-greeting" data-greeting="8"><span class="jy-opening-scene-top"><span class="jy-opening-scene-thumb"><span aria-hidden="true">虞</span><img src="https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v1/avatars/shuwan.png" data-thumb-char="虞淑婉" data-fallback-src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/statusbar/v1/avatars/shuwan.png" data-fallback-raw="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/statusbar/v1/avatars/shuwan.png" alt="" loading="lazy" decoding="async"></span><span class="jy-opening-scene-tag">行政楼</span></span><span class="jy-opening-scene-main"><span class="jy-opening-scene-number">08</span><span class="jy-opening-scene-name">虞淑婉</span><span class="jy-opening-scene-note">校长室约谈</span></span></button>
+          <button class="jy-opening-scene dlc-featured" style="--tone:#185e54" type="button" data-action="select-greeting" data-greeting="9"><span class="jy-opening-scene-top"><span class="jy-opening-scene-thumb"><span aria-hidden="true">云</span><img src="https://testingcf.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/albums/v1/yunqingyan/campus.webp" data-thumb-char="云清晏" data-fallback-src="https://cdn.jsdelivr.net/gh/YangChen-cn/jiyang-school-assets@main/albums/v1/yunqingyan/campus.webp" data-fallback-raw="https://raw.githubusercontent.com/YangChen-cn/jiyang-school-assets/main/albums/v1/yunqingyan/campus.webp" alt="" loading="lazy" decoding="async"></span><span class="jy-opening-scene-tag">修仙DLC · 9月3日</span></span><span class="jy-opening-scene-main"><span class="jy-opening-scene-number">09</span><span class="jy-opening-scene-name">云清晏</span><span class="jy-opening-scene-note">外省借读生转学入班（高二(8)班教室 · 选此项自动开启都市修仙 DLC）</span></span></button>
         </div>
       </div>
 
@@ -678,14 +763,15 @@
         <div class="jy-opening-tpl-bar">
           <div class="jy-opening-tpl-head">
             <span class="jy-opening-tpl-title">快捷开局模板</span>
-            <span class="jy-opening-tpl-sub">一键填入对应身份、校园日期与第一幕，随时可改写</span>
+            <span class="jy-opening-tpl-sub">覆盖老鹰山、越城商门、旧书库、高三、毕业后与修仙直开，一键填入后可随时改写</span>
           </div>
           <div class="jy-opening-tpl-list">
-            <button class="jy-opening-tpl-chip" type="button" data-action="apply-template" data-template="hardware"><strong>空降五金二代</strong><span>高二插班 · 9月1日</span></button>
-            <button class="jy-opening-tpl-chip" type="button" data-action="apply-template" data-template="contest"><strong>竞赛夜班寒门生</strong><span>实验楼 · 10月14日</span></button>
-            <button class="jy-opening-tpl-chip" type="button" data-action="apply-template" data-template="gaokao"><strong>高三百日狂飙</strong><span>高三下 · 2月26日</span></button>
-            <button class="jy-opening-tpl-chip" type="button" data-action="apply-template" data-template="summer"><strong>盛夏自由沙盒</strong><span>暑假 · 7月12日</span></button>
-            <button class="jy-opening-tpl-chip" type="button" data-action="apply-template" data-template="press"><strong>校刊特派记者</strong><span>小花园 · 9月22日</span></button>
+            <button class="jy-opening-tpl-chip" type="button" data-action="apply-template" data-template="eagle"><strong>山风松溪传薪客</strong><span>老鹰山古桩 · 9月14日</span></button>
+            <button class="jy-opening-tpl-chip" type="button" data-action="apply-template" data-template="merchant"><strong>越城商门空降生</strong><span>高二插班 · 9月1日</span></button>
+            <button class="jy-opening-tpl-chip" type="button" data-action="apply-template" data-template="archive"><strong>旧库残卷夜行人</strong><span>三楼旧书库 · 10月14日</span></button>
+            <button class="jy-opening-tpl-chip" type="button" data-action="apply-template" data-template="gaokao"><strong>百日孤城破晓卷</strong><span>高三下 · 2月26日</span></button>
+            <button class="jy-opening-tpl-chip" type="button" data-action="apply-template" data-template="graduated"><strong>江潮未歇新岁行</strong><span>毕业后自由 · 7月18日</span></button>
+            <button class="jy-opening-tpl-chip" type="button" data-action="apply-template" data-template="immortal"><strong>太虚启封 · 云起山城</strong><span>修仙DLC直开 · 9月3日</span></button>
           </div>
         </div>
         <div class="jy-opening-grid">

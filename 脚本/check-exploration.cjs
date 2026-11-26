@@ -41,7 +41,7 @@ assert.ok(!Object.keys(manifest.entryManifest.角色).some(key=>key.startsWith('
 assert.ok(!Object.keys(manifest.entryManifest.NSFW指导).some(key=>key.startsWith('凌知夏')));
 
 async function checkOpeningMappings() {
- const greetingNames=['开学第一天','慕佳芊','苏晚棠','温书语','沈若微','许念安','陈芷汀','虞淑婉'];
+ const greetingNames=['开学第一天','慕佳芊','苏晚棠','温书语','沈若微','许念安','陈芷汀','虞淑婉','云清晏'];
  const files=fs.readdirSync(path.join(root,'开场白')).filter(name=>/^\d-.*\.txt$/.test(name)).sort();
  assert.equal(files.length,greetingNames.length);
  const greetings=files.map(file=>read('开场白/'+file));
@@ -62,12 +62,14 @@ async function checkOpeningMappings() {
    const state=Object.fromEntries(patches({'开始年份':'2020','重要物品':''},'preset',scenes[index+1]));
    assert.ok(state['世界.当前位置']);
    assert.ok(!Object.keys(state).some(key=>key.startsWith('凌知夏.')));
-   if(index>0) assert.equal(state[name+'.是否在场'],true);
+   if(index>0 && index<8) assert.equal(state[name+'.是否在场'],true);
  }
  assert.match(scenes[2].location,/高二教师办公室/);
  assert.match(scenes[6].location,/高二（8）班教室/);
  assert.match(scenes[7].location,/咖啡馆/);
  assert.match(scenes[8].location,/校长办公室/);
+ assert.match(scenes[9].location,/高二（8）班教室/);
+ assert.equal(scenes[9].present['云清晏'].action.length>0,true);
  const custom = Object.fromEntries(patches({
    '开始年份':'2023', '开场日期':'2024-09-01', '开场地点':'桥下旧书摊', '开场时段':'傍晚',
    '班级或身份':'暨阳中学高二重点班学生'
@@ -92,21 +94,60 @@ async function checkOpeningMappings() {
 
 async function checkOpeningArchives() {
  const openingHtml = read('正则/开局设定界面.html');
- const dom = new JSDOM('<main>' + openingHtml + '</main><textarea id="send_textarea">原有聊天草稿</textarea>', {
+ const dom = new JSDOM('<main>' + openingHtml + '</main><textarea id="send_textarea">原有聊天草稿</textarea><button id="send_but" type="button">发送</button>', {
    runScripts:'outside-only', url:'http://localhost:8000'
  });
  const w = dom.window;
  const d = w.document;
  try {
    if (d.readyState === 'loading') await new Promise(resolve => d.addEventListener('DOMContentLoaded', resolve, {once:true}));
+   const greetingTexts = fs.readdirSync(path.join(root,'开场白')).filter(name=>/^\d-.*\.txt$/.test(name)).sort().map(f=>read('开场白/'+f));
    const messages = [{message:'<OpeningSetupUI/>'}];
-   w.getChatMessages = () => messages;
    let writes = 0;
-   w.setChatMessages = () => { writes++; };
+   let sentLetter = '';
+   let savedFloorZero = null;
+   let mockWorldbook = manifest.entryManifest['世界观']['[DLC]灵气复苏总纲与异象日程']
+     ? Object.values(manifest.entryManifest).flatMap(group => Object.entries(group).map(([name, spec]) => ({ name, comment: name, enabled: spec.enabled ?? true })))
+     : [];
+   w.SillyTavern = { getContext: () => ({ getCurrentChatId: () => 'open-chat' }) };
+   w.getChatMessages = () => messages;
+   w.getCharacter = async () => ({ first_messages: ['<OpeningSetupUI/>', ...greetingTexts] });
+   w.getCharWorldbookNames = () => ({ primary: '暨阳测试主书' });
+   w.getWorldbookNames = () => ['暨阳测试主书'];
+   w.getWorldbook = async () => mockWorldbook;
+   w.updateWorldbookWith = async (_name, fn) => { mockWorldbook = fn(mockWorldbook); return mockWorldbook; };
+   w.setChatMessages = async updates => {
+     writes++;
+     for (const up of updates) {
+       if (up.message_id === 0) {
+         messages[0] = { message: up.message };
+         savedFloorZero = up.data;
+       }
+     }
+   };
+   w.Mvu = {
+     getMvuData: async () => ({ stat_data: { 世界:{}, 剧情:{}, 主角:{ 重要物品:[] }, 苏晚棠:{}, 温书语:{}, 沈若微:{}, 许念安:{}, 慕佳芊:{}, 陈芷汀:{}, 虞淑婉:{} } }),
+     setMvuVariable: async (data, keyPath, value) => {
+       const parts = keyPath.split('.');
+       let cur = data.stat_data;
+       for (let i = 0; i < parts.length - 1; i++) cur = cur[parts[i]] ??= {};
+       cur[parts[parts.length - 1]] = value;
+       return true;
+     }
+   };
+   const sendBtn = d.getElementById('send_but');
+   Object.defineProperty(sendBtn, 'offsetParent', { value: d.body, configurable: true });
+   sendBtn.addEventListener('click', () => {
+     sentLetter = d.getElementById('send_textarea').value;
+     messages.push({ is_user: true, message_id: 1, message: sentLetter });
+   });
    w.eval(read('脚本/开局设定按钮绑定脚本.js'));
    const get = selector => d.querySelector(selector);
    const click = action => get('[data-action="' + action + '"]').click();
    const field = name => get('[data-field="' + name + '"]');
+   const dlcBox = get('[data-opening-dlc]');
+   assert.equal(dlcBox.checked, false);
+
    click('show-archives');
    assert.equal(get('[data-opening-archives]').open, true);
    assert.equal(get('[data-opening-archives] summary').textContent, '学籍档案');
@@ -118,16 +159,21 @@ async function checkOpeningArchives() {
    get('[data-mode="custom"]').click();
    get('[data-custom-opening]').value = ' 雨停了。\n有人把书摞到木箱上。';
    get('[data-opening-action]').value = '把伞收起来。';
+   dlcBox.checked = true;
+   dlcBox.dispatchEvent(new w.Event('change', { bubbles: true }));
    click('save-archive');
    const first = get('[data-archive-select]').value;
    assert.ok(first);
    get('[data-archive-name]').value = '<b>另一个开局</b>';
    field('姓名').value = '陈小桥';
+   dlcBox.checked = false;
+   dlcBox.dispatchEvent(new w.Event('change', { bubbles: true }));
    click('save-archive');
    const second = get('[data-archive-select]').value;
    assert.notEqual(second, first);
    assert.match(get('[data-archive-select] option:checked').textContent, /<b>另一个开局<\/b>/);
    click('clear');
+   assert.equal(dlcBox.checked, false);
    assert.equal(w.localStorage.length, 2);
 
    // Remount the actual opening in a new chat. The archive belongs to the site, independent of either form.
@@ -144,19 +190,61 @@ async function checkOpeningArchives() {
    assert.equal(field('性格').value, '说话直\n喜欢旧书');
    assert.equal(field('开场日期').value, '2020-11-06');
    assert.equal(field('开场地点').value, '桥下旧书摊');
+   assert.equal(get('[data-opening-dlc]').checked, true);
    assert.equal(get('[data-jy-opening]').dataset.openingMode, 'custom');
    assert.equal(get('[data-custom-opening]').value, ' 雨停了。\n有人把书摞到木箱上。');
    assert.equal(get('[data-opening-action]').value, '把伞收起来。');
    assert.equal(get('#send_textarea').value, '原有聊天草稿');
    assert.equal(writes, 0);
    assert.equal(get('[data-id-preview-name]').textContent, '陈默');
-   get('[data-action="apply-template"][data-template="hardware"]').click();
+
+   get('[data-opening-dlc]').checked = false;
+   get('[data-opening-dlc]').dispatchEvent(new w.Event('change', { bubbles: true }));
+   get('[data-action="apply-template"][data-template="merchant"]').click();
    assert.equal(field('开场地点').value, '暨阳路校门口');
    assert.equal(field('开场日期').value, '2020-09-01');
    assert.equal(get('[data-id-preview-class]').textContent, '暨阳中学高二重点班插班生');
+   get('[data-action="apply-template"][data-template="eagle"]').click();
+   assert.equal(field('开场地点').value, '老鹰山 听风亭');
    get('[data-action="apply-template"][data-template="gaokao"]').click();
    assert.equal(field('开场日期').value, '2022-02-26');
    assert.equal(get('[data-opening-action]').value.length > 0, true);
+   get('[data-action="apply-template"][data-template="graduated"]').click();
+   assert.equal(field('开场日期').value, '2022-07-18');
+   assert.equal(field('班级或身份').value, '暨阳中学毕业生');
+   get('[data-action="apply-template"][data-template="immortal"]').click();
+   assert.equal(field('开场日期').value, '2020-09-03');
+   assert.equal(get('[data-opening-dlc]').checked, true);
+
+   // Select preset scene 09 (云清晏转学) and toggle DLC OFF->auto-revert / ON->submit cleanly
+   get('[data-opening-dlc]').checked = false;
+   get('[data-opening-dlc]').dispatchEvent(new w.Event('change', { bubbles: true }));
+   get('[data-mode="preset"]').click();
+   get('[data-action="select-greeting"][data-greeting="9"]').click();
+   await new Promise(r => w.setTimeout(r, 40));
+   assert.equal(get('[data-opening-dlc]').checked, true, '选云清晏转学开场应自动勾选修仙DLC');
+   assert.match(get('[data-preview-content]').textContent, /外省转来借读的新同学[\s\S]*云清晏/);
+   get('[data-opening-dlc]').checked = false;
+   get('[data-opening-dlc]').dispatchEvent(new w.Event('change', { bubbles: true }));
+   assert.equal(get('[data-jy-opening]').dataset.greetingIndex, '1', '关闭DLC应退回开学第一天');
+   get('[data-action="select-greeting"][data-greeting="9"]').click();
+   await new Promise(r => w.setTimeout(r, 40));
+   get('[data-action="close-preview"]').click();
+   get('[data-opening-action]').value = '递过一叠新课本并示意旁边的空位。';
+   let dlcEvents = 0;
+   w.addEventListener('jy-aura-dlc-changed', () => { dlcEvents++; });
+   click('confirm');
+   await new Promise(r => w.setTimeout(r, 250));
+   assert.equal(writes, 1);
+   assert.equal(dlcEvents > 0, true);
+   assert.match(sentLetter, /当前开场: 云清晏[\s\S]*修仙DLC: 开启/);
+   assert.equal(savedFloorZero.stat_data.剧情.灵气复苏.已开启, true);
+   assert.equal(savedFloorZero.stat_data.剧情.灵气复苏.开启日期, '2020-09-03');
+   assert.equal(savedFloorZero.stat_data.云清晏.是否在场, true);
+   assert.equal(savedFloorZero.stat_data.谢昭宁.是否在场, false);
+   assert.equal(mockWorldbook.find(e => e.name === '[DLC]灵气复苏总纲与异象日程').enabled, true);
+   assert.equal(mockWorldbook.find(e => e.name === '云清晏_基础信息').enabled, true);
+   assert.equal(schemaBox.schema.parse(savedFloorZero.stat_data).云清晏.是否在场, true);
 
    w.confirm = () => false;
    click('delete-archive');

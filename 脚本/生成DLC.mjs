@@ -11,6 +11,7 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, '..');
 const statePath = path.join(root, 'tavern-cards-state.json');
 const playerPath = path.join(here, '多功能悬浮球.js');
+const openingPath = path.join(here, '开局设定按钮绑定脚本.js');
 
 const DLC_KEYS = [
   ['世界观', '[DLC]灵气复苏总纲与异象日程'],
@@ -74,3 +75,15 @@ const payload = `const DLC_ENTRIES = ${JSON.stringify(manifestEntries)};`;
 const nextSrc = playerSrc.replace(pattern, (_, head, tail) => `${head}\n  ${payload}\n  ${tail.trimStart()}`);
 fs.writeFileSync(playerPath, nextSrc, 'utf8');
 console.log(`[生成DLC] 已同步 ${manifestEntries.length} 条 DLC 世界书条目到 脚本/多功能悬浮球.js`);
+
+if (fs.existsSync(openingPath)) {
+  const openingSrc = fs.readFileSync(openingPath, 'utf8');
+  const namesPattern = /(\/\*\s*JY_DLC_NAMES_BEGIN\s*\*\/)\s*[\s\S]*?(\s*\/\*\s*JY_DLC_NAMES_END\s*\*\/)/;
+  if (namesPattern.test(openingSrc)) {
+    const namesList = manifestEntries.map(item => item.name);
+    const namesPayload = `var DLC_ENTRY_NAMES = ${JSON.stringify(namesList)};`;
+    const nextOpening = openingSrc.replace(namesPattern, (_, head, tail) => `${head}\n  ${namesPayload}\n  ${tail.trimStart()}`);
+    fs.writeFileSync(openingPath, nextOpening, 'utf8');
+    console.log(`[生成DLC] 已同步 ${namesList.length} 条 DLC 条目名录到 脚本/开局设定按钮绑定脚本.js`);
+  }
+}

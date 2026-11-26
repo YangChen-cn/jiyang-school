@@ -6,8 +6,11 @@
   var ARCHIVE_PREFIX = 'jy-opening-archive:v1:';
   var LEGACY_ENTRY_NAME = '玩家开局设定';
   var WRITE_LEGACY_WORLDBOOK = false; // 旧版把档案写进世界书；新版改为写 MVU 变量，保留代码路径但默认关闭
-  var GREETING_NAMES = ['开局设定界面', '开学第一天', '慕佳芊', '苏晚棠', '温书语', '沈若微', '许念安', '陈芷汀', '虞淑婉'];
+  var GREETING_NAMES = ['开局设定界面', '开学第一天', '慕佳芊', '苏晚棠', '温书语', '沈若微', '许念安', '陈芷汀', '虞淑婉', '云清晏'];
   var CHARACTER_NAMES = ['苏晚棠', '温书语', '沈若微', '许念安', '慕佳芊', '陈芷汀', '虞淑婉'];
+  /* JY_DLC_NAMES_BEGIN */
+  var DLC_ENTRY_NAMES = ["[DLC]灵气复苏总纲与异象日程","[DLC]境界描述","[DLC]破境判定","[DLC]华夏修行界与三教总览","[DLC]世家_钱塘谢氏剑庐","[DLC]世家_西溪葛氏丹霞","[DLC]世家_魔都苏氏水府","[DLC]世家_申城天星钟氏","[DLC]仙宗_南屏法华禅院","[DLC]仙宗_天台赤城洞天","[DLC]仙宗_四明赤水剑宗","[DLC]仙宗_天目灵虚宫","[DLC]仙宗_茅山上清宗","[DLC]仙宗_龙虎山天师府","[DLC]仙宗_终南山楼观台","[DLC]仙宗_青城山丈人洞天","[DLC]仙宗_武当山紫霄宫","[DLC]仙宗_东海蓬莱与崇明归墟","[DLC]仙宗_西域昆仑祖脉","[DLC]老鹰山灵脉与古宗秘藏","云清晏_基础信息","云清晏_性格调色盘","云清晏_NSFW指导","谢昭宁_基础信息","谢昭宁_性格调色盘","谢昭宁_NSFW指导"];
+  /* JY_DLC_NAMES_END */
   var DEFAULT_FIELDS = {
     '开始年份': '2020',
     '年龄': '18岁',
@@ -15,85 +18,102 @@
   };
 
   var OPENING_TEMPLATES = {
-    hardware: {
-      title: '空降五金二代',
+    eagle: {
+      title: '山风松溪传薪客',
+      offsetYear: 0,
+      mmdd: '09-14',
+      fields: {
+        '班级或身份': '暨阳中学高二重点班走读生',
+        '家庭背景': '祖辈曾在老城经营拳馆与药行，如今家里只剩一间临江清静茶室；自幼跟着祖父蹲桩调息，习惯早起绕去老鹰山半山压腿呼吸山风。',
+        '擅长与学业': '文化课稳居中上，耐力与定力极佳，晨昏一套「松溪吐风桩」雷打不动。',
+        '重要物品': '洗得发白的帆布包、半本祖父手抄《松溪调息要诀》、一枚刻着模糊云纹的老茶饼铁盒。',
+        '开局心事': '近来清晨在听风亭收功时，旧值守屋檐下那口常年积灰的铜铎偶会无风轻颤半声，屋后扫落叶的周伯看人的视线也越发沉静难测。',
+        '开场地点': '老鹰山 听风亭',
+        '开场时段': '清晨（6:15）'
+      },
+      story: '清晨六点一刻的雾还没从松梢散开，听风亭青石基座上凉得像刚浸过井水。我按祖父教的呼吸吐纳收了最后半式桩功，顺着石阶往旧值守屋那边走——屋檐底下那口青铜铎不知何时极为轻微地荡了一下，连落叶都没有惊动，远处周伯正拿着竹扫帚站在荒径口看过来。',
+      action: '理了理被山风吹乱的校服袖口，朝听风亭外那条铺满松针的石径走过去同周伯打声招呼。'
+    },
+    merchant: {
+      title: '越城商门空降生',
       offsetYear: 0,
       mmdd: '09-01',
       fields: {
         '班级或身份': '暨阳中学高二重点班插班生',
-        '家庭背景': '父亲在店口镇经营精工五金配件厂，刚在老城置产搬来陪读；家境殷实但平日习惯低调，偶尔帮家里跑几趟车间交接。',
-        '擅长与学业': '理科中上，动手能力强，会骑改装电摩也会修常见家用电器与精密小件。',
-        '重要物品': '淘汰的老款行车记录仪、铜质厂徽钥匙扣，以及刚办好的校园饭卡。',
-        '开局心事': '刚从镇上转进全市最卷的重点班，只想先安顿下来，看看这所百年中学里的人和传闻究竟什么样。',
+        '家庭背景': '家里从店口智造与外贸供应链起家，近期刚把总部与新宅落定御江湾别墅区；原本打算去杭州读私立名校，被家里要求先回暨阳重点班沉心压一压锐气。',
+        '擅长与学业': '数理思维与商业直觉俱佳，既看得懂精密机械图，也习惯茶桌商局上的留三分分寸与精准控场。',
+        '重要物品': '一块磨去商标的素面机械表、御江湾地下车库备用门禁卡、一张刚办好还没贴照片的学生证。',
+        '开局心事': '刚空降进这座盘踞着山下湖珍珠与百强名校生的小城重点班，正想亲眼见识一下传闻里眼高于顶的风云人物和藏在老城水面下的门道。',
         '开场地点': '暨阳路校门口',
         '开场时段': '晨光初露（7:10）'
       },
-      story: '秋初七点的风里还带着点槐花落尽后的凉意。我把电动车停在校门对面的香樟树影里，摘下头盔理了理新领的校服领口，校徽别在左胸口袋上方，阳光正落在一行行进门的蓝色校服脊背上。',
-      action: '推车走进校门旁的停车棚，抬头打量教学楼墙上的百年校训牌。'
+      story: '七点十分，秋初的日头刚刚越过香樟树冠。黑色轿车滑进校门外百米处的林荫道边稳稳刹停，我推门下车，把没拉到底的校服拉链随手拎上去一截。百米外百年名校的牌匾挂在晨光里，各色校服顺着道口鱼贯而入。',
+      action: '把机械表袖口整好，拎着单肩包独自穿过暨阳路斑马线走进教学楼大厅看分班榜。'
     },
-    contest: {
-      title: '竞赛夜班寒门生',
+    archive: {
+      title: '旧库残卷夜行人',
       offsetYear: 0,
       mmdd: '10-14',
       fields: {
-        '班级或身份': '暨阳中学高二重点班 · 物理竞赛组走读生',
-        '家庭背景': '与外婆同住在老城窄巷旧楼里，父母常年在外跑长途运输；平时周末帮巷口面馆或便利店搭把手挣生活费。',
-        '擅长与学业': '物理竞赛强项、数学稳居前列，晚上常泡在实验楼三楼竞赛自习室做题。',
-        '重要物品': '写满批注的二手《物理竞赛教程》、掉了漆的不锈钢保温杯、一张月底到期的公交月票。',
-        '开局心事': '省初赛名单快定下来了，晚上加训完还得赶最后一班回老城的车，顺路看看老城巷口灯还亮不亮。',
-        '开场地点': '实验楼',
-        '开场时段': '晚自习后（21:40）'
+        '班级或身份': '暨阳中学高二重点班 · 物理竞赛暨旧书库助理',
+        '家庭背景': '父母长年在浙东各市县跑夜路货运，同外婆住在老城旧楼；课余不仅进实验室做物理竞赛题，还靠帮图书馆三楼地方志旧库归档挣一点稳妥补贴。',
+        '擅长与学业': '数理逻辑与古籍文献梳理俱佳，眼神敏锐沉得住气，对日期、地名残片和旁人微表情记忆极准。',
+        '重要物品': '写满红黑批注的二手《物理竞赛教程》、图书馆三楼旧书库备用钥匙、夹着半张《暨阳风物补遗》拓页的硬壳本。',
+        '开局心事': '昨晚整理地方志夹层时翻出了半张标着老鹰山荒径与古亭坐标的泛黄拓片；今夜加训完锁门，总觉得漆黑走廊尽头的阅览角好像还有盏小灯刚熄不久。',
+        '开场地点': '图书馆 三楼旧书库外',
+        '开场时段': '晚自习后（21:35）'
       },
-      story: '实验楼三楼只剩竞赛自习室那盏白炽灯还亮着。窗外操场早就熄了高杆灯，风吹过连廊时带着食堂散尽后的淡淡油烟味。我把最后一道电磁感应大题收进活页夹，关灯锁门下楼。',
-      action: '拎着旧书包穿过漆黑的连廊去往校门方向。'
+      story: '晚上九点三十五分，教学楼的喧闹早已散进夜色里，图书馆三楼只有旧书库窗外透进一点路灯余光。老纸张特有的干燥樟脑味混着夜露气味浮在过道间，手里那本清末地方志抄录里夹着的一张模糊残图正压在硬壳笔记底下。',
+      action: '把抄好批注的《暨阳风物补遗》残页夹回硬壳本，摸出钥匙准备锁库下楼。'
     },
     gaokao: {
-      title: '高三百日狂飙',
+      title: '百日孤城破晓卷',
       offsetYear: 2,
       mmdd: '02-26',
       fields: {
         '班级或身份': '暨阳中学高三重点班学生',
-        '家庭背景': '普通工薪家庭走读生，高三这一年家里晚饭总是准点摆在桌上，父母嘴上说别紧张却比谁都早起床。',
-        '擅长与学业': '进入高三总复习冲刺节奏，强科稳步拔高，弱科靠错题本一点点补。',
-        '重要物品': '写满红蓝批注的高考倒计时活页册、半板薄荷糖、一枚高二体育周留下来的铜牌。',
-        '开局心事': '距离高考只剩一百来天，教室后墙的红纸换了一次又一次；越是临近告别，有些一直没说出口的话越难装作没看见。',
+        '家庭背景': '历经成人礼与首考洗礼、瞄准浙江大学冲刺的普通家庭走读生；父母晚饭准点温在锅里，嘴上越放宽心却比谁都早亮灯。',
+        '擅长与学业': '进入高三最后百余天合围冲刺阶段，压轴大题手感稳步拔尖，心性也远比高二时沉得住气。',
+        '重要物品': '写着目标「浙江大学」字样的黑皮错题册、高三成人礼纪念徽章、半瓶清醒薄荷鼻通。',
+        '开局心事': '教室后墙红纸倒计时一天天逼近夏天，有些人从高二藏到高三的心事快兜不住了（若此刻同时启封修仙 DLC，也将按高三剩余时日紧凑演进，不拖进毕业后）。',
         '开场地点': '高三教室',
-        '开场时段': '早读前（6:50）'
+        '开场时段': '早读前（6:40）'
       },
-      story: '二月末的早春还很冷，教室玻璃上结了一层薄雾。讲台黑板右上角的百日倒计时昨晚刚被值日生擦新，粉笔灰落在窗台一排厚厚的《五年高考三年模拟》书脊上。前排陆续有人哈着白气进来放书包。',
-      action: '把热豆浆和英语听力词汇本摊在课桌上，擦去玻璃窗上的一角水雾。'
+      story: '二月末的早春还寒，走廊外天色刚泛出一线青白，高三重点班玻璃窗内沿结着一层薄霜。讲台黑板右上角的百日倒计时昨晚刚被擦新，粉笔灰落在窗台一摞翻皱卷边的真题汇编与《浙江大学招生指南》封皮上。',
+      action: '把热豆浆和错题本搁上桌面，抬手抹开窗玻璃上一角白雾望向渐渐醒来的校园。'
     },
-    summer: {
-      title: '盛夏自由沙盒',
-      offsetYear: 1,
-      mmdd: '07-12',
+    graduated: {
+      title: '江潮未歇新岁行',
+      offsetYear: 2,
+      mmdd: '07-18',
       fields: {
-        '班级或身份': '暨阳中学高二重点班学生',
-        '家庭背景': '家里暑期照常早出晚归，留了充分自由支配时间；城市不大，穿街走巷半小时就能绕过半个城区。',
-        '擅长与学业': '完成暑期作业之余精力充沛，熟知暨阳城里各家奶茶店、书店、公园和步道的去处。',
-        '重要物品': '一把折叠晴雨伞、两百块零钱、装满冰美式或矿泉水的运动水壶。',
-        '开局心事': '七月的蝉鸣从早响到晚，难得整片暑假没有早晚自习束缚，想看看这个夏天能和谁撞见什么意料之外的故事。',
+        '班级或身份': '暨阳中学毕业生',
+        '家庭背景': '刚刚走过高考告别钟声与毕业夜的准大学生，志愿已落定、长假刚刚摊开，眼下正频繁往返于暨阳老城与杭城高校圈之间。',
+        '擅长与学业': '彻底告别早晚自习与校规门禁，既有高中三年磨出的敏锐心智，也有足够充裕的时间奔走城区、山野或邻近省会。',
+        '重要物品': '高三毕业合影底片、暨阳至杭州东高铁车票夹、一只装满零碎旧票根的随身帆布包。',
+        '开局心事': '三年的同学与师长各自站在人生新的分岔路口；若此时暗涌掀开（配合勾选修仙 DLC 即启用毕业后 90 日紧凑节奏），不再被课堂约束的新天地正等着重逢或叩门。',
         '开场地点': '浣江步道',
-        '开场时段': '午后（15:30）'
+        '开场时段': '傍晚（18:20）'
       },
-      story: '七月的日头白花花地铺在江面上，风从浣江上游吹过来，带着水汽和岸边栀子花残香。树荫底下的青石板长椅还算阴凉，远处西施故里的飞檐隐在热浪里，几步外的冷饮亭正响着老式冰柜的嗡嗡声。',
-      action: '从背包里摸出一瓶冰水拧开，沿江堤慢步朝老城与遇见奶茶店方向走。'
+      story: '七月中旬的江风终于消下几分日晒的焦灼，夕阳把浣江水面劈成碎金。脱掉校服换成轻便夏装之后，耳边再也没有六点半的起床铃了。远处的暨阳大桥亮起第一排路灯，手机屏保还是不久前在教学楼前拍的那张毕业合照。',
+      action: '把冰镇柠檬茶换到左手，顺着江堤步道慢悠悠朝城中街区走，盘算着今晚去哪碰个熟人或查些线索。'
     },
-    press: {
-      title: '校刊特派记者',
+    immortal: {
+      title: '太虚启封·云起山城',
       offsetYear: 0,
-      mmdd: '09-22',
+      mmdd: '09-03',
+      enableDlc: true,
       fields: {
-        '班级或身份': '暨阳中学高二重点班 · 《青砚》校刊特派采编',
-        '家庭背景': '书香小家庭长大，家里书架挤满旧报纸和胶片洗印相册；对校园里每栋楼的故事格外敏锐。',
-        '擅长与学业': '文笔利落、摄影构图敏锐、记忆力好，常借校刊采访名义正大光明出入办公室、图书馆和社团排练室。',
-        '重要物品': '挂脖工作证（《青砚》编辑部）、一支黑色中性笔、一本贴着便利贴的采访手账。',
-        '开局心事': '新一期校刊的“秋日暨阳图鉴”专刊还差几篇鲜活的人物特写，今天正好可以借采风的名义约几个人聊两句。',
-        '开场地点': '小花园',
-        '开场时段': '午休（12:35）'
+        '班级或身份': '暨阳中学高二（8）班学生',
+        '家庭背景': '寻常暨阳本地人家出身，唯有祖辈传下一枚不知年月的素面青玉扣贴身戴着；近几日夜深醒转时，耳畔偶尔隐约掠过老鹰山方向吹来的清越余韵。',
+        '擅长与学业': '表面课业温和低调，实则五感天生比同龄人清明一筹，能微察山风寒暑之外的那一缕异样沉静。',
+        '重要物品': '祖传素面旧青玉扣（贴近锁骨带着些微难言温凉感）、高二重点班新课表。',
+        '开局心事': '九月初的空气闷热依旧，可刚踏进教室总觉得窗外吹进来的风比往常清冷一线，讲台门外隐约停下一串轻到近乎没有声音的脚步。',
+        '开场地点': '暨阳中学 教学楼四楼 高二（8）班教室',
+        '开场时段': '上午课（08:10）'
       },
-      story: '午休的小花园很安静，鹅卵石小路两旁桂花刚透出几星甜香。我把采访本翻到新的一页，钢笔帽咬开又合上——手里列着一长串还没敲定受访人的名单，从办公室到图书馆再到操场看台都有得跑。',
-      action: '把校刊采访证挂到脖子上，在鹅卵石长椅旁站定翻看今天的采编清单。'
+      story: '九月初的第三节课铃声刚响过不久，窗外掠过一阵顺着江风吹来的意外凉意，带着点雨后深山老松林的味道。胸口衣物底下的旧青玉扣似有似无地透出一丝凉意，正此时班主任推开门站上讲台，朝教室后方挥了挥手，身后跟着一名黑发以旧木簪松松挽起、冷清得仿佛跟满屋燥热隔了一层的陌生女生。',
+      action: '按住衣襟底下微凉的旧玉扣抬眸望向讲台前走近的转校生，看班主任怎么交代她落座。'
     }
   };
 
@@ -137,6 +157,78 @@
     }
   }
 
+  function computeOpeningDlcProgress(originRaw, currentRaw, startYearRaw) {
+    var oriStr = String(originRaw || currentRaw || '').trim();
+    var yearMatch = oriStr.match(/^(\d{4})/);
+    var startYear = (typeof startYearRaw === 'number' || typeof startYearRaw === 'string') && /^\d{4}$/.test(String(startYearRaw).trim())
+      ? Number(String(startYearRaw).trim())
+      : (yearMatch ? Number(yearMatch[1]) : 2020);
+    if (!(startYear >= 1000 && startYear <= 9900)) startYear = 2020;
+    var parseMs = function (raw) {
+      var m = String(raw || '').trim().match(/^(\d{4})[-/年.](\d{1,2})[-/月.](\d{1,2})/);
+      if (!m) return null;
+      var y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);
+      return (mo >= 1 && mo <= 12 && d >= 1 && d <= 31) ? Date.UTC(y, mo - 1, d) : null;
+    };
+    var toIso = function (raw, fallback) {
+      var m = String(raw || '').trim().match(/^(\d{4})[-/年.](\d{1,2})[-/月.](\d{1,2})/);
+      return m ? (m[1] + '-' + String(Number(m[2])).padStart(2, '0') + '-' + String(Number(m[3])).padStart(2, '0')) : fallback;
+    };
+    var originDate = toIso(originRaw, startYear + '-09-01');
+    var currentDate = toIso(currentRaw, originDate);
+    var oriMs = parseMs(originDate);
+    if (oriMs === null) oriMs = Date.UTC(startYear, 8, 1);
+    var curMs = parseMs(currentDate);
+    if (curMs === null) curMs = oriMs;
+    var gradMs = Date.UTC(startYear + 2, 6, 1);
+    var isPostGradOrigin = oriMs >= gradMs;
+    var remainDays = isPostGradOrigin ? 0 : Math.floor((gradMs - oriMs) / 86400000);
+    var totalDays = isPostGradOrigin ? 90 : Math.max(120, Math.min(400, Math.floor(remainDays * 0.92)));
+    var s1 = Math.max(1, Math.round(totalDays * 45 / 400));
+    var s2 = Math.max(s1 + 1, Math.round(totalDays * 120 / 400));
+    var s3 = Math.max(s2 + 1, Math.round(totalDays * 240 / 400));
+    var s4 = totalDays;
+    var dayNumber = Math.max(1, Math.floor((curMs - oriMs) / 86400000) + 1);
+    var stageIndex = dayNumber <= s1 ? 0 : dayNumber <= s2 ? 1 : dayNumber <= s3 ? 2 : dayNumber <= s4 ? 3 : 4;
+    var stageName = ['微兆潜龙期', '灵潮初涌期', '龙眼破禁期', '潜龙秘序期', '百宗出山期'][stageIndex];
+    var modeLabel = isPostGradOrigin ? '毕业后90日线' : totalDays < 400 ? ('高三自适应' + totalDays + '日线') : '400日标准线';
+    return { originDate: originDate, currentDate: currentDate, dayNumber: dayNumber, stageIndex: stageIndex, stageName: stageName, totalDays: totalDays, s1: s1, s2: s2, s3: s3, s4: s4, isPostGradOrigin: isPostGradOrigin, modeLabel: modeLabel };
+  }
+
+  function isDlcEnabled(root) {
+    var box = root && root.querySelector('[data-opening-dlc]');
+    return !!(box && box.checked);
+  }
+
+  function updateDlcHint(root) {
+    if (!root) return;
+    var enabled = isDlcEnabled(root);
+    var boxWrap = root.querySelector('[data-opening-dlc-box]');
+    if (boxWrap) boxWrap.setAttribute('data-enabled', enabled ? 'true' : 'false');
+    var hintEl = root.querySelector('[data-opening-dlc-hint]');
+    if (!hintEl) return;
+    var year = campusYear(readField(root, '开始年份') || '2020');
+    var mode = getMode(root);
+    var targetDate = '';
+    if (mode === 'custom') {
+      targetDate = readField(root, '开场日期');
+    } else {
+      var sc = GREETING_SCENES[getGreetingIndex(root)];
+      if (sc && sc.date) targetDate = sc.date.replace(/^\d{4}/, String(year)).replaceAll('/', '-');
+    }
+    var progress = computeOpeningDlcProgress(targetDate || (year + '-09-01'), targetDate || (year + '-09-01'), year);
+    hintEl.textContent = enabled
+      ? ('已开启（基准日 ' + progress.originDate + ' · ' + progress.modeLabel + '，第 ' + (progress.s4 + 1) + ' 日起百宗出山，同步激活云清晏/谢昭宁与灵脉体系）')
+      : ('未开启（保持 100% 纯校园日常；若此刻改选开启将走' + progress.modeLabel + '）');
+  }
+
+  function setDlcEnabled(root, enabled) {
+    if (!root) return;
+    var box = root.querySelector('[data-opening-dlc]');
+    if (box) box.checked = !!enabled;
+    updateDlcHint(root);
+  }
+
   function applyOpeningTemplate(root, key) {
     var tpl = OPENING_TEMPLATES[key];
     if (!tpl) return;
@@ -152,8 +244,10 @@
     var actionBox = root.querySelector('[data-opening-action]');
     if (actionBox) actionBox.value = tpl.action || '';
     setMode(root, 'custom');
+    if (tpl.enableDlc) setDlcEnabled(root, true);
     updateIdPreview(root);
-    toast(root, '已填入「' + tpl.title + '」开局模板，可直接开始或继续微调。', 'info');
+    updateDlcHint(root);
+    toast(root, '已填入「' + tpl.title + '」开局模板' + (tpl.enableDlc ? '（已自动开启都市修仙 DLC）' : '') + '，可直接开始或继续微调。', 'info');
   }
 
   function bindSceneThumbs(root) {
@@ -256,6 +350,17 @@
       area: '校园', privacy: '半私密', pace: '事件触发', semester: '高二上', focus: '虞淑婉', schoolEvent: '无',
       present: {
         '虞淑婉': { pos: '办公室门内', top: '米白色真丝衬衫', bottom: '黑色直筒西裤', action: '低头俯视跌坐在地的人', mood: '被打断的愠怒与警觉', inner: '他看到了多少。' }
+      }
+    },
+    9: {
+      date: '2020/09/03', week: '星期四', time: '上午课', weather: '晴', location: '暨阳中学 教学楼四楼 高二（8）班教室',
+      area: '校园', privacy: '公开', pace: '日常铺垫', semester: '高二上', focus: '云清晏', schoolEvent: '无',
+      present: {
+        '苏晚棠': { pos: '靠窗后排座位', top: '白色短袖校服衬衫', bottom: '深色校服百褶裙', action: '懒洋洋支着下颌看窗外，听见动静后抬眸打量讲台', mood: '随性好奇', inner: '从外省转来的借读生？看着倒挺冷清。' },
+        '温书语': { pos: '窗边第二排', top: '白色短袖校服衬衫', bottom: '深色校服长裤', action: '指尖压着翻过的书页抬眼望向讲台', mood: '安静敏锐', inner: '方才那阵穿堂风怎么凉得有点奇怪。' },
+        '许念安': { pos: '讲台旁', top: '白色短袖校服衬衫', bottom: '深色校服裙', action: '攥着花名册准备领新同学认座位发书单', mood: '周到从容', inner: '先把名签与新书单登记好。' },
+        '沈若微': { pos: '最后一排靠墙角落', top: '洗得发白的校服短袖', bottom: '洗得发白的校服长裤', action: '垂眼安静整理抽屉，尽量不惹注意', mood: '克制平静', inner: '新来的同学看起来很安静，挺好。' },
+        '云清晏': { pos: '讲台前班主任身侧', top: '洗得规整的暨阳中学白衬衣校服与领结', bottom: '深青校裙与过踝袜鞋', action: '垂眸环视过安静下来的教室，极轻地颔首致意后循过道走下台阶', mood: '疏离清冷，初临红尘的淡静微察', inner: '归元眼散逸在山风里的余韵竟真落进这间寻常教室……红尘烟火原是这般鲜活。' }
       }
     }
   };
@@ -473,6 +578,7 @@
         var record = {
           name: name.slice(0, 60), savedAt: savedAt, fields: fields,
           mode: getMode(root), greeting: getGreetingIndex(root),
+          dlc: isDlcEnabled(root),
           story: root.querySelector('[data-custom-opening]').value,
           action: root.querySelector('[data-opening-action]').value
         };
@@ -494,10 +600,13 @@
           });
           setMode(root, selected.mode === 'custom' ? 'custom' : 'preset');
           var greeting = selected.greeting;
-          setGreetingIndex(root, Number.isInteger(greeting) && greeting >= 1 && greeting < GREETING_NAMES.length ? greeting : 1);
+          var validGreeting = Number.isInteger(greeting) && greeting >= 1 && greeting < GREETING_NAMES.length ? greeting : 1;
+          setGreetingIndex(root, validGreeting);
+          setDlcEnabled(root, Boolean(selected.dlc) || (selected.mode !== 'custom' && validGreeting === 9));
           root.querySelector('[data-custom-opening]').value = typeof selected.story === 'string' ? selected.story : '';
           root.querySelector('[data-opening-action]').value = typeof selected.action === 'string' ? selected.action : '';
           updateIdPreview(root);
+          updateDlcHint(root);
           status.textContent = '已填入「' + selected.name + '」，可继续编辑。';
         } else if (window.top.confirm('删除本地档案「' + selected.name + '」？')) {
           storage.removeItem(key);
@@ -624,7 +733,7 @@
 
   function parseLetter(text) {
     var data = {};
-    var labels = ['姓名', '年龄', '性别或称谓', '班级或身份', '外貌', '性格', '擅长与学业', '家庭背景', '重要物品', '开局心事', '当前开场', '开始年份', '开场日期', '开场地点', '开场时段', '自定义开局', '开局行动'];
+    var labels = ['姓名', '年龄', '性别或称谓', '班级或身份', '外貌', '性格', '擅长与学业', '家庭背景', '重要物品', '开局心事', '当前开场', '开始年份', '修仙DLC', '开场日期', '开场地点', '开场时段', '自定义开局', '开局行动'];
     var stop = labels.concat(['连续性优先级']).join('|');
     var source = String(text || '');
     labels.forEach(function (label) {
@@ -761,7 +870,121 @@
     return patches;
   }
 
-  async function prepareMvuOpening(formData, mode, scene) {
+  function findFloatingBridge() {
+    var wins = windowList();
+    for (var i = 0; i < wins.length; i += 1) {
+      try {
+        if (wins[i].__jiyangFloatingMusicPlayerV2) return wins[i].__jiyangFloatingMusicPlayerV2;
+      } catch (_) {}
+    }
+    return null;
+  }
+
+  function dispatchDlcChanged() {
+    var wins = windowList();
+    for (var i = 0; i < wins.length; i += 1) {
+      try {
+        if (typeof wins[i].CustomEvent === 'function' && typeof wins[i].dispatchEvent === 'function') {
+          wins[i].dispatchEvent(new wins[i].CustomEvent('jy-aura-dlc-changed', { detail: { messageId: 0 } }));
+        }
+      } catch (_) {}
+    }
+  }
+
+  async function syncOpeningWorldbookDlc(bookName, enableDlc) {
+    if (!enableDlc) return;
+    var bridge = findFloatingBridge();
+    if (bridge && typeof bridge.ensureDlcEntries === 'function') {
+      await bridge.ensureDlcEntries(bookName, true);
+      return;
+    }
+    var readWb = th('getWorldbook');
+    var updateWb = th('updateWorldbookWith');
+    if (!bookName || !readWb || !updateWb) return;
+    var dlcSet = new Set(DLC_ENTRY_NAMES);
+    if (!dlcSet.size) return;
+    var entries = await readWb(bookName);
+    var needsSync = entries.some(function (entry) {
+      var name = entry.name || entry.comment;
+      return dlcSet.has(name) && !entry.enabled;
+    });
+    if (!needsSync) return;
+    await updateWb(bookName, function (current) {
+      return current.map(function (entry) {
+        var name = entry.name || entry.comment;
+        return dlcSet.has(name) ? Object.assign({}, entry, { enabled: true }) : entry;
+      });
+    }, { render: 'immediate' });
+  }
+
+  function applyDlcToStatData(stat, options) {
+    if (!stat || typeof stat !== 'object') return null;
+    var opts = options || {};
+    var enableDlc = Boolean(opts.enableDlc);
+    stat.剧情 = stat.剧情 || {};
+    if (!enableDlc) {
+      if (stat.剧情.灵气复苏) stat.剧情.灵气复苏.已开启 = false;
+      return null;
+    }
+    var startYear = stat.世界?.起始年份 || opts.startYear || '2020';
+    var dateRaw = stat.世界?.日期 || opts.date || (String(startYear) + '-09-01');
+    var progress = computeOpeningDlcProgress(dateRaw, dateRaw, startYear);
+    stat.剧情.灵气复苏 = {
+      已开启: true,
+      开启日期: progress.originDate,
+      阶段: progress.stageName
+    };
+    stat.主角 = stat.主角 || {};
+    stat.主角.修行 = stat.主角.修行 || {
+      境界: '未引气（凡躯）',
+      灵气感应: 0,
+      灵根资质: '未测',
+      功法与秘术: [],
+      法器与灵物: [],
+      修行状态: '平顺'
+    };
+    var isYunArrival = opts.mode === 'preset' && Number(opts.greetingIndex) === 9;
+    var yunScene = isYunArrival ? GREETING_SCENES[9]?.present?.['云清晏'] : null;
+    stat.云清晏 = stat.云清晏 || {
+      是否在场: Boolean(yunScene),
+      好感度: 0,
+      关系阶段: '观澜',
+      NSFW: false,
+      当前境界: '炼气大圆满（轮回重修）',
+      伤势余韵: '轮回劫伤未愈·阴雨畏寒',
+      当前上装: yunScene ? yunScene.top : (progress.isPostGradOrigin ? '素净月白斜襟棉麻长衫' : '洗得规整的暨阳中学白衬衣校服与领结'),
+      当前下装: yunScene ? yunScene.bottom : (progress.isPostGradOrigin ? '浅青及踝长裙与布面平底鞋' : '深青校裙与过踝袜鞋'),
+      所在位置: yunScene ? yunScene.pos : (progress.isPostGradOrigin ? '待剧情安排相遇' : (progress.dayNumber === 1 ? '暨阳城外·赴约途中' : '待确定')),
+      动作: yunScene ? yunScene.action : '',
+      心情: yunScene ? yunScene.mood : '',
+      内心独白: yunScene ? yunScene.inner : ''
+    };
+    if (isYunArrival && yunScene) {
+      stat.云清晏.是否在场 = true;
+      stat.云清晏.当前上装 = yunScene.top;
+      stat.云清晏.当前下装 = yunScene.bottom;
+      stat.云清晏.所在位置 = yunScene.pos;
+      stat.云清晏.动作 = yunScene.action;
+      stat.云清晏.心情 = yunScene.mood;
+      stat.云清晏.内心独白 = yunScene.inner;
+    }
+    stat.谢昭宁 = stat.谢昭宁 || {
+      是否在场: false,
+      好感度: 0,
+      关系阶段: '观风',
+      NSFW: false,
+      当前境界: '筑基中期',
+      当前上装: '月白丝质衬衫配深黛短西装',
+      当前下装: '烟灰百褶长裙与低跟乐福鞋',
+      所在位置: '浙江大学紫金港校区',
+      动作: '',
+      心情: '',
+      内心独白: ''
+    };
+    return progress;
+  }
+
+  async function prepareMvuOpening(formData, mode, scene, options) {
     var api = mvuApi();
     if (!api || typeof api.getMvuData !== 'function' || typeof api.setMvuVariable !== 'function') {
       throw new Error('MVU 尚未加载。请确认卡内 MVU 脚本已启用后重试。');
@@ -781,6 +1004,7 @@
         throw new Error('初始变量缺少「' + pair[0] + '」。请重新读取本卡初始变量后重试。');
       }
     }
+    applyDlcToStatData(next.stat_data, options);
     return { original: original || {}, next: next };
   }
 
@@ -898,7 +1122,7 @@
     }, { render: 'immediate' }).then(function () { return bookName; });
   }
 
-  function openingMessage(data, action, customOpening, selectedGreeting) {
+  function openingMessage(data, action, customOpening, selectedGreeting, enableDlc) {
     var lines = ['<initial_setup>', '以下是本次新角色的完整初始设定。请在本次开局中接住它，不要遗漏或替 <user> 自动补全未设定内容。', ''];
     lines.push('姓名: ' + data['姓名']);
     lines.push('年龄: ' + data['年龄']);
@@ -913,6 +1137,7 @@
     lines.push('');
     lines.push('当前开场: ' + selectedGreeting);
     lines.push('开始年份: ' + data['开始年份']);
+    lines.push('修仙DLC: ' + (enableDlc ? '开启（已于开局启封灵气复苏）' : '关闭（纯校园日常）'));
     if (selectedGreeting === '自定义开局') {
       ['开场日期', '开场时段', '开场地点'].forEach(function (key) {
         if (data[key] && data[key] !== '未设定') lines.push(key + ': ' + data[key]);
@@ -947,7 +1172,7 @@
       content.scrollTop = 0;
       content.focus({ preventScroll: true });
     }
-    preview.scrollIntoView({ block: 'start', inline: 'nearest' });
+    if (typeof preview.scrollIntoView === 'function') preview.scrollIntoView({ block: 'start', inline: 'nearest' });
   }
 
   function closePreview(root) {
@@ -957,19 +1182,20 @@
     preview.setAttribute('aria-hidden', 'true');
   }
 
-  function summaryText(data, mode, index, action) {
+  function summaryText(data, mode, index, action, enableDlc) {
     var year = parseInt(data['开始年份'], 10);
     if (!(year >= 1900 && year <= 2100)) year = 2020;
+    var dlcLine = '\n都市修仙 DLC：' + (enableDlc ? '已开启' : '未开启');
     if (mode === 'custom') {
-      return '姓名：' + data['姓名'] + '\n开局方式：自定义开局\n开始年份：' + year + ' 年' + (sceneHeading(data) ? '\n第一幕：' + sceneHeading(data) : '') + (action ? '\n开局行动：' + action : '');
+      return '姓名：' + data['姓名'] + '\n开局方式：自定义开局\n开始年份：' + year + ' 年' + dlcLine + (sceneHeading(data) ? '\n第一幕：' + sceneHeading(data) : '') + (action ? '\n开局行动：' + action : '');
     }
     var scene = GREETING_SCENES[index];
-    return '姓名：' + data['姓名'] + '\n开局：' + GREETING_NAMES[index] + '（' + (scene ? scene.location : '') + '）\n开始年份：' + year + ' 年\n开局行动：' + action;
+    return '姓名：' + data['姓名'] + '\n开局：' + GREETING_NAMES[index] + '（' + (scene ? scene.location : '') + '）\n开始年份：' + year + ' 年' + dlcLine + '\n开局行动：' + action;
   }
 
-  function renderSummary(root, data, mode, index, action) {
+  function renderSummary(root, data, mode, index, action, enableDlc) {
     var node = root.querySelector('[data-opening-summary-text]');
-    if (node) node.textContent = summaryText(data, mode, index, action);
+    if (node) node.textContent = summaryText(data, mode, index, action, enableDlc);
   }
 
   // ---------- 同步状态 ----------
@@ -1004,25 +1230,35 @@
         if (heading && (story === heading || story.startsWith(heading + '\n\n'))) story = story.slice(heading.length).trimStart();
         if (customBox) customBox.value = parsed['自定义开局'] || story;
       }
+      var dlcOn = /^开启/.test(parsed['修仙DLC'] || '') || (parsed['当前开场'] !== '自定义开局' && index === 9);
+      setDlcEnabled(root, dlcOn);
       var actionBox = root.querySelector('[data-opening-action]');
       if (actionBox) actionBox.value = parsed['开局行动'] || '';
       root.setAttribute('data-opening-state', 'complete');
-      renderSummary(root, parsed, getMode(root), getGreetingIndex(root), parsed['开局行动'] || '');
+      renderSummary(root, parsed, getMode(root), getGreetingIndex(root), parsed['开局行动'] || '', dlcOn);
       var confirmBtn = root.querySelector('[data-action="confirm"]');
       if (confirmBtn) confirmBtn.disabled = false;
       closePreview(root);
-    } else if (root.getAttribute('data-opening-state') !== 'editing') {
-      root.setAttribute('data-opening-state', 'editing');
+    } else {
+      updateDlcHint(root);
+      if (root.getAttribute('data-opening-state') !== 'editing') {
+        root.setAttribute('data-opening-state', 'editing');
+      }
     }
   }
 
   function resetToEditing(root) {
     var messages = getMessages('0-3');
     var letter = findLetterMessage(messages);
-    if (letter) fillForm(root, parseLetter(messageText(letter)));
+    if (letter) {
+      var parsed = parseLetter(messageText(letter));
+      fillForm(root, parsed);
+      setDlcEnabled(root, /^开启/.test(parsed['修仙DLC'] || '') || parsed['当前开场'] === '云清晏');
+    }
     root.setAttribute('data-opening-state', 'editing');
     root.__jyUserEditing = true;
     closePreview(root);
+    updateDlcHint(root);
     toast(root, '可以重新填写档案，再次确认只更新当前版本，不会重复发送开局消息。', 'info');
   }
 
@@ -1034,6 +1270,7 @@
     var formData = readForm(root);
     var mode = getMode(root);
     var index = getGreetingIndex(root);
+    var dlcOn = isDlcEnabled(root) || (mode === 'preset' && index === 9);
     var action = readText(root, '[data-opening-action]');
     var custom = mode === 'custom' ? readText(root, '[data-custom-opening]') : '';
 
@@ -1051,7 +1288,8 @@
     if (mode === 'custom' && !custom && !customScene(formData).location) return fail('写下一段第一幕，或填一个开场地点。');
     root.__jyPreviewRequest = (root.__jyPreviewRequest || 0) + 1;
 
-    try { checkPrimaryWorldbook(); } catch (error) { return fail(error.message); }
+    var primaryBook = '';
+    try { primaryBook = checkPrimaryWorldbook(); } catch (error) { return fail(error.message); }
 
     var greeting = '';
     if (mode === 'preset') {
@@ -1090,15 +1328,28 @@
 
     try {
       try {
-        variables = await prepareMvuOpening(formData, mode, mode === 'preset' ? GREETING_SCENES[index] : null);
+        variables = await prepareMvuOpening(formData, mode, mode === 'preset' ? GREETING_SCENES[index] : null, {
+          enableDlc: dlcOn,
+          mode: mode,
+          greetingIndex: index
+        });
       } catch (error) {
         throw new Error('开局变量准备失败：' + error.message);
       }
       if (!root.isConnected || !stillInChat()) return;
 
+      if (dlcOn) {
+        try {
+          await syncOpeningWorldbookDlc(primaryBook, true);
+        } catch (error) {
+          throw new Error('启用修仙 DLC 世界书条目失败：' + error.message);
+        }
+        if (!root.isConnected || !stillInChat()) return;
+      }
+
       var identity = variables.next.stat_data.主角?.班级;
       var profile = identity ? Object.assign({}, formData, { '班级或身份': identity }) : formData;
-      letter = openingMessage(profile, action, custom, mode === 'custom' ? '自定义开局' : GREETING_NAMES[index]);
+      letter = openingMessage(profile, action, custom, mode === 'custom' ? '自定义开局' : GREETING_NAMES[index], dlcOn);
       // 正文和 MVU 数据在同一次首楼更新中提交，完成刷新后再发送。
       staged = true;
       var updates = [{ message_id: 0, message: seedText, data: variables.next }];
@@ -1121,14 +1372,17 @@
       }
 
       if (usedInput && draft.value && !elementValue(input)) restoreDraft(input, draft);
+      dispatchDlcChanged();
+      try { findFloatingBridge()?.probeDlc?.(true); } catch (_) {}
       bindAll();
       var visibleRoot = root.isConnected ? root : activeRoot;
       if (!visibleRoot?.isConnected) return;
       visibleRoot.__jyUserEditing = false;
+      setDlcEnabled(visibleRoot, dlcOn);
       setState(visibleRoot, 'complete');
-      renderSummary(visibleRoot, formData, mode, index, action);
+      renderSummary(visibleRoot, formData, mode, index, action, dlcOn);
       closePreview(visibleRoot);
-      toast(visibleRoot, '开场已保存到本次聊天。', 'info');
+      toast(visibleRoot, '开场已保存到本次聊天' + (dlcOn ? '（都市修仙 DLC 已同步开启）。' : '。'), 'info');
     } catch (error) {
       if (!stillInChat()) return;
       var errorMessage = error.message || '开局提交失败，请重试。';
@@ -1148,6 +1402,7 @@
         fillForm(retryRoot, formData);
         setMode(retryRoot, mode);
         setGreetingIndex(retryRoot, index);
+        setDlcEnabled(retryRoot, dlcOn);
         retryRoot.querySelector('[data-opening-action]').value = action;
         retryRoot.querySelector('[data-custom-opening]').value = custom;
       }
@@ -1176,6 +1431,7 @@
       root.__jyUserEditing = true;
       closePreview(root);
       setMode(root, target.getAttribute('data-mode'));
+      updateDlcHint(root);
     } else if (action === 'apply-template') {
       event.preventDefault();
       applyOpeningTemplate(root, target.getAttribute('data-template'));
@@ -1185,6 +1441,12 @@
       var index = Number(target.getAttribute('data-greeting')) || 1;
       closePreview(root);
       setGreetingIndex(root, index);
+      if (index === 9 && !isDlcEnabled(root)) {
+        setDlcEnabled(root, true);
+        toast(root, '已选择「云清晏」转学开场，自动为你勾选开启都市修仙 DLC。', 'info');
+      } else {
+        updateDlcHint(root);
+      }
       var text;
       try { text = await greetingTextAt(index); }
       catch (error) {
@@ -1210,6 +1472,7 @@
       root.__jyUserEditing = true;
       closePreview(root);
       setMode(root, 'custom');
+      updateDlcHint(root);
       editor.focus();
     } else if (action === 'clear') {
       event.preventDefault();
@@ -1223,6 +1486,7 @@
       if (customBox) customBox.value = '';
       var actionBox = root.querySelector('[data-opening-action]');
       if (actionBox) actionBox.value = '';
+      setDlcEnabled(root, false);
       updateIdPreview(root);
       toast(root, '已清空表单，可重新填写。', 'info');
     } else if (action === 'close-preview' || action === 'use-preview') {
@@ -1266,13 +1530,25 @@
       if (!event.target.closest('[data-opening-archives]')) {
         root.__jyUserEditing = true;
         updateIdPreview(root);
+        updateDlcHint(root);
       }
+    };
+    var onChange = function (event) {
+      if (event.target.closest('[data-opening-archives]')) return;
+      root.__jyUserEditing = true;
+      if (event.target.matches('[data-opening-dlc]') && !event.target.checked && getMode(root) === 'preset' && getGreetingIndex(root) === 9) {
+        setGreetingIndex(root, 1);
+        closePreview(root);
+        toast(root, '已关闭修仙 DLC，并从「云清晏」切回「开学第一天」开场。', 'info');
+      }
+      updateDlcHint(root);
     };
     var onAvatarChanged = function () {
       updateIdPreview(root);
       bindSceneThumbs(root);
     };
     root.addEventListener('input', markEditing);
+    root.addEventListener('change', onChange);
     root.addEventListener('click', onClick);
     root.addEventListener('submit', onSubmit);
     root.addEventListener('keydown', onKeydown);
@@ -1282,6 +1558,7 @@
     cleanups.push(function () {
       archives?.removeEventListener('toggle', refreshArchives);
       root.removeEventListener('input', markEditing);
+      root.removeEventListener('change', onChange);
       root.removeEventListener('click', onClick);
       root.removeEventListener('submit', onSubmit);
       root.removeEventListener('keydown', onKeydown);
@@ -1292,6 +1569,7 @@
     });
     bindSceneThumbs(root);
     updateIdPreview(root);
+    updateDlcHint(root);
     syncRoot(root);
   }
 

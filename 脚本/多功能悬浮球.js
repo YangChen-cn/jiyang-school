@@ -1148,6 +1148,6 @@
   // 页面卸载/切聊天导致脚本重载时，清掉 900ms 轮询、resize 监听、法阵特效与 DOM，避免多实例残留
   appWindow.addEventListener('pagehide', destroyMusicPlayer);
   if (window !== appWindow) window.addEventListener('pagehide', destroyMusicPlayer);
-  appWindow[GLOBAL_KEY] = { destroy: destroyMusicPlayer, probeDlc: probeWorldbookDlc, playSeal: playSealOverlay };
+  appWindow[GLOBAL_KEY] = { destroy: destroyMusicPlayer, probeDlc: probeWorldbookDlc, playSeal: playSealOverlay, ensureDlcEntries: ensureDlcEntries };
   console.info('[暨阳多功能台] 已加载，支持随身广播与太虚灵枢 DLC 开关。');
 })();
