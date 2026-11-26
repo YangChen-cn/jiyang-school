@@ -625,17 +625,56 @@
     }
     .jy-status[data-theme="dark"] .jy-immortal-pill { color: #8ad3be; border-color: rgba(226, 184, 98, 0.42); }
     .jy-cultivation-panel {
-      margin-top: 8px; padding: 8px 10px; border: 1px solid rgba(29, 107, 97, 0.28);
-      border-radius: 8px; background: linear-gradient(135deg, rgba(29, 107, 97, 0.08), rgba(201, 146, 56, 0.07));
+      grid-column: 1 / -1;
+      margin-top: 8px; padding: 10px 12px;
+      border: 1px solid rgba(180, 122, 46, 0.34);
+      border-radius: 9px;
+      background: linear-gradient(140deg, rgba(26, 84, 73, 0.08), rgba(180, 122, 46, 0.08));
+      box-shadow: inset 0 0 0 1px rgba(180, 122, 46, 0.12);
     }
     .jy-cultivation-head {
-      display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 8px; margin-bottom: 5px;
-      padding-right: 72px; font-size: 11px; font-weight: 800; color: var(--c-primary);
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 10px;
+      margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px dashed var(--c-line);
     }
-    .jy-cultivation-grid { display: grid; gap: 4px; padding-right: 72px; font-size: 11px; }
-    .jy-cultivation-grid div { display: grid; grid-template-columns: 60px minmax(0, 1fr); gap: 6px; }
-    .jy-cultivation-grid b { color: var(--c-primary); font-size: 10.5px; }
-    .jy-cultivation-grid span { color: var(--c-ink); overflow-wrap: anywhere; }
+    .jy-cultivation-title {
+      font-family: ui-serif, "Noto Serif SC", "Songti SC", serif;
+      font-size: 12px; font-weight: 850; letter-spacing: 0.04em; color: var(--c-primary);
+    }
+    .jy-cultivation-title::before { content: "❖ "; color: var(--c-accent); }
+    .jy-cultivation-stage-pill {
+      padding: 1px 8px; border: 1px solid rgba(180, 122, 46, 0.4); border-radius: 999px;
+      background: rgba(180, 122, 46, 0.12); color: var(--c-accent); font-size: 10.5px; font-weight: 800;
+    }
+    .jy-cultivation-metrics {
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-bottom: 7px;
+    }
+    .jy-cult-tile {
+      min-width: 0; padding: 6px 8px; border: 1px solid var(--c-line); border-radius: 7px;
+      background: color-mix(in srgb, var(--c-panel) 84%, transparent);
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .jy-cult-tile b { color: var(--c-muted); font-size: 10px; font-weight: 750; letter-spacing: 0.03em; }
+    .jy-cult-tile span { color: var(--c-ink); font-size: 11.5px; font-weight: 800; overflow-wrap: anywhere; }
+    .jy-cult-tile-realm span { color: var(--c-primary); font-family: ui-serif, "Noto Serif SC", "Songti SC", serif; }
+    .jy-cult-state-val[data-state-alert="true"] { color: var(--c-crimson); }
+    .jy-cult-qi-row { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; }
+    .jy-cult-qi-bar {
+      position: relative; height: 5px; margin-top: 3px; border-radius: 999px;
+      background: rgba(112, 86, 46, 0.14); overflow: hidden;
+    }
+    .jy-cult-qi-fill {
+      display: block; height: 100%; width: calc(clamp(0, var(--qi, 0), 100) * 1%);
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--c-primary), var(--c-accent));
+      transition: width .3s ease;
+    }
+    .jy-cultivation-lists { display: grid; gap: 5px; font-size: 11px; }
+    .jy-cult-list-row {
+      display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 6px; align-items: baseline;
+      padding: 4px 7px; border-radius: 6px; background: color-mix(in srgb, var(--c-wash) 72%, transparent);
+    }
+    .jy-cult-list-row b { color: var(--c-primary); font-size: 10.5px; }
+    .jy-cult-list-row span { color: var(--c-ink); overflow-wrap: anywhere; }
     .jy-person[data-present="false"],
     .jy-person[data-present="False"],
     .jy-person[data-present="0"],
@@ -931,11 +970,146 @@
     .jy-status[data-intimate-scene="true" i] .jy-person { border-left-color: var(--tone); }
     .jy-status[data-intimate-scene="true" i] .jy-scene-now { background: var(--rose-wash); border-color: var(--rose-line); }
 
+    /* Ancient-Ink Cultivation Skin (DLC Active · Day / Night / NSFW) */
+    .jy-status[data-dlc-active="true"] {
+      --c-ink: #1b1814;
+      --c-muted: #5b5244;
+      --c-soft: #857a69;
+      --c-paper: #f3ecdc;
+      --c-panel: #faf5e9;
+      --c-wash: #e8dec7;
+      --c-line: rgba(122, 92, 48, 0.24);
+      --c-primary: #195348;
+      --c-accent: #b37426;
+      --c-cool: #34627d;
+      --c-crimson: #9f2f3c;
+      --shadow-panel: 0 14px 32px rgba(34, 24, 12, 0.14), inset 0 0 0 1px rgba(179, 116, 38, 0.18);
+    }
+    .jy-status[data-dlc-active="true"] .jy-shell {
+      border-radius: 10px;
+      border-color: rgba(122, 92, 48, 0.34);
+      background:
+        radial-gradient(circle at 96% 4%, rgba(179, 116, 38, 0.11), transparent 36%),
+        radial-gradient(circle at 4% 0%, rgba(25, 83, 72, 0.09), transparent 34%),
+        var(--c-paper);
+      box-shadow: var(--shadow-panel);
+    }
+    .jy-status[data-dlc-active="true"] .jy-shell::before {
+      background:
+        linear-gradient(90deg, rgba(122, 92, 48, 0.05) 1px, transparent 1px) 0 0 / 26px 26px,
+        linear-gradient(rgba(122, 92, 48, 0.045) 1px, transparent 1px) 0 0 / 26px 26px;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.6), transparent 55%);
+    }
+    .jy-status[data-dlc-active="true"] .jy-head {
+      background: linear-gradient(125deg, #e9dfc6 0%, #f5eedb 55%, #e6dcc2 100%);
+      border-bottom: 1.5px solid var(--c-line);
+    }
+    .jy-status[data-dlc-active="true"] .jy-badge {
+      border-radius: 7px;
+      background: linear-gradient(155deg, #271e19, #151412);
+      color: #f6e7c4;
+      border: 1px solid rgba(214, 166, 86, 0.52);
+      box-shadow: 0 4px 12px rgba(24, 18, 12, 0.28), inset 0 0 0 2px rgba(214, 166, 86, 0.34);
+    }
+    .jy-status[data-dlc-active="true"] :is(.jy-name, .jy-card-name-val, .jy-moment-title, .jy-map-title) {
+      font-family: ui-serif, "Noto Serif SC", "Songti SC", serif;
+    }
+    .jy-status[data-dlc-active="true"] .jy-scene-now {
+      background: color-mix(in srgb, var(--c-wash) 88%, var(--c-paper));
+    }
+    .jy-status[data-dlc-active="true"] .jy-aura-chip {
+      border-color: rgba(179, 116, 38, 0.45);
+      background: linear-gradient(120deg, rgba(25, 83, 72, 0.13), rgba(179, 116, 38, 0.14));
+    }
+    .jy-status[data-dlc-active="true"] .jy-tabs {
+      background: color-mix(in srgb, var(--c-wash) 55%, transparent);
+    }
+    .jy-status[data-dlc-active="true"] .jy-tab-btn[aria-selected="true"] {
+      border-color: var(--c-line);
+      border-bottom: 2px solid var(--c-accent);
+      box-shadow: 0 2px 8px rgba(34, 24, 12, 0.08);
+    }
+    .jy-status[data-dlc-active="true"] .jy-person {
+      border-radius: 8px;
+      border-top-color: rgba(179, 116, 38, 0.24);
+      box-shadow: 0 3px 12px rgba(34, 24, 12, 0.06);
+    }
+    .jy-status[data-dlc-active="true"] .jy-fill {
+      background: linear-gradient(90deg, var(--c-primary), var(--c-accent));
+    }
+    .jy-status[data-dlc-active="true"][data-theme="dark"] {
+      --c-ink: #ece4d3;
+      --c-muted: #a99e8a;
+      --c-soft: #787061;
+      --c-paper: #12110f;
+      --c-panel: #1b1915;
+      --c-wash: #23201a;
+      --c-line: rgba(214, 173, 102, 0.22);
+      --c-primary: #7dc9b6;
+      --c-accent: #dfa252;
+      --c-cool: #8db9d8;
+      --c-crimson: #ef838f;
+      --shadow-panel: 0 14px 34px rgba(0, 0, 0, 0.46), inset 0 0 0 1px rgba(223, 162, 82, 0.16);
+    }
+    .jy-status[data-dlc-active="true"][data-theme="dark"] .jy-head {
+      background: linear-gradient(125deg, #1b1813 0%, #151917 60%, #1d1a14 100%);
+    }
+    .jy-status[data-dlc-active="true"][data-theme="dark"] .jy-badge {
+      background: linear-gradient(155deg, #1d1a15, #100f0d);
+      color: #f4deb0;
+      border-color: rgba(223, 162, 82, 0.5);
+    }
+    .jy-status[data-dlc-active="true"][data-theme="dark"] :is(.jy-time, .jy-map-button, .jy-inventory-button) {
+      background: #23201a; border-color: var(--c-line);
+    }
+    .jy-status[data-dlc-active="true"][data-theme="dark"] .jy-student-card {
+      background: linear-gradient(135deg, #1a1915 0%, #221f19 100%);
+    }
+    .jy-status[data-dlc-active="true"][data-theme="dark"] .jy-cultivation-panel {
+      border-color: rgba(223, 162, 82, 0.34);
+      background: linear-gradient(140deg, rgba(125, 201, 182, 0.08), rgba(223, 162, 82, 0.08));
+    }
+    .jy-status[data-dlc-active="true"][data-intimate-scene="true" i] {
+      --c-ink: #381b24;
+      --c-muted: #764a58;
+      --c-primary: #992e49;
+      --c-accent: #b86c36;
+      --rose-ink: #992e49;
+      --rose-wash: #f4dcdf;
+      --rose-line: rgba(153, 46, 73, 0.3);
+      --scene-paper: #faf0ee;
+      --scene-panel: #fff8f6;
+      --scene-head: linear-gradient(125deg, #efd2d4, #f7e6de);
+      --scene-shadow: 0 12px 28px rgba(96, 30, 48, 0.14), inset 0 0 0 1px rgba(184, 108, 54, 0.22);
+    }
+    .jy-status[data-dlc-active="true"][data-intimate-scene="true" i] .jy-badge {
+      background: linear-gradient(155deg, #7c2236, #561625);
+      border-color: rgba(230, 179, 106, 0.52);
+      color: #f9e8cb;
+    }
+    .jy-status[data-dlc-active="true"][data-theme="dark"][data-intimate-scene="true" i] {
+      --c-ink: #f7e6ea;
+      --c-muted: #cba6b2;
+      --c-primary: #ee94ad;
+      --c-accent: #e5aa66;
+      --rose-ink: #ee94ad;
+      --rose-wash: #381d29;
+      --rose-line: rgba(238, 148, 173, 0.28);
+      --scene-paper: #191014;
+      --scene-panel: #24161c;
+      --scene-head: linear-gradient(125deg, #341824, #1f141a);
+      --scene-shadow: 0 14px 32px rgba(10, 4, 8, 0.6), inset 0 0 0 1px rgba(229, 170, 102, 0.18);
+    }
+    .jy-status[data-dlc-active="true"][data-theme="dark"][data-intimate-scene="true" i] .jy-cultivation-panel {
+      border-color: rgba(238, 148, 173, 0.32);
+      background: linear-gradient(140deg, rgba(153, 46, 73, 0.16), rgba(229, 170, 102, 0.08));
+    }
+
     .jy-status :is(button, input, select, summary):focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
 
     @media (max-width: 640px) {
       .jy-status { width: min(100%, calc(100% - 8px)); margin: 8px auto; }
-      .jy-people, [data-calendar-events] { grid-template-columns: 1fr; }
+      .jy-people, [data-calendar-events], .jy-cultivation-metrics { grid-template-columns: 1fr; }
       .jy-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 420px) {
@@ -943,10 +1117,10 @@
       .jy-scene-tools { margin-left: auto; }
       .jy-panels { padding: 8px 9px 10px; }
       .jy-card-body { grid-template-columns: 1fr; }
-      .jy-card-dossier-grid, .jy-cultivation-head, .jy-cultivation-grid { padding-right: 0; }
+      .jy-card-dossier-grid { padding-right: 0; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .jy-theme-track::before, .jy-tab-panel, .jy-fill, .jy-avatar { transition: none; animation: none; }
+      .jy-theme-track::before, .jy-tab-panel, .jy-fill, .jy-cult-qi-fill, .jy-avatar { transition: none; animation: none; }
     }
   `;
 
@@ -974,6 +1148,46 @@
       --c-line: rgba(158, 208, 188, 0.18);
       --c-primary: #8bcbb5;
       --c-accent: #e5a365;
+    }
+    #jy-status-overlay-root[data-dlc-active="true"] {
+      --c-ink: #1b1814;
+      --c-muted: #5b5244;
+      --c-paper: #f3ecdc;
+      --c-panel: #faf5e9;
+      --c-wash: #e8dec7;
+      --c-line: rgba(122, 92, 48, 0.24);
+      --c-primary: #195348;
+      --c-accent: #b37426;
+    }
+    #jy-status-overlay-root[data-dlc-active="true"][data-theme="dark"] {
+      --c-ink: #ece4d3;
+      --c-muted: #a99e8a;
+      --c-paper: #12110f;
+      --c-panel: #1b1915;
+      --c-wash: #23201a;
+      --c-line: rgba(214, 173, 102, 0.22);
+      --c-primary: #7dc9b6;
+      --c-accent: #dfa252;
+    }
+    #jy-status-overlay-root[data-dlc-active="true"][data-intimate-scene="true" i] {
+      --c-ink: #381b24;
+      --c-muted: #764a58;
+      --c-paper: #faf0ee;
+      --c-panel: #fff8f6;
+      --c-wash: #f4dcdf;
+      --c-line: rgba(153, 46, 73, 0.28);
+      --c-primary: #992e49;
+      --c-accent: #b86c36;
+    }
+    #jy-status-overlay-root[data-dlc-active="true"][data-theme="dark"][data-intimate-scene="true" i] {
+      --c-ink: #f7e6ea;
+      --c-muted: #cba6b2;
+      --c-paper: #191014;
+      --c-panel: #24161c;
+      --c-wash: #381d29;
+      --c-line: rgba(238, 148, 173, 0.26);
+      --c-primary: #ee94ad;
+      --c-accent: #e5aa66;
     }
     #jy-status-overlay-root *, #jy-status-overlay-root *::before, #jy-status-overlay-root *::after { box-sizing: border-box; }
     #jy-status-overlay-root [hidden] { display: none !important; }
@@ -1220,8 +1434,13 @@
     hostDoc.head.append(style);
   }
 
-  function syncOverlayTheme() {
-    if (overlayRoot) overlayRoot.dataset.theme = readTheme() === 'dark' ? 'dark' : 'light';
+  function syncOverlayTheme(sourceRoot) {
+    if (!overlayRoot) return;
+    overlayRoot.dataset.theme = readTheme() === 'dark' ? 'dark' : 'light';
+    if (sourceRoot && sourceRoot.dataset) {
+      overlayRoot.dataset.dlcActive = sourceRoot.dataset.dlcActive === 'true' ? 'true' : 'false';
+      overlayRoot.dataset.intimateScene = String(sourceRoot.dataset.intimateScene || 'false').toLowerCase() === 'true' ? 'true' : 'false';
+    }
   }
 
   function buildPlaceDetails(placeItem) {
@@ -1798,6 +2017,7 @@
       const stEl = cultPanel.querySelector('[data-cultivation-stage]');
       const rlEl = cultPanel.querySelector('[data-cultivation-realm]');
       const qiEl = cultPanel.querySelector('[data-cultivation-qi]');
+      const qiFillEl = cultPanel.querySelector('[data-cultivation-qi-fill]');
       const rtEl = cultPanel.querySelector('[data-cultivation-root]');
       const csEl = cultPanel.querySelector('[data-cultivation-state]');
       const arEl = cultPanel.querySelector('[data-cultivation-arts]');
@@ -1805,10 +2025,20 @@
       if (stEl) stEl.textContent = active ? `第${dayNum}日 · ${stageText}` : '未启封';
       if (rlEl) rlEl.textContent = realmText;
       if (qiEl) qiEl.textContent = qiVal;
+      if (qiFillEl) {
+        const qiNum = Math.max(0, Math.min(100, Number(qiVal) || 0));
+        qiFillEl.style.setProperty('--qi', String(qiNum));
+      }
       if (rtEl) rtEl.textContent = rootText;
-      if (csEl) csEl.textContent = stateText;
+      if (csEl) {
+        csEl.textContent = stateText;
+        csEl.dataset.stateAlert = String(stateText !== '平顺' && !stateText.startsWith('平顺（'));
+      }
       if (arEl) arEl.textContent = artsList;
       if (afEl) afEl.textContent = artifactsList;
+    }
+    if (overlayRoot && overlayRoot.isConnected && overlayRoot.querySelector('.jy-ov-modal[data-open="true"]')) {
+      syncOverlayTheme(root);
     }
 
     enhanceCharacters(root, doc);
@@ -1888,6 +2118,7 @@
 
   function openInventoryFor(root, opener) {
     const ov = ensureOverlayRoot();
+    syncOverlayTheme(root);
     const items = renderInventoryCount(root);
     const list = ov.querySelector('[data-inventory-list]');
     const title = ov.querySelector('[data-inventory-title]');
@@ -2233,6 +2464,7 @@
       const mapBtn = event.target.closest('[data-action="open-map"]');
       if (mapBtn) {
         const ov = ensureOverlayRoot();
+        syncOverlayTheme(root);
         syncMapPhase(ov, root.dataset.dlcActive === 'true');
         syncMapLocation(sceneValue(root.querySelector('.jy-location')));
         openModal(ov.querySelector('.jy-map-modal'), mapBtn, '[data-action="close-map"]');
@@ -2246,6 +2478,7 @@
         const key = albumBtn.dataset.albumKey || '';
         if (key) {
           const ov = ensureOverlayRoot();
+          syncOverlayTheme(root);
           renderAlbumOverlay(key);
           openModal(ov.querySelector('.jy-album-modal'), albumBtn, '[data-action="close-album"]');
         }
@@ -2254,6 +2487,7 @@
       const av = event.target.closest('.jy-avatar');
       if (av && root.contains(av)) {
         const ov = ensureOverlayRoot();
+        syncOverlayTheme(root);
         activeAvatarEl = av;
         const name = av.dataset.avatarName || av.getAttribute('alt') || '头像';
         ov.querySelector('.jy-avatar-big').src = av.src;

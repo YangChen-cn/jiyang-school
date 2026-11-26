@@ -239,19 +239,27 @@
                 <div><b>擅长与学业</b><span data-scene-value>{{format_message_variable::stat_data.主角.擅长与学业}}</span></div>
                 <div><b>家庭背景</b><span data-scene-value>{{format_message_variable::stat_data.主角.家庭背景}}</span></div>
               </div>
-              <div class="jy-cultivation-panel" data-cultivation-panel hidden>
-                <div class="jy-cultivation-head"><span>太虚灵枢 · 个人修行录</span><span data-cultivation-stage>未启封</span></div>
-                <div class="jy-cultivation-grid">
-                  <div><b>当前境界</b><span data-cultivation-realm>未引气（凡躯）</span></div>
-                  <div><b>灵气感应</b><span data-cultivation-qi>0</span></div>
-                  <div><b>灵根资质</b><span data-cultivation-root>未测</span></div>
-                  <div><b>修行状态</b><span data-cultivation-state>平顺</span></div>
-                  <div><b>功法与秘术</b><span data-cultivation-arts>暂无</span></div>
-                  <div><b>法器与灵物</b><span data-cultivation-artifacts>暂无</span></div>
-                </div>
-              </div>
               <div class="jy-card-seal" aria-hidden="true"><span>浙江省暨阳高级中学</span><span class="jy-card-seal-star">★</span><span>教务处学籍专用章</span></div>
             </details>
+            <div class="jy-cultivation-panel" data-cultivation-panel hidden>
+              <div class="jy-cultivation-head">
+                <span class="jy-cultivation-title">太虚灵枢 · 个人修行录</span>
+                <span class="jy-cultivation-stage-pill" data-cultivation-stage>未启封</span>
+              </div>
+              <div class="jy-cultivation-metrics">
+                <div class="jy-cult-tile jy-cult-tile-realm"><b>当前境界</b><span data-cultivation-realm>未引气（凡躯）</span></div>
+                <div class="jy-cult-tile"><b>灵根资质</b><span data-cultivation-root>未测</span></div>
+                <div class="jy-cult-tile"><b>修行状态</b><span class="jy-cult-state-val" data-cultivation-state data-state-alert="false">平顺</span></div>
+                <div class="jy-cult-tile jy-cult-tile-qi">
+                  <div class="jy-cult-qi-row"><b>灵气感应</b><span class="jy-num" data-cultivation-qi>0</span></div>
+                  <div class="jy-cult-qi-bar" aria-hidden="true"><span class="jy-cult-qi-fill" data-cultivation-qi-fill style="--qi: 0;"></span></div>
+                </div>
+              </div>
+              <div class="jy-cultivation-lists">
+                <div class="jy-cult-list-row"><b>功法与秘术</b><span data-cultivation-arts>暂无</span></div>
+                <div class="jy-cult-list-row"><b>法器与灵物</b><span data-cultivation-artifacts>暂无</span></div>
+              </div>
+            </div>
           </div>
           <pre hidden data-inventory-source>{{format_message_variable::stat_data.主角.重要物品}}</pre>
         </div>
