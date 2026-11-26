@@ -12,16 +12,21 @@ const relationshipMetrics = [
   ['谢昭宁', '好感度'],
 ];
 
-const dailyAffectionLimit = 12;
+const defaultDailyAffectionLimit = 15;
 
 function normalizeRelationshipScore(value) {
   const score = Number(value);
   return Number.isFinite(score) ? Math.max(0, Math.min(100, Math.round(score))) : undefined;
 }
 
-function limitRelationshipGains(state, before) {
+function limitRelationshipGains(state, before, settings) {
   if (!state) return;
 
+  const configuredLimit = settings?.limit;
+  const dailyLimit = Number.isInteger(configuredLimit) && configuredLimit >= 1 && configuredLimit <= 100
+    ? configuredLimit
+    : defaultDailyAffectionLimit;
+  const capped = settings?.enabled !== false;
   const previous = before?.剧情?.当日好感增量;
   const trackedDay = campusDate(previous?.日期);
   const day = [trackedDay, campusDate(before?.世界?.日期), campusDate(state.世界?.日期)].sort().at(-1);
@@ -36,15 +41,16 @@ function limitRelationshipGains(state, before) {
     if (score !== undefined) character[metric] = score;
     if (metric !== '好感度' || !before) continue;
 
-    const already = Math.min(dailyAffectionLimit, normalizeRelationshipScore(previousUsage?.[person]) ?? 0);
+    const already = normalizeRelationshipScore(previousUsage?.[person]) ?? 0;
     if (already) usage[person] = already;
     if (score === undefined) continue;
 
     const oldScore = normalizeRelationshipScore(before[person]?.[metric]) ?? 0;
     if (score > oldScore) {
-      const gain = Math.min(score - oldScore, dailyAffectionLimit - already);
+      const requestedGain = score - oldScore;
+      const gain = capped ? Math.min(requestedGain, Math.max(0, dailyLimit - already)) : requestedGain;
       character[metric] = oldScore + gain;
-      if (gain) usage[person] = already + gain;
+      if (gain) usage[person] = Math.min(100, already + gain);
     }
   }
 

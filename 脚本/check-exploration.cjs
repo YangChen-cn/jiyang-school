@@ -526,24 +526,24 @@ function checkRelationshipPace(update) {
  };
  // Positive gains are capped per character and date. Penalties don't refund the budget.
  for(let i=0;i<10;i++) updateState(s=>{s.苏晚棠.好感度+=2;});
- assert.equal(state.苏晚棠.好感度,12);
+ assert.equal(state.苏晚棠.好感度,15);
  assert.equal(state.苏晚棠.关系阶段,'初识'); // 阶段解耦：不随好感度达标自动晋级（方案一）
  assert.equal(state.温书语.好感度,0);
 
  updateState(s=>{s.苏晚棠.好感度-=2;});
  updateState(s=>{s.世界.日期='2020/09/01'; s.苏晚棠.好感度+=5;});
- assert.equal(state.苏晚棠.好感度,10);
+ assert.equal(state.苏晚棠.好感度,13);
 
  // Trust stays independent. A new date restores only the new day's affection budget.
  updateState(s=>{s.沈若微.信任度+=35; s.沈若微.好感度+=30;});
  assert.equal(state.沈若微.信任度,35);
- assert.equal(state.沈若微.好感度,12);
+ assert.equal(state.沈若微.好感度,15);
  assert.equal(state.沈若微.关系阶段,'戒备'); // 阶段保持，直至剧情中明确突破
  updateState(s=>{s.世界.日期='2020-09-02';s.苏晚棠.好感度+=6;s.沈若微.好感度+=20;});
  updateState(s=>{s.世界.日期='';s.苏晚棠.好感度+=9;});
- assert.equal(state.苏晚棠.好感度,22);
- assert.equal(state.沈若微.好感度,24);
- assert.equal(schemaBox.schema.parse(state).剧情.当日好感增量.已用.苏晚棠,12);
+ assert.equal(state.苏晚棠.好感度,28);
+ assert.equal(state.沈若微.好感度,30);
+ assert.equal(schemaBox.schema.parse(state).剧情.当日好感增量.已用.苏晚棠,15);
  const currentSnapshot = ejs.render(read('世界书/变量/变量列表.txt'),{getvar:()=>state});
  assert.doesNotMatch(currentSnapshot,/当日好感增量/);
 
@@ -552,7 +552,7 @@ function checkRelationshipPace(update) {
  updateState(s=>{s.许念安={好感度:8};});
  const branchPoint=structuredClone(state);
  updateState(s=>{s.世界.日期='2020-09-01';s.许念安.好感度+=9;});
- assert.equal(state.许念安.好感度,12);
+ assert.equal(state.许念安.好感度,15);
  state=structuredClone(branchPoint);
  updateState(s=>{s.许念安.好感度+=1;});
  assert.equal(state.许念安.好感度,9);
@@ -716,7 +716,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  migrated.许念安.控制欲=160;
  callbackBox.pace({stat_data:migrated},{stat_data:legacy});
  callbackBox.write({variables:{stat_data:migrated}});
- assert.equal(migrated.许念安.好感度,12);
+ assert.equal(migrated.许念安.好感度,15);
  assert.equal(migrated.许念安.控制欲,100);
  assert.equal(legacy.许念安,undefined);
  const state={世界:{日期:'2021/07/03'},校园:structuredClone(stored.stat_data.校园)};
@@ -1151,8 +1151,8 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  dlcSave.云清晏.好感度+=30;
  dlcSave.谢昭宁.好感度+=30;
  callbackBox.pace({stat_data:dlcSave},{stat_data:dlcPrior});
- assert.equal(dlcSave.云清晏.好感度,34);
- assert.equal(dlcSave.谢昭宁.好感度,30);
+ assert.equal(dlcSave.云清晏.好感度,37);
+ assert.equal(dlcSave.谢昭宁.好感度,33);
  const lateDlcSave={世界:{日期:'2021-10-08'},剧情:{灵气复苏:{已开启:true,开启日期:'2020-09-03',阶段:'旧值'}}};
  await callbackBox.write({variables:{stat_data:lateDlcSave}});
  assert.equal(lateDlcSave.剧情.灵气复苏.阶段,'百宗出山期');
@@ -1345,6 +1345,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    B:{stat_data:{世界:{日期:'2021/08/09',起始年份:'2020'},剧情:{},主角:{姓名:'测试生'}}},
  };
  const oldFloor={stat_data:{世界:{日期:'2021/07/02'},剧情:{},主角:{},校园:forumCampus}};
+ const chatPreferences={A:{unrelated:'preserved'},B:{}};
  let chatId='A';
  let onChatChanged;
  let bookWrites=0;
@@ -1357,8 +1358,9 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  mw.getWorldbookNames=()=>['暨阳测试书'];
  mw.getWorldbook=async()=>mockBook;
  mw.updateWorldbookWith=async(name,fn)=>{assert.equal(name,'暨阳测试书');mockBook=fn(mockBook);bookWrites++;return mockBook;};
- mw.getVariables=({message_id}={})=>structuredClone(message_id===3 ? mockChats[chatId] : message_id===2 ? oldFloor : {});
- mw.updateVariablesWith=async(fn,options)=>{
+ mw.getVariables=({type,message_id}={})=>structuredClone(type==='chat' ? chatPreferences[chatId] : message_id===3 ? mockChats[chatId] : message_id===2 ? oldFloor : {});
+ mw.updateVariablesWith=(fn,options)=>{
+   if (options.type==='chat') return chatPreferences[chatId]=fn(structuredClone(chatPreferences[chatId]));
    assert.equal(options.type,'message');
    assert.equal(options.message_id,3,'最新用户楼层无 MVU 时应写最近有状态的楼层');
    mockChats[chatId]=fn(structuredClone(mockChats[chatId]));
@@ -1398,6 +1400,57 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(md.querySelector('[data-aura-badge]').hidden,true);
  assert.equal(md.querySelector('[data-dlc-heroine="云清晏"]').hidden,true);
  assert.equal(md.querySelector('[data-dlc-heroine="谢昭宁"]').hidden,true);
+
+ mp.querySelector('[data-console-tab="relationship"]').click();
+ const affectionForm=mp.querySelector('[data-panel="relationship"]');
+ const affectionToggle=affectionForm.querySelector('[data-role="affection-enabled"]');
+ const affectionLimit=affectionForm.querySelector('[data-role="affection-limit"]');
+ const saveAffection=()=>affectionForm.querySelector('button[type="submit"]').click();
+ assert.equal(affectionForm.hidden,false);
+ assert.equal(affectionToggle.checked,true);
+ assert.equal(affectionLimit.value,'15');
+ affectionLimit.value='101';
+ saveAffection();
+ assert.equal(chatPreferences.A.jy_daily_affection_cap,undefined);
+ affectionLimit.value='6';
+ saveAffection();
+ assert.deepEqual(structuredClone(chatPreferences.A.jy_daily_affection_cap),{enabled:true,limit:6});
+ assert.equal(chatPreferences.A.unrelated,'preserved');
+
+ callbackBox.getVariables = option=>mw.getVariables(option);
+ let rapport={世界:{日期:'2020/09/01'},剧情:{当日好感增量:{日期:'2020-09-01',已用:{苏晚棠:4}}},苏晚棠:{好感度:4},温书语:{好感度:0}};
+ const addRapport=(name, points)=>{
+   const prior=structuredClone(rapport);
+   rapport[name].好感度+=points;
+   callbackBox.pace({stat_data:rapport},{stat_data:prior});
+ };
+ addRapport('苏晚棠',10); addRapport('温书语',10);
+ assert.equal(rapport.苏晚棠.好感度,6);
+ assert.equal(rapport.温书语.好感度,6);
+ affectionLimit.value='3';
+ saveAffection();
+ addRapport('苏晚棠',5);
+ assert.equal(rapport.苏晚棠.好感度,6);
+ affectionToggle.checked=false;
+ saveAffection();
+ addRapport('苏晚棠',20);
+ assert.equal(rapport.苏晚棠.好感度,26);
+ assert.equal(schemaBox.schema.parse(rapport).剧情.当日好感增量.已用.苏晚棠,26);
+
+ chatId='B';
+ onChatChanged();
+ assert.equal(affectionToggle.checked,true);
+ assert.equal(affectionLimit.value,'15');
+ chatId='A';
+ onChatChanged();
+ assert.equal(affectionToggle.checked,false);
+ assert.equal(affectionLimit.value,'3');
+ affectionToggle.checked=true;
+ affectionLimit.value='30';
+ saveAffection();
+ addRapport('苏晚棠',10);
+ assert.equal(rapport.苏晚棠.好感度,30);
+ delete callbackBox.getVariables;
 
  mp.querySelector('[data-console-tab="codex"]').click();
  assert.equal(mp.querySelector('[data-panel="codex"]').hidden,false);

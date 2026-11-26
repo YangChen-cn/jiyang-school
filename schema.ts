@@ -58,7 +58,7 @@ export const Schema = z.object({
     当前nsfw: z.coerce.boolean().prefault(false),
     校园活动: z.string().prefault(''),
     学期: z.string().prefault(''),       // 高二上 | 高二下 | 暑假 | 高三上 | 高三下 | 已毕业
-    当日好感增量: z.object({ 日期: z.string(), 已用: z.record(z.string(), z.number().int().min(0).max(12)) }).optional(),
+    当日好感增量: z.object({ 日期: z.string(), 已用: z.record(z.string(), z.number().int().min(0).max(100)) }).optional(),
     灵气复苏: z.object({ 已开启: z.coerce.boolean(), 开启日期: z.string(), 阶段: z.string() }).optional(),
   }).prefault({}),
 
