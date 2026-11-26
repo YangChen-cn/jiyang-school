@@ -1,5 +1,5 @@
 // 暨阳正文：装饰已渲染的对白和对应楼层的场景，不改聊天原文、草稿或 MVU。
-// API依据：SillyTavern 1.19.0 st-context.js；Tavern Helper 4.12.0 variables.d.ts。
+// API依据：SillyTavern 1.19.0 st-context.js / StreamingProcessor；Tavern Helper 4.12.2。
 (() => {
   'use strict';
   let host = window;
@@ -317,8 +317,13 @@
         }
       }
       for (const figure of scenery) if (!figure.isConnected) scenery.delete(figure);
+      const stream = host.SillyTavern?.getContext()?.streamingProcessor;
+      const streamingId = stream && !stream.isFinished && !stream.isStopped ? String(stream.messageId) : null;
       doc.querySelectorAll('#chat .mes[is_user="false"] .mes_text').forEach(body => {
-        const state = messageState(body.closest('.mes'));
+        const message = body.closest('.mes');
+        // Each stream update can replace the message DOM, even after the prose tag closes.
+        if (streamingId !== null && message.getAttribute('mesid') === streamingId) return;
+        const state = messageState(message);
         decorateScene(body, state);
         const names = playerNames(state);
         // Only ordinary prose paragraphs; no descent into another extension's panel.
@@ -355,7 +360,7 @@
     if (host[KEY]?.destroy === destroy) delete host[KEY];
   }
   if (typeof eventOn === 'function') {
-    for (const event of ['message_received', 'message_updated', 'message_swiped', 'chat_id_changed', 'mag_variable_update_ended']) {
+    for (const event of ['message_received', 'message_updated', 'message_swiped', 'generation_ended', 'generation_stopped', 'chat_id_changed', 'mag_variable_update_ended']) {
       subscriptions.push(eventOn(event, schedule));
     }
   }
