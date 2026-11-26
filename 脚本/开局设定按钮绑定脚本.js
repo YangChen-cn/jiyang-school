@@ -16,6 +16,7 @@
     '年龄': '18岁',
     '班级或身份': '暨阳中学高二重点班学生'
   };
+  var OPENING_CULTIVATION_DEFAULTS = { 灵根资质: '未测', 体质: '未明' };
 
   var OPENING_TEMPLATES = {
     eagle: {
@@ -205,6 +206,11 @@
     var enabled = isDlcEnabled(root);
     var boxWrap = root.querySelector('[data-opening-dlc-box]');
     if (boxWrap) boxWrap.setAttribute('data-enabled', enabled ? 'true' : 'false');
+    var cultivationFields = root.querySelector('[data-opening-dlc-fields]');
+    if (cultivationFields) {
+      cultivationFields.hidden = !enabled;
+      cultivationFields.disabled = !enabled;
+    }
     var hintEl = root.querySelector('[data-opening-dlc-hint]');
     if (!hintEl) return;
     var year = campusYear(readField(root, '开始年份') || '2020');
@@ -732,8 +738,8 @@
   }
 
   function parseLetter(text) {
-    var data = {};
-    var labels = ['姓名', '年龄', '性别或称谓', '班级或身份', '外貌', '性格', '擅长与学业', '家庭背景', '重要物品', '开局心事', '当前开场', '开始年份', '修仙DLC', '开场日期', '开场地点', '开场时段', '自定义开局', '开局行动'];
+    var data = { 灵根资质: '', 体质: '' };
+    var labels = ['姓名', '年龄', '性别或称谓', '班级或身份', '外貌', '性格', '擅长与学业', '家庭背景', '重要物品', '开局心事', '当前开场', '开始年份', '修仙DLC', '开场日期', '开场地点', '开场时段', '自定义开局', '开局行动'].concat(Object.keys(OPENING_CULTIVATION_DEFAULTS));
     var stop = labels.concat(['连续性优先级']).join('|');
     var source = String(text || '');
     labels.forEach(function (label) {
@@ -802,9 +808,12 @@
     return items.filter(function (item) { return item.名称; });
   }
 
+  function optionalOpeningField(data, key) {
+    return data[key] === '未设定' ? '' : (data[key] || '');
+  }
+
   function customScene(data) {
-    function optional(key) { return data[key] && data[key] !== '未设定' ? data[key] : ''; }
-    return { date: optional('开场日期'), time: optional('开场时段'), location: optional('开场地点') };
+    return { date: optionalOpeningField(data, '开场日期'), time: optionalOpeningField(data, '开场时段'), location: optionalOpeningField(data, '开场地点') };
   }
 
   function sceneHeading(data) {
@@ -920,7 +929,7 @@
     }, { render: 'immediate' });
   }
 
-  function applyDlcToStatData(stat, options) {
+  function applyDlcToStatData(stat, formData, options) {
     if (!stat || typeof stat !== 'object') return null;
     var opts = options || {};
     var enableDlc = Boolean(opts.enableDlc);
@@ -942,11 +951,13 @@
     stat.主角.修行 = stat.主角.修行 || {
       境界: '未引气（凡躯）',
       灵气感应: 0,
-      灵根资质: '未测',
       功法与秘术: [],
       法器与灵物: [],
       修行状态: '平顺'
     };
+    Object.entries(OPENING_CULTIVATION_DEFAULTS).forEach(function ([key, fallback]) {
+      stat.主角.修行[key] = optionalOpeningField(formData, key) || fallback;
+    });
     // 保留转班正文中的出场动作或自我介绍时，改写开场也算已经见面。
     var isYunArrival = opts.mode === 'preset'
       ? Number(opts.greetingIndex) === 9
@@ -1004,7 +1015,7 @@
         throw new Error('初始变量缺少「' + pair[0] + '」。请重新读取本卡初始变量后重试。');
       }
     }
-    applyDlcToStatData(next.stat_data, options);
+    applyDlcToStatData(next.stat_data, formData, options);
     return { original: original || {}, next: next };
   }
 
@@ -1138,6 +1149,12 @@
     lines.push('当前开场: ' + selectedGreeting);
     lines.push('开始年份: ' + data['开始年份']);
     lines.push('修仙DLC: ' + (enableDlc ? '开启（已于开局启封灵气复苏）' : '关闭（纯校园日常）'));
+    if (enableDlc) {
+      Object.keys(OPENING_CULTIVATION_DEFAULTS).forEach(function (key) {
+        var value = optionalOpeningField(data, key);
+        if (value) lines.push(key + ': ' + value);
+      });
+    }
     if (selectedGreeting === '自定义开局') {
       ['开场日期', '开场时段', '开场地点'].forEach(function (key) {
         if (data[key] && data[key] !== '未设定') lines.push(key + ': ' + data[key]);
@@ -1186,6 +1203,11 @@
     var year = parseInt(data['开始年份'], 10);
     if (!(year >= 1900 && year <= 2100)) year = 2020;
     var dlcLine = '\n都市修仙 DLC：' + (enableDlc ? '已开启' : '未开启');
+    if (enableDlc) {
+      dlcLine += '\n' + Object.entries(OPENING_CULTIVATION_DEFAULTS).map(function ([key, fallback]) {
+        return key + '：' + (optionalOpeningField(data, key) || fallback);
+      }).join(' · ');
+    }
     if (mode === 'custom') {
       return '姓名：' + data['姓名'] + '\n开局方式：自定义开局\n开始年份：' + year + ' 年' + dlcLine + (sceneHeading(data) ? '\n第一幕：' + sceneHeading(data) : '') + (action ? '\n开局行动：' + action : '');
     }
@@ -1240,7 +1262,7 @@
       if (confirmBtn) confirmBtn.disabled = false;
       closePreview(root);
     } else {
-      updateDlcHint(root);
+      setDlcEnabled(root, index === 9);
       if (root.getAttribute('data-opening-state') !== 'editing') {
         root.setAttribute('data-opening-state', 'editing');
       }

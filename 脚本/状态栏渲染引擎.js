@@ -656,6 +656,7 @@
     .jy-cult-tile b { color: var(--c-muted); font-size: 10px; font-weight: 750; letter-spacing: 0.03em; }
     .jy-cult-tile span { color: var(--c-ink); font-size: 11.5px; font-weight: 800; overflow-wrap: anywhere; }
     .jy-cult-tile-realm span { color: var(--c-primary); font-family: ui-serif, "Noto Serif SC", "Songti SC", serif; }
+    .jy-cult-tile-qi { grid-column: 1 / -1; }
     .jy-cult-state-val[data-state-alert="true"] { color: var(--c-crimson); }
     .jy-cult-qi-row { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; }
     .jy-cult-qi-bar {
@@ -1994,6 +1995,7 @@
     const realmText = cult?.境界 && !String(cult.境界).startsWith('{{') ? String(cult.境界) : '未引气（凡躯）';
     const qiVal = cult && cult.灵气感应 !== undefined ? String(cult.灵气感应) : '0';
     const rootText = cult?.灵根资质 && !String(cult.灵根资质).startsWith('{{') ? String(cult.灵根资质) : '未测';
+    const physiqueText = cult?.体质 && !String(cult.体质).startsWith('{{') ? String(cult.体质) : '未明';
     const stateText = cult?.修行状态 && !String(cult.修行状态).startsWith('{{') ? String(cult.修行状态) : '平顺';
     const artsList = Array.isArray(cult?.功法与秘术) && cult.功法与秘术.length ? cult.功法与秘术.join('、') : '暂无';
     const artifactsList = Array.isArray(cult?.法器与灵物) && cult.法器与灵物.length ? cult.法器与灵物.join('、') : '暂无';
@@ -2050,6 +2052,7 @@
       const qiEl = cultPanel.querySelector('[data-cultivation-qi]');
       const qiFillEl = cultPanel.querySelector('[data-cultivation-qi-fill]');
       const rtEl = cultPanel.querySelector('[data-cultivation-root]');
+      const phEl = cultPanel.querySelector('[data-cultivation-physique]');
       const csEl = cultPanel.querySelector('[data-cultivation-state]');
       const arEl = cultPanel.querySelector('[data-cultivation-arts]');
       const afEl = cultPanel.querySelector('[data-cultivation-artifacts]');
@@ -2061,6 +2064,7 @@
         qiFillEl.style.setProperty('--qi', String(qiNum));
       }
       if (rtEl) rtEl.textContent = rootText;
+      if (phEl) phEl.textContent = physiqueText;
       if (csEl) {
         csEl.textContent = stateText;
         csEl.dataset.stateAlert = String(stateText !== '平顺' && !stateText.startsWith('平顺（'));

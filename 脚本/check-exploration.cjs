@@ -151,7 +151,19 @@ async function checkOpeningArchives() {
    const click = action => get('[data-action="' + action + '"]').click();
    const field = name => get('[data-field="' + name + '"]');
    const dlcBox = get('[data-opening-dlc]');
+   const cultivationFields = get('[data-opening-dlc-fields]');
    assert.equal(dlcBox.checked, false);
+   assert.equal(cultivationFields.hidden, true);
+   assert.equal(cultivationFields.disabled, true);
+
+   messages[0].message = greetingTexts[8];
+   w.__jiyangOpeningSetupControllerV7.bind();
+   await new Promise(r => w.setTimeout(r, 40));
+   assert.equal(dlcBox.checked, true, '酒馆原生切到云清晏开场也应启用修行设定');
+   assert.equal(cultivationFields.hidden, false);
+   messages[0].message = '<OpeningSetupUI/>';
+   w.__jiyangOpeningSetupControllerV7.bind();
+   await new Promise(r => w.setTimeout(r, 40));
 
    click('show-archives');
    assert.equal(get('[data-opening-archives]').open, true);
@@ -166,6 +178,10 @@ async function checkOpeningArchives() {
    get('[data-opening-action]').value = '把伞收起来。';
    dlcBox.checked = true;
    dlcBox.dispatchEvent(new w.Event('change', { bubbles: true }));
+   assert.equal(cultivationFields.disabled, false);
+   assert.ok([...field('灵根资质').list.options].some(option => option.value === '水灵根'));
+   field('灵根资质').value = '水灵根';
+   field('体质').value = '寒潭灵体';
    click('save-archive');
    const first = get('[data-archive-select]').value;
    assert.ok(first);
@@ -173,6 +189,7 @@ async function checkOpeningArchives() {
    field('姓名').value = '陈小桥';
    dlcBox.checked = false;
    dlcBox.dispatchEvent(new w.Event('change', { bubbles: true }));
+   assert.equal(cultivationFields.hidden, true);
    click('save-archive');
    const second = get('[data-archive-select]').value;
    assert.notEqual(second, first);
@@ -196,6 +213,8 @@ async function checkOpeningArchives() {
    assert.equal(field('开场日期').value, '2020-11-06');
    assert.equal(field('开场地点').value, '桥下旧书摊');
    assert.equal(get('[data-opening-dlc]').checked, true);
+   assert.equal(field('灵根资质').value, '水灵根');
+   assert.equal(field('体质').value, '寒潭灵体');
    assert.equal(get('[data-jy-opening]').dataset.openingMode, 'custom');
    assert.equal(get('[data-custom-opening]').value, ' 雨停了。\n有人把书摞到木箱上。');
    assert.equal(get('[data-opening-action]').value, '把伞收起来。');
@@ -250,8 +269,12 @@ async function checkOpeningArchives() {
    assert.equal(writes, 1);
    assert.equal(dlcEvents > 0, true);
    assert.match(sentLetter, /当前开场: 云清晏[\s\S]*修仙DLC: 开启/);
+   assert.match(sentLetter, /灵根资质: 水灵根\n体质: 寒潭灵体/);
    assert.equal(savedFloorZero.stat_data.剧情.灵气复苏.已开启, true);
    assert.equal(savedFloorZero.stat_data.剧情.灵气复苏.开启日期, '2020-09-03');
+   assert.equal(savedFloorZero.stat_data.主角.修行.灵根资质, '水灵根');
+   assert.equal(schemaBox.schema.parse(savedFloorZero.stat_data).主角.修行.体质, '寒潭灵体');
+   assert.match(get('[data-opening-summary-text]').textContent, /灵根资质：水灵根 · 体质：寒潭灵体/);
    assert.equal(savedFloorZero.stat_data.云清晏.是否在场, true);
    assert.equal(savedFloorZero.stat_data.谢昭宁.是否在场, false);
    assert.equal(mockWorldbook.find(e => e.name === '[DLC]灵气复苏总纲与异象日程').enabled, true);
@@ -259,6 +282,7 @@ async function checkOpeningArchives() {
    assert.equal(schemaBox.schema.parse(savedFloorZero.stat_data).云清晏.是否在场, true);
 
    click('reset-opening');
+   assert.equal(field('体质').value, '寒潭灵体');
    get('[data-custom-opening]').value = '';
    field('开场日期').value = '';
    field('开场时段').value = '';
@@ -272,6 +296,8 @@ async function checkOpeningArchives() {
    assert.equal(writes, 2);
    assert.equal(savedFloorZero.stat_data.云清晏.是否在场, true);
    click('reset-opening');
+   field('灵根资质').value = '';
+   field('体质').value = '';
    get('[data-custom-opening]').value = '花名册上有个名字叫云清晏。教室里还没来人。';
    field('开场日期').value = '2022-06-30';
    field('开场日期').dispatchEvent(new w.Event('input', { bubbles: true }));
@@ -282,6 +308,8 @@ async function checkOpeningArchives() {
    assert.equal(messages.length, 2, '改写首楼只更新已有开局消息');
    assert.equal(savedFloorZero.stat_data.云清晏.是否在场, false);
    assert.equal(savedFloorZero.stat_data.云清晏.动作, '');
+   assert.equal(savedFloorZero.stat_data.主角.修行.灵根资质, '未测');
+   assert.equal(savedFloorZero.stat_data.主角.修行.体质, '未明');
 
    w.confirm = () => false;
    click('delete-archive');
@@ -1094,6 +1122,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(dlcParsed.云清晏.已入班,undefined);
  assert.equal(dlcParsed.主角.修行.境界,'筑基初期');
  assert.equal(dlcParsed.主角.修行.灵根资质,'未测');
+ assert.equal(dlcParsed.主角.修行.体质,'未明');
  assert.deepEqual(dlcParsed.主角.修行.法器与灵物,[]);
  assert.equal(dlcParsed.主角.修行.修行状态,'平顺');
  await callbackBox.write({variables:{stat_data:dlcSave}});
@@ -1467,6 +1496,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(mockChats.A.stat_data.主角.修行.境界,'筑基');
  assert.match(md.querySelector('[data-aura-badge-text]').textContent,/第20日 · 微兆潜龙期 · 筑基/);
  assert.equal(md.querySelector('[data-cultivation-root]').textContent,'未测');
+ assert.equal(md.querySelector('[data-cultivation-physique]').textContent,'未明');
  assert.equal(md.querySelector('[data-cultivation-state]').textContent,'平顺');
  assert.equal(md.querySelector('[data-cultivation-artifacts]').textContent,'暂无');
  const statusRoot=md.querySelector('.jy-status');
@@ -1479,7 +1509,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const suCard=[...md.querySelectorAll('.jy-person')].find(c=>c.querySelector('.jy-name')?.textContent.trim()==='苏晚棠');
  assert.equal(suCard.querySelector('[data-heroine-realm]').hidden,true);
  mockChats.A.stat_data.苏晚棠={是否在场:true,好感度:35,关系阶段:'熟悉',NSFW:false,当前境界:'炼气二层',灵根:'先天沧溟水脉'};
- mockChats.A.stat_data.主角.修行={境界:'筑基初期',灵气感应:68,灵根资质:'水木双灵根',功法与秘术:['太微引气篇','松溪吐风桩'],法器与灵物:['镇风铎残片'],修行状态:'神魂微损'};
+ mockChats.A.stat_data.主角.修行={境界:'筑基初期',灵气感应:68,灵根资质:'水木双灵根',体质:'寒潭灵体',功法与秘术:['太微引气篇','松溪吐风桩'],法器与灵物:['镇风铎残片'],修行状态:'神魂微损'};
  mockChats.A.stat_data.剧情.当前nsfw=true;
  statusRoot.dataset.intimateScene='true';
  mw.dispatchEvent(new mw.CustomEvent('jy-aura-dlc-changed',{detail:{chatId:'A',messageId:3}}));
@@ -1488,6 +1518,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(suCard.querySelector('[data-heroine-realm]').textContent,'炼气二层');
  assert.equal(suCard.querySelector('[data-heroine-realm]').title,'灵根：先天沧溟水脉');
  assert.equal(md.querySelector('[data-cultivation-root]').textContent,'水木双灵根');
+ assert.equal(md.querySelector('[data-cultivation-physique]').textContent,'寒潭灵体');
  assert.equal(md.querySelector('[data-cultivation-arts]').textContent,'太微引气篇、松溪吐风桩');
  assert.equal(md.querySelector('[data-cultivation-artifacts]').textContent,'镇风铎残片');
  assert.equal(md.querySelector('[data-cultivation-state]').dataset.stateAlert,'true');

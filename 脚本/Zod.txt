@@ -33,6 +33,16 @@ const CampusPost = z.object({
   ...CampusInteractions.shape,
 });
 
+const PlayerCultivationFields = {
+  境界: z.string().prefault('未引气（凡躯）'),
+  灵气感应: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
+  灵根资质: z.string().prefault('未测'),
+  体质: z.string().prefault('未明'),
+  功法与秘术: z.array(z.string()).prefault([]),
+  法器与灵物: z.array(z.string()).prefault([]),
+  修行状态: z.string().prefault('平顺'),
+};
+
 export const Schema = z.object({
   // 初始变量一律为空/0/false：不同开场白的时间、地点、在场角色不同，
   // 由第一轮 AI 依据开场白与玩家设定补齐，之后按 变量更新规则 推进。
@@ -216,7 +226,7 @@ export const Schema = z.object({
     性格: z.string().prefault(''),
     擅长与学业: z.string().prefault(''),
     家庭背景: z.string().prefault(''),
-    修行: z.object({ 境界: z.string().prefault('未引气（凡躯）'), 灵气感应: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0), 灵根资质: z.string().prefault('未测'), 功法与秘术: z.array(z.string()).prefault([]), 法器与灵物: z.array(z.string()).prefault([]), 修行状态: z.string().prefault('平顺') }).optional(),
+    修行: z.object(PlayerCultivationFields).optional(),
     重要物品: z.array(z.object({
       名称: z.string(),
       描述: z.string(),

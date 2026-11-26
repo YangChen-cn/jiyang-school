@@ -598,6 +598,7 @@
     user-select: none;
   }
   .jy-opening-dlc-switch input { width: 15px; height: 15px; accent-color: var(--green); cursor: pointer; margin: 0; }
+  .jy-opening-dlc-fields { min-width: 0; margin: 0 0 12px; padding: 0; border: 0; }
   .jy-opening-scene.dlc-featured {
     grid-column: 1 / -1;
     flex-direction: row;
@@ -727,6 +728,20 @@
         </div>
         <label class="jy-opening-dlc-switch"><input type="checkbox" data-opening-dlc><span>开启修仙 DLC</span></label>
       </div>
+      <fieldset class="jy-opening-dlc-fields" data-opening-dlc-fields aria-label="主角修行天赋" aria-describedby="jy-opening-cultivation-hint" hidden disabled>
+        <div class="jy-opening-grid">
+          <label class="jy-opening-field"><span class="jy-opening-label">灵根资质</span><input class="jy-opening-input" data-field="灵根资质" list="jy-opening-root-options" maxlength="36" placeholder="例如：水灵根"></label>
+          <label class="jy-opening-field"><span class="jy-opening-label">体质</span><input class="jy-opening-input" data-field="体质" list="jy-opening-physique-options" maxlength="36" placeholder="例如：凡体"></label>
+        </div>
+        <datalist id="jy-opening-root-options">
+          <option value="金灵根"></option><option value="木灵根"></option><option value="水灵根"></option><option value="火灵根"></option><option value="土灵根"></option>
+          <option value="金水双灵根"></option><option value="五行杂灵根"></option><option value="无灵根"></option>
+        </datalist>
+        <datalist id="jy-opening-physique-options">
+          <option value="凡体"></option><option value="通灵体质"></option><option value="先天道体"></option>
+        </datalist>
+        <small class="jy-opening-hint" id="jy-opening-cultivation-hint">可选建议或自填。留空由剧情揭晓。</small>
+      </fieldset>
       <div class="jy-opening-mode-switch" role="group" aria-label="开场方式">
         <button class="jy-opening-mode" type="button" data-action="select-mode" data-mode="preset" aria-pressed="true">预写开场</button>
         <button class="jy-opening-mode" type="button" data-action="select-mode" data-mode="custom" aria-pressed="false">自定义开局</button>
