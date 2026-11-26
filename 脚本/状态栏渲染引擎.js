@@ -1942,19 +1942,31 @@
     }
   }
 
-  function dlcDayProgress(originRaw, currentRaw) {
+  function dlcDayProgress(originRaw, currentRaw, startYearRaw) {
     const parseMs = s => {
       const m = String(s || '').trim().match(/^(\d{4})[-/年.](\d{1,2})[-/月.](\d{1,2})/);
       if (!m) return null;
       const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);
       return (mo >= 1 && mo <= 12 && d >= 1 && d <= 31) ? Date.UTC(y, mo - 1, d) : null;
     };
-    const ori = parseMs(originRaw);
+    const oriYearMatch = String(originRaw || currentRaw || '').trim().match(/^(\d{4})/);
+    const parsedYear = Number(startYearRaw);
+    const startYear = (Number.isInteger(parsedYear) && parsedYear >= 1000 && parsedYear <= 9900)
+      ? parsedYear
+      : (oriYearMatch ? Number(oriYearMatch[1]) : 2020);
+    const ori = parseMs(originRaw) ?? parseMs(currentRaw);
     const cur = parseMs(currentRaw) ?? ori;
+    const gradMs = Date.UTC(startYear + 2, 6, 1);
+    const isPostGrad = ori !== null && ori >= gradMs;
+    const remainDays = (ori !== null && !isPostGrad) ? Math.floor((gradMs - ori) / 86400000) : 0;
+    const totalDays = isPostGrad ? 90 : Math.max(120, Math.min(400, Math.floor(remainDays * 0.92)));
+    const s1 = Math.max(1, Math.round(totalDays * 45 / 400));
+    const s2 = Math.max(s1 + 1, Math.round(totalDays * 120 / 400));
+    const s3 = Math.max(s2 + 1, Math.round(totalDays * 240 / 400));
     const elapsed = (ori !== null && cur !== null) ? Math.max(0, Math.floor((cur - ori) / 86400000)) : 0;
     const dayNumber = elapsed + 1;
-    const stage = dayNumber <= 45 ? '微兆潜龙期' : dayNumber <= 120 ? '灵潮初涌期' : dayNumber <= 240 ? '龙眼破禁期' : dayNumber <= 400 ? '潜龙秘序期' : '百宗出山期';
-    return { dayNumber, stage };
+    const stage = dayNumber <= s1 ? '微兆潜龙期' : dayNumber <= s2 ? '灵潮初涌期' : dayNumber <= s3 ? '龙眼破禁期' : dayNumber <= totalDays ? '潜龙秘序期' : '百宗出山期';
+    return { dayNumber, stage, totalDays };
   }
 
   function statusFloorId(win) {
@@ -1977,7 +1989,8 @@
     root.dataset.dlcActive = String(active);
 
     const curDate = stat?.世界?.日期 || sceneValue(root.querySelector('.jy-date'));
-    const { dayNumber: dayNum, stage: stageText } = dlcDayProgress(dlc?.开启日期, curDate);
+    const startYear = stat?.世界?.起始年份 ?? sceneValue(root.querySelector('[data-start-year]'));
+    const { dayNumber: dayNum, stage: stageText } = dlcDayProgress(dlc?.开启日期, curDate, startYear);
     const realmText = cult?.境界 && !String(cult.境界).startsWith('{{') ? String(cult.境界) : '未引气（凡躯）';
     const qiVal = cult && cult.灵气感应 !== undefined ? String(cult.灵气感应) : '0';
     const rootText = cult?.灵根资质 && !String(cult.灵根资质).startsWith('{{') ? String(cult.灵根资质) : '未测';

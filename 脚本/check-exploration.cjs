@@ -977,6 +977,23 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const lateDlcSave={世界:{日期:'2021-10-08'},剧情:{灵气复苏:{已开启:true,开启日期:'2020-09-03',阶段:'旧值'}}};
  await callbackBox.write({variables:{stat_data:lateDlcSave}});
  assert.equal(lateDlcSave.剧情.灵气复苏.阶段,'百宗出山期');
+ for (const [originDate,curDate,expectedStage] of [
+   ['2021-09-01','2021-10-01','微兆潜龙期'],
+   ['2021-09-01','2021-10-02','灵潮初涌期'],
+   ['2021-09-01','2022-06-05','潜龙秘序期'],
+   ['2021-09-01','2022-06-06','百宗出山期'],
+   ['2022-03-01','2022-03-14','微兆潜龙期'],
+   ['2022-03-01','2022-06-28','潜龙秘序期'],
+   ['2022-03-01','2022-06-29','百宗出山期'],
+   ['2022-07-05','2022-07-14','微兆潜龙期'],
+   ['2022-07-05','2022-07-15','灵潮初涌期'],
+   ['2022-07-05','2022-10-02','潜龙秘序期'],
+   ['2022-07-05','2022-10-03','百宗出山期'],
+ ]) {
+   const adaptiveSave={世界:{起始年份:'2020',日期:curDate},剧情:{灵气复苏:{已开启:true,开启日期:originDate,阶段:'旧值'}}};
+   await callbackBox.write({variables:{stat_data:adaptiveSave}});
+   assert.equal(adaptiveSave.剧情.灵气复苏.阶段,expectedStage,`${originDate} -> ${curDate}`);
+ }
 
  const dlcMaster=dlcEntries.get(dlcNames[0]).content;
  const origin={'stat_data.剧情.灵气复苏.开启日期':'2020-09-03'};
@@ -1096,6 +1113,17 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.match(yunFirstText,/《太微玉女轮回经》[\s\S]*金丹巅峰[\s\S]*元婴大劫[\s\S]*炼气大圆满（轮回重修）[\s\S]*太微轮回印诀[\s\S]*独修亦可重登巅峰[\s\S]*极尽升华[\s\S]*结丹大圆满[\s\S]*宁愿孤身苦修百年[\s\S]*仙凡两隔/);
  assert.doesNotMatch(yunFirstText,/剑意|剑修|剑法|飞剑/);
  assert.doesNotMatch(yun(yunBase,firstAppearance),/初次入班/);
+ const seniorIntro=yun(yunBase,{'stat_data.剧情.学期':'高三上','stat_data.世界.日期':'2021-09-04','stat_data.主角.班级':''});
+ assert.match(seniorIntro,/高三重点班[\s\S]*引荐外省借读生云清晏/);
+ const gradIntro=yun(yunBase,{'stat_data.剧情.学期':'已毕业','stat_data.世界.日期':'2022-08-10','stat_data.世界.当前位置':'浙江大学紫金港校区'});
+ assert.match(gradIntro,/初遇入口[\s\S]*浙江大学紫金港校区[\s\S]*不再以高中借读生入班[\s\S]*云清晏\.是否在场=true/);
+ assert.doesNotMatch(gradIntro,/初次入班|班主任向/);
+ const gradPresentText=yun(yunBase,{'stat_data.剧情.学期':'已毕业','stat_data.世界.日期':'2022-08-10',...present});
+ assert.match(gradPresentText,/独行访客或旅人掩护/);
+ assert.doesNotMatch(gradPresentText,/体弱外省借读生为公开身份|校服洗得规整平挺/);
+ assert.match(render(catalog.content,{...enabled,'stat_data.剧情.学期':'已毕业','stat_data.世界.日期':'2022-08-10'}),/姓名: 云清晏[\s\S]*表面身份:/);
+ assert.match(render(dlcMaster,{...enabled,'stat_data.世界.起始年份':'2020','stat_data.剧情.灵气复苏.开启日期':'2021-09-01','stat_data.世界.日期':'2022-06-06'}),/高三自适应 278 日线[\s\S]*第五阶段·百宗出山期（第279天起）/);
+ assert.match(render(dlcMaster,{...enabled,'stat_data.世界.起始年份':'2020','stat_data.剧情.灵气复苏.开启日期':'2022-07-05','stat_data.世界.日期':'2022-10-03'}),/本档前四期共 90 日[\s\S]*毕业后 90 日紧凑线[\s\S]*第五阶段·百宗出山期（第91天起）/);
  assert.equal(yun(yunPalette),'');
  assert.match(yun(yunPalette,{...firstAppearance,'stat_data.云清晏.好感度':45,'stat_data.云清晏.关系阶段':'观澜'}),/观澜·尘外冷眸/);
  assert.match(yun(yunPalette,{...present,'stat_data.云清晏.好感度':45,'stat_data.云清晏.关系阶段':'问道'}),/《太微玉女轮回经》独修重登极慢极苦/);
@@ -1187,7 +1215,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
 
  mp.querySelector('[data-console-tab="codex"]').click();
  assert.equal(mp.querySelector('[data-panel="codex"]').hidden,false);
- assert.match(mp.querySelector('[data-panel="codex"]').textContent,/越中潜龙 · 暨阳隐秘龙脉[\s\S]*灵潮暗涌 · 秘而不宣与仙凡两隔[\s\S]*三教隐世巨室[\s\S]*谢昭宁[\s\S]*苏氏沧溟水府[\s\S]*与自家「澹珠记」珍珠生意毫无干系[\s\S]*四百日渐进出山/);
+ assert.match(mp.querySelector('[data-panel="codex"]').textContent,/越中潜龙 · 暨阳隐秘龙脉[\s\S]*灵潮暗涌 · 秘而不宣与仙凡两隔[\s\S]*三教隐世巨室[\s\S]*谢昭宁[\s\S]*苏氏沧溟水府[\s\S]*与自家「澹珠记」珍珠生意毫无干系[\s\S]*阵内避世 · 自适应周期出山[\s\S]*高三按剩余高中时日自适应收束[\s\S]*九十日紧凑进程/);
  assert.doesNotMatch(mp.querySelector('[data-panel="codex"]').textContent,/秘密仙班|实验尖子班|清北强基|正压「暨阳中学」|百倍/);
  mp.querySelector('[data-console-tab="dlc"]').click();
  const toggle=()=>mp.querySelector('[data-action="dlc-toggle"]').click();
@@ -1348,6 +1376,23 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(render(mockBook.find(entry=>entry.name===dlcNames[0]).content).trim(),'');
  assert.equal(mockChats.A.stat_data.剧情.灵气复苏.已开启,true);
  assert.equal(mockChats.B.stat_data.剧情.灵气复苏.已开启,false);
+
+ delete mockChats.B.stat_data.剧情.灵气复苏;
+ mockChats.B.stat_data.世界.日期='2021/09/01';
+ await onChatChanged();
+ const seniorSteps=[...mp.querySelectorAll('[data-dlc-step]')].map(el=>el.textContent);
+ assert.deepEqual(seniorSteps,['微兆 31d','初涌 83d','破禁 167d','秘序 278d','出山 279d+']);
+ mockChats.B.stat_data.世界.日期='2022/07/05';
+ delete mockChats.B.stat_data.云清晏;
+ await onChatChanged();
+ toggle();
+ await settle();
+ dismissSeal();
+ const postGradSteps=[...mp.querySelectorAll('[data-dlc-step]')].map(el=>el.textContent);
+ assert.deepEqual(postGradSteps,['微兆 10d','初涌 27d','破禁 54d','秘序 90d','出山 91d+']);
+ assert.equal(mockChats.B.stat_data.剧情.灵气复苏.开启日期,'2022-07-05');
+ assert.equal(mockChats.B.stat_data.云清晏.所在位置,'待剧情安排相遇');
+ assert.match(mockChats.B.stat_data.云清晏.当前上装,/长衫/);
 
  mw.__jiyangFloatingMusicPlayerV2.destroy();
  mw.__jyStatusEngineV1.destroy();
