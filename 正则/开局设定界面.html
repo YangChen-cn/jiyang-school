@@ -728,10 +728,11 @@
         </div>
         <label class="jy-opening-dlc-switch"><input type="checkbox" data-opening-dlc><span>开启修仙 DLC</span></label>
       </div>
-      <fieldset class="jy-opening-dlc-fields" data-opening-dlc-fields aria-label="主角修行天赋" aria-describedby="jy-opening-cultivation-hint" hidden disabled>
+      <fieldset class="jy-opening-dlc-fields" data-opening-dlc-fields aria-label="主角修行天赋与灵潮节奏" aria-describedby="jy-opening-cultivation-hint" hidden disabled>
         <div class="jy-opening-grid">
           <label class="jy-opening-field"><span class="jy-opening-label">灵根资质</span><input class="jy-opening-input" data-field="灵根资质" list="jy-opening-root-options" maxlength="36" placeholder="例如：水灵根"></label>
           <label class="jy-opening-field"><span class="jy-opening-label">体质</span><input class="jy-opening-input" data-field="体质" list="jy-opening-physique-options" maxlength="36" placeholder="例如：凡体"></label>
+          <label class="jy-opening-field wide"><span class="jy-opening-label">灵潮演化节奏（开局后可在右下方太虚灵枢随时调节）</span><select class="jy-opening-input" data-field="灵潮节奏"><option value="慢热">慢热 ×1.0（原版长线 · 高二400日/高三≥120日/毕业90日）</option><option value="适中">适中 ×0.5（半年推进 · 高二200日/毕业45日）</option><option value="紧凑">紧凑 ×0.25（快节奏 · 高二100日/毕业23日）</option><option value="极速">极速 ×0.12（短线体验 · 高二48日/毕业11日）</option></select></label>
         </div>
         <datalist id="jy-opening-root-options">
           <option value="金灵根"></option><option value="木灵根"></option><option value="水灵根"></option><option value="火灵根"></option><option value="土灵根"></option>
@@ -740,7 +741,7 @@
         <datalist id="jy-opening-physique-options">
           <option value="凡体"></option><option value="通灵体质"></option><option value="先天道体"></option>
         </datalist>
-        <small class="jy-opening-hint" id="jy-opening-cultivation-hint">可选建议或自填。留空由剧情揭晓。</small>
+        <small class="jy-opening-hint" id="jy-opening-cultivation-hint">可选建议或自填；灵潮节奏仅控制各阶段与老怪出山周期，不锁主角自身突破速度。</small>
       </fieldset>
       <div class="jy-opening-mode-switch" role="group" aria-label="开场方式">
         <button class="jy-opening-mode" type="button" data-action="select-mode" data-mode="preset" aria-pressed="true">预写开场</button>

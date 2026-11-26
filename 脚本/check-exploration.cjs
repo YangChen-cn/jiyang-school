@@ -30,6 +30,11 @@ for (const [date, id] of cases) {
 assert.equal(sandbox.pick('2031-07-04',2030).id, '暑假');
 assert.equal(sandbox.pick('2021-02-30',2020),null);
 assert.equal(sandbox.pick('',2020),null);
+const dlcBox = {}; vm.createContext(dlcBox);
+vm.runInContext(engineSrc.slice(engineSrc.indexOf('  function dlcDayProgress('), engineSrc.indexOf('  function statusFloorId(')) + '\nthis.progress = dlcDayProgress;', dlcBox);
+assert.equal(dlcBox.progress('2020-09-01', '2020-09-12', 2020, '紧凑').stage, '灵潮初涌期');
+assert.equal(dlcBox.progress('2020-09-01', '2020-09-12', 2020, '慢热').stage, '微兆潜龙期');
+assert.equal(dlcBox.progress('2022-07-05', '2022-07-16', 2020, '极速').stage, '百宗出山期');
 const schemaBox = {z,_}; vm.createContext(schemaBox);
 vm.runInContext(read('schema.ts').replace('export const Schema','const Schema').replace(/^export type .*$/gm,'')+'\nthis.schema = Schema;', schemaBox);
 const old = schemaBox.schema.parse({世界:{当前位置:'我找到的小巷'},主角:{姓名:'测试同学',重要物品:[{名称:'借书',描述:'已借未还'}]},苏晚棠:{好感度:17}});
@@ -87,11 +92,16 @@ async function checkOpeningMappings() {
  const free = Object.fromEntries(patches({'开始年份':'2020'}, 'custom'));
  assert.equal(free['世界.当前位置'], '');
  assert.equal(free['剧情.学期'], '');
+ assert.equal(scenes[8].time, '下午课');
  const first = Object.fromEntries(patches({'开始年份':'2020'}, 'preset', scenes[1]));
  const other = Object.fromEntries(patches({'开始年份':'2020'}, 'preset', scenes[2]));
  assert.equal(first['许念安.是否在场'],true);
  assert.equal(first['许念安.控制欲'],0);
  assert.equal(first['许念安.关系阶段'],'表面');
+ assert.equal(first['苏晚棠.关系阶段'],'初识');
+ assert.equal(first['沈若微.关系阶段'],'戒备');
+ assert.equal(other['陈芷汀.关系阶段'],'交易');
+ assert.equal(other['虞淑婉.关系阶段'],'师生');
  assert.equal(other['许念安.是否在场'],false);
 }
 
@@ -182,6 +192,9 @@ async function checkOpeningArchives() {
    assert.ok([...field('灵根资质').list.options].some(option => option.value === '水灵根'));
    field('灵根资质').value = '水灵根';
    field('体质').value = '寒潭灵体';
+   field('灵潮节奏').value = '紧凑';
+   field('灵潮节奏').dispatchEvent(new w.Event('change', { bubbles: true }));
+   assert.match(get('[data-opening-dlc-hint]').textContent, /100日线.*第 101 日起百宗出山/);
    click('save-archive');
    const first = get('[data-archive-select]').value;
    assert.ok(first);
@@ -196,6 +209,7 @@ async function checkOpeningArchives() {
    assert.match(get('[data-archive-select] option:checked').textContent, /<b>另一个开局<\/b>/);
    click('clear');
    assert.equal(dlcBox.checked, false);
+   assert.equal(field('灵潮节奏').value, '慢热');
    assert.equal(w.localStorage.length, 2);
 
    // Remount the actual opening in a new chat. The archive belongs to the site, independent of either form.
@@ -215,6 +229,7 @@ async function checkOpeningArchives() {
    assert.equal(get('[data-opening-dlc]').checked, true);
    assert.equal(field('灵根资质').value, '水灵根');
    assert.equal(field('体质').value, '寒潭灵体');
+   assert.equal(field('灵潮节奏').value, '紧凑');
    assert.equal(get('[data-jy-opening]').dataset.openingMode, 'custom');
    assert.equal(get('[data-custom-opening]').value, ' 雨停了。\n有人把书摞到木箱上。');
    assert.equal(get('[data-opening-action]').value, '把伞收起来。');
@@ -269,12 +284,13 @@ async function checkOpeningArchives() {
    assert.equal(writes, 1);
    assert.equal(dlcEvents > 0, true);
    assert.match(sentLetter, /当前开场: 云清晏[\s\S]*修仙DLC: 开启/);
-   assert.match(sentLetter, /灵根资质: 水灵根\n体质: 寒潭灵体/);
+   assert.match(sentLetter, /灵根资质: 水灵根\n体质: 寒潭灵体\n灵潮节奏: 紧凑/);
    assert.equal(savedFloorZero.stat_data.剧情.灵气复苏.已开启, true);
    assert.equal(savedFloorZero.stat_data.剧情.灵气复苏.开启日期, '2020-09-03');
+   assert.equal(savedFloorZero.stat_data.剧情.灵气复苏.节奏, '紧凑');
    assert.equal(savedFloorZero.stat_data.主角.修行.灵根资质, '水灵根');
    assert.equal(schemaBox.schema.parse(savedFloorZero.stat_data).主角.修行.体质, '寒潭灵体');
-   assert.match(get('[data-opening-summary-text]').textContent, /灵根资质：水灵根 · 体质：寒潭灵体/);
+   assert.match(get('[data-opening-summary-text]').textContent, /灵根资质：水灵根 · 体质：寒潭灵体 · 灵潮节奏：紧凑/);
    assert.equal(savedFloorZero.stat_data.云清晏.是否在场, true);
    assert.equal(savedFloorZero.stat_data.谢昭宁.是否在场, false);
    assert.equal(mockWorldbook.find(e => e.name === '[DLC]灵气复苏总纲与异象日程').enabled, true);
@@ -283,6 +299,9 @@ async function checkOpeningArchives() {
 
    click('reset-opening');
    assert.equal(field('体质').value, '寒潭灵体');
+   assert.equal(field('灵潮节奏').value, '紧凑');
+   field('灵潮节奏').value = '慢热';
+   field('灵潮节奏').dispatchEvent(new w.Event('change', { bubbles: true }));
    get('[data-custom-opening]').value = '';
    field('开场日期').value = '';
    field('开场时段').value = '';
@@ -412,6 +431,13 @@ for (const [place, zone, message, previous, expected] of [
 ]) {
   assert.equal(allowsGarage(place, zone, message, previous), expected, '万风地库：' + message);
 }
+const garageBody = worldbookByName.get('万风地库').content.split('\n').slice(1).join('\n');
+assert.match(ejs.render(garageBody, { getvar: (_k, opts) => opts?.defaults ?? '' }), /暗角车震[\s\S]*俞嘉豪/);
+const garageCommitted = ejs.render(garageBody, {
+  getvar: k => k.endsWith('关系阶段') ? '卸妆' : (k.endsWith('好感度') ? 85 : ''),
+});
+assert.match(garageCommitted, /地库日常/);
+assert.doesNotMatch(garageCommitted, /暗角车震|呻吟|胸衣|内裤/);
 assert.equal(matchesWorldbookKey('地点_城东万风新天地', '周末去万风吃饭'), true);
 assert.equal(matchesWorldbookKey('地点_老鹰山', '周末去老鹰山步道跑步'), true);
 for (const period of periods) {
@@ -640,6 +666,13 @@ function checkRelationshipPace(update) {
  assert.doesNotThrow(()=>ejs.compile(tri));
  assert.equal(ejs.render(tri,{getvar:k=>k.endsWith('是否在场')?false:''}).trim(),'');
  assert.ok(ejs.render(tri,{getvar:k=>k.endsWith('是否在场')?true:'校园'}).trim().includes('第一面'));
+ const triRender=vars=>ejs.render(tri,{getvar:(k,opts)=>Object.hasOwn(vars,k)?vars[k]:opts?.defaults}).trim();
+ const triMilkTea=triRender({'stat_data.沈若微.是否在场':true,'stat_data.沈若微.触发家庭话题':false,'stat_data.世界.所在区域':'周边','stat_data.世界.当前位置':'遇见奶茶店','stat_data.世界.私密程度':'公开','stat_data.沈若微.关系阶段':'松动'});
+ assert.match(triMilkTea,/校外日常/);
+ assert.doesNotMatch(triMilkTea,/逃生模式|我不回家/);
+ assert.match(triRender({'stat_data.沈若微.是否在场':true,'stat_data.沈若微.触发家庭话题':true,'stat_data.世界.所在区域':'周边','stat_data.世界.当前位置':'遇见奶茶店'}),/第二面：涉及家庭——"逃生模式"/);
+ assert.match(triRender({'stat_data.沈若微.是否在场':true,'stat_data.沈若微.触发家庭话题':false,'stat_data.世界.所在区域':'城区','stat_data.世界.当前位置':'老城窄巷'}),/第二面：涉及家庭——"逃生模式"/);
+ assert.match(triRender({'stat_data.沈若微.是否在场':true,'stat_data.沈若微.触发家庭话题':false,'stat_data.世界.所在区域':'周边','stat_data.世界.当前位置':'奶茶店休息间','stat_data.世界.私密程度':'独处','stat_data.沈若微.关系阶段':'依赖'}),/第三面：<user>面前——"停下来的地方"/);
 
  // Keep the story dates and selected participants fixed when simulating the old
  // routine bonuses and the new policy. No model output is assumed by this fixture.
@@ -1177,6 +1210,20 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    await callbackBox.write({variables:{stat_data:adaptiveSave}});
    assert.equal(adaptiveSave.剧情.灵气复苏.阶段,expectedStage,`${originDate} -> ${curDate}`);
  }
+ for (const [pace,originDate,curDate,expectedStage] of [
+   ['紧凑','2020-09-01','2020-09-12','灵潮初涌期'],
+   ['紧凑','2020-09-01','2020-12-09','潜龙秘序期'],
+   ['紧凑','2020-09-01','2020-12-10','百宗出山期'],
+   ['极速','2022-07-05','2022-07-15','潜龙秘序期'],
+   ['极速','2022-07-05','2022-07-16','百宗出山期'],
+ ]) {
+   const pacedSave={世界:{起始年份:'2020',日期:curDate},剧情:{灵气复苏:{已开启:true,开启日期:originDate,阶段:'旧值',节奏:pace}}};
+   await callbackBox.write({variables:{stat_data:pacedSave}});
+   assert.equal(pacedSave.剧情.灵气复苏.阶段,expectedStage,`${pace} ${originDate} -> ${curDate}`);
+ }
+ const shurabaTpl=read('世界书/扮演准则/修罗场冲突.yaml');
+ assert.doesNotMatch(render(shurabaTpl,{}),/云清晏|谢昭宁/);
+ assert.match(render(shurabaTpl,enabled),/云清晏:[\s\S]*谢昭宁:/);
 
  const dlcMaster=dlcEntries.get(dlcNames[0]).content;
  const origin={'stat_data.剧情.灵气复苏.开启日期':'2020-09-03'};
@@ -1248,12 +1295,12 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const realm=dlcEntries.get('[DLC]境界描述');
  assert.ok(realm.keys.includes('神识') && realm.keys.includes('灵压'));
  const realmText=render(realm.content,enabled);
- assert.match(realmText,/炼气[\s\S]*筑基[\s\S]*金丹[\s\S]*元婴[\s\S]*化神[\s\S]*体修[\s\S]*神识探查边界[\s\S]*灵压压制阶梯[\s\S]*识海·神魂·精血/);
+ assert.match(realmText,/炼气[\s\S]*筑基[\s\S]*金丹[\s\S]*元婴[\s\S]*化神[\s\S]*体修[\s\S]*灵根资质与体质差异[\s\S]*五行杂灵根[\s\S]*无灵根[\s\S]*先天道体[\s\S]*神识探查边界[\s\S]*灵压压制阶梯[\s\S]*识海·神魂·精血/);
  assert.doesNotMatch(realmText,/古武|明劲|暗劲|化劲|先天通玄/);
  assert.doesNotMatch(realmText,/云清晏|跌境|极尽升华|炼气大圆满/);
  const breakthrough=dlcEntries.get('[DLC]破境判定');
  const breakthroughText=render(breakthrough.content,enabled);
- assert.match(breakthroughText,/实际冲关[\s\S]*暂稳[\s\S]*失败保留原境/);
+ assert.match(breakthroughText,/实际冲关[\s\S]*资质与体质联动[\s\S]*暂稳[\s\S]*失败保留原境/);
  assert.doesNotMatch(breakthroughText,/云清晏|玉女轮回经|极尽升华|跌落/);
  const overview=render(dlcEntries.get('[DLC]华夏修行界与三教总览').content,enabled);
  assert.match(overview,/道、佛、儒[\s\S]*钱塘谢氏剑庐[\s\S]*魔都苏氏水府[\s\S]*天台赤城洞天/);
@@ -1320,6 +1367,9 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.match(yunNsfwText,/NSFW实战指导：云清晏[\s\S]*《太微玉女轮回经》/);
 
  const [xieBase,xiePalette,xieNsfw]=['谢昭宁_基础信息','谢昭宁_性格调色盘','谢昭宁_NSFW指导'].map(name=>dlcEntries.get(name).content);
+ assert.equal(dlcEntries.get('谢昭宁_基础信息').constant,false);
+ assert.equal(matchesWorldbookKey('谢昭宁_基础信息','在暨阳高二八班教室自习'),false);
+ assert.equal(matchesWorldbookKey('谢昭宁_基础信息','周末坐高铁去杭州紫金港'),true);
  const xie=(tpl,overrides={},floors=[])=>render(tpl,{...scene,...overrides},floors).trim();
  assert.match(xie(xieBase),/相逢入口[\s\S]*浙江大学管理学院工商管理专业[\s\S]*谢昭宁\.是否在场=true/);
  assert.doesNotMatch(xie(xieBase),/角色档案：谢昭宁/);
@@ -1635,6 +1685,13 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  dismissSeal();
  const postGradSteps=[...mp.querySelectorAll('[data-dlc-step]')].map(el=>el.textContent);
  assert.deepEqual(postGradSteps,['微兆 10d','初涌 27d','破禁 54d','秘序 90d','出山 91d+']);
+ const paceSel=mp.querySelector('[data-role="dlc-pace"]');
+ assert.equal(paceSel.value,'慢热');
+ paceSel.value='极速';
+ paceSel.dispatchEvent(new mw.Event('change',{bubbles:true}));
+ await settle();
+ assert.equal(mockChats.B.stat_data.剧情.灵气复苏.节奏,'极速');
+ assert.deepEqual([...mp.querySelectorAll('[data-dlc-step]')].map(el=>el.textContent),['微兆 1d','初涌 3d','破禁 7d','秘序 11d','出山 12d+']);
  assert.equal(mockChats.B.stat_data.剧情.灵气复苏.开启日期,'2022-07-05');
  assert.equal(mockChats.B.stat_data.云清晏.所在位置,'待剧情安排相遇');
  assert.match(mockChats.B.stat_data.云清晏.当前上装,/长衫/);

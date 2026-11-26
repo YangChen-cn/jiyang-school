@@ -14,9 +14,26 @@
   var DEFAULT_FIELDS = {
     '开始年份': '2020',
     '年龄': '18岁',
-    '班级或身份': '暨阳中学高二重点班学生'
+    '班级或身份': '暨阳中学高二重点班学生',
+    '灵潮节奏': '慢热'
   };
   var OPENING_CULTIVATION_DEFAULTS = { 灵根资质: '未测', 体质: '未明' };
+  var INITIAL_STAGES = {
+    '苏晚棠': '初识',
+    '温书语': '初识',
+    '沈若微': '戒备',
+    '陈芷汀': '交易',
+    '慕佳芊': '初识',
+    '虞淑婉': '师生',
+    '许念安': '表面'
+  };
+  function normalizeOpeningDlcPace(raw) {
+    var s = String(raw || '').trim();
+    if (s.indexOf('适中') !== -1) return '适中';
+    if (s.indexOf('紧凑') !== -1) return '紧凑';
+    if (s.indexOf('极速') !== -1) return '极速';
+    return '慢热';
+  }
 
   var OPENING_TEMPLATES = {
     eagle: {
@@ -158,7 +175,7 @@
     }
   }
 
-  function computeOpeningDlcProgress(originRaw, currentRaw, startYearRaw) {
+  function computeOpeningDlcProgress(originRaw, currentRaw, startYearRaw, paceRaw) {
     var oriStr = String(originRaw || currentRaw || '').trim();
     var yearMatch = oriStr.match(/^(\d{4})/);
     var startYear = (typeof startYearRaw === 'number' || typeof startYearRaw === 'string') && /^\d{4}$/.test(String(startYearRaw).trim())
@@ -169,7 +186,7 @@
       var m = String(raw || '').trim().match(/^(\d{4})[-/年.](\d{1,2})[-/月.](\d{1,2})/);
       if (!m) return null;
       var y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);
-      return (mo >= 1 && mo <= 12 && d >= 1 && d <= 31) ? Date.UTC(y, mo - 1, d) : null;
+      return (mo >= 1 && mo <= 12 && d >= 1 && d > 0 && d <= 31) ? Date.UTC(y, mo - 1, d) : null;
     };
     var toIso = function (raw, fallback) {
       var m = String(raw || '').trim().match(/^(\d{4})[-/年.](\d{1,2})[-/月.](\d{1,2})/);
@@ -184,7 +201,10 @@
     var gradMs = Date.UTC(startYear + 2, 6, 1);
     var isPostGradOrigin = oriMs >= gradMs;
     var remainDays = isPostGradOrigin ? 0 : Math.floor((gradMs - oriMs) / 86400000);
-    var totalDays = isPostGradOrigin ? 90 : Math.max(120, Math.min(400, Math.floor(remainDays * 0.92)));
+    var baseTotal = isPostGradOrigin ? 90 : Math.max(120, Math.min(400, Math.floor(remainDays * 0.92)));
+    var pace = normalizeOpeningDlcPace(paceRaw);
+    var paceScale = pace === '适中' ? 0.5 : pace === '紧凑' ? 0.25 : pace === '极速' ? 0.12 : 1;
+    var totalDays = Math.max(8, Math.round(baseTotal * paceScale));
     var s1 = Math.max(1, Math.round(totalDays * 45 / 400));
     var s2 = Math.max(s1 + 1, Math.round(totalDays * 120 / 400));
     var s3 = Math.max(s2 + 1, Math.round(totalDays * 240 / 400));
@@ -192,8 +212,10 @@
     var dayNumber = Math.max(1, Math.floor((curMs - oriMs) / 86400000) + 1);
     var stageIndex = dayNumber <= s1 ? 0 : dayNumber <= s2 ? 1 : dayNumber <= s3 ? 2 : dayNumber <= s4 ? 3 : 4;
     var stageName = ['微兆潜龙期', '灵潮初涌期', '龙眼破禁期', '潜龙秘序期', '百宗出山期'][stageIndex];
-    var modeLabel = isPostGradOrigin ? '毕业后90日线' : totalDays < 400 ? ('高三自适应' + totalDays + '日线') : '400日标准线';
-    return { originDate: originDate, currentDate: currentDate, dayNumber: dayNumber, stageIndex: stageIndex, stageName: stageName, totalDays: totalDays, s1: s1, s2: s2, s3: s3, s4: s4, isPostGradOrigin: isPostGradOrigin, modeLabel: modeLabel };
+    var modeLabel = pace === '慢热'
+      ? (isPostGradOrigin ? '毕业后90日线' : totalDays < 400 ? ('高三自适应' + totalDays + '日线') : '400日标准线')
+      : (pace + ' · ' + totalDays + '日线');
+    return { originDate: originDate, currentDate: currentDate, dayNumber: dayNumber, stageIndex: stageIndex, stageName: stageName, totalDays: totalDays, s1: s1, s2: s2, s3: s3, s4: s4, isPostGradOrigin: isPostGradOrigin, pace: pace, modeLabel: modeLabel };
   }
 
   function isDlcEnabled(root) {
@@ -222,7 +244,7 @@
       var sc = GREETING_SCENES[getGreetingIndex(root)];
       if (sc && sc.date) targetDate = sc.date.replace(/^\d{4}/, String(year)).replaceAll('/', '-');
     }
-    var progress = computeOpeningDlcProgress(targetDate || (year + '-09-01'), targetDate || (year + '-09-01'), year);
+    var progress = computeOpeningDlcProgress(targetDate || (year + '-09-01'), targetDate || (year + '-09-01'), year, readField(root, '灵潮节奏'));
     hintEl.textContent = enabled
       ? ('已开启（基准日 ' + progress.originDate + ' · ' + progress.modeLabel + '，第 ' + (progress.s4 + 1) + ' 日起百宗出山，同步激活云清晏/谢昭宁与灵脉体系）')
       : ('未开启（保持 100% 纯校园日常；若此刻改选开启将走' + progress.modeLabel + '）');
@@ -352,7 +374,7 @@
       }
     },
     8: {
-      date: '2020/09/02', week: '星期三', time: '上午课', weather: '晴', location: '行政楼 校长办公室门口',
+      date: '2020/09/02', week: '星期三', time: '下午课', weather: '晴', location: '行政楼 校长办公室门口',
       area: '校园', privacy: '半私密', pace: '事件触发', semester: '高二上', focus: '虞淑婉', schoolEvent: '无',
       present: {
         '虞淑婉': { pos: '办公室门内', top: '米白色真丝衬衫', bottom: '黑色直筒西裤', action: '低头俯视跌坐在地的人', mood: '被打断的愠怒与警觉', inner: '他看到了多少。' }
@@ -483,6 +505,7 @@
       var value = data && data[key];
       if (typeof value !== 'string') return;
       var next = value === '未设定' ? '' : value;
+      if (key === '灵潮节奏' && !next) next = DEFAULT_FIELDS['灵潮节奏'];
       if ('value' in el) el.value = next; else el.textContent = next;
     });
     updateIdPreview(root);
@@ -738,8 +761,8 @@
   }
 
   function parseLetter(text) {
-    var data = { 灵根资质: '', 体质: '' };
-    var labels = ['姓名', '年龄', '性别或称谓', '班级或身份', '外貌', '性格', '擅长与学业', '家庭背景', '重要物品', '开局心事', '当前开场', '开始年份', '修仙DLC', '开场日期', '开场地点', '开场时段', '自定义开局', '开局行动'].concat(Object.keys(OPENING_CULTIVATION_DEFAULTS));
+    var data = { 灵根资质: '', 体质: '', 灵潮节奏: '慢热' };
+    var labels = ['姓名', '年龄', '性别或称谓', '班级或身份', '外貌', '性格', '擅长与学业', '家庭背景', '重要物品', '开局心事', '当前开场', '开始年份', '修仙DLC', '灵潮节奏', '开场日期', '开场地点', '开场时段', '自定义开局', '开局行动'].concat(Object.keys(OPENING_CULTIVATION_DEFAULTS));
     var stop = labels.concat(['连续性优先级']).join('|');
     var source = String(text || '');
     labels.forEach(function (label) {
@@ -861,7 +884,7 @@
         var present = scene.present ? scene.present[name] : null;
         patches.push([name + '.是否在场', !!present]);
         patches.push([name + '.好感度', 0]);
-        patches.push([name + '.关系阶段', name === '许念安' ? '表面' : '']);
+        patches.push([name + '.关系阶段', INITIAL_STAGES[name] || '']);
         patches.push([name + '.NSFW', false]);
         patches.push([name + '.当前上装', present ? present.top : '']);
         patches.push([name + '.当前下装', present ? present.bottom : '']);
@@ -941,11 +964,13 @@
     }
     var startYear = stat.世界?.起始年份 || opts.startYear || '2020';
     var dateRaw = stat.世界?.日期 || opts.date || (String(startYear) + '-09-01');
-    var progress = computeOpeningDlcProgress(dateRaw, dateRaw, startYear);
+    var dlcPace = normalizeOpeningDlcPace(optionalOpeningField(formData, '灵潮节奏'));
+    var progress = computeOpeningDlcProgress(dateRaw, dateRaw, startYear, dlcPace);
     stat.剧情.灵气复苏 = {
       已开启: true,
       开启日期: progress.originDate,
-      阶段: progress.stageName
+      阶段: progress.stageName,
+      节奏: progress.pace
     };
     stat.主角 = stat.主角 || {};
     stat.主角.修行 = stat.主角.修行 || {
@@ -1154,6 +1179,7 @@
         var value = optionalOpeningField(data, key);
         if (value) lines.push(key + ': ' + value);
       });
+      lines.push('灵潮节奏: ' + normalizeOpeningDlcPace(optionalOpeningField(data, '灵潮节奏')));
     }
     if (selectedGreeting === '自定义开局') {
       ['开场日期', '开场时段', '开场地点'].forEach(function (key) {
@@ -1206,7 +1232,7 @@
     if (enableDlc) {
       dlcLine += '\n' + Object.entries(OPENING_CULTIVATION_DEFAULTS).map(function ([key, fallback]) {
         return key + '：' + (optionalOpeningField(data, key) || fallback);
-      }).join(' · ');
+      }).join(' · ') + ' · 灵潮节奏：' + normalizeOpeningDlcPace(optionalOpeningField(data, '灵潮节奏'));
     }
     if (mode === 'custom') {
       return '姓名：' + data['姓名'] + '\n开局方式：自定义开局\n开始年份：' + year + ' 年' + dlcLine + (sceneHeading(data) ? '\n第一幕：' + sceneHeading(data) : '') + (action ? '\n开局行动：' + action : '');

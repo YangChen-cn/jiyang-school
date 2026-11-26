@@ -63,7 +63,7 @@ export const Schema = z.object({
     校园活动: z.string().prefault(''),
     学期: z.string().prefault(''),       // 高二上 | 高二下 | 暑假 | 高三上 | 高三下 | 已毕业
     当日好感增量: z.object({ 日期: z.string(), 已用: z.record(z.string(), z.number().int().min(0).max(100)) }).optional(),
-    灵气复苏: z.object({ 已开启: z.coerce.boolean(), 开启日期: z.string(), 阶段: z.string() }).optional(),
+    灵气复苏: z.object({ 已开启: z.coerce.boolean(), 开启日期: z.string(), 阶段: z.string(), 节奏: z.string().optional() }).optional(),
   }).prefault({}),
 
   校园: z.object({
@@ -461,7 +461,10 @@ $(async () => {
         const gradMs = Date.UTC(startYear + 2, 6, 1);
         const isPostGrad = ori >= gradMs;
         const remainDays = isPostGrad ? 0 : Math.floor((gradMs - ori) / 86400000);
-        const totalDays = isPostGrad ? 90 : Math.max(120, Math.min(400, Math.floor(remainDays * 0.92)));
+        const baseTotal = isPostGrad ? 90 : Math.max(120, Math.min(400, Math.floor(remainDays * 0.92)));
+        const paceRaw = String(state.剧情.灵气复苏.节奏 || '').trim();
+        const paceScale = paceRaw.includes('适中') ? 0.5 : paceRaw.includes('紧凑') ? 0.25 : paceRaw.includes('极速') ? 0.12 : 1;
+        const totalDays = Math.max(8, Math.round(baseTotal * paceScale));
         const s1 = Math.max(1, Math.round(totalDays * 45 / 400));
         const s2 = Math.max(s1 + 1, Math.round(totalDays * 120 / 400));
         const s3 = Math.max(s2 + 1, Math.round(totalDays * 240 / 400));

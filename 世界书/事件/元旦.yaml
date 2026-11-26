@@ -5,14 +5,14 @@
   核心: 班级小联欢与短假
 <%_ if (['before', 'window', 'live', 'undated'].includes(phase.kind)) { _%>
   筹备:
-    - 按班级安排自愿布置教室、分工和挑歌，不临时占用全校礼堂。
+    - 班级自愿布置教室、分工挑歌。
 <%_ } _%>
 <%_ if (['window', 'live', 'undated'].includes(phase.kind)) { _%>
   现场素材:
-    - 可看班级节目、帮忙或回家。新年问候来自已联系的人和可见的公开渠道。
+    - 可看节目、帮忙或回家；新年问候来自熟人与公开渠道。
 <%_ } _%>
 <%_ if (['after', 'cancelled', 'window', 'live', 'undated'].includes(phase.kind)) { _%>
   收尾与重访:
-    - 只承接已送出的卡片、借物和已公开照片。
+    - 承接已送贺卡、借物与公开照片。
 <%_ } _%>
 <%_ } } _%>
