@@ -991,17 +991,60 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    assert.ok(timeline(date).includes('第 '+day+' 日（'+stage+'）'), date+' -> '+day+' '+stage);
  }
  assert.equal(dlcEntries.get(dlcNames[0]).constant,true);
- assert.match(timeline('2020-09-04'),/潜龙归元窍与学宫聚灵核心[\s\S]*暨阳中学[\s\S]*觉醒灵根乃至高品\/特殊灵根的概率远超外界百倍[\s\S]*阵内避世与老怪出山铁律[\s\S]*龙脉高觉醒与原人物仙缘[\s\S]*四层空间秩序[\s\S]*奇遇独立性[\s\S]*旧调频收音机/);
- assert.doesNotMatch(timeline('2020-09-04'),/云清晏|谢昭宁|仙凡两隔|极尽升华/);
+ assert.match(timeline('2020-09-04'),/潜龙归元窍[\s\S]*古镇山大阵敛藏地脉不外泄[\s\S]*阵内避世与老怪出山铁律[\s\S]*灵根稀缺与仙凡两隔[\s\S]*现世双轨与校园锚点[\s\S]*绝密防全知降级[\s\S]*四层空间秩序[\s\S]*奇遇独立性[\s\S]*旧调频收音机/);
+ assert.doesNotMatch(timeline('2020-09-04'),/云清晏|谢昭宁|极尽升华|学宫聚灵核心|正压在整座归元眼|百倍|秘密仙班|实验尖子班/);
+ assert.doesNotMatch(timeline('2020-09-04'),/温书语|沈若微|许念安|陈芷汀|慕佳芊|虞淑婉/);
  assert.match(timeline('2021-10-08'),/第五阶段·百宗出山期[\s\S]*出阵不损道基[\s\S]*陆续突破瓶口或解封出山/);
- assert.match(timeline('2020-10-18'),/脱敏归档/);
+ assert.match(timeline('2020-10-18'),/脱敏归档[\s\S]*大众媒体与普通学校只字不提/);
  assert.match(timeline('2021-01-01'),/特种气象与非典型样本调查组/);
- assert.match(timeline('2021-05-01'),/外地散修与隐门/);
+ assert.match(timeline('2021-05-01'),/高考与世俗日常正常运转[\s\S]*特调单线暗控/);
  assert.doesNotMatch(timeline('2020-09-03'),/今日尚在途中|第2天起|初次入班/);
- assert.match(timeline('2020-09-04'),/苏晚棠[\s\S]*温书语[\s\S]*沈若微[\s\S]*许念安[\s\S]*陈芷汀[\s\S]*慕佳芊[\s\S]*虞淑婉/);
+ const suTpl=worldbookByName.get('苏晚棠_基础信息').content;
+ for (const offState of [{},{'stat_data.剧情.灵气复苏.已开启':false},{'stat_data.剧情.灵气复苏.已开启':false,'stat_data.苏晚棠.当前境界':'炼气一层'}]) {
+   const offOut=render(suTpl,offState);
+   assert.match(offOut,/开局身份:[\s\S]*继承压力:/);
+   assert.doesNotMatch(offOut,/隐藏血脉|双重压力与修行破局|魔都「苏氏沧溟水府」/);
+ }
+ for (const dormantState of [enabled,{...enabled,'stat_data.苏晚棠.当前境界':'凡人'},{...enabled,'stat_data.苏晚棠.当前境界':'未引气'}]) {
+   const dormantOut=render(suTpl,dormantState);
+   assert.match(dormantOut,/开局身份:[\s\S]*继承压力:[\s\S]*隐藏血脉[\s\S]*与修行、法宝或丹药毫无关联/);
+   assert.doesNotMatch(dormantOut,/双重压力与修行破局/);
+ }
+ for (const out of [
+   render(suTpl,{...enabled,'stat_data.苏晚棠.当前境界':'炼气一层'}),
+   render(suTpl,{...enabled,'stat_data.苏晚棠.灵根':'水灵根'}),
+ ]) {
+   assert.match(out,/当前身份:[\s\S]*双重压力与修行破局[\s\S]*与修真界无任何绑定/);
+   assert.doesNotMatch(out,/开局身份:|隐藏血脉/);
+ }
+ for (const [name,cultivatedRe] of [
+   ['温书语',/当前身份:[\s\S]*踏入修行后设定/],
+   ['沈若微',/当前身份:[\s\S]*经济与修行生计变化:[\s\S]*踏入修行后设定/],
+   ['许念安',/当前身份:[\s\S]*踏入修行后设定/],
+   ['陈芷汀',/当前身份:[\s\S]*资财与生计重塑:/],
+   ['慕佳芊',/当前身份:[\s\S]*衍生三_大人防线下的暗护/],
+   ['虞淑婉',/当前身份:[\s\S]*处境与蜕变:[\s\S]*修行后的权衡与护校之责/],
+ ]) {
+   const tpl=worldbookByName.get(`${name}_基础信息`).content;
+   const baseline=render(tpl,{});
+   assert.match(baseline,/开局身份:/);
+   assert.doesNotMatch(baseline,/踏入修行后设定|资财与生计重塑|修行后的权衡与护校之责|衍生三_大人防线下的暗护|秘密仙班/);
+   assert.equal(render(tpl,{'stat_data.剧情.灵气复苏.已开启':false,'stat_data.主角.境界':'炼气一层'}),baseline);
+   assert.equal(render(tpl,{'stat_data.剧情.灵气复苏.已开启':false,[`stat_data.${name}.当前境界`]:'炼气一层'}),baseline);
+   for (const dormantState of [enabled,{...enabled,[`stat_data.${name}.当前境界`]:'凡人'},{...enabled,[`stat_data.${name}.当前境界`]:'未引气'}]) {
+     assert.equal(render(tpl,dormantState),baseline,`${name} 未入道前哪怕开启DLC也应保持100%原版档案`);
+   }
+   for (const out of [
+     render(tpl,{...enabled,[`stat_data.${name}.当前境界`]:'炼气一层'}),
+     render(tpl,{...enabled,[`stat_data.${name}.灵根`]:'测试灵根'}),
+   ]) {
+     assert.match(out,cultivatedRe,`${name} 入道后应切换修仙EJS段`);
+     assert.doesNotMatch(out,/开局身份:|秘密仙班|清北强基|实验尖子班/,`${name} 入道后应替换开局身份且不含秘密仙班`);
+   }
+ }
  const plot=cardEntries.find(entry=>entry.comment==='[mvu_plot]剧情推动器').content;
  assert.doesNotMatch(render(plot),/修仙暗线/);
- assert.match(render(plot,enabled),/修仙暗线优先交织在校内外既有角色/);
+ assert.match(render(plot,enabled),/修仙暗线优先交织在校内外既有日常与城乡边缘/);
  const realm=dlcEntries.get('[DLC]境界描述');
  assert.ok(realm.keys.includes('神识') && realm.keys.includes('灵压'));
  const realmText=render(realm.content,enabled);
@@ -1033,7 +1076,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  for (const fName of dlcNames.slice(7)) {
    assert.doesNotMatch(render(dlcEntries.get(fName).content,enabled),/万风/);
  }
- assert.match(render(dlcMaster,{...enabled,...origin,'stat_data.世界.日期':'2020-09-04'}),/暨阳苏家（苏晚棠父祖一脉）实与魔都「苏氏沧溟水府」百年前同源/);
+ assert.match(render(dlcMaster,{...enabled,...origin,'stat_data.世界.日期':'2020-09-04'}),/暨阳苏家实与魔都「苏氏沧溟水府」百年前同源分家[\s\S]*苏晚棠[\s\S]*「澹珠记」纯系凡俗珍珠生意，与修行毫无关联/);
 
  const [yunBase,yunPalette,yunNsfw]=dlcNames.slice(2,5).map(name=>dlcEntries.get(name).content);
  const scene={...enabled,...origin,'stat_data.世界.日期':'2020-09-04','stat_data.世界.当前位置':'高二重点班教室','stat_data.世界.时间段':'上午','stat_data.剧情.学期':'高二上','stat_data.主角.班级':'高二(8)班'};
@@ -1144,7 +1187,8 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
 
  mp.querySelector('[data-console-tab="codex"]').click();
  assert.equal(mp.querySelector('[data-panel="codex"]').hidden,false);
- assert.match(mp.querySelector('[data-panel="codex"]').textContent,/三教隐世巨室[\s\S]*谢昭宁[\s\S]*苏氏沧溟水府[\s\S]*四百日渐进出山/);
+ assert.match(mp.querySelector('[data-panel="codex"]').textContent,/越中潜龙 · 暨阳隐秘龙脉[\s\S]*灵潮暗涌 · 秘而不宣与仙凡两隔[\s\S]*三教隐世巨室[\s\S]*谢昭宁[\s\S]*苏氏沧溟水府[\s\S]*与自家「澹珠记」珍珠生意毫无干系[\s\S]*四百日渐进出山/);
+ assert.doesNotMatch(mp.querySelector('[data-panel="codex"]').textContent,/秘密仙班|实验尖子班|清北强基|正压「暨阳中学」|百倍/);
  mp.querySelector('[data-console-tab="dlc"]').click();
  const toggle=()=>mp.querySelector('[data-action="dlc-toggle"]').click();
  toggle();
