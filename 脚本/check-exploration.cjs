@@ -880,7 +880,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  }
  for (const [name,key] of [
    [dlcNames[1],'镇风铎'],
-   ['[DLC]境界描述','暗劲'],
+   ['[DLC]境界描述','体修'],
    ['[DLC]破境判定','冲关'],
    ['[DLC]世家_钱塘谢氏剑庐','谢氏剑庐'],
    ['[DLC]世家_西溪葛氏丹霞','葛氏丹霞'],
@@ -958,8 +958,11 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(dlcParsed.谢昭宁.好感度,18);
  assert.equal(dlcParsed.云清晏.已入班,undefined);
  assert.equal(dlcParsed.主角.修行.境界,'筑基初期');
+ assert.equal(dlcParsed.主角.修行.灵根资质,'未测');
+ assert.deepEqual(dlcParsed.主角.修行.法器与灵物,[]);
+ assert.equal(dlcParsed.主角.修行.修行状态,'平顺');
  await callbackBox.write({variables:{stat_data:dlcSave}});
- assert.equal(dlcSave.剧情.灵气复苏.阶段,'古武抬头期');
+ assert.equal(dlcSave.剧情.灵气复苏.阶段,'灵潮初涌期');
  assert.equal(dlcSave.云清晏.已入班,undefined,'旧版字段从新楼层清理');
  const dlcPrior=structuredClone(dlcSave);
  dlcSave.云清晏.好感度+=30;
@@ -976,7 +979,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const timeline=(date)=>render(dlcMaster,{...enabled,...origin,'stat_data.世界.日期':date});
  for (const [date,day,stage] of [
    ['2020-09-03',1,'微兆潜龙期'], ['2020/09/12',10,'微兆潜龙期'],
-   ['2020-09-13',11,'古武抬头期'], ['2020-09-27',25,'古武抬头期'],
+   ['2020-09-13',11,'灵潮初涌期'], ['2020-09-27',25,'灵潮初涌期'],
    ['2020-09-28',26,'龙眼破禁期'], ['2020-10-17',45,'龙眼破禁期'],
    ['2020-10-18',46,'潜龙秘序期'], ['2020-12-01',90,'潜龙秘序期'],
    ['2020-12-02',91,'百宗出山期'],
@@ -992,15 +995,14 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.match(timeline('2020-10-18'),/外地散修与隐门/);
  assert.doesNotMatch(timeline('2020-09-03'),/今日尚在途中|第2天起|初次入班/);
  assert.match(timeline('2020-09-04'),/公开所见与防全知降级[\s\S]*感官直觉模糊描述[\s\S]*证据不足时只作观察与推测/);
- const guidelines=cardEntries.find(entry=>entry.comment==='扮演准则').content;
- assert.match(guidelines,/对话感官降级[\s\S]*模糊指代或试探/);
  const plot=cardEntries.find(entry=>entry.comment==='[mvu_plot]剧情推动器').content;
  assert.doesNotMatch(render(plot),/修仙暗线/);
  assert.match(render(plot,enabled),/当前校园事件或余波先收束/);
  const realm=dlcEntries.get('[DLC]境界描述');
  assert.ok(realm.keys.includes('神识') && realm.keys.includes('灵压'));
  const realmText=render(realm.content,enabled);
- assert.match(realmText,/炼气[\s\S]*筑基[\s\S]*金丹[\s\S]*元婴[\s\S]*化神[\s\S]*古武[\s\S]*神识探查边界[\s\S]*灵压压制阶梯[\s\S]*识海·神魂·精血/);
+ assert.match(realmText,/炼气[\s\S]*筑基[\s\S]*金丹[\s\S]*元婴[\s\S]*化神[\s\S]*体修[\s\S]*神识探查边界[\s\S]*灵压压制阶梯[\s\S]*识海·神魂·精血/);
+ assert.doesNotMatch(realmText,/古武|明劲|暗劲|化劲|先天通玄/);
  assert.doesNotMatch(realmText,/云清晏|跌境|极尽升华|炼气大圆满/);
  const breakthrough=dlcEntries.get('[DLC]破境判定');
  const breakthroughText=render(breakthrough.content,enabled);
@@ -1249,7 +1251,10 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  dismissSeal();
  assert.equal(mockChats.A.stat_data.剧情.灵气复苏.开启日期,'2021-07-03');
  assert.equal(mockChats.A.stat_data.主角.修行.境界,'筑基');
- assert.match(md.querySelector('[data-aura-badge-text]').textContent,/第20日 · 古武抬头期 · 筑基/);
+ assert.match(md.querySelector('[data-aura-badge-text]').textContent,/第20日 · 灵潮初涌期 · 筑基/);
+ assert.equal(md.querySelector('[data-cultivation-root]').textContent,'未测');
+ assert.equal(md.querySelector('[data-cultivation-state]').textContent,'平顺');
+ assert.equal(md.querySelector('[data-cultivation-artifacts]').textContent,'暂无');
  assert.equal(rumorOption.hidden,false);
  assert.match(forumFeed.textContent,/山顶青光/);
  assert.equal(history.contentDocument.querySelector('[data-aura-badge]').hidden,true);

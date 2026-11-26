@@ -198,7 +198,7 @@ export const Schema = z.object({
     性格: z.string().prefault(''),
     擅长与学业: z.string().prefault(''),
     家庭背景: z.string().prefault(''),
-    修行: z.object({ 境界: z.string(), 灵气感应: z.number(), 功法与秘术: z.array(z.string()) }).optional(),
+    修行: z.object({ 境界: z.string().prefault('未引气（凡躯）'), 灵气感应: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0), 灵根资质: z.string().prefault('未测'), 功法与秘术: z.array(z.string()).prefault([]), 法器与灵物: z.array(z.string()).prefault([]), 修行状态: z.string().prefault('平顺') }).optional(),
     重要物品: z.array(z.object({
       名称: z.string(),
       描述: z.string(),

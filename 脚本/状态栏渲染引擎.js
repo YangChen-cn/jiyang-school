@@ -1734,7 +1734,7 @@
     const cur = parseMs(currentRaw) ?? ori;
     const elapsed = (ori !== null && cur !== null) ? Math.max(0, Math.floor((cur - ori) / 86400000)) : 0;
     const dayNumber = elapsed + 1;
-    const stage = dayNumber <= 10 ? '微兆潜龙期' : dayNumber <= 25 ? '古武抬头期' : dayNumber <= 45 ? '龙眼破禁期' : dayNumber <= 90 ? '潜龙秘序期' : '百宗出山期';
+    const stage = dayNumber <= 10 ? '微兆潜龙期' : dayNumber <= 25 ? '灵潮初涌期' : dayNumber <= 45 ? '龙眼破禁期' : dayNumber <= 90 ? '潜龙秘序期' : '百宗出山期';
     return { dayNumber, stage };
   }
 
@@ -1761,7 +1761,10 @@
     const { dayNumber: dayNum, stage: stageText } = dlcDayProgress(dlc?.开启日期, curDate);
     const realmText = cult?.境界 && !String(cult.境界).startsWith('{{') ? String(cult.境界) : '未引气（凡躯）';
     const qiVal = cult && cult.灵气感应 !== undefined ? String(cult.灵气感应) : '0';
+    const rootText = cult?.灵根资质 && !String(cult.灵根资质).startsWith('{{') ? String(cult.灵根资质) : '未测';
+    const stateText = cult?.修行状态 && !String(cult.修行状态).startsWith('{{') ? String(cult.修行状态) : '平顺';
     const artsList = Array.isArray(cult?.功法与秘术) && cult.功法与秘术.length ? cult.功法与秘术.join('、') : '暂无';
+    const artifactsList = Array.isArray(cult?.法器与灵物) && cult.法器与灵物.length ? cult.法器与灵物.join('、') : '暂无';
 
     const badge = root.querySelector('[data-aura-badge]');
     const badgeText = root.querySelector('[data-aura-badge-text]');
@@ -1795,11 +1798,17 @@
       const stEl = cultPanel.querySelector('[data-cultivation-stage]');
       const rlEl = cultPanel.querySelector('[data-cultivation-realm]');
       const qiEl = cultPanel.querySelector('[data-cultivation-qi]');
+      const rtEl = cultPanel.querySelector('[data-cultivation-root]');
+      const csEl = cultPanel.querySelector('[data-cultivation-state]');
       const arEl = cultPanel.querySelector('[data-cultivation-arts]');
+      const afEl = cultPanel.querySelector('[data-cultivation-artifacts]');
       if (stEl) stEl.textContent = active ? `第${dayNum}日 · ${stageText}` : '未启封';
       if (rlEl) rlEl.textContent = realmText;
       if (qiEl) qiEl.textContent = qiVal;
+      if (rtEl) rtEl.textContent = rootText;
+      if (csEl) csEl.textContent = stateText;
       if (arEl) arEl.textContent = artsList;
+      if (afEl) afEl.textContent = artifactsList;
     }
 
     enhanceCharacters(root, doc);

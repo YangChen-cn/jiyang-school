@@ -202,7 +202,7 @@ export const Schema = z.object({
     性格: z.string().prefault(''),
     擅长与学业: z.string().prefault(''),
     家庭背景: z.string().prefault(''),
-    修行: z.object({ 境界: z.string(), 灵气感应: z.number(), 功法与秘术: z.array(z.string()) }).optional(),
+    修行: z.object({ 境界: z.string().prefault('未引气（凡躯）'), 灵气感应: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0), 灵根资质: z.string().prefault('未测'), 功法与秘术: z.array(z.string()).prefault([]), 法器与灵物: z.array(z.string()).prefault([]), 修行状态: z.string().prefault('平顺') }).optional(),
     重要物品: z.array(z.object({
       名称: z.string(),
       描述: z.string(),
@@ -422,7 +422,7 @@ $(async () => {
       const cur = toMs(state?.世界?.日期) ?? ori;
       if (ori !== null && cur !== null) {
         const d = Math.max(0, Math.floor((cur - ori) / 86400000));
-        state.剧情.灵气复苏.阶段 = d < 10 ? '微兆潜龙期' : d < 25 ? '古武抬头期' : d < 45 ? '龙眼破禁期' : d < 90 ? '潜龙秘序期' : '百宗出山期';
+        state.剧情.灵气复苏.阶段 = d < 10 ? '微兆潜龙期' : d < 25 ? '灵潮初涌期' : d < 45 ? '龙眼破禁期' : d < 90 ? '潜龙秘序期' : '百宗出山期';
       }
     }
     if (state?.主角) {
