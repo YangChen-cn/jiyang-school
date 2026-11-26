@@ -984,20 +984,23 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    assert.ok(timeline(date).includes('第 '+day+' 日（'+stage+'）'));
  }
  assert.equal(dlcEntries.get(dlcNames[0]).constant,true);
- assert.match(timeline('2020-09-04'),/华夏龙脉与暨阳暗局[\s\S]*阵内避世与老怪出山铁律[\s\S]*修行总纲与保密准则[\s\S]*灵根与保密铁律[\s\S]*旧调频收音机/);
+ assert.match(timeline('2020-09-04'),/华夏龙脉与暨阳暗局[\s\S]*阵内避世与老怪出山铁律[\s\S]*修行总纲与保密准则[\s\S]*灵根与保密铁律[\s\S]*四层空间秩序[\s\S]*奇遇独立性[\s\S]*旧调频收音机/);
  assert.doesNotMatch(timeline('2020-09-04'),/云清晏|谢昭宁|仙凡两隔|极尽升华/);
  assert.match(timeline('2020-12-02'),/第五阶段·百宗出山期[\s\S]*出阵不损道基[\s\S]*陆续突破瓶口或解封出山/);
  assert.match(timeline('2020-09-13'),/脱敏归档/);
  assert.match(timeline('2020-09-28'),/特种气象与非典型样本调查组/);
  assert.match(timeline('2020-10-18'),/外地散修与隐门/);
  assert.doesNotMatch(timeline('2020-09-03'),/今日尚在途中|第2天起|初次入班/);
- assert.match(timeline('2020-09-04'),/公开所见与私下所知[\s\S]*证据不足时只作观察与推测/);
+ assert.match(timeline('2020-09-04'),/公开所见与防全知降级[\s\S]*感官直觉模糊描述[\s\S]*证据不足时只作观察与推测/);
+ const guidelines=cardEntries.find(entry=>entry.comment==='扮演准则').content;
+ assert.match(guidelines,/对话感官降级[\s\S]*模糊指代或试探/);
  const plot=cardEntries.find(entry=>entry.comment==='[mvu_plot]剧情推动器').content;
  assert.doesNotMatch(render(plot),/修仙暗线/);
  assert.match(render(plot,enabled),/当前校园事件或余波先收束/);
  const realm=dlcEntries.get('[DLC]境界描述');
+ assert.ok(realm.keys.includes('神识') && realm.keys.includes('灵压'));
  const realmText=render(realm.content,enabled);
- assert.match(realmText,/炼气[\s\S]*筑基[\s\S]*金丹[\s\S]*元婴[\s\S]*化神[\s\S]*古武/);
+ assert.match(realmText,/炼气[\s\S]*筑基[\s\S]*金丹[\s\S]*元婴[\s\S]*化神[\s\S]*古武[\s\S]*神识探查边界[\s\S]*灵压压制阶梯[\s\S]*识海·神魂·精血/);
  assert.doesNotMatch(realmText,/云清晏|跌境|极尽升华|炼气大圆满/);
  const breakthrough=dlcEntries.get('[DLC]破境判定');
  const breakthroughText=render(breakthrough.content,enabled);
