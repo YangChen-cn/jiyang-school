@@ -17,10 +17,10 @@ const curMs = toIsoDay(curDateStr) ?? startMs;
 const gradMs = Date.UTC(startYear + 2, 6, 1);
 const isPostGradOrigin = startMs >= gradMs;
 const remainDays = isPostGradOrigin ? 0 : Math.floor((gradMs - startMs) / 86400000);
-const totalDays = isPostGradOrigin ? 90 : Math.min(remainDays, Math.max(120, Math.min(400, Math.floor(remainDays * 0.92))));
+const totalDays = isPostGradOrigin ? 90 : Math.max(120, Math.min(400, Math.floor(remainDays * 0.92)));
 const s1 = Math.max(1, Math.round(totalDays * 45 / 400));
-const s2 = Math.min(totalDays, Math.max(s1 + 1, Math.round(totalDays * 120 / 400)));
-const s3 = Math.min(totalDays, Math.max(s2 + 1, Math.round(totalDays * 240 / 400)));
+const s2 = Math.max(s1 + 1, Math.round(totalDays * 120 / 400));
+const s3 = Math.max(s2 + 1, Math.round(totalDays * 240 / 400));
 const s4 = totalDays;
 const elapsedDays = Math.max(0, Math.floor((curMs - startMs) / 86400000));
 const dayNumber = elapsedDays + 1;
@@ -32,7 +32,7 @@ _%>
 华夏龙脉与暨阳暗局:
   潜龙归元窍: 暨阳实为华夏南干龙入越沉睡主窍「越中潜龙·归元眼」（北承会稽、东抱老鹰山、南接浦阳江），古镇山大阵敛藏地脉不外泄；灵气前期主自老鹰山荒脉与城郊古窍极其缓慢渗露，普通市区与校园仍维持常人世界底色。
   太微云岫祖庭: 老鹰山深处沉封着昔年浙东名宗「太微云岫宗」外门山阵与残殿，守灯执事周伯独自守望，严守山门因果。
-  阵内避世与老怪出山铁律: 末法外界灵气枯竭，金丹及以上离阵调运会倒耗本源损道基，各宗宿老皆封死阵内减息避世；周期按开启时机变化（高二约 400 日、高三按毕业前剩余时日收束、毕业后开启为 90 日），**本档第 <%= s4 + 1 %> 天起**外界灵气堪托高阶道基，老怪相继突破出山。
+  阵内避世与老怪出山铁律: 末法外界灵气枯竭，金丹及以上离阵调运会倒耗本源损道基，各宗宿老皆封死阵内减息避世；高二启封约 400 日，高三启封至少 120 日，可跨毕业延续，毕业后首次启封为 90 日。**本档第 <%= s4 + 1 %> 天起**外界灵气堪托高阶道基，老怪相继突破出山。
   世家同源线索: 灵潮涌动下杭城、魔都世家与三教名山渐次启封；**暨阳苏家实与魔都「苏氏沧溟水府」百年前同源分家**（已断传承彻底隐于凡俗商海，唯后人苏晚棠骨血中隐存一缕未启水灵根；其家「澹珠记」纯系凡俗珍珠生意，与修行毫无关联）。
 
 修行总纲、仙凡双轨与保密准则:
@@ -51,7 +51,7 @@ _%>
 <%_ } else if (dayNumber <= s3) { _%>
   - 第三阶段·龙眼破禁期（第<%= s2 + 1 %>～<%= s3 %>天）：老鹰山与城郊归元眼支脉晨昏雾霭渐厚，雷夜偶见弧光偏折；少数散落民间与隐门新秀私下可展微末道法，杭城夜集坊市开始秘密流通灵材符器。国家「特种气象与非典型样本调查组（隐秘特调）」便装单线接触极少数异常样本，严禁公开；深探线索者可试叩山腹沉封山门。
 <%_ } else if (dayNumber <= s4) { _%>
-  - 第四阶段·潜龙秘序期（第<%= s3 + 1 %>～<%= s4 %>天）：表层都市与学校依旧按高考与世俗日常正常运转，里世界渐次成型——特调单线暗控，杭城魔都世家与各名山外门真传陆续现身越中暗探归元眼脉动，少数身负渊源或奇遇之人迎来关键抉择。
+  - 第四阶段·潜龙秘序期（第<%= s3 + 1 %>～<%= s4 %>天）：表层都市照常运转，学业与毕业去向随校历及剧情推进，里世界渐次成型——特调单线暗控，杭城魔都世家与各名山外门真传陆续现身越中暗探归元眼脉动，少数身负渊源或奇遇之人迎来关键抉择。
 <%_ } else { _%>
   - 第五阶段·百宗出山期（第<%= s4 + 1 %>天起）：外界游离灵气终跨「出阵不损道基」阈值！各宗门与世家闭死关的金丹老祖、假婴宿老与元婴真君陆续突破瓶口或解封出山重定座次，表层仍守现代法治遮掩。
 <%_ } _%>

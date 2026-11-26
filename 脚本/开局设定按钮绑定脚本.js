@@ -75,7 +75,7 @@
         '家庭背景': '历经成人礼与首考洗礼、瞄准浙江大学冲刺的普通家庭走读生；父母晚饭准点温在锅里，嘴上越放宽心却比谁都早亮灯。',
         '擅长与学业': '进入高三最后百余天合围冲刺阶段，压轴大题手感稳步拔尖，心性也远比高二时沉得住气。',
         '重要物品': '写着目标「浙江大学」字样的黑皮错题册、高三成人礼纪念徽章、半瓶清醒薄荷鼻通。',
-        '开局心事': '教室后墙红纸倒计时一天天逼近夏天，有些人从高二藏到高三的心事快兜不住了（若此刻同时启封修仙 DLC，也将按高三剩余时日紧凑演进，不拖进毕业后）。',
+        '开局心事': '教室后墙红纸倒计时一天天逼近夏天，有些人从高二藏到高三的心事快兜不住了。',
         '开场地点': '高三教室',
         '开场时段': '早读前（6:40）'
       },
@@ -183,10 +183,10 @@
     var gradMs = Date.UTC(startYear + 2, 6, 1);
     var isPostGradOrigin = oriMs >= gradMs;
     var remainDays = isPostGradOrigin ? 0 : Math.floor((gradMs - oriMs) / 86400000);
-    var totalDays = isPostGradOrigin ? 90 : Math.min(remainDays, Math.max(120, Math.min(400, Math.floor(remainDays * 0.92))));
+    var totalDays = isPostGradOrigin ? 90 : Math.max(120, Math.min(400, Math.floor(remainDays * 0.92)));
     var s1 = Math.max(1, Math.round(totalDays * 45 / 400));
-    var s2 = Math.min(totalDays, Math.max(s1 + 1, Math.round(totalDays * 120 / 400)));
-    var s3 = Math.min(totalDays, Math.max(s2 + 1, Math.round(totalDays * 240 / 400)));
+    var s2 = Math.max(s1 + 1, Math.round(totalDays * 120 / 400));
+    var s3 = Math.max(s2 + 1, Math.round(totalDays * 240 / 400));
     var s4 = totalDays;
     var dayNumber = Math.max(1, Math.floor((curMs - oriMs) / 86400000) + 1);
     var stageIndex = dayNumber <= s1 ? 0 : dayNumber <= s2 ? 1 : dayNumber <= s3 ? 2 : dayNumber <= s4 ? 3 : 4;

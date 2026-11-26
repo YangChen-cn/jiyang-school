@@ -272,7 +272,7 @@ async function checkOpeningArchives() {
    get('[data-custom-opening]').value = '花名册上有个名字叫云清晏。教室里还没来人。';
    field('开场日期').value = '2022-06-30';
    field('开场日期').dispatchEvent(new w.Event('input', { bubbles: true }));
-   assert.match(get('[data-opening-dlc-hint]').textContent, /第 2 日起百宗出山/);
+   assert.match(get('[data-opening-dlc-hint]').textContent, /高三自适应120日线.*第 121 日起百宗出山/);
    click('confirm');
    await new Promise(r => w.setTimeout(r, 40));
    assert.equal(writes, 3);
@@ -1108,7 +1108,9 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    ['2022-03-01','2022-06-28','潜龙秘序期'],
    ['2022-03-01','2022-06-29','百宗出山期'],
    ['2022-06-30','2022-06-30','微兆潜龙期'],
-   ['2022-06-30','2022-07-01','百宗出山期'],
+   ['2022-06-30','2022-07-01','微兆潜龙期'],
+   ['2022-06-30','2022-10-27','潜龙秘序期'],
+   ['2022-06-30','2022-10-28','百宗出山期'],
    ['2022-07-05','2022-07-14','微兆潜龙期'],
    ['2022-07-05','2022-07-15','灵潮初涌期'],
    ['2022-07-05','2022-10-02','潜龙秘序期'],
@@ -1138,7 +1140,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.match(timeline('2021-10-08'),/第五阶段·百宗出山期[\s\S]*出阵不损道基[\s\S]*陆续突破瓶口或解封出山/);
  assert.match(timeline('2020-10-18'),/脱敏归档[\s\S]*大众媒体与普通学校只字不提/);
  assert.match(timeline('2021-01-01'),/特种气象与非典型样本调查组/);
- assert.match(timeline('2021-05-01'),/高考与世俗日常正常运转[\s\S]*特调单线暗控/);
+ assert.match(timeline('2021-05-01'),/学业与毕业去向随校历及剧情推进[\s\S]*特调单线暗控/);
  assert.doesNotMatch(timeline('2020-09-03'),/今日尚在途中|第2天起|初次入班/);
  const suTpl=worldbookByName.get('苏晚棠_基础信息').content;
  for (const offState of [{},{'stat_data.剧情.灵气复苏.已开启':false},{'stat_data.剧情.灵气复苏.已开启':false,'stat_data.苏晚棠.当前境界':'炼气一层'}]) {
@@ -1247,7 +1249,9 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.doesNotMatch(gradPresentText,/体弱外省借读生为公开身份|校服洗得规整平挺/);
  assert.match(render(catalog.content,{...enabled,'stat_data.剧情.学期':'已毕业','stat_data.世界.日期':'2022-08-10'}),/姓名: 云清晏[\s\S]*表面身份:/);
  assert.match(render(dlcMaster,{...enabled,'stat_data.世界.起始年份':'2020','stat_data.剧情.灵气复苏.开启日期':'2021-09-01','stat_data.世界.日期':'2022-06-06'}),/高三自适应 278 日线[\s\S]*第五阶段·百宗出山期（第279天起）/);
- assert.match(render(dlcMaster,{...enabled,'stat_data.世界.起始年份':'2020','stat_data.剧情.灵气复苏.开启日期':'2022-06-30','stat_data.世界.日期':'2022-07-01'}),/本档前四期共 1 日[\s\S]*第五阶段·百宗出山期（第2天起）/);
+ const lateSeniorTimeline = date => render(dlcMaster,{...enabled,'stat_data.世界.起始年份':'2020','stat_data.剧情.灵气复苏.开启日期':'2022-06-30','stat_data.世界.日期':date});
+ assert.match(lateSeniorTimeline('2022-07-01'),/第 2 日（微兆潜龙期）[\s\S]*本档前四期共 120 日/);
+ assert.match(lateSeniorTimeline('2022-10-28'),/第 121 日（百宗出山期）[\s\S]*第五阶段·百宗出山期（第121天起）/);
  assert.match(render(dlcMaster,{...enabled,'stat_data.世界.起始年份':'2020','stat_data.剧情.灵气复苏.开启日期':'2022-07-05','stat_data.世界.日期':'2022-10-03'}),/本档前四期共 90 日[\s\S]*毕业后 90 日紧凑线[\s\S]*第五阶段·百宗出山期（第91天起）/);
  assert.equal(yun(yunPalette),'');
  assert.match(yun(yunPalette,{...firstAppearance,'stat_data.云清晏.好感度':45,'stat_data.云清晏.关系阶段':'观澜'}),/观澜·尘外冷眸/);
@@ -1340,7 +1344,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
 
  mp.querySelector('[data-console-tab="codex"]').click();
  assert.equal(mp.querySelector('[data-panel="codex"]').hidden,false);
- assert.match(mp.querySelector('[data-panel="codex"]').textContent,/越中潜龙 · 暨阳隐秘龙脉[\s\S]*灵潮暗涌 · 秘而不宣与仙凡两隔[\s\S]*三教隐世巨室[\s\S]*谢昭宁[\s\S]*苏氏沧溟水府[\s\S]*与自家「澹珠记」珍珠生意毫无干系[\s\S]*阵内避世 · 自适应周期出山[\s\S]*高三按剩余高中时日自适应收束[\s\S]*九十日紧凑进程/);
+ assert.match(mp.querySelector('[data-panel="codex"]').textContent,/越中潜龙 · 暨阳隐秘龙脉[\s\S]*灵潮暗涌 · 秘而不宣与仙凡两隔[\s\S]*三教隐世巨室[\s\S]*谢昭宁[\s\S]*苏氏沧溟水府[\s\S]*与自家「澹珠记」珍珠生意毫无干系[\s\S]*阵内避世 · 自适应周期出山[\s\S]*高三开启至少一百二十日，可跨毕业继续推进[\s\S]*九十日紧凑进程/);
  assert.doesNotMatch(mp.querySelector('[data-panel="codex"]').textContent,/秘密仙班|实验尖子班|清北强基|正压「暨阳中学」|百倍/);
  mp.querySelector('[data-console-tab="dlc"]').click();
  const toggle=()=>mp.querySelector('[data-action="dlc-toggle"]').click();
