@@ -73,6 +73,8 @@ export const Schema = z.object({
     好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
     关系阶段: z.string().prefault(''),
     NSFW: z.coerce.boolean().prefault(false),
+    当前境界: z.string().optional(),
+    灵根: z.string().optional(),
     当前上装: z.string().prefault(''),
     当前下装: z.string().prefault(''),
     所在位置: z.string().prefault(''),
@@ -86,6 +88,8 @@ export const Schema = z.object({
     好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
     关系阶段: z.string().prefault(''),
     NSFW: z.coerce.boolean().prefault(false),
+    当前境界: z.string().optional(),
+    灵根: z.string().optional(),
     当前上装: z.string().prefault(''),
     当前下装: z.string().prefault(''),
     所在位置: z.string().prefault(''),
@@ -101,6 +105,8 @@ export const Schema = z.object({
     触发家庭话题: z.coerce.boolean().prefault(false),
     关系阶段: z.string().prefault(''),
     NSFW: z.coerce.boolean().prefault(false),
+    当前境界: z.string().optional(),
+    灵根: z.string().optional(),
     当前上装: z.string().prefault(''),
     当前下装: z.string().prefault(''),
     所在位置: z.string().prefault(''),
@@ -114,6 +120,8 @@ export const Schema = z.object({
     好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
     关系阶段: z.string().prefault(''),
     NSFW: z.coerce.boolean().prefault(false),
+    当前境界: z.string().optional(),
+    灵根: z.string().optional(),
     当前上装: z.string().prefault(''),
     当前下装: z.string().prefault(''),
     所在位置: z.string().prefault(''),
@@ -127,6 +135,8 @@ export const Schema = z.object({
     好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
     关系阶段: z.string().prefault(''),
     NSFW: z.coerce.boolean().prefault(false),
+    当前境界: z.string().optional(),
+    灵根: z.string().optional(),
     当前上装: z.string().prefault(''),
     当前下装: z.string().prefault(''),
     所在位置: z.string().prefault(''),
@@ -140,6 +150,8 @@ export const Schema = z.object({
     好感度: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
     关系阶段: z.string().prefault(''),
     NSFW: z.coerce.boolean().prefault(false),
+    当前境界: z.string().optional(),
+    灵根: z.string().optional(),
     当前上装: z.string().prefault(''),
     当前下装: z.string().prefault(''),
     所在位置: z.string().prefault(''),
@@ -154,6 +166,8 @@ export const Schema = z.object({
     控制欲: z.coerce.number().transform(v => _.clamp(v, 0, 100)).prefault(0),
     关系阶段: z.string().prefault('表面'),
     NSFW: z.coerce.boolean().prefault(false),
+    当前境界: z.string().optional(),
+    灵根: z.string().optional(),
     当前上装: z.string().prefault(''),
     当前下装: z.string().prefault(''),
     所在位置: z.string().prefault(''),
@@ -422,7 +436,7 @@ $(async () => {
       const cur = toMs(state?.世界?.日期) ?? ori;
       if (ori !== null && cur !== null) {
         const d = Math.max(0, Math.floor((cur - ori) / 86400000));
-        state.剧情.灵气复苏.阶段 = d < 10 ? '微兆潜龙期' : d < 25 ? '灵潮初涌期' : d < 45 ? '龙眼破禁期' : d < 90 ? '潜龙秘序期' : '百宗出山期';
+        state.剧情.灵气复苏.阶段 = d < 45 ? '微兆潜龙期' : d < 120 ? '灵潮初涌期' : d < 240 ? '龙眼破禁期' : d < 400 ? '潜龙秘序期' : '百宗出山期';
       }
     }
     if (state?.主角) {

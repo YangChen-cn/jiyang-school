@@ -952,10 +952,14 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.equal(plainParsed.谢昭宁,undefined);
  assert.equal(plainParsed.主角.修行,undefined);
  assert.equal(plainParsed.剧情.灵气复苏,undefined);
- const dlcSave={世界:{日期:'2020-09-13'},剧情:{灵气复苏:{已开启:true,开启日期:'2020-09-03',阶段:'旧值'}},主角:{修行:{境界:'筑基初期',灵气感应:35,功法与秘术:['太微引气篇']}},云清晏:{已入班:true,是否在场:true,好感度:22,关系阶段:'问道',当前境界:'炼气大圆满（轮回重修）'},谢昭宁:{是否在场:true,好感度:18,关系阶段:'观风',当前境界:'筑基中期'}};
+ assert.equal(plainParsed.苏晚棠.当前境界,undefined);
+ assert.equal(plainParsed.苏晚棠.灵根,undefined);
+ const dlcSave={世界:{日期:'2020-10-18'},剧情:{灵气复苏:{已开启:true,开启日期:'2020-09-03',阶段:'旧值'}},主角:{修行:{境界:'筑基初期',灵气感应:35,功法与秘术:['太微引气篇']}},苏晚棠:{好感度:35,当前境界:'炼气二层',灵根:'先天沧溟水脉'},云清晏:{已入班:true,是否在场:true,好感度:22,关系阶段:'问道',当前境界:'炼气大圆满（轮回重修）'},谢昭宁:{是否在场:true,好感度:18,关系阶段:'观风',当前境界:'筑基中期'}};
  const dlcParsed=schemaBox.schema.parse(dlcSave);
  assert.equal(dlcParsed.云清晏.好感度,22);
  assert.equal(dlcParsed.谢昭宁.好感度,18);
+ assert.equal(dlcParsed.苏晚棠.当前境界,'炼气二层');
+ assert.equal(dlcParsed.苏晚棠.灵根,'先天沧溟水脉');
  assert.equal(dlcParsed.云清晏.已入班,undefined);
  assert.equal(dlcParsed.主角.修行.境界,'筑基初期');
  assert.equal(dlcParsed.主角.修行.灵根资质,'未测');
@@ -970,7 +974,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  callbackBox.pace({stat_data:dlcSave},{stat_data:dlcPrior});
  assert.equal(dlcSave.云清晏.好感度,34);
  assert.equal(dlcSave.谢昭宁.好感度,30);
- const lateDlcSave={世界:{日期:'2020-12-03'},剧情:{灵气复苏:{已开启:true,开启日期:'2020-09-03',阶段:'旧值'}}};
+ const lateDlcSave={世界:{日期:'2021-10-08'},剧情:{灵气复苏:{已开启:true,开启日期:'2020-09-03',阶段:'旧值'}}};
  await callbackBox.write({variables:{stat_data:lateDlcSave}});
  assert.equal(lateDlcSave.剧情.灵气复苏.阶段,'百宗出山期');
 
@@ -978,26 +982,26 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  const origin={'stat_data.剧情.灵气复苏.开启日期':'2020-09-03'};
  const timeline=(date)=>render(dlcMaster,{...enabled,...origin,'stat_data.世界.日期':date});
  for (const [date,day,stage] of [
-   ['2020-09-03',1,'微兆潜龙期'], ['2020/09/12',10,'微兆潜龙期'],
-   ['2020-09-13',11,'灵潮初涌期'], ['2020-09-27',25,'灵潮初涌期'],
-   ['2020-09-28',26,'龙眼破禁期'], ['2020-10-17',45,'龙眼破禁期'],
-   ['2020-10-18',46,'潜龙秘序期'], ['2020-12-01',90,'潜龙秘序期'],
-   ['2020-12-02',91,'百宗出山期'],
+   ['2020-09-03',1,'微兆潜龙期'], ['2020/10/17',45,'微兆潜龙期'],
+   ['2020-10-18',46,'灵潮初涌期'], ['2020-12-31',120,'灵潮初涌期'],
+   ['2021-01-01',121,'龙眼破禁期'], ['2021-04-30',240,'龙眼破禁期'],
+   ['2021-05-01',241,'潜龙秘序期'], ['2021-10-07',400,'潜龙秘序期'],
+   ['2021-10-08',401,'百宗出山期'],
  ]) {
-   assert.ok(timeline(date).includes('第 '+day+' 日（'+stage+'）'));
+   assert.ok(timeline(date).includes('第 '+day+' 日（'+stage+'）'), date+' -> '+day+' '+stage);
  }
  assert.equal(dlcEntries.get(dlcNames[0]).constant,true);
- assert.match(timeline('2020-09-04'),/华夏龙脉与暨阳暗局[\s\S]*阵内避世与老怪出山铁律[\s\S]*修行总纲与保密准则[\s\S]*灵根与保密铁律[\s\S]*四层空间秩序[\s\S]*奇遇独立性[\s\S]*旧调频收音机/);
+ assert.match(timeline('2020-09-04'),/潜龙归元窍与学宫聚灵核心[\s\S]*暨阳中学[\s\S]*觉醒灵根乃至高品\/特殊灵根的概率远超外界百倍[\s\S]*阵内避世与老怪出山铁律[\s\S]*龙脉高觉醒与原人物仙缘[\s\S]*四层空间秩序[\s\S]*奇遇独立性[\s\S]*旧调频收音机/);
  assert.doesNotMatch(timeline('2020-09-04'),/云清晏|谢昭宁|仙凡两隔|极尽升华/);
- assert.match(timeline('2020-12-02'),/第五阶段·百宗出山期[\s\S]*出阵不损道基[\s\S]*陆续突破瓶口或解封出山/);
- assert.match(timeline('2020-09-13'),/脱敏归档/);
- assert.match(timeline('2020-09-28'),/特种气象与非典型样本调查组/);
- assert.match(timeline('2020-10-18'),/外地散修与隐门/);
+ assert.match(timeline('2021-10-08'),/第五阶段·百宗出山期[\s\S]*出阵不损道基[\s\S]*陆续突破瓶口或解封出山/);
+ assert.match(timeline('2020-10-18'),/脱敏归档/);
+ assert.match(timeline('2021-01-01'),/特种气象与非典型样本调查组/);
+ assert.match(timeline('2021-05-01'),/外地散修与隐门/);
  assert.doesNotMatch(timeline('2020-09-03'),/今日尚在途中|第2天起|初次入班/);
- assert.match(timeline('2020-09-04'),/公开所见与防全知降级[\s\S]*感官直觉模糊描述[\s\S]*证据不足时只作观察与推测/);
+ assert.match(timeline('2020-09-04'),/苏晚棠[\s\S]*温书语[\s\S]*沈若微[\s\S]*许念安[\s\S]*陈芷汀[\s\S]*慕佳芊[\s\S]*虞淑婉/);
  const plot=cardEntries.find(entry=>entry.comment==='[mvu_plot]剧情推动器').content;
  assert.doesNotMatch(render(plot),/修仙暗线/);
- assert.match(render(plot,enabled),/当前校园事件或余波先收束/);
+ assert.match(render(plot,enabled),/修仙暗线优先交织在校内外既有角色/);
  const realm=dlcEntries.get('[DLC]境界描述');
  assert.ok(realm.keys.includes('神识') && realm.keys.includes('灵压'));
  const realmText=render(realm.content,enabled);
@@ -1140,7 +1144,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
 
  mp.querySelector('[data-console-tab="codex"]').click();
  assert.equal(mp.querySelector('[data-panel="codex"]').hidden,false);
- assert.match(mp.querySelector('[data-panel="codex"]').textContent,/三教隐世巨室[\s\S]*谢昭宁[\s\S]*苏氏沧溟水府[\s\S]*数月后百宗出山/);
+ assert.match(mp.querySelector('[data-panel="codex"]').textContent,/三教隐世巨室[\s\S]*谢昭宁[\s\S]*苏氏沧溟水府[\s\S]*四百日渐进出山/);
  mp.querySelector('[data-console-tab="dlc"]').click();
  const toggle=()=>mp.querySelector('[data-action="dlc-toggle"]').click();
  toggle();
@@ -1251,7 +1255,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  dismissSeal();
  assert.equal(mockChats.A.stat_data.剧情.灵气复苏.开启日期,'2021-07-03');
  assert.equal(mockChats.A.stat_data.主角.修行.境界,'筑基');
- assert.match(md.querySelector('[data-aura-badge-text]').textContent,/第20日 · 灵潮初涌期 · 筑基/);
+ assert.match(md.querySelector('[data-aura-badge-text]').textContent,/第20日 · 微兆潜龙期 · 筑基/);
  assert.equal(md.querySelector('[data-cultivation-root]').textContent,'未测');
  assert.equal(md.querySelector('[data-cultivation-state]').textContent,'平顺');
  assert.equal(md.querySelector('[data-cultivation-artifacts]').textContent,'暂无');
@@ -1262,11 +1266,17 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.match(frameCss,/\.jy-status\[data-dlc-active="true"\]\[data-theme="dark"\]/);
  assert.match(frameCss,/\.jy-status\[data-dlc-active="true"\]\[data-intimate-scene="true"/);
  assert.match(frameCss,/\.jy-status\[data-dlc-active="true"\]\[data-theme="dark"\]\[data-intimate-scene="true"/);
+ const suCard=[...md.querySelectorAll('.jy-person')].find(c=>c.querySelector('.jy-name')?.textContent.trim()==='苏晚棠');
+ assert.equal(suCard.querySelector('[data-heroine-realm]').hidden,true);
+ mockChats.A.stat_data.苏晚棠={是否在场:true,好感度:35,关系阶段:'熟悉',NSFW:false,当前境界:'炼气二层',灵根:'先天沧溟水脉'};
  mockChats.A.stat_data.主角.修行={境界:'筑基初期',灵气感应:68,灵根资质:'水木双灵根',功法与秘术:['太微引气篇','松溪吐风桩'],法器与灵物:['镇风铎残片'],修行状态:'神魂微损'};
  mockChats.A.stat_data.剧情.当前nsfw=true;
  statusRoot.dataset.intimateScene='true';
  mw.dispatchEvent(new mw.CustomEvent('jy-aura-dlc-changed',{detail:{chatId:'A',messageId:3}}));
  await settle();
+ assert.equal(suCard.querySelector('[data-heroine-realm]').hidden,false);
+ assert.equal(suCard.querySelector('[data-heroine-realm]').textContent,'炼气二层');
+ assert.equal(suCard.querySelector('[data-heroine-realm]').title,'灵根：先天沧溟水脉');
  assert.equal(md.querySelector('[data-cultivation-root]').textContent,'水木双灵根');
  assert.equal(md.querySelector('[data-cultivation-arts]').textContent,'太微引气篇、松溪吐风桩');
  assert.equal(md.querySelector('[data-cultivation-artifacts]').textContent,'镇风铎残片');

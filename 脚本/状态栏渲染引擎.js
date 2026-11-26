@@ -1953,7 +1953,7 @@
     const cur = parseMs(currentRaw) ?? ori;
     const elapsed = (ori !== null && cur !== null) ? Math.max(0, Math.floor((cur - ori) / 86400000)) : 0;
     const dayNumber = elapsed + 1;
-    const stage = dayNumber <= 10 ? '微兆潜龙期' : dayNumber <= 25 ? '灵潮初涌期' : dayNumber <= 45 ? '龙眼破禁期' : dayNumber <= 90 ? '潜龙秘序期' : '百宗出山期';
+    const stage = dayNumber <= 45 ? '微兆潜龙期' : dayNumber <= 120 ? '灵潮初涌期' : dayNumber <= 240 ? '龙眼破禁期' : dayNumber <= 400 ? '潜龙秘序期' : '百宗出山期';
     return { dayNumber, stage };
   }
 
@@ -2008,6 +2008,24 @@
         card.dataset.present = String(roleStat.是否在场);
       } else if (active && !/^(?:true|false|1|0|是|否|在场|不在场)$/i.test((card.dataset.present || '').trim())) {
         card.dataset.present = 'false';
+      }
+    });
+
+    root.querySelectorAll('.jy-person:not([data-dlc-heroine])').forEach(card => {
+      const roleName = (card.querySelector('.jy-name')?.textContent || '').trim();
+      const roleStat = roleName ? stat?.[roleName] : null;
+      const realmPill = card.querySelector('[data-heroine-realm]');
+      const rootNode = card.querySelector('[data-heroine-root]');
+      if (!realmPill) return;
+      const realmVal = roleStat?.当前境界 || sceneValue(realmPill);
+      const rootVal = roleStat?.灵根 || (rootNode ? sceneValue(rootNode) : '');
+      const awakened = active && ((realmVal && realmVal !== '凡人' && realmVal !== '未引气') || Boolean(rootVal));
+      realmPill.hidden = !awakened;
+      if (awakened) {
+        realmPill.textContent = (realmVal && realmVal !== '凡人' && realmVal !== '未引气') ? realmVal : `灵根·${rootVal}`;
+        realmPill.title = rootVal ? `灵根：${rootVal}` : '';
+      } else {
+        realmPill.title = '';
       }
     });
 
