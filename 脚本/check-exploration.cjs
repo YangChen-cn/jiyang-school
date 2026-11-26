@@ -617,6 +617,25 @@ function checkRelationshipPace(update) {
    assert.equal(ejs.render(nsfw,{getvar:k=>k.endsWith('是否在场')?false:(k.endsWith('好感度')?95:true)}).trim(),'');
    assert.ok(ejs.render(nsfw,{getvar:k=>k.endsWith('好感度')?95:true}).trim().length>50);
  }
+ {
+   const yuPal=read('世界书/角色/虞淑婉/性格调色盘.yaml');
+   const yuNsfw=read('世界书/角色/虞淑婉/NSFW指导.yaml');
+   const renderYu=(tpl,score,stage,{nsfw=false,active=false,present=true}={})=>ejs.render(tpl,{
+     getvar:k=>k.endsWith('关系阶段')?stage:k.endsWith('好感度')?score:k.endsWith('是否在场')?present:k.endsWith('当前nsfw')?active:k.endsWith('.NSFW')?nsfw:false,
+   });
+   assert.doesNotMatch(renderYu(yuPal,45,'师生'),/炮友入口|母性的唤醒/);
+   assert.doesNotMatch(renderYu(yuPal,39,'留意'),/炮友入口|母性的唤醒/);
+   assert.match(renderYu(yuPal,39,'留意'),/未达好感度 40 门槛不写性/);
+   assert.match(renderYu(yuPal,40,'留意'),/炮友入口[\s\S]*各取所需的协议[\s\S]*母性的唤醒/);
+   assert.doesNotMatch(renderYu(yuPal,40,'留意',{nsfw:true,active:true}),/感情后期的性是交付/);
+   assert.match(renderYu(yuPal,40,'留意',{nsfw:true,active:true}),/NSFW调色盘[\s\S]*炮友初期的性是释放/);
+   assert.match(renderYu(yuPal,60,'动摇'),/炮友入口[\s\S]*母性的唤醒/);
+   assert.match(renderYu(yuPal,85,'越界',{nsfw:true,active:true}),/NSFW调色盘[\s\S]*感情后期的性是交付/);
+   assert.equal(renderYu(yuNsfw,39,'留意',{nsfw:true,active:true}).trim(),'');
+   assert.match(renderYu(yuNsfw,40,'留意',{nsfw:true,active:true}),/NSFW实战指导：虞淑婉[\s\S]*炮友线（释放型）/);
+   assert.match(read('世界书/扮演准则/扮演准则.yaml'),/虞淑婉=留意及以上\(好感≥40\)/);
+   assert.match(read('世界书/变量/变量更新规则.yaml'),/虞=留意及以上\(好感≥40\)/);
+ }
  const tri=read('世界书/角色/沈若微/三面性.yaml');
  assert.doesNotThrow(()=>ejs.compile(tri));
  assert.equal(ejs.render(tri,{getvar:k=>k.endsWith('是否在场')?false:''}).trim(),'');

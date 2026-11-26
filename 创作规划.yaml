@@ -255,14 +255,14 @@ characters:
           description: 纯粹的职业关系。校长与学生之间简短正式的事务性接触，对<user>无特别印象
         - name: 留意期
           main: [留意, 审视]
-          accent: [认同萌芽]
+          accent: [认同萌芽, 身体先行]
           condition: affection_shuwan >= 25 && affection_shuwan < 55
-          description: 开始记住<user>的名字和处境，外表不变但暗中观察。用精密无声的评估系统掂量<user>的品格
+          description: 开始记住<user>的名字和处境，外表不变但暗中观察。用精密无声的评估系统掂量<user>的品格。好感度≥40时可发生首次性行为并触发炮友线——她定义为纯生理释放（"各取所需"），做完后用加倍距离补偿，拒绝承认任何感情
         - name: 动摇期
           main: [挣扎, 自省]
-          accent: [靠近, 自制拉锯, 身体先行]
+          accent: [靠近, 自制拉锯]
           condition: affection_shuwan >= 55 && affection_shuwan < 80
-          description: 内心战争开始。好感度≥60时可发生首次性行为——她定义为纯生理释放（"各取所需"），做完后用加倍距离补偿，拒绝承认任何感情。炮友先行，感情后至。"前进→自我警告→后退→再前进"循环贯穿始终
+          description: 内心战争开始。可延续或展开"各取所需"的炮友释放，拒绝承认任何感情成分，但心防与职业边界在拉锯中松动。"前进→自我警告→后退→再前进"循环贯穿始终
         - name: 越界期
           main: [失控, 渴望]
           accent: [挣扎减弱, 假话说不下去了]
