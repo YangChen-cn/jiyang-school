@@ -17,10 +17,10 @@ const curMs = toIsoDay(curDateStr) ?? startMs;
 const gradMs = Date.UTC(startYear + 2, 6, 1);
 const isPostGradOrigin = startMs >= gradMs;
 const remainDays = isPostGradOrigin ? 0 : Math.floor((gradMs - startMs) / 86400000);
-const totalDays = isPostGradOrigin ? 90 : Math.max(120, Math.min(400, Math.floor(remainDays * 0.92)));
+const totalDays = isPostGradOrigin ? 90 : Math.min(remainDays, Math.max(120, Math.min(400, Math.floor(remainDays * 0.92))));
 const s1 = Math.max(1, Math.round(totalDays * 45 / 400));
-const s2 = Math.max(s1 + 1, Math.round(totalDays * 120 / 400));
-const s3 = Math.max(s2 + 1, Math.round(totalDays * 240 / 400));
+const s2 = Math.min(totalDays, Math.max(s1 + 1, Math.round(totalDays * 120 / 400)));
+const s3 = Math.min(totalDays, Math.max(s2 + 1, Math.round(totalDays * 240 / 400)));
 const s4 = totalDays;
 const elapsedDays = Math.max(0, Math.floor((curMs - startMs) / 86400000));
 const dayNumber = elapsedDays + 1;
@@ -32,7 +32,7 @@ _%>
 华夏龙脉与暨阳暗局:
   潜龙归元窍: 暨阳实为华夏南干龙入越沉睡主窍「越中潜龙·归元眼」（北承会稽、东抱老鹰山、南接浦阳江），古镇山大阵敛藏地脉不外泄；灵气前期主自老鹰山荒脉与城郊古窍极其缓慢渗露，普通市区与校园仍维持常人世界底色。
   太微云岫祖庭: 老鹰山深处沉封着昔年浙东名宗「太微云岫宗」外门山阵与残殿，守灯执事周伯独自守望，严守山门因果。
-  阵内避世与老怪出山铁律: 末法外界灵气枯竭，金丹及以上离阵调运会倒耗本源损道基，各宗宿老皆封死阵内减息避世；周期按开启时机自适应高中毕业窗口（高二开启约 400 日慢节奏、高三按剩余高中时日压缩至 120～399 日、已毕业开启走 90 日紧凑节奏），**本档第 <%= s4 + 1 %> 天起**外界灵气堪托高阶道基，老怪相继突破出山。
+  阵内避世与老怪出山铁律: 末法外界灵气枯竭，金丹及以上离阵调运会倒耗本源损道基，各宗宿老皆封死阵内减息避世；周期按开启时机变化（高二约 400 日、高三按毕业前剩余时日收束、毕业后开启为 90 日），**本档第 <%= s4 + 1 %> 天起**外界灵气堪托高阶道基，老怪相继突破出山。
   世家同源线索: 灵潮涌动下杭城、魔都世家与三教名山渐次启封；**暨阳苏家实与魔都「苏氏沧溟水府」百年前同源分家**（已断传承彻底隐于凡俗商海，唯后人苏晚棠骨血中隐存一缕未启水灵根；其家「澹珠记」纯系凡俗珍珠生意，与修行毫无关联）。
 
 修行总纲、仙凡双轨与保密准则:

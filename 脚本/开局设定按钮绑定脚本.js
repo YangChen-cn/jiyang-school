@@ -183,10 +183,10 @@
     var gradMs = Date.UTC(startYear + 2, 6, 1);
     var isPostGradOrigin = oriMs >= gradMs;
     var remainDays = isPostGradOrigin ? 0 : Math.floor((gradMs - oriMs) / 86400000);
-    var totalDays = isPostGradOrigin ? 90 : Math.max(120, Math.min(400, Math.floor(remainDays * 0.92)));
+    var totalDays = isPostGradOrigin ? 90 : Math.min(remainDays, Math.max(120, Math.min(400, Math.floor(remainDays * 0.92))));
     var s1 = Math.max(1, Math.round(totalDays * 45 / 400));
-    var s2 = Math.max(s1 + 1, Math.round(totalDays * 120 / 400));
-    var s3 = Math.max(s2 + 1, Math.round(totalDays * 240 / 400));
+    var s2 = Math.min(totalDays, Math.max(s1 + 1, Math.round(totalDays * 120 / 400)));
+    var s3 = Math.min(totalDays, Math.max(s2 + 1, Math.round(totalDays * 240 / 400)));
     var s4 = totalDays;
     var dayNumber = Math.max(1, Math.floor((curMs - oriMs) / 86400000) + 1);
     var stageIndex = dayNumber <= s1 ? 0 : dayNumber <= s2 ? 1 : dayNumber <= s3 ? 2 : dayNumber <= s4 ? 3 : 4;
@@ -900,10 +900,13 @@
     }
     var readWb = th('getWorldbook');
     var updateWb = th('updateWorldbookWith');
-    if (!bookName || !readWb || !updateWb) return;
+    if (!bookName || !readWb || !updateWb) throw new Error('请先导入绑定世界书并加载酒馆助手。');
     var dlcSet = new Set(DLC_ENTRY_NAMES);
-    if (!dlcSet.size) return;
     var entries = await readWb(bookName);
+    var installed = new Set(entries.map(function (entry) { return entry.name || entry.comment; }));
+    if (DLC_ENTRY_NAMES.some(function (name) { return !installed.has(name); })) {
+      throw new Error('当前世界书缺少修仙条目。请启用「多功能悬浮球」脚本后重试，或重新导入本卡世界书。');
+    }
     var needsSync = entries.some(function (entry) {
       var name = entry.name || entry.comment;
       return dlcSet.has(name) && !entry.enabled;
@@ -924,6 +927,7 @@
     stat.剧情 = stat.剧情 || {};
     if (!enableDlc) {
       if (stat.剧情.灵气复苏) stat.剧情.灵气复苏.已开启 = false;
+      if (stat.云清晏) stat.云清晏.是否在场 = false;
       return null;
     }
     var startYear = stat.世界?.起始年份 || opts.startYear || '2020';
@@ -943,31 +947,27 @@
       法器与灵物: [],
       修行状态: '平顺'
     };
-    var isYunArrival = opts.mode === 'preset' && Number(opts.greetingIndex) === 9;
+    // 保留转班正文中的出场动作或自我介绍时，改写开场也算已经见面。
+    var isYunArrival = opts.mode === 'preset'
+      ? Number(opts.greetingIndex) === 9
+      : /云清晏微微欠了欠身|[“「]云清晏。\s*请多指教/.test(opts.customOpening || '');
     var yunScene = isYunArrival ? GREETING_SCENES[9]?.present?.['云清晏'] : null;
     stat.云清晏 = stat.云清晏 || {
-      是否在场: Boolean(yunScene),
       好感度: 0,
       关系阶段: '观澜',
       NSFW: false,
       当前境界: '炼气大圆满（轮回重修）',
-      伤势余韵: '轮回劫伤未愈·阴雨畏寒',
+      伤势余韵: '轮回劫伤未愈·阴雨畏寒'
+    };
+    Object.assign(stat.云清晏, {
+      是否在场: Boolean(yunScene),
       当前上装: yunScene ? yunScene.top : (progress.isPostGradOrigin ? '素净月白斜襟棉麻长衫' : '洗得规整的暨阳中学白衬衣校服与领结'),
       当前下装: yunScene ? yunScene.bottom : (progress.isPostGradOrigin ? '浅青及踝长裙与布面平底鞋' : '深青校裙与过踝袜鞋'),
       所在位置: yunScene ? yunScene.pos : (progress.isPostGradOrigin ? '待剧情安排相遇' : (progress.dayNumber === 1 ? '暨阳城外·赴约途中' : '待确定')),
       动作: yunScene ? yunScene.action : '',
       心情: yunScene ? yunScene.mood : '',
       内心独白: yunScene ? yunScene.inner : ''
-    };
-    if (isYunArrival && yunScene) {
-      stat.云清晏.是否在场 = true;
-      stat.云清晏.当前上装 = yunScene.top;
-      stat.云清晏.当前下装 = yunScene.bottom;
-      stat.云清晏.所在位置 = yunScene.pos;
-      stat.云清晏.动作 = yunScene.action;
-      stat.云清晏.心情 = yunScene.mood;
-      stat.云清晏.内心独白 = yunScene.inner;
-    }
+    });
     stat.谢昭宁 = stat.谢昭宁 || {
       是否在场: false,
       好感度: 0,
@@ -1331,7 +1331,8 @@
         variables = await prepareMvuOpening(formData, mode, mode === 'preset' ? GREETING_SCENES[index] : null, {
           enableDlc: dlcOn,
           mode: mode,
-          greetingIndex: index
+          greetingIndex: index,
+          customOpening: custom
         });
       } catch (error) {
         throw new Error('开局变量准备失败：' + error.message);

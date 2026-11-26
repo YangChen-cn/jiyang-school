@@ -1958,11 +1958,11 @@
     const cur = parseMs(currentRaw) ?? ori;
     const gradMs = Date.UTC(startYear + 2, 6, 1);
     const isPostGrad = ori !== null && ori >= gradMs;
-    const remainDays = (ori !== null && !isPostGrad) ? Math.floor((gradMs - ori) / 86400000) : 0;
-    const totalDays = isPostGrad ? 90 : Math.max(120, Math.min(400, Math.floor(remainDays * 0.92)));
+    const remainDays = (ori !== null && !isPostGrad) ? Math.floor((gradMs - ori) / 86400000) : 1;
+    const totalDays = isPostGrad ? 90 : Math.min(remainDays, Math.max(120, Math.min(400, Math.floor(remainDays * 0.92))));
     const s1 = Math.max(1, Math.round(totalDays * 45 / 400));
-    const s2 = Math.max(s1 + 1, Math.round(totalDays * 120 / 400));
-    const s3 = Math.max(s2 + 1, Math.round(totalDays * 240 / 400));
+    const s2 = Math.min(totalDays, Math.max(s1 + 1, Math.round(totalDays * 120 / 400)));
+    const s3 = Math.min(totalDays, Math.max(s2 + 1, Math.round(totalDays * 240 / 400)));
     const elapsed = (ori !== null && cur !== null) ? Math.max(0, Math.floor((cur - ori) / 86400000)) : 0;
     const dayNumber = elapsed + 1;
     const stage = dayNumber <= s1 ? '微兆潜龙期' : dayNumber <= s2 ? '灵潮初涌期' : dayNumber <= s3 ? '龙眼破禁期' : dayNumber <= totalDays ? '潜龙秘序期' : '百宗出山期';
@@ -2068,7 +2068,7 @@
       if (arEl) arEl.textContent = artsList;
       if (afEl) afEl.textContent = artifactsList;
     }
-    if (overlayRoot && overlayRoot.isConnected && overlayRoot.querySelector('.jy-ov-modal[data-open="true"]')) {
+    if (root.contains(activeReturnFocus) && overlayRoot?.querySelector('.jy-ov-modal[data-open="true"]')) {
       syncOverlayTheme(root);
     }
 

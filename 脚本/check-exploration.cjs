@@ -122,11 +122,13 @@ async function checkOpeningArchives() {
        if (up.message_id === 0) {
          messages[0] = { message: up.message };
          savedFloorZero = up.data;
+       } else {
+         messages[up.message_id].message = up.message;
        }
      }
    };
    w.Mvu = {
-     getMvuData: async () => ({ stat_data: { 世界:{}, 剧情:{}, 主角:{ 重要物品:[] }, 苏晚棠:{}, 温书语:{}, 沈若微:{}, 许念安:{}, 慕佳芊:{}, 陈芷汀:{}, 虞淑婉:{} } }),
+     getMvuData: async () => savedFloorZero || ({ stat_data: { 世界:{}, 剧情:{}, 主角:{ 重要物品:[] }, 苏晚棠:{}, 温书语:{}, 沈若微:{}, 许念安:{}, 慕佳芊:{}, 陈芷汀:{}, 虞淑婉:{} } }),
      setMvuVariable: async (data, keyPath, value) => {
        const parts = keyPath.split('.');
        let cur = data.stat_data;
@@ -233,6 +235,13 @@ async function checkOpeningArchives() {
    get('[data-opening-action]').value = '递过一叠新课本并示意旁边的空位。';
    let dlcEvents = 0;
    w.addEventListener('jy-aura-dlc-changed', () => { dlcEvents++; });
+   const fullWorldbook = mockWorldbook;
+   mockWorldbook = fullWorldbook.filter(e => e.name !== '云清晏_基础信息');
+   click('confirm');
+   await new Promise(r => w.setTimeout(r, 40));
+   assert.equal(writes, 0, '缺失必需 DLC 条目时不提交首楼');
+   assert.match(d.body.textContent, /当前世界书缺少修仙条目/);
+   mockWorldbook = fullWorldbook;
    click('confirm');
    await new Promise(r => w.setTimeout(r, 250));
    assert.equal(writes, 1);
@@ -245,6 +254,31 @@ async function checkOpeningArchives() {
    assert.equal(mockWorldbook.find(e => e.name === '[DLC]灵气复苏总纲与异象日程').enabled, true);
    assert.equal(mockWorldbook.find(e => e.name === '云清晏_基础信息').enabled, true);
    assert.equal(schemaBox.schema.parse(savedFloorZero.stat_data).云清晏.是否在场, true);
+
+   click('reset-opening');
+   get('[data-custom-opening]').value = '';
+   field('开场日期').value = '';
+   field('开场时段').value = '';
+   field('开场地点').value = '';
+   get('[data-action="select-greeting"][data-greeting="9"]').click();
+   await new Promise(r => w.setTimeout(r, 40));
+   click('rewrite-preview');
+   assert.match(get('[data-custom-opening]').value, /云清晏。请多指教/);
+   click('confirm');
+   await new Promise(r => w.setTimeout(r, 40));
+   assert.equal(writes, 2);
+   assert.equal(savedFloorZero.stat_data.云清晏.是否在场, true);
+   click('reset-opening');
+   get('[data-custom-opening]').value = '花名册上有个名字叫云清晏。教室里还没来人。';
+   field('开场日期').value = '2022-06-30';
+   field('开场日期').dispatchEvent(new w.Event('input', { bubbles: true }));
+   assert.match(get('[data-opening-dlc-hint]').textContent, /第 2 日起百宗出山/);
+   click('confirm');
+   await new Promise(r => w.setTimeout(r, 40));
+   assert.equal(writes, 3);
+   assert.equal(messages.length, 2, '改写首楼只更新已有开局消息');
+   assert.equal(savedFloorZero.stat_data.云清晏.是否在场, false);
+   assert.equal(savedFloorZero.stat_data.云清晏.动作, '');
 
    w.confirm = () => false;
    click('delete-archive');
@@ -1073,6 +1107,8 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
    ['2022-03-01','2022-03-14','微兆潜龙期'],
    ['2022-03-01','2022-06-28','潜龙秘序期'],
    ['2022-03-01','2022-06-29','百宗出山期'],
+   ['2022-06-30','2022-06-30','微兆潜龙期'],
+   ['2022-06-30','2022-07-01','百宗出山期'],
    ['2022-07-05','2022-07-14','微兆潜龙期'],
    ['2022-07-05','2022-07-15','灵潮初涌期'],
    ['2022-07-05','2022-10-02','潜龙秘序期'],
@@ -1211,6 +1247,7 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  assert.doesNotMatch(gradPresentText,/体弱外省借读生为公开身份|校服洗得规整平挺/);
  assert.match(render(catalog.content,{...enabled,'stat_data.剧情.学期':'已毕业','stat_data.世界.日期':'2022-08-10'}),/姓名: 云清晏[\s\S]*表面身份:/);
  assert.match(render(dlcMaster,{...enabled,'stat_data.世界.起始年份':'2020','stat_data.剧情.灵气复苏.开启日期':'2021-09-01','stat_data.世界.日期':'2022-06-06'}),/高三自适应 278 日线[\s\S]*第五阶段·百宗出山期（第279天起）/);
+ assert.match(render(dlcMaster,{...enabled,'stat_data.世界.起始年份':'2020','stat_data.剧情.灵气复苏.开启日期':'2022-06-30','stat_data.世界.日期':'2022-07-01'}),/本档前四期共 1 日[\s\S]*第五阶段·百宗出山期（第2天起）/);
  assert.match(render(dlcMaster,{...enabled,'stat_data.世界.起始年份':'2020','stat_data.剧情.灵气复苏.开启日期':'2022-07-05','stat_data.世界.日期':'2022-10-03'}),/本档前四期共 90 日[\s\S]*毕业后 90 日紧凑线[\s\S]*第五阶段·百宗出山期（第91天起）/);
  assert.equal(yun(yunPalette),'');
  assert.match(yun(yunPalette,{...firstAppearance,'stat_data.云清晏.好感度':45,'stat_data.云清晏.关系阶段':'观澜'}),/观澜·尘外冷眸/);
@@ -1445,6 +1482,10 @@ const neutral = html.replace(/^```\w*\s*|\s*```$/g,'').replaceAll('{{format_mess
  md.querySelector('[data-action="open-map"]').click();
  const ovRoot=md.getElementById('jy-status-overlay-root');
  assert.equal(ovRoot.dataset.dlcActive,'true');
+ assert.equal(ovRoot.dataset.intimateScene,'true');
+ mw.dispatchEvent(new mw.CustomEvent('jy-aura-dlc-changed',{detail:{chatId:'A',messageId:2}}));
+ await settle();
+ assert.equal(ovRoot.dataset.dlcActive,'true','旧楼层刷新不覆盖当前弹窗的皮肤');
  assert.equal(ovRoot.dataset.intimateScene,'true');
  md.querySelector('[data-action="close-map"]').click();
  statusRoot.dataset.intimateScene='false';
